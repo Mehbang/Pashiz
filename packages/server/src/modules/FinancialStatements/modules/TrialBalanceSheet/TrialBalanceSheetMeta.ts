@@ -1,6 +1,5 @@
 import { I18nService } from 'nestjs-i18n';
 import { formatDateIn } from '@/utils/jalali-date';
-import * as moment from 'moment';
 import {
   ITrialBalanceSheetMeta,
   ITrialBalanceSheetQuery,
@@ -24,8 +23,10 @@ export class TrialBalanceSheetMeta {
   ): Promise<ITrialBalanceSheetMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
 
-    const formattedFromDate = moment(query.fromDate).format(
+    const formattedFromDate = formatDateIn(
+      query.fromDate,
       commonMeta.dateFormat,
+      commonMeta.calendar,
     );
     const formattedToDate = formatDateIn(
       query.toDate,

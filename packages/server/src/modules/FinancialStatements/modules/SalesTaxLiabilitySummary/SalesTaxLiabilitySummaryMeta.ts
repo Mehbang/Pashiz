@@ -1,6 +1,5 @@
 import { I18nService } from 'nestjs-i18n';
 import { formatDateIn } from '@/utils/jalali-date';
-import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { FinancialSheetMeta } from '../../common/FinancialSheetMeta';
 import { SalesTaxLiabilitySummaryQuery } from './SalesTaxLiability.types';
@@ -24,8 +23,10 @@ export class SalesTaxLiabilitySummaryMeta {
       commonMeta.dateFormat,
       commonMeta.calendar,
     );
-    const formattedFromDate = moment(query.fromDate).format(
+    const formattedFromDate = formatDateIn(
+      query.fromDate,
       commonMeta.dateFormat,
+      commonMeta.calendar,
     );
     const formattedDateRange = this.i18n.t('report.from_to', {
       args: { from: formattedFromDate, to: formattedToDate },
