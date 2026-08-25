@@ -1,5 +1,4 @@
 import { CalendarSystem, formatDateIn } from '@/utils/jalali-date';
-import * as moment from 'moment';
 import * as R from 'ramda';
 import { ITransactionsByContactsContact } from './TransactionsByContact.types';
 import { ITableRow } from '../../types/Table.types';

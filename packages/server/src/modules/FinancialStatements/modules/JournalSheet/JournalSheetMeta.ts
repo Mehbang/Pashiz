@@ -1,6 +1,5 @@
 import { formatDateIn } from '@/utils/jalali-date';
 import { I18nService } from 'nestjs-i18n';
-import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { FinancialSheetMeta } from '../../common/FinancialSheetMeta';
 import { IJournalReportQuery, IJournalSheetMeta } from './JournalSheet.types';

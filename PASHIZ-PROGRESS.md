@@ -1,7 +1,6 @@
 # Pashiz — Persian & Jalali localisation
 
-Working notes for the `pashiz` branch. Nothing here is committed yet; all of it
-lives in the working tree.
+Working notes for the `pashiz` branch.
 
 ## What the fork adds
 
@@ -53,6 +52,37 @@ $P -C packages/webapp        exec tsc --noEmit  # 53 — pre-existing baseline
 The webapp's 53 type errors were present before this work and are untouched by
 choice; they sit mostly in the financial reports' `dynamicColumns.tsx`.
 
+## Keeping up with upstream
+
+`bigcapitalhq:develop` is merged into `pashiz` from time to time. After each
+merge, re-run the checks above and audit two things that a clean textual merge
+will not catch:
+
+- **i18n key drift.** Upstream renames keys in `src/i18n/en/*.json`; the `fa`
+  namespace then silently falls back to English. Compare the key sets:
+
+  ```bash
+  node -e '
+  const fs=require("fs"),p=require("path"),b="packages/server/src/i18n";
+  const flat=(o,pre="")=>Object.entries(o).flatMap(([k,v])=>typeof v==="object"&&v?flat(v,pre+k+"."):[pre+k]);
+  for(const f of fs.readdirSync(p.join(b,"en"))){
+    const E=new Set(flat(JSON.parse(fs.readFileSync(p.join(b,"en",f)))));
+    const F=new Set(flat(JSON.parse(fs.readFileSync(p.join(b,"fa",f)))));
+    const d=[...E].filter(k=>!F.has(k)).concat([...F].filter(k=>!E.has(k)));
+    if(d.length)console.log(f,d);
+  }'
+  ```
+
+  The same check applies to `packages/webapp/src/lang/{en,fa}/index.json`.
+
+- **New date rendering.** Anything upstream adds that formats a date must go
+  through `useDateInputFormatter` / `formatDateLocalized` on the client or
+  `formatDateIn` on the server, or it will render Gregorian inside a Persian
+  organisation.
+
+Merged so far: `2bbd98cba` (2026-08-25), which brought the password-length
+policy, the ESLint workflow, Garage object storage, and the e2e test overhaul.
+
 ## Pre-existing Bigcapital bugs fixed along the way
 
 1. `import('moment/locale/${x}')` could not be resolved by Vite — this broke
@@ -74,7 +104,9 @@ choice; they sit mostly in the financial reports' `dynamicColumns.tsx`.
 ## Not done
 
 - The 53 pre-existing webapp type errors (Ehsan chose to leave them).
-- `packages/server/src/i18n/*/test.json` (16 keys, a test fixture).
+- The ESLint check upstream added (`pnpm run lint:check`) reports ~900 problems
+  across ~550 server files. They are upstream's, not this fork's; the workflow
+  only gates `main`/`develop`, so `pashiz` is unaffected.
 - Organisations built before a seeder fix keep their old seeded data; only newly
   created ones pick it up.
 - `Bigcapital Technology, Inc.` is left as-is in the payment authorisation — it

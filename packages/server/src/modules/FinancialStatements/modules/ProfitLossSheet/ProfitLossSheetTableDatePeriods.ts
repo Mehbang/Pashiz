@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { formatDateIn } from '@/utils/jalali-date';
 import * as R from 'ramda';
-import * as moment from 'moment';
 import { ITableColumn, ITableColumnAccessor } from '../../types/Table.types';
 import { ProfitLossSheetTablePercentage } from './ProfitLossSheetTablePercentage';
 import { ProfitLossTablePreviousPeriod } from './ProfitLossTablePreviousPeriod';

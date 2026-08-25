@@ -2,7 +2,6 @@
 import { formatDateIn } from '@/utils/jalali-date';
 import * as R from 'ramda';
 import { isEmpty } from 'lodash';
-import * as moment from 'moment';
 import { I18nService } from 'nestjs-i18n';
 import {
   ICashFlowStatementSection,
