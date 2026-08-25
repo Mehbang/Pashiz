@@ -84,7 +84,14 @@ GARAGE_VOLUME="bigcapital_prod_garage"
 # copy needs these, because the S3 key and the Garage node identity live inside
 # the volume and are referenced from .env. Everything else in .env — the domain,
 # the database password — belongs to the machine, not to the data.
-BINDING_KEYS="GARAGE_RPC_SECRET GARAGE_ADMIN_TOKEN S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_BUCKET S3_REGION JWT_SECRET APP_JWT_SECRET"
+#
+# The JWT secrets are deliberately absent. Carrying them would let sessions
+# survive a migration, which is worth very little, at the cost of copying a
+# signing key from wherever the archive was made — and a development .env
+# usually still holds the published default from .env.example. Restoring one of
+# those onto a public server would hand anyone the ability to mint tokens for
+# it. Users signing in again is the cheaper outcome.
+BINDING_KEYS="GARAGE_RPC_SECRET GARAGE_ADMIN_TOKEN S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_BUCKET S3_REGION"
 
 # Everything needed to reproduce this installation somewhere else: the
 # organizations' data, the files attached to it, and the secrets that tie the
