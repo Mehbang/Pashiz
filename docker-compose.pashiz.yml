@@ -37,6 +37,10 @@ services:
     build:
       context: .
       dockerfile: packages/server/Dockerfile
+    # The system migration directory is configured as a path relative to the
+    # working directory (`./src/database/system/migrations`), so the command
+    # has to run from the server package rather than the image's `/app`.
+    working_dir: /app/packages/server
     command:
       - sh
       - -c
@@ -45,8 +49,8 @@ services:
           echo 'waiting for the database...'
           sleep 2
         done
-        node packages/server/dist/cli.js system:migrate:latest &&
-        node packages/server/dist/cli.js tenants:migrate:latest
+        node dist/cli.js system:migrate:latest &&
+        node dist/cli.js tenants:migrate:latest
 
   mysql:
     container_name: pashiz-mysql
