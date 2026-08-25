@@ -1,3 +1,102 @@
+<div align="right">
+
+# سامانه مالی پشیز
+
+نسخهٔ فارسی‌شدهٔ [Bigcapital](https://github.com/bigcapitalhq/bigcapital) با تقویم شمسی.
+
+</div>
+
+نرم‌افزار حسابداری متن‌باز، با رابط راست‌به‌چپ، تقویم جلالی، ارقام فارسی و
+واحد پول ریال و تومان.
+
+| | |
+|---|---|
+| تقویم | جلالی در نمایش، ورودی و دوره‌های گزارش |
+| زبان | فارسی کامل در رابط کاربری، چاپ و لینک اشتراک‌گذاری |
+| ارز | ریال و تومان، افزون بر ارزهای موجود |
+| داده‌های اولیه | نمودار حساب‌ها، انبار، نرخ‌های مالیات و قالب‌های چاپ، همه فارسی |
+
+تاریخ‌ها همچنان میلادی ذخیره و از API رد و بدل می‌شوند؛ جلالی فقط جایی است
+که تاریخ برای انسان خوانده می‌شود.
+
+## نصب روی اوبونتو
+
+```bash
+git clone -b pashiz https://github.com/Mehbang/Pashiz.git /opt/pashiz
+cd /opt/pashiz
+sudo ./setup.sh
+```
+
+روی یک اوبونتوی خالی همین کافی است: داکر را نصب می‌کند، `.env` را با رمزهای
+تصادفی می‌سازد، ایمیج‌ها را از روی همین منبع می‌سازد، پایگاه‌داده را مهاجرت
+می‌دهد و همه‌چیز را بالا می‌آورد. در پایان نشانی دسترسی را چاپ می‌کند.
+
+هنگام نصب دامنه را می‌پرسد؛ اگر بدهید HTTPS با گواهی خودکار Let's Encrypt
+روشن می‌شود.
+
+<details>
+<summary>نصب یک‌خطی (بدون پرسش دامنه)</summary>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Mehbang/Pashiz/pashiz/setup.sh | sudo bash
+```
+
+چون ورودی از لوله می‌آید، پرسشی نمایش داده نمی‌شود و روی HTTP نصب می‌کند.
+برای HTTPS دامنه را از پیش بدهید:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Mehbang/Pashiz/pashiz/setup.sh \
+  | sudo PASHIZ_DOMAIN=hesab.example.ir bash
+```
+
+</details>
+
+<details>
+<summary>اگر Docker Hub در دسترس نیست</summary>
+
+ایمیج‌های پایه از Docker Hub می‌آیند. یک آینه بدهید:
+
+```bash
+sudo DOCKER_REGISTRY_MIRROR=https://docker.arvancloud.ir ./setup.sh
+```
+
+اسکریپت پیش از شروع ساخت دسترسی را می‌آزماید و اگر برقرار نبود همان‌جا با
+پیام روشن می‌ایستد.
+
+</details>
+
+## نگهداری
+
+```bash
+cd /opt/pashiz
+
+sudo ./update.sh                        # دریافت نسخهٔ تازه، پشتیبان، ساخت، راه‌اندازی
+sudo ./update.sh https hesab.example.ir # روشن‌کردن HTTPS روی نصب موجود
+     ./update.sh backup                 # پشتیبان از پایگاه‌داده و تنظیمات
+     ./update.sh logs server
+     ./update.sh status
+```
+
+به‌روزرسانی پیش از هر کار پشتیبان می‌گیرد، `.env` را دست نمی‌زند و هیچ
+volume‌ای را پاک نمی‌کند.
+
+راهنمای کامل نصب، پشتیبان‌گیری، دامنه و عیب‌یابی: **[DEPLOY.md](DEPLOY.md)**
+
+## پس از نصب
+
+نشانی را در مرورگر باز کنید و نخستین سازمان را بسازید. **هنگام ساخت سازمان
+زبان «فارسی» را انتخاب کنید** — تقویم شمسی، ارقام فارسی، نمودار حساب‌ها،
+انبار، نرخ‌های مالیات و نام ارزها همه بر پایهٔ همین تنظیم ساخته می‌شوند.
+
+---
+
+# Upstream — Bigcapital
+
+Pashiz is a fork of Bigcapital. Everything below is the upstream project's own
+README, kept as it is: the accounting engine, the API and the data model are
+theirs, and this fork adds the Persian localisation and the Jalali calendar on
+top. Bigcapital is licensed AGPL-3.0; so is this fork.
+
 <p align="center">
   <p align="center">
     <a href="https://bigcapital.app" target="_blank">
