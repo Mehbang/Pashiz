@@ -356,32 +356,77 @@ build_images() {
   info "ایمیج‌های پشیز ساخته شد."
 }
 
+# Prepares the object store the application keeps attachments and logos in.
+#
+# The Garage image ships the `garage` binary and nothing else — no shell — so
+# the setup script mounted into it by upstream cannot run there. The same
+# steps are driven from here instead, against the v1.3.1 CLI, whose `key
+# create` and `bucket allow` take their subject as a positional argument.
 bootstrap_garage() {
   step "آماده‌سازی فضای ذخیره‌سازی پیوست‌ها"
 
   if [ -n "$(get_env S3_ACCESS_KEY_ID)" ]; then
     info "کلید S3 از قبل در .env هست؛ رد شد."
-    return
+    return 0
   fi
-  dc up -d garage
-  sleep 5
+  dc up -d garage >/dev/null 2>&1
 
-  local output key secret
-  output=$(dc exec -T garage bash /garage-setup/setup.sh 2>&1) || {
-    warn "آماده‌سازی Garage ناموفق بود؛ بارگذاری پیوست‌ها کار نخواهد کرد."
-    warn "بعداً می‌توانید دستی اجرا کنید: docker compose exec garage bash /garage-setup/setup.sh"
-    return
+  # `garage` writes its progress to stderr; only the payload is wanted here.
+  garage_cli() {
+    dc exec -T garage /garage "$@" 2>/dev/null
   }
-  key=$(echo "$output"    | grep -E '^S3_ACCESS_KEY_ID='     | tail -1 | cut -d= -f2-)
-  secret=$(echo "$output" | grep -E '^S3_SECRET_ACCESS_KEY=' | tail -1 | cut -d= -f2- | tr -d ' ')
+
+  printf '    در انتظار Garage'
+  local ready=""
+  for _ in $(seq 1 30); do
+    if garage_cli status >/dev/null 2>&1; then ready=1; break; fi
+    printf '.'; sleep 2
+  done
+  printf '\n'
+
+  if [ -z "$ready" ]; then
+    warn "Garage بالا نیامد؛ بارگذاری پیوست‌ها کار نخواهد کرد."
+    return 0
+  fi
+
+  # A node with no role assigned cannot store anything, so give it the whole
+  # local disk allowance before creating the bucket.
+  if ! garage_cli status | grep -q "dc1"; then
+    local node
+    node=$(garage_cli node id | head -1 | tr -d '\r' | cut -d@ -f1)
+
+    garage_cli layout assign "$node" -z "${GARAGE_LOCAL_ZONE:-dc1}" \
+      -c "${GARAGE_CAPACITY:-10G}" >/dev/null 2>&1 || true
+    garage_cli layout apply --version 1 >/dev/null 2>&1 || true
+    sleep 3
+  fi
+
+  local bucket key secret
+  bucket=$(get_env S3_BUCKET); bucket="${bucket:-bigcapital}"
+
+  garage_cli bucket create "$bucket" >/dev/null 2>&1 || true
+
+  # Re-running must not mint a second key, so an existing one is read back.
+  if garage_cli key list | grep -q "bigcapital"; then
+    info "کلید S3 از قبل در Garage هست؛ خوانده شد."
+  else
+    garage_cli key create bigcapital >/dev/null 2>&1 || true
+  fi
+  local info_out
+  info_out=$(garage_cli key info bigcapital --show-secret 2>/dev/null || true)
+  key=$(echo "$info_out"    | awk '/^Key ID:/{print $3}'     | head -1 | tr -d '\r')
+  secret=$(echo "$info_out" | awk '/^Secret key:/{print $3}' | head -1 | tr -d '\r')
+
+  garage_cli bucket allow --read --write --owner --key bigcapital "$bucket" \
+    >/dev/null 2>&1 || true
 
   if [ -n "$key" ] && [ -n "$secret" ]; then
     set_env S3_ACCESS_KEY_ID "$key"
     set_env S3_SECRET_ACCESS_KEY "$secret"
     info "کلید S3 ساخته و در .env ذخیره شد."
   else
-    warn "کلید S3 خوانده نشد؛ خروجی را ببینید:"
-    echo "$output" | tail -20
+    warn "کلید S3 خوانده نشد؛ بارگذاری پیوست‌ها کار نخواهد کرد."
+    warn "دستی بررسی کنید:  docker compose exec garage /garage key info bigcapital --show-secret"
   fi
 }
 

@@ -19,11 +19,6 @@
 	# ports, which the HTTPS overlay binds to localhost.
 	reverse_proxy proxy:80
 
-	# The API streams file downloads (PDF invoices, exports) that can take a
-	# while to render.
-	timeouts {
-		read_body 5m
-	}
 
 	header {
 		Strict-Transport-Security "max-age=31536000; includeSubDomains"
