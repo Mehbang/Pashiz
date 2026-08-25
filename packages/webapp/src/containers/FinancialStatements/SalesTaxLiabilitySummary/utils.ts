@@ -7,12 +7,13 @@ import { salesTaxLiabilitySummaryDynamicColumns } from './dynamicColumns';
 import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBoot';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 /**
  * Retrieves the default sales tax liability summary query.
  */
 export const getDefaultSalesTaxLiablitySummaryQuery = () => ({
-  fromDate: moment().startOf('month').format('YYYY-MM-DD'),
+  fromDate: startOfPeriodLocalized('month'),
   toDate: moment().format('YYYY-MM-DD'),
   basis: 'cash',
   numberFormat: {},

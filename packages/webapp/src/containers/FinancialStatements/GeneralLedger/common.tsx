@@ -5,6 +5,7 @@ import intl from 'react-intl-universal';
 import * as Yup from 'yup';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 // Filters accounts options.
 export const filterAccountsOptions = [
@@ -26,7 +27,7 @@ export const filterAccountsOptions = [
  * Retrieves the default general ledger query.
  */
 export const getDefaultGeneralLedgerQuery = () => ({
-  fromDate: moment().startOf('month').format('YYYY-MM-DD'),
+  fromDate: startOfPeriodLocalized('month'),
   toDate: moment().format('YYYY-MM-DD'),
   basis: 'accrual',
   filterByOption: 'with-transactions',

@@ -2,13 +2,14 @@ import moment from 'moment';
 import React from 'react';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 /**
  * Retrieves the default journal report query.
  */
 export const getDefaultJournalQuery = () => {
   return {
-    fromDate: moment().startOf('month').format('YYYY-MM-DD'),
+    fromDate: startOfPeriodLocalized('month'),
     toDate: moment().format('YYYY-MM-DD'),
     basis: 'accrual',
   };

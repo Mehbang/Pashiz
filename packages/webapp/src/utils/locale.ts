@@ -1,6 +1,8 @@
 import intl from 'react-intl-universal';
 import { localeSettings } from '@/constants/languagesOptions';
-import { CURRENCIES, toPersianDigits } from '@bigcapital/utils';
+import { CURRENCIES, startOfJalaali, toPersianDigits } from '@bigcapital/utils';
+import type { JalaaliDateUnit } from '@bigcapital/utils';
+import moment from 'moment';
 import { formatDateValue } from './date-formatter';
 
 /**
@@ -66,4 +68,27 @@ export const localizedCurrencyLabel = (code?: string): string => {
   return currentLocaleSettings().persianDigits && isPersianScript
     ? nativeSymbol
     : code;
+};
+
+/**
+ * The first day of the period the given date falls in, as a Gregorian ISO
+ * string — the format every report query travels in.
+ *
+ * Only the boundary follows the locale's calendar. A Persian organization
+ * opening a yearly report should see it begin on 1 Farvardin rather than on
+ * 1 January, but the value handed to the API stays what the API has always
+ * taken.
+ */
+export const startOfPeriodLocalized = (
+  unit: JalaaliDateUnit,
+  date: Date = new Date(),
+): string => {
+  const { calendar } = currentLocaleSettings();
+
+  const start =
+    calendar === 'jalali'
+      ? startOfJalaali(date, unit)
+      : moment(date).startOf(unit).toDate();
+
+  return moment(start).format('YYYY-MM-DD');
 };

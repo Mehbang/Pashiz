@@ -5,6 +5,7 @@ import intl from 'react-intl-universal';
 import * as Yup from 'yup';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 /**
  * The validation schema of vendors transactions.
@@ -23,7 +24,7 @@ export const getVendorTransactionsQuerySchema = () => {
  * Retrieves the default query of vendors transactions.
  */
 export const getVendorsTransactionsDefaultQuery = () => ({
-  fromDate: moment().startOf('month').format('YYYY-MM-DD'),
+  fromDate: startOfPeriodLocalized('month'),
   toDate: moment().format('YYYY-MM-DD'),
   vendorsIds: [] as string[],
   filterByOption: 'with-transactions',

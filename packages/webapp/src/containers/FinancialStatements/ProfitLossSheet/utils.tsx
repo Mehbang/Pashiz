@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import type { FormikContextType } from 'formik';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 interface FormSetFieldValue {
   setFieldValue: FormikContextType<Record<string, unknown>>['setFieldValue'];
@@ -14,7 +15,7 @@ interface FormSetFieldValue {
 
 export const getDefaultProfitLossQuery = () => ({
   basis: 'cash',
-  fromDate: moment().startOf('year').format('YYYY-MM-DD'),
+  fromDate: startOfPeriodLocalized('year'),
   toDate: moment().format('YYYY-MM-DD'),
   displayColumnsType: 'total',
   filterByOption: 'with-transactions',

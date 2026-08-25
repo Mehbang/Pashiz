@@ -6,6 +6,7 @@ import intl from 'react-intl-universal';
 import * as Yup from 'yup';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 export const getCustomersTransactionsQuerySchema = () => {
   return Yup.object().shape({
@@ -18,7 +19,7 @@ export const getCustomersTransactionsQuerySchema = () => {
 };
 
 export const getCustomersTransactionsDefaultQuery = () => ({
-  fromDate: moment().startOf('month').format('YYYY-MM-DD'),
+  fromDate: startOfPeriodLocalized('month'),
   toDate: moment().format('YYYY-MM-DD'),
   customersIds: [] as string[],
   filterByOption: 'with-transactions',

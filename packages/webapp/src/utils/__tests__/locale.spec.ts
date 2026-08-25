@@ -1,6 +1,10 @@
 import intl from 'react-intl-universal';
 import { afterEach, describe, expect, it } from 'vitest';
-import { localizedCurrencyLabel, localizedDigits } from '../locale';
+import {
+  localizedCurrencyLabel,
+  localizedDigits,
+  startOfPeriodLocalized,
+} from '../locale';
 
 const useLocale = (currentLocale: string) =>
   intl.init({ currentLocale, locales: { [currentLocale]: {} } });
@@ -65,5 +69,32 @@ describe('localizedCurrencyLabel()', () => {
 
     expect(localizedCurrencyLabel(undefined)).toBe('');
     expect(localizedCurrencyLabel('ZZZ')).toBe('ZZZ');
+  });
+});
+
+describe('startOfPeriodLocalized()', () => {
+  // 2026-08-25 is 3 Shahrivar 1405: inside Jalaali year 1405, which opened on
+  // 2026-03-21, and inside Shahrivar, which opened on 2026-08-23.
+  const date = new Date(2026, 7, 25);
+
+  it('uses the Gregorian boundary in English', async () => {
+    await useLocale('en');
+
+    expect(startOfPeriodLocalized('year', date)).toBe('2026-01-01');
+    expect(startOfPeriodLocalized('month', date)).toBe('2026-08-01');
+  });
+
+  it('uses the Jalaali boundary in Persian', async () => {
+    await useLocale('fa');
+
+    // 1 Farvardin 1405 and 1 Shahrivar 1405.
+    expect(startOfPeriodLocalized('year', date)).toBe('2026-03-21');
+    expect(startOfPeriodLocalized('month', date)).toBe('2026-08-23');
+  });
+
+  it('returns a Gregorian ISO string in both, which is what the API takes', async () => {
+    await useLocale('fa');
+
+    expect(startOfPeriodLocalized('year', date)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 });

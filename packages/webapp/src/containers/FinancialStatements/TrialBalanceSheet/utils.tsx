@@ -5,6 +5,7 @@ import React from 'react';
 import { transformFilterFormToQuery } from '../common';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 type TrialBalanceQuery = TrialBalanceTableQuery & { filterByOption?: string };
 
@@ -13,7 +14,7 @@ type TrialBalanceQuery = TrialBalanceTableQuery & { filterByOption?: string };
  */
 export function getDefaultTrialBalanceQuery(): TrialBalanceQuery {
   return {
-    fromDate: moment().startOf('year').format('YYYY-MM-DD'),
+    fromDate: startOfPeriodLocalized('year'),
     toDate: moment().format('YYYY-MM-DD'),
     basis: 'accrual',
     filterByOption: 'with-transactions',

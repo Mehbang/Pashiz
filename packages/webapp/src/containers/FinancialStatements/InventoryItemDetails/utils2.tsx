@@ -6,12 +6,13 @@ import * as Yup from 'yup';
 import { transformFilterFormToQuery } from '../common';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 /**
  * Retrieves inventory item details default query.
  */
 export const getInventoryItemDetailsDefaultQuery = () => ({
-  fromDate: moment().startOf('month').format('YYYY-MM-DD'),
+  fromDate: startOfPeriodLocalized('month'),
   toDate: moment().format('YYYY-MM-DD'),
   itemsIds: [] as string[],
   warehousesIds: [] as string[],

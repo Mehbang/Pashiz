@@ -6,12 +6,13 @@ import intl from 'react-intl-universal';
 import * as Yup from 'yup';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 /**
  * Retrieves the purchases by items query.
  */
 export const getDefaultPurchasesByItemsQuery = () => ({
-  fromDate: moment().startOf('month').format('YYYY-MM-DD'),
+  fromDate: startOfPeriodLocalized('month'),
   toDate: moment().format('YYYY-MM-DD'),
   filterByOption: 'with-transactions',
   itemsIds: [] as number[],

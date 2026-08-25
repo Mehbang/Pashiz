@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import type { FormikContextType } from 'formik';
 import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
+import { startOfPeriodLocalized } from '@/utils/locale';
 
 interface FormSetFieldValue {
   setFieldValue: FormikContextType<Record<string, unknown>>['setFieldValue'];
@@ -18,7 +19,7 @@ interface FormSetFieldValue {
  * @returns {}
  */
 export const getDefaultBalanceSheetQuery = (): BalanceSheetTableQuery => ({
-  fromDate: moment().startOf('year').format('YYYY-MM-DD'),
+  fromDate: startOfPeriodLocalized('year'),
   toDate: moment().format('YYYY-MM-DD'),
   basis: 'cash',
   displayColumnsType: 'total',
