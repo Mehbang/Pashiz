@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React, {
   Dispatch,
   SetStateAction,
@@ -65,10 +66,6 @@ interface ImportFileProviderProps {
   exampleDescription?: string;
 }
 
-const ExampleDescription =
-  'You can download the sample file to obtain detailed information about the data fields used during the import.';
-const ExampleTitle = 'Table Example';
-
 const ImportFileContext = createContext<ImportFileContextValue>(
   {} as ImportFileContextValue,
 );
@@ -95,9 +92,15 @@ export const ImportFileProvider = ({
   sampleFileName,
 
   exampleDownload = true,
-  exampleTitle = ExampleTitle,
-  exampleDescription = ExampleDescription,
+  exampleTitle,
+  exampleDescription,
 }: ImportFileProviderProps) => {
+  // Resolved here rather than as default parameter values: `intl.get()` at
+  // module scope runs before the locale is loaded and returns nothing.
+  const resolvedExampleTitle = exampleTitle ?? intl.get('import.example_title');
+  const resolvedExampleDescription =
+    exampleDescription ?? intl.get('import.example_description');
+
   const [sheetColumns, setSheetColumns] = useState<SheetColumn[]>([]);
   const [entityColumns, setEntityColumns] = useState<EntityColumn[]>([]);
   const [sheetMapping, setSheetMapping] = useState<SheetMap[]>([]);
@@ -132,8 +135,8 @@ export const ImportFileProvider = ({
     sampleFileName,
 
     exampleDownload,
-    exampleTitle,
-    exampleDescription,
+    exampleTitle: resolvedExampleTitle,
+    exampleDescription: resolvedExampleDescription,
   };
 
   return (

@@ -24,6 +24,7 @@ import { FormattedMessage as T } from '@/components';
 import { TaxRatesSelect } from '@/components/TaxRates/TaxRatesSelect';
 import { ACCOUNT_PARENT_TYPE } from '@/constants/accountTypes';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 export function ItemFormSellingSection() {
   const { accounts, taxRates } = useItemFormContext();
@@ -57,7 +58,7 @@ export function ItemFormSellingSection() {
         fastField
       >
         <ControlGroup fill>
-          <InputPrependText text={baseCurrency} />
+          <InputPrependText text={localizedCurrencyLabel(baseCurrency)} />
           <FMoneyInputGroup
             name={'sellPrice'}
             shouldUpdate={sellPriceFieldShouldUpdate}

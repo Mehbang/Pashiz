@@ -23,6 +23,7 @@ import {
 import { Features } from '@/constants';
 import { useDateInputFormatter } from '@/hooks';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 /**
  * Vendor Financial Panel Tab (legacy layout — kept for reference; not in the active form layout).
@@ -99,7 +100,7 @@ function VendorOpeningBalanceField() {
       fastField
     >
       <ControlGroup>
-        <InputPrependText text={values.currencyCode} />
+        <InputPrependText text={localizedCurrencyLabel(values.currencyCode)} />
         <FMoneyInputGroup
           name={'openingBalance'}
           inputGroupProps={{ fill: true }}

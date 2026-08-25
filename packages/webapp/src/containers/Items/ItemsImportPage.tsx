@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
 import { ImportView } from '../Import/ImportView';
 import { DashboardInsider } from '@/components';
@@ -17,7 +18,7 @@ export function ItemsImportpage() {
         resource={'items'}
         onImportSuccess={handleImportSuccess}
         onCancelClick={handleCancelBtnClick}
-        exampleTitle="Items Example"
+        exampleTitle={intl.get('import.example_title.items')}
       />
     </DashboardInsider>
   );

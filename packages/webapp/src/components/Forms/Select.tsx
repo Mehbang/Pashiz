@@ -6,6 +6,23 @@ import clsx from 'classnames';
 import React from 'react';
 import styled from 'styled-components';
 
+/**
+ * Translated defaults for the query box a select popover shows.
+ *
+ * `@blueprintjs-formik/select` falls back to a literal "No results." and
+ * Blueprint's own query input to a literal "Filter...", neither of which pass
+ * through the translation layer. Applying them here means every select in the
+ * application inherits the locale's wording, while a call site that passes its
+ * own text still wins.
+ */
+export const selectLocaleDefaults = (props: Record<string, any> = {}) => ({
+  noResultsText: props.noResultsText ?? intl.get('no_results'),
+  inputProps: {
+    placeholder: intl.get('filter_placeholder'),
+    ...props.inputProps,
+  },
+});
+
 export function FSelect<T extends SelectOptionProps = SelectOptionProps>({
   ...props
 }) {
@@ -17,7 +34,14 @@ export function FSelect<T extends SelectOptionProps = SelectOptionProps>({
       className={clsx({ 'is-selected': !!text }, props.className)}
     />
   );
-  return <FormikSelect<T> input={input} fill={true} {...props} />;
+  return (
+    <FormikSelect<T>
+      input={input}
+      fill={true}
+      {...props}
+      {...selectLocaleDefaults(props)}
+    />
+  );
 }
 
 export function BPSelect<T extends SelectOptionProps = SelectOptionProps>({
@@ -31,7 +55,14 @@ export function BPSelect<T extends SelectOptionProps = SelectOptionProps>({
       className={clsx({ 'is-selected': !!text }, props.className)}
     />
   );
-  return <Select<T> input={input} fill={true} {...props} />;
+  return (
+    <Select<T>
+      input={input}
+      fill={true}
+      {...props}
+      {...selectLocaleDefaults(props)}
+    />
+  );
 }
 
 export const SelectButton = styled(Button)`

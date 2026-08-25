@@ -2907,5 +2907,16 @@
   "max_500_characters": "حداکثر ۵۰۰ نویسه",
   "payment_page.sent_an_invoice_for": "{organization} فاکتوری به مبلغ {amount} برای شما فرستاده است",
   "payment_page.invoice_due": "سررسید فاکتور {date}",
-  "payment_page.invoice_number": "فاکتور {number}"
+  "payment_page.invoice_number": "فاکتور {number}",
+  "filter_placeholder": "فیلتر...",
+  "back": "بازگشت",
+  "file_is_required": "انتخاب فایل الزامی است",
+  "import.example_title": "نمونهٔ جدول",
+  "import.example_title.items": "نمونهٔ کالاها",
+  "import.example_title.customers": "نمونهٔ مشتریان",
+  "import.example_title.vendors": "نمونهٔ تأمین‌کنندگان",
+  "import.example_title.item_categories": "نمونهٔ دسته‌بندی کالاها",
+  "import.example_description": "برای آشنایی با فیلدهای اطلاعاتی که هنگام ورود داده به کار می‌روند، می‌توانید فایل نمونه را دانلود کنید.",
+  "import.supported_formats": "قالب‌های پشتیبانی‌شده: {formats}",
+  "import.maximum_size": "بیشینه اندازه: {size}"
 }

@@ -25,6 +25,7 @@ import {
 import { Features } from '@/constants';
 import { useDateInputFormatter } from '@/hooks';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 export function VendorFormFinancialSection() {
   const { currencies, vendorId, branches } = useVendorFormContext();
@@ -122,7 +123,7 @@ function VendorOpeningBalanceField() {
       fastField={true}
     >
       <ControlGroup fill>
-        <InputPrependText text={values.currencyCode} />
+        <InputPrependText text={localizedCurrencyLabel(values.currencyCode)} />
         <FMoneyInputGroup
           name={'openingBalance'}
           fastField

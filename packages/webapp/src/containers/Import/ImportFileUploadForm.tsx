@@ -15,7 +15,9 @@ const initialValues: ImportFileUploadValues = {
 };
 
 const validationSchema = Yup.object().shape({
-  file: Yup.mixed().required('File is required'),
+  // Resolved when the form validates rather than when this module is
+  // evaluated, which can happen before the locale is loaded.
+  file: Yup.mixed().required(() => intl.get('file_is_required')),
 });
 
 interface ImportErrorResponse {

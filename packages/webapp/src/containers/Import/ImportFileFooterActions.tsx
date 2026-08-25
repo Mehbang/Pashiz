@@ -21,7 +21,7 @@ export function ImportFileUploadFooterActions() {
       <Group spacing={10}>
         <Button onClick={handleCancelBtnClick}>{intl.get('cancel')}</Button>
         <Button type="submit" intent={Intent.PRIMARY} loading={isSubmitting}>
-          Next
+          {intl.get('next')}
         </Button>
       </Group>
     </div>

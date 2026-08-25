@@ -2907,5 +2907,16 @@
   "max_500_characters": "Max. 500 characters",
   "payment_page.sent_an_invoice_for": "{organization} Sent an Invoice for {amount}",
   "payment_page.invoice_due": "Invoice due {date}",
-  "payment_page.invoice_number": "Invoice {number}"
+  "payment_page.invoice_number": "Invoice {number}",
+  "filter_placeholder": "Filter...",
+  "back": "Back",
+  "file_is_required": "File is required",
+  "import.example_title": "Table Example",
+  "import.example_title.items": "Items Example",
+  "import.example_title.customers": "Customers Example",
+  "import.example_title.vendors": "Vendors Example",
+  "import.example_title.item_categories": "Item Categories Example",
+  "import.example_description": "You can download the sample file to obtain detailed information about the data fields used during the import.",
+  "import.supported_formats": "Supported formats: {formats}",
+  "import.maximum_size": "Maximum size: {size}"
 }

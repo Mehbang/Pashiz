@@ -27,6 +27,7 @@ import { FormattedMessage as T } from '@/components';
 import { TaxRatesSelect } from '@/components/TaxRates/TaxRatesSelect';
 import { ACCOUNT_PARENT_TYPE } from '@/constants/accountTypes';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 type CheckboxField = {
   name: string;
@@ -77,7 +78,7 @@ function ItemFormBodyInner() {
             fastField
           >
             <ControlGroup>
-              <InputPrependText text={baseCurrency} />
+              <InputPrependText text={localizedCurrencyLabel(baseCurrency)} />
               <FMoneyInputGroup
                 name={'sellPrice'}
                 shouldUpdate={sellPriceFieldShouldUpdate}
@@ -171,7 +172,7 @@ function ItemFormBodyInner() {
             fastField
           >
             <ControlGroup>
-              <InputPrependText text={baseCurrency} />
+              <InputPrependText text={localizedCurrencyLabel(baseCurrency)} />
 
               <FMoneyInputGroup
                 name={'costPrice'}
