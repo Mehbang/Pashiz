@@ -1,6 +1,6 @@
+import intl from 'react-intl-universal';
 import { Intent, Menu, MenuItem, Tag } from '@blueprintjs/core';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
 import type { DataTableColumn } from '@/components/Datatable/types';
 import type { BankingTransactionResponse } from '@bigcapital/sdk-ts';
@@ -47,13 +47,13 @@ export function ActionsMenu({
       {original.status === 'categorized' && (
         <MenuItem
           icon={<Icon icon="reader-18" />}
-          text={'Uncategorize'}
+          text={intl.get('uncategorize')}
           onClick={safeCallback(onUncategorize, original)}
         />
       )}
       {original.status === 'matched' && (
         <MenuItem
-          text={'Unmatch'}
+          text={intl.get('unmatch')}
           icon={<Icon icon="unlink" iconSize={16} />}
           onClick={safeCallback(onUnmatch, original)}
         />
@@ -105,7 +105,7 @@ export function useAccountTransactionsColumns(): DataTableColumn<AccountTransact
       },
       {
         id: 'transaction_number',
-        Header: 'Transaction #',
+        Header: intl.get('transaction_id'),
         accessor: 'transactionNumber',
         width: 160,
         className: 'transaction_number',
@@ -114,7 +114,7 @@ export function useAccountTransactionsColumns(): DataTableColumn<AccountTransact
       },
       {
         id: 'reference_number',
-        Header: 'Ref.#',
+        Header: intl.get('ref'),
         accessor: 'referenceNumber',
         width: 160,
         className: 'reference_number',
@@ -123,7 +123,7 @@ export function useAccountTransactionsColumns(): DataTableColumn<AccountTransact
       },
       {
         id: 'status',
-        Header: 'Status',
+        Header: intl.get('status'),
         accessor: allTransactionsStatusAccessor,
       },
       {

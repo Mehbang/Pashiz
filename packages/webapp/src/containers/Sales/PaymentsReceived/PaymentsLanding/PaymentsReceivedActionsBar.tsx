@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -195,7 +196,7 @@ function PaymentsReceivedActionsBarInner({
             <Menu>
               <MenuItem
                 onClick={handleCustomizeBtnClick}
-                text={'Customize Templates'}
+                text={intl.get('customize_templates')}
               />
             </Menu>
           }

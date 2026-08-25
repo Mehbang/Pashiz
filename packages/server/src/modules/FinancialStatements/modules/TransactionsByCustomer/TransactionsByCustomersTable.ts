@@ -1,3 +1,4 @@
+import { CalendarSystem } from '@/utils/jalali-date';
 import * as R from 'ramda';
 import { I18nService } from 'nestjs-i18n';
 import { ITransactionsByCustomersCustomer } from './TransactionsByCustomer.types';
@@ -23,11 +24,13 @@ export class TransactionsByCustomersTable extends TransactionsByContactsTableRow
     customersTransactions: ITransactionsByCustomersCustomer[],
     i18n: I18nService,
     dateFormat: string,
+    calendar: CalendarSystem = 'gregorian',
   ) {
     super();
     this.customersTransactions = customersTransactions;
     this.i18n = i18n;
     this.dateFormat = dateFormat;
+    this.calendar = calendar;
   }
 
   /**

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes, Intent } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers } from 'formik';
 import {
@@ -82,7 +83,7 @@ function TaxRateFormDialogFormInner({
     const handleSuccess = () => {
       closeDialog(dialogName);
       AppToaster.show({
-        message: 'The tax rate has been created successfully.',
+        message: intl.get('the_tax_rate_has_been_created_successfully'),
         intent: Intent.SUCCESS,
       });
     };

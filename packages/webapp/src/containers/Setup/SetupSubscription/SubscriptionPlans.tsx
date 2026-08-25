@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import * as R from 'ramda';
 import { useSubscriptionPlans } from './hooks';
@@ -65,7 +66,7 @@ const SubscriptionPlanMapped = R.compose(
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong!',
+          message: intl.get('something_went_wrong'),
           intent: Intent.DANGER,
         });
       });

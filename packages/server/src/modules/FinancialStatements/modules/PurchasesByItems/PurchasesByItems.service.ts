@@ -83,6 +83,7 @@ export class PurchasesByItemsService {
       {
         baseCurrency: tenantMetadata.baseCurrency,
         dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
       },
     );
     const purchasesByItemsData = purchasesByItemsInstance.reportData();

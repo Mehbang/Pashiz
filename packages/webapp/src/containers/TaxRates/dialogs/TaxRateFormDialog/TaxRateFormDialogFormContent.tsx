@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Tag, Text } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import { ChangeEvent } from 'react';
@@ -19,8 +20,8 @@ export function TaxRateFormDialogContent() {
     <div>
       <FFormGroup
         name={'name'}
-        label={'Name'}
-        labelInfo={<Tag minimal>Required</Tag>}
+        label={intl.get('name')}
+        labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
         subLabel={
           'The name as you would like it to appear in customers invoices.'
         }
@@ -32,8 +33,8 @@ export function TaxRateFormDialogContent() {
       <TaxRateCodeField />
       <FFormGroup
         name={'rate'}
-        label={'Rate (%)'}
-        labelInfo={<Tag minimal>Required</Tag>}
+        label={intl.get('rate_2')}
+        labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
         fastField={true}
       >
         <RateFormGroup
@@ -46,7 +47,7 @@ export function TaxRateFormDialogContent() {
 
       <FFormGroup
         name={'description'}
-        label={'Description'}
+        label={intl.get('description')}
         labelInfo={
           <Hint content="This description is for internal use only and will not be visiable to your customers." />
         }
@@ -56,12 +57,16 @@ export function TaxRateFormDialogContent() {
       </FFormGroup>
 
       <CompoundFormGroup name={'isCompound'} fastField={true}>
-        <FCheckbox label={'Is compound'} name={'isCompound'} fastField={true} />
+        <FCheckbox
+          label={intl.get('is_compound')}
+          name={'isCompound'}
+          fastField={true}
+        />
       </CompoundFormGroup>
 
       <CompoundFormGroup name={'isNonRecoverable'} fastField={true}>
         <FCheckbox
-          label={'Is non recoverable'}
+          label={intl.get('is_non_recoverable')}
           name={'isNonRecoverable'}
           fastField={true}
         />
@@ -88,8 +93,8 @@ function TaxRateCodeField() {
   return (
     <FFormGroup
       name={'code'}
-      label={'Code'}
-      labelInfo={<Tag minimal>Required</Tag>}
+      label={intl.get('code')}
+      labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
       fastField={true}
     >
       <FInputGroup name={'code'} fastField={true} onChange={handleChange} />

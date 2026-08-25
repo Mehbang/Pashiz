@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   NavbarGroup,
   NavbarDivider,
@@ -130,7 +131,7 @@ function ItemsActionsBarInner({
 
   // Handle the print button click.
   const handlePrintBtnClick = () => {
-    downloadExportPdf({ resource: 'Item' });
+    downloadExportPdf({ resource: intl.get('item') });
   };
 
   if (!isEmpty(itemsSelectedRows)) {

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import React from 'react';
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
@@ -19,7 +20,7 @@ function SharePaymentLinkDialogRoot({ dialogName, payload, isOpen }) {
       name={dialogName}
       isOpen={isOpen}
       payload={payload}
-      title={'Share Link'}
+      title={intl.get('share_link')}
       canEscapeJeyClose={true}
       autoFocus={true}
       style={{ width: 570 }}

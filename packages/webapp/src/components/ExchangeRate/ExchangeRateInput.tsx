@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -107,7 +108,9 @@ export function ExchangeRateInputGroup({
   const popoverConfirmContent = (
     <PopoverContent>
       <p>
-        Are you want to re-calculate item prices based on this exchange rate.
+        {intl.get(
+          'are_you_want_to_re_calculate_item_prices_based_on_this_excha',
+        )}
       </p>
       <div
         style={{
@@ -121,7 +124,7 @@ export function ExchangeRateInputGroup({
           onClick={handleRecalcConfirmBtn}
           small
         >
-          Calculate
+          {intl.get('calculate')}
         </Button>
         <Button
           className={Classes.POPOVER_DISMISS}
@@ -130,7 +133,7 @@ export function ExchangeRateInputGroup({
           small
           minimal
         >
-          Cancel
+          {intl.get('cancel')}
         </Button>
       </div>
     </PopoverContent>

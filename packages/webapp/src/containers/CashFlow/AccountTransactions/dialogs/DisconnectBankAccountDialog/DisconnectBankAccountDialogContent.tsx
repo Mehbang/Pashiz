@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent, Classes } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -42,7 +43,7 @@ function DisconnectBankAccountDialogContentInner({
 
     if (values.label !== 'DISCONNECT ACCOUNT') {
       setErrors({
-        label: 'The entered value is incorrect.',
+        label: intl.get('the_entered_value_is_incorrect'),
       });
       setSubmitting(false);
       return;
@@ -51,7 +52,7 @@ function DisconnectBankAccountDialogContentInner({
       .then(() => {
         setSubmitting(false);
         AppToaster.show({
-          message: 'The bank account has been disconnected.',
+          message: intl.get('the_bank_account_has_been_disconnected'),
           intent: Intent.SUCCESS,
         });
         closeDialog(DialogsName.DisconnectBankAccountConfirmation);
@@ -59,7 +60,7 @@ function DisconnectBankAccountDialogContentInner({
       .catch(() => {
         setSubmitting(false);
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });
@@ -89,11 +90,11 @@ function DisconnectBankAccountDialogContentInner({
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Button type="submit" intent={Intent.DANGER}>
-              Disconnect Bank Account
+              {intl.get('disconnect_bank_account')}
             </Button>
 
             <Button intent={Intent.NONE} onClick={handleCancelBtnClick}>
-              Cancel
+              {intl.get('cancel')}
             </Button>
           </div>
         </div>

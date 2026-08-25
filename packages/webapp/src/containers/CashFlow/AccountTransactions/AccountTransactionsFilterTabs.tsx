@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useMemo } from 'react';
 import styled from 'styled-components';
 import { useAccountTransactionsContext } from './AccountTransactionsProvider';
@@ -28,7 +29,7 @@ export function AccountTransactionsFilterTabs() {
     <AccountContentTabs value={filterTab} onChange={handleChange}>
       <ContentTabs.Tab
         id={'dashboard'}
-        title={'Dashboard'}
+        title={intl.get('dashboard')}
         description={'Account Summary'}
       />
       {hasUncategorizedTransx && (
@@ -42,12 +43,12 @@ export function AccountTransactionsFilterTabs() {
               Uncategorized Transactions
             </>
           }
-          description={'For Bank Statement'}
+          description={intl.get('for_bank_statement')}
         />
       )}
       <ContentTabs.Tab
         id="all"
-        title={'All Transactions'}
+        title={intl.get('all_transactions')}
         description={'In Bigcapital'}
       />
     </AccountContentTabs>

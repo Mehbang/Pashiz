@@ -1,0 +1,12 @@
+{
+  "field.date": "تاریخ",
+  "field.journal_number": "شماره سند",
+  "field.reference": "شماره مرجع",
+  "field.journal_type": "نوع سند",
+  "field.amount": "مبلغ",
+  "field.description": "شرح",
+  "field.currency": "ارز",
+  "field.exchange_rate": "نرخ تسعیر",
+  "field.status": "وضعیت",
+  "field.created_at": "تاریخ ایجاد"
+}

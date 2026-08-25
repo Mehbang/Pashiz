@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import classNames from 'classnames';
 import React, { lazy } from 'react';
 import { Dialog, DialogSuspense } from '@/components';
@@ -25,7 +26,7 @@ function CashflowSheetPdfDialogRoot({
   return (
     <Dialog
       name={dialogName}
-      title={'Customer Balance Summary Print Preview'}
+      title={intl.get('customer_balance_summary_print_preview')}
       className={classNames(CLASSES.DIALOG_PDF_PREVIEW)}
       autoFocus={true}
       canEscapeKeyClose={true}

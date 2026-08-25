@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -52,7 +53,7 @@ export function DashboardActionViewsList({
         <>
           <MenuItem
             onClick={handleAllTabClick}
-            text={allMenuItemText || 'All'}
+            text={allMenuItemText || intl.get('all')}
           />
           <Divider />
         </>

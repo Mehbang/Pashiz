@@ -1,3 +1,4 @@
+import { PashizBrand } from '@/components/Icons/PashizBrand';
 import classNames from 'classnames';
 import React from 'react';
 import { Icon } from '@/components';
@@ -29,7 +30,7 @@ export default function BigcapitalLoading({
             className="bigcapital-logo"
           />
         ) : (
-          <Icon icon="bigcapital" height={37} width={228} />
+          <PashizBrand height={34} />
         )}
       </div>
     </div>

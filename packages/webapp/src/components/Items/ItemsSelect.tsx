@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useMemo, ComponentType } from 'react';
 import type { Item } from '@bigcapital/sdk-ts';
 import type { SelectOptionProps } from '@blueprintjs-formik/select';
@@ -50,7 +51,7 @@ function withItemsSelectLogic<C extends ComponentType<any>>(
       valueAccessor: 'id' as const,
       textAccessor: 'name' as const,
       labelAccessor: 'code' as const,
-      placeholder: 'Click to select an item.',
+      placeholder: intl.get('click_to_select_an_item'),
       popoverProps: { minimal: true },
       ...rest,
     } as ComponentProps<C>;

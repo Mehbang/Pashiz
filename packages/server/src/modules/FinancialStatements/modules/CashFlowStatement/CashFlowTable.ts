@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { formatDateIn } from '@/utils/jalali-date';
 import * as R from 'ramda';
 import { isEmpty } from 'lodash';
 import * as moment from 'moment';
@@ -38,9 +39,17 @@ export class CashFlowTable {
    * @param {ICashFlowStatement} reportStatement - Statement.
    * @param {I18nService} i18n - I18n service.
    */
-  constructor(reportStatement: ICashFlowStatementDOO, i18n: I18nService) {
+  constructor(
+    reportStatement: ICashFlowStatementDOO,
+    i18n: I18nService,
+    meta?: IFinancialReportMeta,
+  ) {
     this.report = reportStatement;
     this.i18n = i18n;
+    // The table builds its own period columns, so it needs the same calendar
+    // and date format the sheet was computed with.
+    this.dateFormat = meta?.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta?.calendar || DEFAULT_REPORT_META.calendar;
     this.dateRangeSet = [];
     this.initDateRangeCollection();
   }
@@ -319,9 +328,12 @@ export class CashFlowTable {
    * @return {string}
    */
   private formatColumnLabel = (dateRange: ICashFlowDateRange) => {
-    const monthFormat = (range) => moment(range.toDate).format('YYYY-MM');
-    const yearFormat = (range) => moment(range.toDate).format('YYYY');
-    const dayFormat = (range) => moment(range.toDate).format('YYYY-MM-DD');
+    const label = (format: string) => (range) =>
+      formatDateIn(range.toDate, format, this.calendar);
+
+    const monthFormat = label('YYYY-MM');
+    const yearFormat = label('YYYY');
+    const dayFormat = label('YYYY-MM-DD');
 
     const conditions = [
       ['month', monthFormat],

@@ -16,8 +16,16 @@
     "build:cjs": "tsup src/index.ts --format cjs --dts --sourcemap",
     "build:esm": "tsup src/index.ts --format esm --dts --sourcemap",
     "build": "npm run build:cjs && npm run build:esm",
-    "dev": "npm run build -- --watch"
+    "dev": "npm run build -- --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "vitest": "2.1.3"
+  },
+  "dependencies": {
+    "js-money": "^0.6.3"
+  }
 }

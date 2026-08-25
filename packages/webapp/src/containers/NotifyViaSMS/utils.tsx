@@ -5,7 +5,7 @@ export const transformErrors = (errors, { setErrors, setCalloutCode }) => {
   if (errors.some((e) => e.type === 'CUSTOMER_SMS_NOTIFY_PHONE_INVALID')) {
     setCalloutCode([200]);
     setErrors({
-      customer_phone_number: 'The personal phone number is invalid.',
+      customer_phone_number: intl.get('the_personal_phone_number_is_invalid'),
     });
   }
   if (errors.find((error) => error.type === 'CUSTOMER_HAS_NO_PHONE_NUMBER')) {

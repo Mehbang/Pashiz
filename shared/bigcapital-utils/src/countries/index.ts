@@ -1,5 +1,5 @@
-import { Countries } from './constant';
-import { Country, Maybe } from './types';
+import { Countries } from "./constant";
+import { Country, Maybe } from "./types";
 
 export const getAllCountries = () => {
   return Object.keys(Countries).map((countryCode) => {
@@ -11,7 +11,7 @@ export const getAllCountries = () => {
 };
 
 export const findByIsoCountryCode = (
-  isoCode: string
+  isoCode: string,
 ): Maybe<Country & { countryCode: string }> => {
   const _isoCode = isoCode?.toUpperCase();
   const country = Countries[_isoCode];

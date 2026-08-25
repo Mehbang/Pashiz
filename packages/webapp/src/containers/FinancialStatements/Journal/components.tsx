@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -84,8 +85,8 @@ export const JournalSheetExportMenu = () => {
       <Stack spacing={8}>
         <Text>
           {done
-            ? 'The report has been exported successfully.'
-            : 'Exporting the report…'}
+            ? intl.get('the_report_has_been_exported_successfully')
+            : intl.get('exporting_the_report')}
         </Text>
         <ProgressBar
           className={classNames('toast-progress', {
@@ -128,7 +129,7 @@ export const JournalSheetExportMenu = () => {
   return (
     <Menu>
       <MenuItem
-        text={'XLSX (Microsoft Excel)'}
+        text={intl.get('xlsx_microsoft_excel')}
         onClick={handleXlsxExportBtnClick}
       />
       <MenuItem text={'CSV'} onClick={handleCsvExportBtnClick} />

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -30,7 +31,7 @@ export function PaymentReceiveFormFootetRight() {
         textStyle={TotalLineTextStyle.Bold}
       />
       <TotalLine
-        title={'Exceeded Amount'}
+        title={intl.get('exceeded_amount')}
         value={<FormatNumber value={exceededAmount} noZero={false} />}
         textStyle={TotalLineTextStyle.Regular}
       />

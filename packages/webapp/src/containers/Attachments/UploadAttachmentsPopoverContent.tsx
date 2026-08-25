@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Intent, Text, Spinner } from '@blueprintjs/core';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
@@ -114,13 +115,13 @@ export function UploadAttachmentsPopoverContent({
   return (
     <div className={styles.content}>
       <div>
-        <Text className={styles.label}>Attach documents</Text>
+        <Text className={styles.label}>{intl.get('attach_documents')}</Text>
         <Stack spacing={0}>
           <ImportDropzoneField
             uploadIcon={null}
             value={null}
             title={''}
-            subtitle={'Drag and drop file here or choose file'}
+            subtitle={intl.get('drag_and_drop_file_here_or_choose_file')}
             classNames={{ root: styles.dropzoneRoot }}
             onChange={handleChangeDropzone}
             dropzoneProps={{
@@ -165,7 +166,7 @@ export function UploadAttachmentsPopoverContent({
                     </Text>
                     {localFile.loading ? (
                       <Text className={styles.attachmentLoadingText}>
-                        Loading...
+                        {intl.get('loading')}
                       </Text>
                     ) : (
                       <Text className={styles.attachmentSizeText}>

@@ -1,7 +1,7 @@
+import intl from 'react-intl-universal';
 import { ControlGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { useItemFormContext } from './ItemFormProvider';
 import { ItemFormSectionTitle } from './ItemFormSectionTitle';
 import {
@@ -32,7 +32,7 @@ export function ItemFormSellingSection() {
 
   return (
     <Box data-section-id="selling">
-      <ItemFormSectionTitle>Selling details</ItemFormSectionTitle>
+      <ItemFormSectionTitle>{intl.get('selling_details')}</ItemFormSectionTitle>
 
       {/*------------- Sellable checkbox ------------- */}
       <FFormGroup
@@ -91,7 +91,11 @@ export function ItemFormSellingSection() {
       </FFormGroup>
 
       {/*------------- Sell Tax Rate ------------- */}
-      <FFormGroup name={'sellTaxRateId'} label={'Tax Rate'} inline={true}>
+      <FFormGroup
+        name={'sellTaxRateId'}
+        label={intl.get('tax_rate')}
+        inline={true}
+      >
         <TaxRatesSelect name={'sellTaxRateId'} items={taxRates} allowCreate />
       </FFormGroup>
 

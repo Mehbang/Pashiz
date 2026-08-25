@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useFormikContext } from 'formik';
 import styled from 'styled-components';
 import { composeEntriesOnEditInclusiveTax, type BillFormValues } from './utils';
@@ -34,7 +35,7 @@ export function BillExclusiveInclusiveSelect(props: Record<string, unknown>) {
   return (
     <InclusiveFormGroup
       name={'inclusiveExclusiveTax'}
-      label={'Amounts are'}
+      label={intl.get('amounts_are')}
       inline={true}
     >
       <FSelect

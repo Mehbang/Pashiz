@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { TaxRatesTableActionsMenu } from './_components';
 import { useTaxRatesTableColumns } from './_utils';
@@ -79,13 +80,13 @@ function TaxRatesDataTable({
     activateTaxRateMutate(taxRate.id)
       .then(() => {
         AppToaster.show({
-          message: 'The tax rate has been activated successfully.',
+          message: intl.get('the_tax_rate_has_been_activated_successfully'),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });
@@ -95,13 +96,13 @@ function TaxRatesDataTable({
     inactivateTaxRateMutate(taxRate.id)
       .then(() => {
         AppToaster.show({
-          message: 'The tax rate has been inactivated successfully.',
+          message: intl.get('the_tax_rate_has_been_inactivated_successfully'),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });

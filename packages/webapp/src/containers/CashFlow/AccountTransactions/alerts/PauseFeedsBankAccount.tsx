@@ -1,6 +1,6 @@
+import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
-import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithAlertStoreConnectProps } from '@/containers/Alert/withAlertStoreConnect';
 import { AppToaster } from '@/components';
@@ -42,7 +42,9 @@ function PauseFeedsBankAccountAlert({
     pauseBankAccountFeeds({ bankAccountId })
       .then(() => {
         AppToaster.show({
-          message: 'The bank feeds of the bank account has been paused.',
+          message: intl.get(
+            'the_bank_feeds_of_the_bank_account_has_been_paused',
+          ),
           intent: Intent.SUCCESS,
         });
       })
@@ -55,7 +57,7 @@ function PauseFeedsBankAccountAlert({
   return (
     <Alert
       cancelButtonText={intl.get('cancel')}
-      confirmButtonText={'Pause bank feeds'}
+      confirmButtonText={intl.get('pause_bank_feeds')}
       intent={Intent.WARNING}
       isOpen={isOpen}
       onCancel={handleCancelActivateItem}
@@ -63,8 +65,9 @@ function PauseFeedsBankAccountAlert({
       onConfirm={handleConfirmItemActivate}
     >
       <p>
-        Are you sure want to pause bank feeds syncing of this bank account, you
-        can always resume it again?
+        {intl.get(
+          'are_you_sure_want_to_pause_bank_feeds_syncing_of_this_bank_a',
+        )}
       </p>
     </Alert>
   );

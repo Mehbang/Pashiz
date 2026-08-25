@@ -17,6 +17,7 @@ import {
   DrawerActionsBar,
 } from '@/components';
 import { getAllCurrenciesOptions } from '@/constants/currencies';
+import { useAppIntlContext } from '@/components/AppIntlProvider';
 import { getFiscalYear } from '@/constants/fiscalYearOptions';
 import { getLanguages } from '@/constants/languagesOptions';
 import {
@@ -62,7 +63,8 @@ export default function CreateWorkspaceForm({
   onSubmitting,
   onCancel,
 }: CreateWorkspaceFormProps) {
-  const FiscalYear = getFiscalYear();
+  const { calendar } = useAppIntlContext();
+  const FiscalYear = getFiscalYear(calendar);
   const Languages = getLanguages();
   const currencies = getAllCurrenciesOptions();
   const isDarkMode = useIsDarkMode();

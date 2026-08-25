@@ -46,14 +46,14 @@ function TaxRateDeleteAlertInner({
     deleteTaxRate(taxRateId)
       .then(() => {
         AppToaster.show({
-          message: 'The tax rate has been deleted successfully.',
+          message: intl.get('the_tax_rate_has_been_deleted_successfully'),
           intent: Intent.SUCCESS,
         });
         closeDrawer(DRAWERS.TAX_RATE_DETAILS);
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       })
@@ -74,13 +74,15 @@ function TaxRateDeleteAlertInner({
       loading={isPending}
     >
       <p>
-        Once you delete this tax rate, you won't be able to restore the item
-        later.
+        {intl.get(
+          'once_you_delete_this_tax_rate_you_won_t_be_able_to_restore_t',
+        )}
       </p>
 
       <p>
-        Are you sure you want to delete ? If you're not sure, you can inactivate
-        it instead.
+        {intl.get(
+          'are_you_sure_you_want_to_delete_if_you_re_not_sure_you_can_i',
+        )}
       </p>
     </Alert>
   );

@@ -55,6 +55,7 @@ export class TrialBalanceSheet extends FinancialSheet {
     this.numberFormat = this.query.numberFormat;
     this.baseCurrency = meta.baseCurrency;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
   }
 
   /**

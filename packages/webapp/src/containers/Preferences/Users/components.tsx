@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Intent,
   Button,
@@ -9,7 +10,6 @@ import {
   Position,
 } from '@blueprintjs/core';
 import React from 'react';
-import intl from 'react-intl-universal';
 import type { User } from '@bigcapital/sdk-ts';
 import { FormattedMessage as T, Icon, If } from '@/components';
 import { safeCallback, firstLettersArgs } from '@/utils';
@@ -78,7 +78,7 @@ export function ActionsMenu({
 
       <If condition={!original.inviteAcceptedAt}>
         <MenuItem
-          text={'Resend invitation'}
+          text={intl.get('resend_invitation')}
           onClick={safeCallback(onResendInvitation, original)}
           icon={<Icon icon="send" iconSize={16} />}
         />

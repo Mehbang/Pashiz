@@ -47,8 +47,9 @@ function ChangingFullAmountAlertInner({
       onConfirm={handleConfirm}
     >
       <p>
-        Changing full amount will change all credit and payment were applied, Is
-        this okay?
+        {intl.get(
+          'changing_full_amount_will_change_all_credit_and_payment_were',
+        )}
       </p>
     </Alert>
   );

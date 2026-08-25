@@ -1,9 +1,9 @@
+import intl from 'react-intl-universal';
 import {
   ControlGroup,
   Divider,
   Icon as BlueprintIcon,
 } from '@blueprintjs/core';
-import intl from 'react-intl-universal';
 import { VendorFormSectionTitle } from './VendorFormSectionTitle';
 import {
   SalutationList,
@@ -24,7 +24,9 @@ export function VendorFormBasicSection() {
 
   return (
     <Box data-section-id="primary">
-      <VendorFormSectionTitle>Vendor details</VendorFormSectionTitle>
+      <VendorFormSectionTitle>
+        {intl.get('vendor_details')}
+      </VendorFormSectionTitle>
 
       {/**----------- Contact name -----------*/}
       <FFormGroup
@@ -66,7 +68,7 @@ export function VendorFormBasicSection() {
 
       <FFormGroup
         name={'code'}
-        label={'Vendor Code'}
+        label={intl.get('vendor_code')}
         helperText="Add a unique account number to identify, reference and search for the contact."
         inline
         fastField

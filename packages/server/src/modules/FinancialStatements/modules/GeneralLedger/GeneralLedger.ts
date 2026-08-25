@@ -1,3 +1,4 @@
+import { formatDateIn } from '@/utils/jalali-date';
 import { isEmpty, get, last, head } from 'lodash';
 import * as moment from 'moment';
 import * as R from 'ramda';
@@ -50,6 +51,7 @@ export class GeneralLedgerSheet extends R.compose(FinancialSheetStructure)(
     this.query = query;
     this.numberFormat = this.query.numberFormat;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
     this.repository = repository;
     this.baseCurrency = meta.baseCurrency;
     this.i18n = i18n;
@@ -94,7 +96,7 @@ export class GeneralLedgerSheet extends R.compose(FinancialSheetStructure)(
     return {
       id: entry.id,
       date: entry.date,
-      dateFormatted: moment(entry.date).format(this.dateFormat),
+      dateFormatted: formatDateIn(entry.date, this.dateFormat, this.calendar),
 
       referenceType: entry.transactionType,
       referenceId: entry.transactionId,

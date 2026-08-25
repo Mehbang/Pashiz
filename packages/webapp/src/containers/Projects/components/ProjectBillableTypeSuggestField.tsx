@@ -68,7 +68,7 @@ export function ProjectBillableTypeSuggestField({
   initialBillableTypeId,
   selectedBillableTypeId,
 
-  defautlSelectText = 'Placeholder Type...',
+  defautlSelectText = intl.get('placeholder_type'),
   onBillableTypeSelected,
   popoverFill = false,
 

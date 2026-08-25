@@ -11,7 +11,7 @@ export function useProjectTimesheetColumns() {
     () => [
       {
         id: 'name',
-        Header: 'Header',
+        Header: intl.get('header'),
         accessor: TimesheetAccessor,
         width: 100,
         className: 'name',

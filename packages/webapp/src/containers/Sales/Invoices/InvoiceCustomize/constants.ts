@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 export const MANAGE_LINK_URL = '/preferences/payment-methods';
 
 export const initialValues = {
@@ -14,126 +15,130 @@ export const initialValues = {
 
   // Top details.
   showInvoiceNumber: true,
-  invoiceNumberLabel: 'Invoice number',
+  invoiceNumberLabel: intl.get('invoice_no_'),
 
   // Issue date
   showDateIssue: true,
-  dateIssueLabel: 'Date of Issue',
+  dateIssueLabel: intl.get('date_of_issue'),
 
   // Due date.
   showDueDate: true,
-  dueDateLabel: 'Due Date',
+  dueDateLabel: intl.get('due_date'),
 
   // Addresses
   showCustomerAddress: true,
   showCompanyAddress: true,
-  billedToLabel: 'Billed To',
+  billedToLabel: intl.get('billed_to'),
 
   // Entries
-  itemNameLabel: 'Item',
-  itemDescriptionLabel: 'Description',
-  itemRateLabel: 'Rate',
-  itemTotalLabel: 'Total',
+  itemNameLabel: intl.get('item'),
+  itemDescriptionLabel: intl.get('description'),
+  itemRateLabel: intl.get('rate'),
+  itemTotalLabel: intl.get('total'),
 
   // Totals
   showSubtotal: true,
-  subtotalLabel: 'Subtotal',
+  subtotalLabel: intl.get('subtotal'),
 
   // Discount
   showDiscount: true,
-  discountLabel: 'Discount',
+  discountLabel: intl.get('discount_2'),
 
   showTaxes: true,
 
   showTotal: true,
-  totalLabel: 'Total',
+  totalLabel: intl.get('total'),
 
-  paymentMadeLabel: 'Payment Made',
+  paymentMadeLabel: intl.get('payment_made'),
   showPaymentMade: true,
 
   // Due amount
-  dueAmountLabel: 'Due Amount',
+  dueAmountLabel: intl.get('due_amount'),
   showDueAmount: true,
 
   // Footer paragraphs.
-  termsConditionsLabel: 'Terms & Conditions',
+  termsConditionsLabel: intl.get('terms_conditions'),
   showTermsConditions: true,
 
   // Statement
-  statementLabel: 'Statement',
+  statementLabel: intl.get('statement'),
   showStatement: true,
 };
 
 export const fieldsGroups = [
   {
-    label: 'Header',
+    label: intl.get('header'),
     fields: [
       {
         labelKey: 'invoiceNumberLabel',
         enableKey: 'showInvoiceNumber',
-        label: 'Invoice No.',
+        label: intl.get('invoice_no_2'),
       },
       {
         labelKey: 'dateIssueLabel',
         enableKey: 'showDateIssue',
-        label: 'Issue Date',
+        label: intl.get('issue_date'),
       },
       {
         labelKey: 'dueDateLabel',
         enableKey: 'showDueDate',
-        label: 'Due Date',
+        label: intl.get('due_date'),
       },
       {
         enableKey: 'showCustomerAddress',
         labelKey: 'billedToLabel',
-        label: 'Bill To',
+        label: intl.get('bill_to'),
       },
       {
         enableKey: 'showCompanyAddress',
-        label: 'Billed From',
+        label: intl.get('billed_from'),
       },
     ],
   },
   {
-    label: 'Totals',
+    label: intl.get('totals'),
     fields: [
       {
         labelKey: 'subtotalLabel',
         enableKey: 'showSubtotal',
-        label: 'Subtotal',
+        label: intl.get('subtotal'),
       },
       {
         labelKey: 'discountLabel',
         enableKey: 'showDiscount',
-        label: 'Discount',
+        label: intl.get('discount_2'),
       },
-      { enableKey: 'showTaxes', label: 'Taxes' },
-      { labelKey: 'totalLabel', enableKey: 'showTotal', label: 'Total' },
+      { enableKey: 'showTaxes', label: intl.get('taxes') },
+      {
+        labelKey: 'totalLabel',
+        enableKey: 'showTotal',
+        label: intl.get('total'),
+      },
       {
         labelKey: 'paymentMadeLabel',
         enableKey: 'showPaymentMade',
-        label: 'Payment Made',
+        label: intl.get('payment_made'),
       },
       {
         labelKey: 'dueAmountLabel',
         enableKey: 'showDueAmount',
-        label: 'Due Amount',
+        label: intl.get('due_amount'),
       },
     ],
   },
   {
-    label: 'Footer',
+    label: intl.get('footer'),
     fields: [
       {
         labelKey: 'termsConditionsLabel',
         enableKey: 'showTermsConditions',
-        label: 'Terms & Conditions',
+        label: intl.get('terms_conditions'),
       },
       {
         labelKey: 'statementLabel',
         enableKey: 'showStatement',
-        label: 'Statement',
-        labelPlaceholder: 'Statement',
+        label: intl.get('statement'),
+        labelPlaceholder: intl.get('statement'),
       },
     ],
   },

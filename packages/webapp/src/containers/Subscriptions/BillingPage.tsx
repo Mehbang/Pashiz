@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import * as R from 'ramda';
 import { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -19,7 +20,7 @@ function BillingPageRoot({
   });
 
   useEffect(() => {
-    changePreferencesPageTitle('Billing');
+    changePreferencesPageTitle(intl.get('billing'));
   }, [changePreferencesPageTitle]);
 
   // In case the edition is not Bigcapital Cloud, redirect to the homepage.

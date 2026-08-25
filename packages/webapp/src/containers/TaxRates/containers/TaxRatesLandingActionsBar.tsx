@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { NavbarGroup, NavbarDivider, Button, Classes } from '@blueprintjs/core';
 import { useHistory } from 'react-router-dom';
 import {
@@ -42,7 +43,7 @@ function TaxRatesActionsBar({
           <Button
             className={Classes.MINIMAL}
             icon={<Icon icon="plus" />}
-            text={'New Tax Rate'}
+            text={intl.get('new_tax_rate')}
             onClick={onClickNewItem}
           />
         </Can>

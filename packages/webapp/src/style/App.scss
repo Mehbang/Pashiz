@@ -1,3 +1,4 @@
+@import './fonts';
 @import './normalize.scss';
 @import './_base.scss';
 
@@ -308,3 +309,6 @@ span.table-tooltip-overview-target {
 :root {
   --top-offset: 60px;
 }
+
+// Right-to-left corrections; imported last so it wins over Blueprint.
+@import 'rtl';

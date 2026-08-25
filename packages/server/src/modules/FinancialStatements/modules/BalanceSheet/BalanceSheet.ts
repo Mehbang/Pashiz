@@ -87,6 +87,7 @@ export class BalanceSheet extends R.pipe(
     this.baseCurrency = meta.baseCurrency;
     this.numberFormat = this.query.query.numberFormat;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
     this.i18n = i18n;
   }
 

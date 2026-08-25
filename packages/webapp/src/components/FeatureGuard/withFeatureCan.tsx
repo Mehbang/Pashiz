@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { connect } from 'react-redux';
 import { getDashboardFeaturesSelector } from '@/store/dashboard/dashboard.selectors';
 import { ApplicationState } from '@/store/reducers';

@@ -3,12 +3,12 @@ import {
   IsHexColor,
   IsIn,
   IsISO31661Alpha2,
-  IsISO4217CurrencyCode,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsSupportedCurrencyCode } from '@/common/decorators/IsSupportedCurrencyCode.decorator';
 import { MONTHS } from '../Organization/constants';
 import { ACCEPTED_LOCALES, DATE_FORMATS } from '../Organization.constants';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -68,7 +68,7 @@ export class BuildOrganizationDto {
   })
   location: string;
 
-  @IsISO4217CurrencyCode()
+  @IsSupportedCurrencyCode()
   @ApiProperty({
     description: 'Base currency in ISO 4217 format',
     example: 'USD',
@@ -131,7 +131,7 @@ export class UpdateOrganizationDto {
   location?: string;
 
   @IsOptional()
-  @IsISO4217CurrencyCode()
+  @IsSupportedCurrencyCode()
   @ApiPropertyOptional({
     description: 'Base currency in ISO 4217 format',
     example: 'USD',

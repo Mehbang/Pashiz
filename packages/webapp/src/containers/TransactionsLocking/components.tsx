@@ -96,7 +96,9 @@ export const TransactionLockingItemSkeleton = ({}) => {
           </TransLockingItemTitle>
 
           <TransLockingItemDesc className={Classes.SKELETON}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            {intl.get(
+              'lorem_ipsum_dolor_sit_amet_consectetur_adipisicing_elit',
+            )}
           </TransLockingItemDesc>
         </TransLockingContent>
       </TransLockingInner>

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes } from '@blueprintjs/core';
 import clsx from 'classnames';
 import React from 'react';
@@ -59,41 +60,41 @@ export function useUncategorizedTransactionsColumns(): DataTableColumn<Recognize
   return React.useMemo(
     () => [
       {
-        Header: 'Date',
+        Header: intl.get('date'),
         accessor: 'formattedDate',
         width: 110,
         textOverview: true,
       },
       {
-        Header: 'Description',
+        Header: intl.get('description'),
         accessor: 'description',
         className: clsx(Classes.TEXT_MUTED),
         textOverview: true,
       },
       {
-        Header: 'Payee',
+        Header: intl.get('payee'),
         accessor: 'payee',
         textOverview: true,
       },
       {
-        Header: 'Recognize',
+        Header: intl.get('recognize'),
         accessor: recognizeAccessor,
         textOverview: true,
       },
       {
-        Header: 'Rule',
+        Header: intl.get('rule'),
         accessor: 'bankRuleName',
         textOverview: true,
       },
       {
-        Header: 'Deposit',
+        Header: intl.get('deposit'),
         accessor: 'formattedDepositAmount',
         align: 'right',
         width: depositWidth,
         money: true,
       },
       {
-        Header: 'Withdrawal',
+        Header: intl.get('withdrawal'),
         accessor: 'formattedWithdrawalAmount',
         align: 'right',
         width: withdrawalWidth,

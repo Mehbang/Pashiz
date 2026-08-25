@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import {
   Position,
   Menu,
@@ -11,7 +12,6 @@ import {
 } from '@blueprintjs/core';
 import clsx from 'classnames';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { FormattedMessage as T } from '@/components';
 import { FormatDateCell, Choose, Money, Icon, If, Can } from '@/components';
 import { SaleReceiptAction, AbilitySubject } from '@/constants/abilityOption';
@@ -52,7 +52,7 @@ export function ActionsMenu({
       <Can I={SaleReceiptAction.View} a={AbilitySubject.Receipt}>
         <MenuItem
           icon={<Icon icon={'envelope'} iconSize={16} />}
-          text={'Send Mail'}
+          text={intl.get('send_mail')}
           onClick={safeCallback(onSendMail, receipt)}
         />
         <MenuItem

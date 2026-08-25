@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes, Text } from '@blueprintjs/core';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
@@ -17,15 +18,16 @@ export function PreferencesPaymentMethodsPage() {
   const changePageTitle = useChangePreferencesPageTitle();
 
   useEffect(() => {
-    changePageTitle('Payment Methods');
+    changePageTitle(intl.get('payment_methods'));
   }, [changePageTitle]);
 
   return (
     <PaymentMethodsRoot>
       <PaymentMethodsBoot>
         <Text className={Classes.TEXT_MUTED} style={{ marginBottom: 20 }}>
-          Accept payments from all the major debit and credit card networks
-          through the supported payment methods.
+          {intl.get(
+            'accept_payments_from_all_the_major_debit_and_credit_card_net',
+          )}
         </Text>
 
         <Stack>

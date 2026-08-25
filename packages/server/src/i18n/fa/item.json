@@ -1,0 +1,23 @@
+{
+  "field.type": "نوع کالا",
+  "field.type.inventory": "انبارگردانی‌شده",
+  "field.type.service": "خدمت",
+  "field.type.non-inventory": "بدون انبارگردانی",
+  "field.name": "نام کالا",
+  "field.code": "کد کالا",
+  "field.sellable": "قابل فروش",
+  "field.purchasable": "قابل خرید",
+  "field.cost_price": "بهای تمام‌شده",
+  "field.sell_price": "قیمت فروش",
+  "field.cost_account": "حساب بهای تمام‌شده",
+  "field.sell_account": "حساب فروش",
+  "field.sell_description": "شرح فروش",
+  "field.inventory_account": "حساب موجودی",
+  "field.purchase_description": "شرح خرید",
+  "field.quantity_on_hand": "موجودی در دسترس",
+  "field.note": "یادداشت",
+  "field.category": "دسته‌بندی",
+  "field.category_hint": "با نام دسته‌بندی مطابقت دارد.",
+  "field.active": "فعال",
+  "field.created_at": "تاریخ ایجاد"
+}

@@ -25,6 +25,7 @@ export class TransactionsByVendorTableInjectable {
       sheet.data,
       this.i18n,
       sheet.meta.dateFormat,
+      sheet.meta.calendar,
     );
 
     return {

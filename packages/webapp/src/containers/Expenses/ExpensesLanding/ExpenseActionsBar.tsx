@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   NavbarGroup,
@@ -110,7 +111,7 @@ function ExpensesActionsBar({
   };
   // Handles the print button click.
   const handlePrintBtnClick = () => {
-    downloadExportPdf({ resource: 'Expense' });
+    downloadExportPdf({ resource: intl.get('expense') });
   };
 
   if (!isEmpty(expensesSelectedRows)) {

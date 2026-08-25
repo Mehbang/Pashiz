@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -47,19 +48,19 @@ export function SharePaymentLinkFormContent() {
         <Stack spacing={0}>
           <FFormGroup
             name={'publicity'}
-            label={'Visibility'}
+            label={intl.get('visibility')}
             style={{ marginBottom: 10 }}
             inline
           >
             <FSelect
               name={'publicity'}
               items={[
-                { value: 'private', text: 'Private' },
-                { value: 'public', text: 'Public' },
+                { value: 'private', text: intl.get('private') },
+                { value: 'public', text: intl.get('public') },
               ]}
               input={({ activeItem, text, label, value }) => (
                 <Button
-                  text={text || 'Select an item ...'}
+                  text={text || intl.get('select_an_item')}
                   rightIcon={<Icon icon={'caret-down-16'} iconSize={16} />}
                   minimal
                 />
@@ -70,17 +71,17 @@ export function SharePaymentLinkFormContent() {
           </FFormGroup>
 
           <p className={Classes.TEXT_MUTED} style={{ marginBottom: 20 }}>
-            Select an expiration date and generate the link to share it with
-            your customer. Remember that anyone who has access to this link can
-            view, print or download it.
+            {intl.get(
+              'select_an_expiration_date_and_generate_the_link_to_share_it_',
+            )}
           </p>
 
           <FFormGroup
             name={'expiryDate'}
-            label={'Expiration Date'}
-            helperText={
-              'By default, the link is set to expire 90 days from today.'
-            }
+            label={intl.get('expiration_date')}
+            helperText={intl.get(
+              'by_default_the_link_is_set_to_expire_90_days_from_today',
+            )}
             fastField
           >
             <FDateInput
@@ -97,7 +98,7 @@ export function SharePaymentLinkFormContent() {
           </FFormGroup>
 
           {url && (
-            <FormGroup name={'link'} label={'Payment Link'}>
+            <FormGroup name={'link'} label={intl.get('payment_link')}>
               <InputGroup
                 name={'link'}
                 value={url}
@@ -121,18 +122,20 @@ export function SharePaymentLinkFormContent() {
         <DialogFooterActions>
           {url ? (
             <Button intent={Intent.PRIMARY} onClick={handleCopyBtnClick}>
-              Copy Link
+              {intl.get('copy_link')}
             </Button>
           ) : (
             <>
-              <Button onClick={handleCancelBtnClick}>Cancel</Button>
+              <Button onClick={handleCancelBtnClick}>
+                {intl.get('cancel')}
+              </Button>
               <Button
                 type={'submit'}
                 intent={Intent.PRIMARY}
                 loading={isSubmitting}
                 style={{ minWidth: 100 }}
               >
-                Generate
+                {intl.get('generate')}
               </Button>
             </>
           )}

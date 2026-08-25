@@ -49,6 +49,7 @@ export class TrialBalanceSheetService {
       {
         baseCurrency: tenantMetadata.baseCurrency,
         dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
       },
     );
     // Trial balance sheet data.

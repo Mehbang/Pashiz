@@ -102,10 +102,3 @@ function ApiKeysGenerateDialogContentInner({
 export const ApiKeysGenerateDialogContent = compose(withDialogActions)(
   ApiKeysGenerateDialogContentInner,
 );
-
-// FIXME: latent bug preserved — `index.tsx` re-exports `ApiKeysGenerateDialog`
-// but this module historically only exported `ApiKeysGenerateDialogContent`.
-// The Dialog wrapper (`<Dialog>...`) was never created in the original code;
-// instead the dialog content is used directly. Re-export under the dialog
-// name to keep external consumers (DialogsContainer.tsx) working.
-export { ApiKeysGenerateDialogContent as ApiKeysGenerateDialog };

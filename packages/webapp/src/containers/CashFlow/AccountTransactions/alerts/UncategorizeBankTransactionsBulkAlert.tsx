@@ -1,6 +1,6 @@
+import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { withBankingActions } from '../../withBankingActions';
 import type { WithBankingActionsProps } from '../../withBankingActions';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -50,14 +50,18 @@ function UncategorizeBankTransactionsBulkAlertInner({
     uncategorizeTransactions({ ids: uncategorizeTransactionsIds })
       .then(() => {
         AppToaster.show({
-          message: 'The selected transactions have been uncategorized.',
+          message: intl.get(
+            'the_selected_transactions_have_been_uncategorized',
+          ),
           intent: Intent.SUCCESS,
         });
         resetCategorizedTransactionsSelected();
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong while uncategorizing transactions.',
+          message: intl.get(
+            'something_went_wrong_while_uncategorizing_transactions',
+          ),
           intent: Intent.DANGER,
         });
       })
@@ -69,7 +73,7 @@ function UncategorizeBankTransactionsBulkAlertInner({
   return (
     <Alert
       cancelButtonText={intl.get('cancel')}
-      confirmButtonText={'Uncategorize Transactions'}
+      confirmButtonText={intl.get('uncategorize_transactions')}
       intent={Intent.DANGER}
       isOpen={isOpen}
       onCancel={handleCancelActivateItem}
@@ -77,8 +81,9 @@ function UncategorizeBankTransactionsBulkAlertInner({
       onConfirm={handleConfirmItemActivate}
     >
       <p>
-        Are you sure want to uncategorize the selected bank transactions, this
-        action is not reversible but you can always categorize them again?
+        {intl.get(
+          'are_you_sure_want_to_uncategorize_the_selected_bank_transact',
+        )}
       </p>
     </Alert>
   );

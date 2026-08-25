@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent, Position, Tag } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { round } from 'lodash';
@@ -80,7 +81,7 @@ function MatchingReconcileTransactionFormRoot({
         setSubmitting(false);
 
         AppToaster.show({
-          message: 'The transaction has been created.',
+          message: intl.get('the_transaction_has_been_created'),
           intent: Intent.SUCCESS,
         });
         closeReconcileMatchingTransaction();
@@ -100,11 +101,11 @@ function MatchingReconcileTransactionFormRoot({
           ) {
             setErrors({
               ...({} as MatchingReconcileTransactionValues),
-              branchId: 'The branch is required.',
+              branchId: intl.get('the_branch_is_required'),
             });
           } else {
             AppToaster.show({
-              message: 'Something went wrong.',
+              message: intl.get('something_wentwrong'),
               intent: Intent.DANGER,
             });
           }
@@ -124,7 +125,7 @@ function MatchingReconcileTransactionFormRoot({
 
   return (
     <Aside
-      title={'Create Reconcile Transactions'}
+      title={intl.get('create_reconcile_transactions')}
       className={styles.asideRoot}
       onClose={handleAsideClose}
     >
@@ -170,8 +171,8 @@ function ReconcileMatchingType() {
       onChange={handleChange}
       small
     >
-      <ContentTabs.Tab id={'deposit'} title={'Deposit'} />
-      <ContentTabs.Tab id={'withdrawal'} title={'Withdrawal'} />
+      <ContentTabs.Tab id={'deposit'} title={intl.get('deposit')} />
+      <ContentTabs.Tab id={'withdrawal'} title={intl.get('withdrawal')} />
     </ContentTabs>
   );
 }
@@ -184,7 +185,7 @@ function CreateReconcileTransactionContent() {
     <Box className={styles.content}>
       <ReconcileMatchingType />
 
-      <FFormGroup label={'Date'} name={'date'} fastField>
+      <FFormGroup label={intl.get('date')} name={'date'} fastField>
         <FDateInput
           {...dateInputFormatter}
           name={'date'}
@@ -203,9 +204,9 @@ function CreateReconcileTransactionContent() {
       </FFormGroup>
 
       <FFormGroup
-        label={'Amount'}
+        label={intl.get('amount')}
         name={'amount'}
-        labelInfo={<Tag minimal>Required</Tag>}
+        labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
         fastField
       >
         <FMoneyInputGroup name={'amount'} fastField />
@@ -214,23 +215,27 @@ function CreateReconcileTransactionContent() {
       <MatchingReconcileCategoryField />
 
       <FFormGroup
-        label={'Memo'}
+        label={intl.get('memo')}
         name={'memo'}
-        labelInfo={<Tag minimal>Required</Tag>}
+        labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
         fastField
       >
         <FInputGroup name={'memo'} fastField />
       </FFormGroup>
 
-      <FFormGroup label={'Reference No.'} name={'referenceNo'} fastField>
+      <FFormGroup
+        label={intl.get('reference_no_2')}
+        name={'referenceNo'}
+        fastField
+      >
         <FInputGroup name={'referenceNo'} />
       </FFormGroup>
 
       <FeatureCan feature={Features.Branches}>
         <FFormGroup
           name={'branchId'}
-          label={'Branch'}
-          labelInfo={<Tag minimal>Required</Tag>}
+          label={intl.get('branch')}
+          labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
           fastField
         >
           <BranchSelect
@@ -258,9 +263,9 @@ function MatchingReconcileCategoryField() {
 
   return (
     <FFormGroup
-      label={'Category'}
+      label={intl.get('category')}
       name={'category'}
-      labelInfo={<Tag minimal>Required</Tag>}
+      labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
       fastField
     >
       <AccountsSelect
@@ -299,7 +304,7 @@ function MatchingReconcileTransactionFooter() {
           intent={Intent.PRIMARY}
           loading={isSubmitting}
         >
-          Submit
+          {intl.get('submit')}
         </Button>
       </Group>
     </Box>

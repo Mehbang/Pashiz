@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { useEffect, useMemo } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
@@ -30,14 +31,14 @@ export function EmailConfirmation() {
     authSignupVerify({ token, email })
       .then(() => {
         AppToaster.show({
-          message: 'Your email has been verified, Congrats!',
+          message: intl.get('your_email_has_been_verified_congrats'),
           intent: Intent.SUCCESS,
         });
         history.push('/');
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong',
+          message: intl.get('something_went_wrong_2'),
           intent: Intent.DANGER,
         });
         history.push('/');

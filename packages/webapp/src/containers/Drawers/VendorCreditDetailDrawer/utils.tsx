@@ -69,7 +69,7 @@ export const useVendorCreditReadonlyEntriesTableColumns = () => {
       },
       {
         id: 'discount',
-        Header: 'Discount',
+        Header: intl.get('discount_2'),
         accessor: 'discountFormatted',
         width: getColumnWidth(entries, 'discountFormatted', {
           minWidth: 60,

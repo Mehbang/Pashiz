@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent, Radio } from '@blueprintjs/core';
 import { x } from '@xstyled/emotion';
 import { Form, useFormikContext } from 'formik';
@@ -28,10 +29,12 @@ function ExportDialogFormContentRoot({
     <Form>
       <x.div p="20px">
         <x.p className="bp4-text-muted" mb="1.2rem">
-          You can export data from Bigcapital in CSV or XLSX format
+          {intl.get(
+            'you_can_export_data_from_bigcapital_in_csv_or_xlsx_format',
+          )}
         </x.p>
 
-        <FFormGroup name={'resource'} label={'Select Resource'}>
+        <FFormGroup name={'resource'} label={intl.get('select_resource')}>
           <x.div maxWidth="280px">
             <FSelect
               name={'resource'}
@@ -41,22 +44,22 @@ function ExportDialogFormContentRoot({
           </x.div>
         </FFormGroup>
 
-        <FRadioGroup label={'Export As'} name={'format'}>
-          <Radio value={'xlsx'}>XLSX (Microsoft Excel)</Radio>
-          <Radio value={'csv'}>CSV (Comma Seperated Value)</Radio>
+        <FRadioGroup label={intl.get('export_as')} name={'format'}>
+          <Radio value={'xlsx'}>{intl.get('xlsx_microsoft_excel')}</Radio>
+          <Radio value={'csv'}>{intl.get('csv_comma_seperated_value')}</Radio>
         </FRadioGroup>
 
         <x.div mt="1.6rem">
           <Group position={'right'} spacing={10}>
             <Button intent={Intent.NONE} onClick={handleCancelBtnClick}>
-              Cancel
+              {intl.get('cancel')}
             </Button>
             <Button
               type={'submit'}
               intent={Intent.PRIMARY}
               loading={isSubmitting}
             >
-              Export
+              {intl.get('export')}
             </Button>
           </Group>
         </x.div>

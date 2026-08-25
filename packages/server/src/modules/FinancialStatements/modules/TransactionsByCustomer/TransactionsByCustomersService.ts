@@ -44,7 +44,11 @@ export class TransactionsByCustomersSheet {
       filter,
       this.transactionsByCustomersRepository,
       this.i18n,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
 
     // Triggers `onCustomerTransactionsViewed` event.

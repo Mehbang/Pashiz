@@ -1,9 +1,9 @@
-import moment from 'moment';
 import intl from 'react-intl-universal';
 import * as Yup from 'yup';
 import { DATATYPES_LENGTH } from '@/constants/dataTypes';
 import { TaxType } from '@/interfaces/TaxRates';
 import { isBlank } from '@/utils';
+import { formatDateLocalized } from '@/utils/locale';
 
 const getSchema = () =>
   Yup.object().shape({
@@ -13,7 +13,7 @@ const getSchema = () =>
       .min(Yup.ref('invoiceDate'), ({ path, min }) =>
         intl.get('invoice.validation.due_date', {
           path,
-          min: moment(min).format('YYYY/MM/DD'),
+          min: formatDateLocalized(min, 'YYYY/MM/DD'),
         }),
       )
       .required()

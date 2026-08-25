@@ -1,9 +1,9 @@
+import intl from 'react-intl-universal';
 import {
   ControlGroup,
   Divider,
   Icon as BlueprintIcon,
 } from '@blueprintjs/core';
-import intl from 'react-intl-universal';
 import { CustomerFormSectionTitle } from './CustomerFormSectionTitle';
 import { CustomerTypeRadioField } from './CustomerTypeRadioField';
 import {
@@ -25,7 +25,9 @@ export function CustomerFormBasicSection() {
 
   return (
     <Box data-section-id="primary">
-      <CustomerFormSectionTitle>Customer details</CustomerFormSectionTitle>
+      <CustomerFormSectionTitle>
+        {intl.get('customer_details')}
+      </CustomerFormSectionTitle>
 
       {/**-----------Customer type. -----------*/}
       <CustomerTypeRadioField />
@@ -62,7 +64,7 @@ export function CustomerFormBasicSection() {
 
       <FFormGroup
         name={'code'}
-        label={'Customer Code'}
+        label={intl.get('customer_code')}
         helperText="Add a unique account number to identify, reference and search for the contact."
         inline
       >

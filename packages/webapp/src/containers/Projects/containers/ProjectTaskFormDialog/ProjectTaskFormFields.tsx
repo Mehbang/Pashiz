@@ -1,8 +1,8 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Classes, ControlGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { EstimateAmount } from './utils';
 import {
   FFormGroup,
@@ -50,7 +50,7 @@ function ProjectTaskFormFieldsInner() {
             label={intl.get('project_task.dialog.charge')}
           >
             <ControlGroup>
-              <InputPrependText text={'Hourly Price'} />
+              <InputPrependText text={intl.get('hourly_price')} />
               <FInputGroup
                 name="rate"
                 disabled={values?.charge_type === 'non_chargable'}

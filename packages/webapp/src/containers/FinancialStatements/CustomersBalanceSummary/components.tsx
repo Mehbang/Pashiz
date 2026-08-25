@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Classes,
   Intent,
@@ -9,7 +10,6 @@ import {
 import classNames from 'classnames';
 import * as R from 'ramda';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { useCustomersBalanceSummaryContext } from './CustomersBalanceSummaryProvider';
 import type { CustomersBalanceColumnKey } from '@bigcapital/sdk-ts';
@@ -109,8 +109,8 @@ export function CustomerBalanceSummaryExportMenu() {
       <Stack spacing={8}>
         <Text>
           {done
-            ? 'The report has been exported successfully.'
-            : 'Exporting the report…'}
+            ? intl.get('the_report_has_been_exported_successfully')
+            : intl.get('exporting_the_report')}
         </Text>
         <ProgressBar
           className={classNames('toast-progress', {
@@ -153,7 +153,7 @@ export function CustomerBalanceSummaryExportMenu() {
   return (
     <Menu>
       <MenuItem
-        text={'XLSX (Microsoft Excel)'}
+        text={intl.get('xlsx_microsoft_excel')}
         onClick={handleXlsxExportBtnClick}
       />
       <MenuItem text={'CSV'} onClick={handleCsvExportBtnClick} />

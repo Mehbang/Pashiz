@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Position } from '@blueprintjs/core';
 import React from 'react';
 import { useCategorizeTransactionBoot } from '../CategorizeTransactionBoot';
@@ -18,7 +19,7 @@ export function CategorizeTransactionOtherIncome() {
 
   return (
     <>
-      <FFormGroup name={'date'} label={'Date'} fastField inline>
+      <FFormGroup name={'date'} label={intl.get('date')} fastField inline>
         <FDateInput
           name={'date'}
           popoverProps={{ position: Position.BOTTOM, minimal: true }}
@@ -29,7 +30,7 @@ export function CategorizeTransactionOtherIncome() {
 
       <FFormGroup
         name={'debitAccountId'}
-        label={'To Account'}
+        label={intl.get('to_account')}
         fastField={true}
         inline
       >
@@ -45,7 +46,7 @@ export function CategorizeTransactionOtherIncome() {
 
       <FFormGroup
         name={'creditAccountId'}
-        label={'Income Account'}
+        label={intl.get('income_account')}
         fastField
         inline
       >
@@ -59,11 +60,21 @@ export function CategorizeTransactionOtherIncome() {
         />
       </FFormGroup>
 
-      <FFormGroup name={'referenceNo'} label={'Reference No.'} fastField inline>
+      <FFormGroup
+        name={'referenceNo'}
+        label={intl.get('reference_no_2')}
+        fastField
+        inline
+      >
         <FInputGroup name={'referenceNo'} fill />
       </FFormGroup>
 
-      <FFormGroup name={'description'} label={'Description'} fastField inline>
+      <FFormGroup
+        name={'description'}
+        label={intl.get('description')}
+        fastField
+        inline
+      >
         <FTextArea
           name={'description'}
           growVertically={true}

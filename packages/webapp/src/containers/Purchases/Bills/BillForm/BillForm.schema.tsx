@@ -1,8 +1,8 @@
-import moment from 'moment';
 import intl from 'react-intl-universal';
 import * as Yup from 'yup';
 import { DATATYPES_LENGTH } from '@/constants/dataTypes';
 import { isBlank } from '@/utils';
+import { formatDateLocalized } from '@/utils/locale';
 
 const BillFormSchema = Yup.object().shape({
   vendorId: Yup.number().required().label(intl.get('vendor_name_')),
@@ -11,7 +11,7 @@ const BillFormSchema = Yup.object().shape({
     .min(Yup.ref('billDate'), ({ path, min }) =>
       intl.get('bill.validation.due_date', {
         path,
-        min: moment(min).format('YYYY/MM/DD'),
+        min: formatDateLocalized(min, 'YYYY/MM/DD'),
       }),
     )
     .required()

@@ -43,6 +43,7 @@ export class CustomerBalanceSummaryReport extends ContactBalanceSummaryReport {
     this.filter = filter;
     this.numberFormat = this.filter.numberFormat;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
   }
 
   /**

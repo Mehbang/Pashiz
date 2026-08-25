@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -19,7 +20,7 @@ export function BillGLEntriesTable() {
   const { data, isLoading: isTransactionLoading } = useTransactionsByReference(
     {
       referenceId: billId as number,
-      referenceType: 'Bill',
+      referenceType: intl.get('resource_bill_singular'),
     },
     { enabled: !!billId },
   );

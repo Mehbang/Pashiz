@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { x } from '@xstyled/emotion';
 import {
   SendMailReceipt,
@@ -46,22 +47,22 @@ export function PaymentReceivedMailReceipt({
 
   // # Payment date
   paymentDate,
-  paymentDateLabel = 'Payment Date',
+  paymentDateLabel = intl.get('payment_date'),
 
   // # Total
   total,
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
 
   // # Payment number
   paymentNumber,
-  paymentNumberLabel = 'Payment #',
+  paymentNumberLabel = intl.get('payment_2'),
 
   // # Mail message
   message,
 
   // # Subtotal
   subtotal,
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
 
   // # Paid Invoices
   items = [],

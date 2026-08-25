@@ -134,7 +134,7 @@ export function useEditableItemsEntriesColumns() {
       ...(enableTaxRates
         ? [
             {
-              Header: 'Tax rate',
+              Header: intl.get('tax_rate'),
               accessor: 'taxRateId',
               Cell: TaxRatesSuggestInputCell,
               disableSortBy: true,

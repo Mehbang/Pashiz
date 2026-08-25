@@ -23,7 +23,11 @@ export class CashflowTableInjectable {
     query: ICashFlowStatementQuery,
   ): Promise<ICashFlowStatementTable> {
     const cashflowDOO = await this.cashflowSheet.cashFlow(query);
-    const cashflowTable = new CashFlowTable(cashflowDOO, this.i18n);
+    const cashflowTable = new CashFlowTable(
+      cashflowDOO,
+      this.i18n,
+      cashflowDOO.meta,
+    );
 
     return {
       table: {

@@ -5,7 +5,7 @@ import { index as MoneyInDialog } from '@/containers/CashFlow/MoneyInDialog';
 import { index as MoneyOutDialog } from '@/containers/CashFlow/MoneyOutDialog';
 import { index as AccountDialog } from '@/containers/Dialogs/AccountDialog';
 import { index as AllocateLandedCostDialog } from '@/containers/Dialogs/AllocateLandedCostDialog';
-import { ApiKeysGenerateDialog } from '@/containers/Dialogs/ApiKeysGenerateDialog';
+import { index as ApiKeysGenerateDialog } from '@/containers/Dialogs/ApiKeysGenerateDialog';
 import { index as BadDebtDialog } from '@/containers/Dialogs/BadDebtDialog';
 import { index as BranchActivateDialog } from '@/containers/Dialogs/BranchActivateDialog';
 import { index as BranchFormDialog } from '@/containers/Dialogs/BranchFormDialog';

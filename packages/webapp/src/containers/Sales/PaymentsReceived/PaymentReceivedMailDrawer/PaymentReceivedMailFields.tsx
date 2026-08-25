@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import { useSendMailItems } from '../../Estimates/SendMailViewDrawer/hooks';
@@ -22,14 +23,14 @@ export function PaymentReceivedSendMailFields() {
           ccMultiSelectProps={{ items }}
           bccMultiSelectProps={{ items }}
         />
-        <FFormGroup label={'Submit'} name={'subject'}>
+        <FFormGroup label={intl.get('submit')} name={'subject'}>
           <FInputGroup name={'subject'} large fastField />
         </FFormGroup>
 
         <SendMailViewMessageField argsOptions={argsOptions} />
 
         <Group>
-          <FCheckbox name={'attachPdf'} label={'Attach PDF'} />
+          <FCheckbox name={'attachPdf'} label={intl.get('attach_pdf')} />
         </Group>
       </Stack>
 
@@ -72,7 +73,7 @@ function PaymentReceivedSendMailFooter() {
           style={{ minWidth: '85px' }}
           type="submit"
         >
-          Send Mail
+          {intl.get('send_mail')}
         </Button>
       </Group>
     </Group>

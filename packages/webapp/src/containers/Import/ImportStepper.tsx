@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { ImportFileMapping } from './ImportFileMapping';
 import { ImportFilePreview } from './ImportFilePreview';
 import { useImportFileContext } from './ImportFileProvider';
@@ -16,15 +17,15 @@ export function ImportStepper() {
         items: styles.items,
       }}
     >
-      <Stepper.Step label={'File Upload'}>
+      <Stepper.Step label={intl.get('file_upload')}>
         <ImportFileUploadStep />
       </Stepper.Step>
 
-      <Stepper.Step label={'Mapping'}>
+      <Stepper.Step label={intl.get('mapping')}>
         <ImportFileMapping />
       </Stepper.Step>
 
-      <Stepper.Step label={'Results'}>
+      <Stepper.Step label={intl.get('results')}>
         <ImportFilePreview />
       </Stepper.Step>
     </Stepper>

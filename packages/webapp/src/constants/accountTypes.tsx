@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 export const ACCOUNT_TYPE = {
   CASH: 'cash',
   BANK: 'bank',
@@ -61,7 +62,7 @@ export interface AccountTypeOption {
 
 export const ACCOUNT_TYPES: AccountTypeOption[] = [
   {
-    label: 'Cash',
+    label: intl.get('cash'),
     key: ACCOUNT_TYPE.CASH,
     normal: ACCOUNT_NORMAL.DEBIT,
     parentType: ACCOUNT_PARENT_TYPE.CURRENT_ASSET,
@@ -70,7 +71,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Bank',
+    label: intl.get('bank'),
     key: ACCOUNT_TYPE.BANK,
     normal: ACCOUNT_NORMAL.DEBIT,
     parentType: ACCOUNT_PARENT_TYPE.CURRENT_ASSET,
@@ -79,7 +80,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Accounts Receivable',
+    label: intl.get('accounts_receivable'),
     key: ACCOUNT_TYPE.ACCOUNTS_RECEIVABLE,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -88,7 +89,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Inventory',
+    label: intl.get('inventory'),
     key: ACCOUNT_TYPE.INVENTORY,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -97,7 +98,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Other Current Asset',
+    label: intl.get('other_current_asset'),
     key: ACCOUNT_TYPE.OTHER_CURRENT_ASSET,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -106,7 +107,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Fixed Asset',
+    label: intl.get('fixed_asset'),
     key: ACCOUNT_TYPE.FIXED_ASSET,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -115,7 +116,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Non-Current Asset',
+    label: intl.get('non_current_asset'),
     key: ACCOUNT_TYPE.NON_CURRENT_ASSET,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -124,7 +125,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Accounts Payable',
+    label: intl.get('accounts_payable'),
     key: ACCOUNT_TYPE.ACCOUNTS_PAYABLE,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -133,7 +134,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Credit Card',
+    label: intl.get('credit_card'),
     key: ACCOUNT_TYPE.CREDIT_CARD,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -142,7 +143,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Tax Payable',
+    label: intl.get('tax_payable'),
     key: ACCOUNT_TYPE.TAX_PAYABLE,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -151,7 +152,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Other Current Liability',
+    label: intl.get('other_current_liability'),
     key: ACCOUNT_TYPE.OTHER_CURRENT_LIABILITY,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -160,7 +161,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: true,
   },
   {
-    label: 'Long Term Liability',
+    label: intl.get('long_term_liability'),
     key: ACCOUNT_TYPE.LOGN_TERM_LIABILITY,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -169,7 +170,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: true,
   },
   {
-    label: 'Non-Current Liability',
+    label: intl.get('non_current_liability'),
     key: ACCOUNT_TYPE.NON_CURRENT_LIABILITY,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -178,7 +179,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: true,
   },
   {
-    label: 'Equity',
+    label: intl.get('equity'),
     key: ACCOUNT_TYPE.EQUITY,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.EQUITY,
@@ -187,7 +188,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: false,
   },
   {
-    label: 'Income',
+    label: intl.get('income'),
     key: ACCOUNT_TYPE.INCOME,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.INCOME,
@@ -196,7 +197,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: true,
   },
   {
-    label: 'Other Income',
+    label: intl.get('other_income'),
     key: ACCOUNT_TYPE.OTHER_INCOME,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.INCOME,
@@ -205,7 +206,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: true,
   },
   {
-    label: 'Cost of Goods Sold',
+    label: intl.get('cost_of_goods_sold'),
     key: ACCOUNT_TYPE.COST_OF_GOODS_SOLD,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.EXPENSE,
@@ -214,7 +215,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: true,
   },
   {
-    label: 'Expense',
+    label: intl.get('expense'),
     key: ACCOUNT_TYPE.EXPENSE,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.EXPENSE,
@@ -223,7 +224,7 @@ export const ACCOUNT_TYPES: AccountTypeOption[] = [
     incomeSheet: true,
   },
   {
-    label: 'Other Expense',
+    label: intl.get('other_expense'),
     key: ACCOUNT_TYPE.OTHER_EXPENSE,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.EXPENSE,

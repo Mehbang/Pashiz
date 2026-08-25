@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { categorizeTransactionsBulk } from '@bigcapital/sdk-ts';
 import { Intent } from '@blueprintjs/core';
 import { useMutation } from '@tanstack/react-query';
@@ -59,7 +60,9 @@ function CategorizeTransactionFormRoot({
         setSubmitting(false);
 
         AppToaster.show({
-          message: 'The uncategorized transaction has been categorized.',
+          message: intl.get(
+            'the_uncategorized_transaction_has_been_categorized',
+          ),
           intent: Intent.SUCCESS,
         });
         closeMatchingTransactionAside();
@@ -76,11 +79,11 @@ function CategorizeTransactionFormRoot({
           ) {
             setErrors({
               ...({} as CategorizeTransactionFormValues),
-              branchId: 'The branch is required.',
+              branchId: intl.get('the_branch_is_required'),
             });
           } else {
             AppToaster.show({
-              message: 'Something went wrong!',
+              message: intl.get('something_went_wrong'),
               intent: Intent.DANGER,
             });
           }

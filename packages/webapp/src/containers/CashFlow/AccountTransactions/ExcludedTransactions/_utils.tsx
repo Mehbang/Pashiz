@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import { useExcludedTransactionsBoot } from './ExcludedTransactionsTableBoot';
 import type { DataTableColumn } from '@/components/Datatable/types';
@@ -49,28 +50,28 @@ export function useExcludedTransactionsColumns(): DataTableColumn<ExcludedTransa
   return React.useMemo(
     () => [
       {
-        Header: 'Date',
+        Header: intl.get('date'),
         accessor: 'formattedDate',
         width: 110,
       },
       {
-        Header: 'Description',
+        Header: intl.get('description'),
         accessor: descriptionAccessor,
         textOverview: true,
       },
       {
-        Header: 'Payee',
+        Header: intl.get('payee'),
         accessor: 'payee',
       },
       {
-        Header: 'Deposit',
+        Header: intl.get('deposit'),
         accessor: 'formattedDepositAmount',
         align: 'right',
         width: depositWidth,
         money: true,
       },
       {
-        Header: 'Withdrawal',
+        Header: intl.get('withdrawal'),
         accessor: 'formattedWithdrawalAmount',
         align: 'right',
         width: withdrawalWidth,

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -114,7 +115,7 @@ function AccountDrawerActionBarInner({
             <NavbarDivider />
             <Button
               className={CLASSES.MINIMAL}
-              text={'Activate'}
+              text={intl.get('activate')}
               intent={Intent.SUCCESS}
               onClick={handleActivateBtnClick}
             />
@@ -134,7 +135,7 @@ function AccountDrawerActionBarInner({
                 <Menu>
                   <MenuItem
                     onClick={handleInactivateBtnClick}
-                    text={'Inactivate'}
+                    text={intl.get('inactivate')}
                   />
                 </Menu>
               }

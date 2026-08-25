@@ -13,6 +13,7 @@ import {
 } from '@/components';
 import { Col, Row } from '@/components';
 import { getAllCurrenciesOptions } from '@/constants/currencies';
+import { useAppIntlContext } from '@/components/AppIntlProvider';
 import { getFiscalYear } from '@/constants/fiscalYearOptions';
 import { getLanguages } from '@/constants/languagesOptions';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
@@ -25,7 +26,8 @@ const countries = getAllCountries();
 export function SetupOrganizationForm({
   isSubmitting,
 }: FormikProps<SetupOrganizationFormValues>) {
-  const FiscalYear = getFiscalYear();
+  const { calendar } = useAppIntlContext();
+  const FiscalYear = getFiscalYear(calendar);
   const Languages = getLanguages();
   const currencies = getAllCurrenciesOptions();
   const isDarkMode = useIsDarkMode();

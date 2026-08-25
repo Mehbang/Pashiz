@@ -1,6 +1,7 @@
-import moment from 'moment';
 import React from 'react';
 import intl from 'react-intl-universal';
+import { useAppIntlContext } from '@/components/AppIntlProvider';
+import { formatDateValue } from '@/utils/date-formatter';
 
 interface FormatDateProps {
   value: string | Date | undefined | null;
@@ -8,12 +9,18 @@ interface FormatDateProps {
 }
 
 /**
- * Format the given date.
+ * Format the given date in the calendar of the active locale.
  */
 export function FormatDate({ value, format = 'YYYY MMM DD' }: FormatDateProps) {
-  const localizedFormat = intl.get(`date_formats.${format}`);
+  const { calendar, persianDigits } = useAppIntlContext();
 
-  return <>{moment(value).format(localizedFormat)}</>;
+  // Locales may map a format onto one that reads better in their script; fall
+  // back to the requested format when they don't.
+  const localizedFormat = intl.get(`date_formats.${format}`) || format;
+
+  return (
+    <>{formatDateValue(value, localizedFormat, { calendar, persianDigits })}</>
+  );
 }
 
 interface FormatDateCellProps {

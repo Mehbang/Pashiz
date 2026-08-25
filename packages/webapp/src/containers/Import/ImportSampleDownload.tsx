@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Intent,
@@ -26,7 +27,9 @@ export function ImportSampleDownload() {
       .then(() => {
         AppToaster.show({
           intent: Intent.SUCCESS,
-          message: 'The sample sheet has been downloaded successfully.',
+          message: intl.get(
+            'the_sample_sheet_has_been_downloaded_successfully',
+          ),
         });
       })
       .catch(() => {});
@@ -55,7 +58,7 @@ export function ImportSampleDownload() {
           minimal
         >
           <Button minimal outlined>
-            Download File
+            {intl.get('download_file')}
           </Button>
         </Popover>
       </Box>

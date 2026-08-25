@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   NavbarGroup,
@@ -153,7 +154,7 @@ function InvoiceDetailActionsBarInner({
         </Can>
         <Can I={SaleInvoiceAction.View} a={AbilitySubject.Invoice}>
           <Button
-            text={'Send Mail'}
+            text={intl.get('send_mail')}
             icon={<Icon icon="envelope" />}
             onClick={handleMailInvoice}
             className={Classes.MINIMAL}

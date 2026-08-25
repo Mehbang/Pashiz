@@ -1,15 +1,16 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Intent, Tag } from '@blueprintjs/core';
 import { useMemo } from 'react';
 
 const applyToTypeAccessor = (rule) => {
   return rule.apply_if_transaction_type === 'deposit' ? (
     <Tag round intent={Intent.SUCCESS}>
-      Deposits
+      {intl.get('deposits')}
     </Tag>
   ) : (
     <Tag round intent={Intent.DANGER}>
-      Withdrawals
+      {intl.get('withdrawals')}
     </Tag>
   );
 };
@@ -28,23 +29,23 @@ export const useBankRulesTableColumns = () => {
   return useMemo(
     () => [
       {
-        Header: 'Apply to',
+        Header: intl.get('apply_to'),
         accessor: applyToTypeAccessor,
       },
       {
-        Header: 'Rule Name',
+        Header: intl.get('rule_name'),
         accessor: 'name',
       },
       {
-        Header: 'Categorize As',
+        Header: intl.get('categorize_as'),
         accessor: 'assign_category_formatted',
       },
       {
-        Header: 'Apply To',
+        Header: intl.get('apply_to'),
         accessor: applyToAccessor,
       },
       {
-        Header: 'Conditions',
+        Header: intl.get('conditions'),
         accessor: conditionsAccessor,
       },
     ],

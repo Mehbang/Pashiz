@@ -1,0 +1,19 @@
+{
+  "as_date": "تا تاریخ {date}",
+  "from_to": "از {from} | تا {to}",
+  "from_to_plain": "از {from} تا {to}",
+  "sheet.balance_sheet": "ترازنامه",
+  "sheet.trial_balance": "تراز آزمایشی",
+  "sheet.profit_loss": "صورت سود و زیان",
+  "sheet.sales_by_items": "فروش بر اساس کالا",
+  "sheet.purchases_by_items": "خرید بر اساس کالا",
+  "sheet.sales_tax_liability": "خلاصه بدهی مالیات فروش",
+  "sheet.transactions_by_vendor": "تراکنش‌های تأمین‌کننده",
+  "sheet.transactions_by_customer": "تراکنش‌های مشتری",
+  "sheet.inventory_item_details": "جزئیات موجودی کالا",
+  "sheet.inventory_valuation": "ارزش‌گذاری موجودی",
+  "sheet.general_ledger": "دفتر کل",
+  "sheet.journal": "دفتر روزنامه",
+  "sheet.customer_balance_summary": "خلاصه مانده مشتریان",
+  "sheet.vendor_balance_summary": "خلاصه مانده تأمین‌کنندگان"
+}

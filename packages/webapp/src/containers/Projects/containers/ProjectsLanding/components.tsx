@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import {
   Menu,
   MenuDivider,
@@ -8,7 +9,6 @@ import {
   ProgressBar,
 } from '@blueprintjs/core';
 import React from 'react';
-import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import {
   Icon,
@@ -76,16 +76,16 @@ export const ActionsMenu = ({
       />
     </Can>
     <Can I={ProjectAction.View} a={AbilitySubject.Project}>
-      <MenuItem text={'Status'} icon={<Icon icon="plus" />}>
+      <MenuItem text={intl.get('status')} icon={<Icon icon="plus" />}>
         <If condition={original.status !== 'InProgress'}>
           <MenuItem
-            text={'InProgress'}
+            text={intl.get('inprogress')}
             onClick={safeCallback(onStatus, original)}
           />
         </If>
-        <If condition={original.status !== 'Closed'}>
+        <If condition={original.status !== intl.get('closed')}>
           <MenuItem
-            text={'Closed'}
+            text={intl.get('closed')}
             onClick={safeCallback(onStatus, original)}
           />
         </If>

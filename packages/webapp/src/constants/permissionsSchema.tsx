@@ -104,24 +104,24 @@ export const getPermissionsSchema = (): PermissionModule[] => [
         subject: AbilitySubject.InventoryAdjustment,
         permissions: [
           {
-            label: 'View',
+            label: intl.get('view'),
             key: ItemAction.View,
             relatedColumn: PermissionColumn.View,
           },
           {
-            label: 'Create',
+            label: intl.get('create'),
             key: ItemAction.Create,
             relatedColumn: PermissionColumn.Create,
             depend: [{ key: ItemAction.View }],
           },
           {
-            label: 'Edit',
+            label: intl.get('edit'),
             key: ItemAction.Edit,
             relatedColumn: PermissionColumn.Edit,
             depend: [{ key: ItemAction.Create }],
           },
           {
-            label: 'Delete',
+            label: intl.get('delete'),
             key: ItemAction.Delete,
             relatedColumn: PermissionColumn.Delete,
             depend: [{ key: ItemAction.Edit }],

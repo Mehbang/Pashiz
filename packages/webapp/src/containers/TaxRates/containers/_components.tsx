@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
 import type { TaxRate } from '@bigcapital/sdk-ts';
 import { Can, Icon } from '@/components';
@@ -29,14 +30,14 @@ export function TaxRatesTableActionsMenu({
     <Menu>
       <MenuItem
         icon={<Icon icon="reader-18" />}
-        text={'View Details'}
+        text={intl.get('view_details')}
         onClick={safeCallback(onViewDetails, original)}
       />
       <Can I={TaxRateAction.Edit} a={AbilitySubject.TaxRate}>
         <MenuDivider />
         <MenuItem
           icon={<Icon icon="pen-18" />}
-          text={'Edit Tax Rate'}
+          text={intl.get('edit_tax_rate')}
           onClick={safeCallback(onEdit, original)}
         />
       </Can>
@@ -44,21 +45,21 @@ export function TaxRatesTableActionsMenu({
       {!original.active && (
         <MenuItem
           icon={<Icon icon="play-16" iconSize={16} />}
-          text={'Activate Tax Rate'}
+          text={intl.get('activate_tax_rate')}
           onClick={safeCallback(onActivate, original)}
         />
       )}
       {!!original.active && (
         <MenuItem
           icon={<Icon icon="pause-16" iconSize={16} />}
-          text={'Inactivate Tax Rate'}
+          text={intl.get('inactivate_tax_rate')}
           onClick={safeCallback(onInactivate, original)}
         />
       )}
       <Can I={TaxRateAction.Delete} a={AbilitySubject.TaxRate}>
         <MenuDivider />
         <MenuItem
-          text={'Delete Tax Rate'}
+          text={intl.get('delete_tax_rate')}
           intent={Intent.DANGER}
           onClick={safeCallback(onDelete, original)}
           icon={<Icon icon="trash-16" iconSize={16} />}

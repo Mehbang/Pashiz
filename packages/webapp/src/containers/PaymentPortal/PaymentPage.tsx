@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Text, Classes, Button, Intent, ButtonProps } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import clsx from 'classnames';
@@ -78,38 +79,38 @@ export function InvoicePaymentPage({
 
   // # Subtotal
   subtotal,
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
 
   // # Total
   total,
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
 
   // # Due date
   dueDate,
 
   // # Paid amount
   paidAmount,
-  paidAmountLabel = 'Paid Amount (-)',
+  paidAmountLabel = intl.get('paid_amount_2'),
 
   // # Invoice number
   invoiceNumber,
-  invoiceNumberLabel = 'Invoice #',
+  invoiceNumberLabel = intl.get('invoice_no'),
 
   // # Download invoice button
-  downloadInvoiceBtnLabel = 'Download Invoice',
+  downloadInvoiceBtnLabel = intl.get('download_invoice'),
   downloadInvoiceButtonProps,
 
   // # View invoice button
-  viewInvoiceLabel = 'View Invoice',
+  viewInvoiceLabel = intl.get('view_invoice'),
   viewInvoiceButtonProps,
 
   // # Due amount
   dueAmount,
-  dueAmountLabel = 'Due Amount',
+  dueAmountLabel = intl.get('due_amount'),
 
   // # Pay button
   showPayButton = true,
-  payButtonLabel = 'Pay {total}',
+  payButtonLabel = intl.get('pay_total'),
   payInvoiceButtonProps,
 
   // # Buy note

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Spinner, Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
@@ -17,7 +18,7 @@ export function PdfDocumentPreview({
     <Spinner size={30} />
   ) : isError ? (
     <div className="pdf-preview__error">
-      Failed to load the PDF document. Please try again.
+      {intl.get('failed_to_load_the_pdf_document_please_try_again')}
     </div>
   ) : (
     <embed src={url} height={height} width={width} />

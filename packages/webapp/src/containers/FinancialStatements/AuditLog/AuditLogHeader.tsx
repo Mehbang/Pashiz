@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Tabs, Tab, Position } from '@blueprintjs/core';
 import { SelectOptionProps } from '@blueprintjs-formik/select';
 import { Formik, Form, FormikHelpers } from 'formik';
@@ -163,7 +164,11 @@ export function AuditLogHeader({
               title={<T id={'general'} />}
               panel={
                 <div style={{ maxWidth: '400px' }}>
-                  <FFormGroup name="subject" label={'Subject'} fastField>
+                  <FFormGroup
+                    name="subject"
+                    label={intl.get('subject')}
+                    fastField
+                  >
                     <FMultiSelect
                       name="subject"
                       items={subjectSelectItems}
@@ -171,7 +176,7 @@ export function AuditLogHeader({
                       textAccessor="name"
                       tagAccessor="name"
                       itemPredicate={auditLogSelectItemPredicate}
-                      placeholder={'All'}
+                      placeholder={intl.get('all')}
                       popoverProps={{ minimal: true }}
                       tagInputProps={{
                         inputProps: { disabled: isFilterOptionsLoading },
@@ -182,7 +187,11 @@ export function AuditLogHeader({
                     />
                   </FFormGroup>
 
-                  <FFormGroup name="action" label={'Action'} fastField>
+                  <FFormGroup
+                    name="action"
+                    label={intl.get('action')}
+                    fastField
+                  >
                     <FMultiSelect
                       name="action"
                       items={actionSelectItems}
@@ -190,7 +199,7 @@ export function AuditLogHeader({
                       textAccessor="name"
                       tagAccessor="name"
                       itemPredicate={auditLogSelectItemPredicate}
-                      placeholder={'All'}
+                      placeholder={intl.get('all')}
                       popoverProps={{ minimal: true }}
                       tagInputProps={{
                         inputProps: { disabled: isFilterOptionsLoading },
@@ -201,7 +210,11 @@ export function AuditLogHeader({
                     />
                   </FFormGroup>
 
-                  <FFormGroup name="fromDate" label={'From'} fastField>
+                  <FFormGroup
+                    name="fromDate"
+                    label={intl.get('from')}
+                    fastField
+                  >
                     <FDateInput
                       name="fromDate"
                       popoverProps={{

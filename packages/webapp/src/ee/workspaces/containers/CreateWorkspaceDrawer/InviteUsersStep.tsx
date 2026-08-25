@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Intent, InputGroup, MenuItem } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { x } from '@xstyled/emotion';
@@ -107,13 +108,15 @@ export default function InviteUsersStep({
         }
 
         if (emails.includes(invite.email.toLowerCase())) {
-          newErrors[invite.id] = newErrors[invite.id] || 'Duplicate email';
+          newErrors[invite.id] =
+            newErrors[invite.id] || intl.get('duplicate_email');
         }
         emails.push(invite.email.toLowerCase());
       }
 
       if (!invite.roleId) {
-        newErrors[invite.id] = newErrors[invite.id] || 'Role is required';
+        newErrors[invite.id] =
+          newErrors[invite.id] || intl.get('role_is_required');
       }
     });
 

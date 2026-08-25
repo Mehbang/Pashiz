@@ -1,4 +1,19 @@
 import * as moment from 'moment';
+import {
+  CalendarSystem,
+  JalaaliDateUnit,
+  addJalaali,
+  endOfJalaali,
+  isSameJalaali,
+  startOfJalaali,
+} from './jalali-date';
+
+/** Formats a date as `YYYY-MM-DD` in local time, the way moment does. */
+const toIsoDay = (date: Date): string => {
+  const pad = (value: number) => String(value).padStart(2, '0');
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+};
 
 export const dateRangeCollection = (
   fromDate,
@@ -33,12 +48,52 @@ export const dateRangeCollection = (
   return collection;
 };
 
+/**
+ * Walks the range one Jalaali period at a time. Period boundaries follow the
+ * Persian calendar (Farvardin…Esfand), while the dates themselves stay
+ * Gregorian so the rest of the reporting pipeline is unaffected.
+ */
+const jalaaliRangeFromToCollection = (
+  fromDate: moment.MomentInput,
+  toDate: moment.MomentInput,
+  unit: JalaaliDateUnit,
+  increment: number,
+) => {
+  const collection = [];
+  const rangeEnd = moment(toDate).toDate();
+  let cursor = startOfJalaali(moment(fromDate).toDate(), unit);
+
+  // A non-positive increment would never advance the cursor.
+  const step = increment > 0 ? increment : 1;
+
+  while (
+    cursor.getTime() <= rangeEnd.getTime() ||
+    isSameJalaali(cursor, rangeEnd, unit)
+  ) {
+    collection.push({
+      fromDate: toIsoDay(cursor),
+      toDate: toIsoDay(endOfJalaali(cursor, unit)),
+    });
+    cursor = startOfJalaali(addJalaali(cursor, step, unit), unit);
+  }
+  return collection;
+};
+
 export const dateRangeFromToCollection = (
   fromDate: moment.MomentInput,
   toDate: moment.MomentInput,
   addType: moment.unitOfTime.StartOf = 'day',
   increment: number = 1,
+  calendar: CalendarSystem = 'gregorian',
 ) => {
+  if (calendar === 'jalali') {
+    return jalaaliRangeFromToCollection(
+      fromDate,
+      toDate,
+      addType as JalaaliDateUnit,
+      increment,
+    );
+  }
   const collection = [];
   const momentFromDate = moment(fromDate);
   const dateFormat = 'YYYY-MM-DD';

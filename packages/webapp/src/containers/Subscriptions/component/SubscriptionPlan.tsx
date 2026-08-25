@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { ButtonProps } from '@blueprintjs/core';
 import * as R from 'ramda';
 import { PricingPlan } from '@/components/PricingPlan/PricingPlan';
@@ -54,7 +55,9 @@ function SubscriptionPlanRoot({
 
   return (
     <PricingPlan featured={featured}>
-      {featured && <PricingPlan.Featured>Most Popular</PricingPlan.Featured>}
+      {featured && (
+        <PricingPlan.Featured>{intl.get('most_popular')}</PricingPlan.Featured>
+      )}
       <PricingPlan.Header label={label} description={description} />
 
       {plansPeriod === SubscriptionPlansPeriod.Monthly ? (
@@ -66,7 +69,7 @@ function SubscriptionPlanRoot({
         />
       )}
       <PricingPlan.BuyButton onClick={handleClick} {...subscribeButtonProps}>
-        Subscribe
+        {intl.get('subscribe')}
       </PricingPlan.BuyButton>
 
       <PricingPlan.Features>

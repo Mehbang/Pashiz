@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -218,7 +219,7 @@ function ReceiptActionsBarInner({
             <Menu>
               <MenuItem
                 onClick={handleCustomizeBtnClick}
-                text={'Customize Template'}
+                text={intl.get('customize_template')}
               />
             </Menu>
           }

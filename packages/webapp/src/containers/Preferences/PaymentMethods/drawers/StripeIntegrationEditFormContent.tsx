@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import { useStripeIntegrationEditBoot } from './StripeIntegrationEditBoot';
@@ -13,9 +14,11 @@ export function StripeIntegrationEditFormContent() {
     <Stack spacing={0} style={{ padding: 20 }}>
       <FFormGroup
         name={'bankAccountId'}
-        label={'Bank Account'}
+        label={intl.get('bank_account')}
         style={{ maxWidth: 300 }}
-        helperText={'The bank account where the Stripe payout is deposited.'}
+        helperText={intl.get(
+          'the_bank_account_where_the_stripe_payout_is_deposited',
+        )}
       >
         <AccountsSelect
           name={'bankAccountId'}
@@ -29,11 +32,11 @@ export function StripeIntegrationEditFormContent() {
 
       <FFormGroup
         name={'clearingAccountId'}
-        label={'Clearing Account'}
+        label={intl.get('clearing_account')}
         subLabel="Liability Account"
-        helperText={
-          'Clearing account tracks all payments collected through Stripe.'
-        }
+        helperText={intl.get(
+          'clearing_account_tracks_all_payments_collected_through_strip',
+        )}
         style={{ maxWidth: 300 }}
       >
         <AccountsSelect
@@ -71,7 +74,7 @@ export function StripeIntegrationEditFormFooter() {
         >
           Save
         </Button>
-        <Button onClick={handleCancelBtnClick}>Cancel</Button>
+        <Button onClick={handleCancelBtnClick}>{intl.get('cancel')}</Button>
       </Group>
     </>
   );

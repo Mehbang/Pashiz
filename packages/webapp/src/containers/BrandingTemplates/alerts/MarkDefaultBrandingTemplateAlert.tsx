@@ -1,7 +1,7 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Alert, Intent } from '@blueprintjs/core';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { AppToaster } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
@@ -37,7 +37,7 @@ function MarkDefaultBrandingTemplateAlertInner({
       })
       .catch((error) => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
         closeAlert(name);
@@ -51,15 +51,16 @@ function MarkDefaultBrandingTemplateAlertInner({
   return (
     <Alert
       cancelButtonText={intl.get('cancel')}
-      confirmButtonText={'Mark as Default'}
+      confirmButtonText={intl.get('mark_as_default')}
       intent={Intent.WARNING}
       isOpen={isOpen}
       onCancel={handleCancel}
       onConfirm={handleConfirmDelete}
     >
       <p>
-        Are you sure want to mark the given branding template as a default
-        template?
+        {intl.get(
+          'are_you_sure_want_to_mark_the_given_branding_template_as_a_d',
+        )}
       </p>
     </Alert>
   );

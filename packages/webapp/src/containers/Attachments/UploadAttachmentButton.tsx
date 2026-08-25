@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -34,7 +35,7 @@ export function UploadAttachmentButton() {
   return (
     <FFormGroup
       name={'attachments'}
-      label={'Attachments'}
+      label={intl.get('attachments')}
       className={styles.attachmentField}
       fastField={true}
     >
@@ -48,7 +49,7 @@ export function UploadAttachmentButton() {
           {uploadedFiles > 0 ? (
             <>Upload attachments ({uploadedFiles})</>
           ) : (
-            <>Upload attachments</>
+            <>{intl.get('upload_attachments')}</>
           )}
         </Button>
       </Popover>

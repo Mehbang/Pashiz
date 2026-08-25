@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import { withBankingActions } from '../../withBankingActions';
@@ -59,13 +60,13 @@ function ExcludedTransactionsTableRoot({
     unexcludeBankTransaction(transaction.id)
       .then(() => {
         AppToaster.show({
-          message: 'The excluded bank transaction has been restored.',
+          message: intl.get('the_excluded_bank_transaction_has_been_restored'),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });

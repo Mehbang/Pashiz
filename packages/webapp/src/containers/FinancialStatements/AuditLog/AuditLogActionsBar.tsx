@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Classes, NavbarGroup, NavbarDivider } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
@@ -30,7 +31,7 @@ export function AuditLogActionsBar({
       <NavbarGroup>
         <Button
           className={classNames(Classes.MINIMAL)}
-          text={'Reload'}
+          text={intl.get('reload')}
           onClick={handleRecalcReport}
           icon={<Icon icon="refresh-16" iconSize={16} />}
         />
@@ -38,7 +39,7 @@ export function AuditLogActionsBar({
         <Button
           className={classNames(Classes.MINIMAL)}
           icon={<Icon icon="cog-16" iconSize={16} />}
-          text={'Filter'}
+          text={intl.get('filter')}
           onClick={handleCustomizeClick}
           active={isFilterDrawerOpen}
         />

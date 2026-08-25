@@ -45,7 +45,11 @@ export class GeneralLedgerService {
       filter,
       this.generalLedgerRepository,
       this.i18n,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
     // Retrieve general ledger report data.
     const reportData = generalLedgerInstance.reportData();

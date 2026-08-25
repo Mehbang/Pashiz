@@ -1,3 +1,4 @@
+import { CalendarSystem } from '@/utils/jalali-date';
 export interface INumberFormatQuery {
   precision: number;
   divideOn1000: boolean;
@@ -47,6 +48,8 @@ export interface IFinancialSheetCommonMeta {
   organizationName: string;
   baseCurrency: string;
   dateFormat: string;
+  /** Calendar the report's dates and period boundaries follow. */
+  calendar: CalendarSystem;
   isCostComputeRunning: boolean;
   sheetName: string;
 }
@@ -58,6 +61,7 @@ export interface IFinancialSheetCommonMeta {
 export interface IFinancialReportMeta {
   baseCurrency: string;
   dateFormat: string;
+  calendar?: CalendarSystem;
 }
 
 /**
@@ -65,6 +69,7 @@ export interface IFinancialReportMeta {
  */
 export const DEFAULT_REPORT_META: Omit<IFinancialReportMeta, 'baseCurrency'> = {
   dateFormat: 'YYYY MMM DD',
+  calendar: 'gregorian',
 };
 
 export enum IFinancialDatePeriodsUnit {

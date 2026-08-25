@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Classes, Intent } from '@blueprintjs/core';
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
@@ -26,7 +27,7 @@ function InvoiceExchangeRateChangeDialogInner({
   return (
     <Dialog
       name={dialogName}
-      title={'Kindly take care of new rates'}
+      title={intl.get('kindly_take_care_of_new_rates')}
       autoFocus={true}
       canEscapeKeyClose={true}
       isOpen={isOpen}
@@ -40,8 +41,9 @@ function InvoiceExchangeRateChangeDialogInner({
           </p>
 
           <p style={{ marginBottom: '30px' }}>
-            Make sure to check that the item rates match the current exchange
-            rate of the newly selected currency before saving the transaction.
+            {intl.get(
+              'make_sure_to_check_that_the_item_rates_match_the_current_exc',
+            )}
           </p>
         </div>
 

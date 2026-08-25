@@ -1,5 +1,4 @@
 import { useFormikContext } from 'formik';
-import moment from 'moment';
 import React from 'react';
 import intl from 'react-intl-universal';
 import {
@@ -9,6 +8,7 @@ import {
 import { Money, ExchangeRateInputGroup } from '@/components';
 import { MoneyFieldCell } from '@/components/DataTableCells';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { formatDateLocalized } from '@/utils/locale';
 
 type Row = {
   billNo?: string;
@@ -20,7 +20,7 @@ function BillNumberAccessor(row: Row): string {
 }
 
 function BillDateCell({ value }: { value: string }) {
-  return <span>{moment(value).format('YYYY MMM DD')}</span>;
+  return <span>{formatDateLocalized(value, 'YYYY MMM DD')}</span>;
 }
 
 /**
@@ -43,7 +43,7 @@ export function usePaymentMadeEntriesTableColumns() {
   return React.useMemo(
     () => [
       {
-        Header: 'Bill date',
+        Header: intl.get('bill_date'),
         id: 'billDate',
         accessor: 'billDate',
         Cell: BillDateCell,

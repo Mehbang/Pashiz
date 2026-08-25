@@ -31,7 +31,7 @@ function ProjectStatusAlertInner({
   // handle confirm alert.
   const handleConfirmAlert = () => {
     const values = {
-      status: status !== 'InProgress' ? 'InProgress' : 'Closed',
+      status: status !== 'InProgress' ? 'InProgress' : intl.get('closed'),
     };
 
     statusProjectMutate([projectId, values])

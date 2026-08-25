@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Card, Classes, Intent, Text } from '@blueprintjs/core';
 import clsx from 'classnames';
 import { includes } from 'lodash';
@@ -63,8 +64,9 @@ function SubscriptionRoot({ openAlert, openDrawer }) {
       </Stack>
 
       <Text className={styles.description}>
-        Control your business bookkeeping with automated accounting, to run
-        intelligent reports for faster decision-making.
+        {intl.get(
+          'control_your_business_bookkeeping_with_automated_accounting_',
+        )}
       </Text>
 
       <Stack align="flex-start" spacing={8} className={styles.actions}>
@@ -75,7 +77,7 @@ function SubscriptionRoot({ openAlert, openDrawer }) {
           intent={Intent.PRIMARY}
           onClick={handleUpgradeBtnClick}
         >
-          Upgrade the Plan
+          {intl.get('upgrade_the_plan')}
         </Button>
 
         {mainSubscription.canceled && (
@@ -86,7 +88,7 @@ function SubscriptionRoot({ openAlert, openDrawer }) {
             intent={Intent.PRIMARY}
             onClick={handleResumeSubBtnClick}
           >
-            Resume Subscription
+            {intl.get('resume_subscription')}
           </Button>
         )}
         {!mainSubscription.canceled && (
@@ -97,7 +99,7 @@ function SubscriptionRoot({ openAlert, openDrawer }) {
             intent={Intent.PRIMARY}
             onClick={handleCancelSubBtnClick}
           >
-            Cancel Subscription
+            {intl.get('cancel_subscription')}
           </Button>
         )}
         <Button
@@ -107,7 +109,7 @@ function SubscriptionRoot({ openAlert, openDrawer }) {
           intent={Intent.PRIMARY}
           onClick={handleUpdatePaymentMethod}
         >
-          Change Payment Method
+          {intl.get('change_payment_method')}
         </Button>
       </Stack>
 
@@ -135,7 +137,7 @@ function SubscriptionRoot({ openAlert, openDrawer }) {
               onClick={handleResumeSubBtnClick}
               className={styles.subscribeButton}
             >
-              Resume Subscription
+              {intl.get('resume_subscription')}
             </Button>
           )}
         </Box>

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IFinancialSheetCommonMeta } from '../types/Report.types';
 import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { InventoryComputeCostService } from '@/modules/InventoryCost/commands/InventoryComputeCost.service';
+import { calendarOfLanguage } from '@/utils/jalali-date';
 
 @Injectable()
 export class FinancialSheetMeta {
@@ -20,6 +21,7 @@ export class FinancialSheetMeta {
     const organizationName = tenantMetadata.name;
     const baseCurrency = tenantMetadata.baseCurrency;
     const dateFormat = tenantMetadata.dateFormat;
+    const calendar = calendarOfLanguage(tenantMetadata.language);
 
     const isCostComputeRunning =
       await this.inventoryComputeCostService.isItemsCostComputeRunning();
@@ -28,6 +30,7 @@ export class FinancialSheetMeta {
       organizationName,
       baseCurrency,
       dateFormat,
+      calendar,
       isCostComputeRunning,
       sheetName: '',
     };

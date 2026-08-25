@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   NavbarGroup,
@@ -116,7 +117,7 @@ function CashFlowAccountsActionsBarInner({
         <FeatureCan feature={Features.BankSyncing}>
           <Button
             className={Classes.MINIMAL}
-            text={'Connect Bank/Credit Card'}
+            text={intl.get('connect_bank_credit_card')}
             icon={<CreditCard2Icon />}
             onClick={handleConnectToBank}
             disabled={isPlaidLoading}

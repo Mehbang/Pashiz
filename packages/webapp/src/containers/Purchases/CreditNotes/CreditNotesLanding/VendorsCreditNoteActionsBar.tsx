@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -199,7 +200,7 @@ function VendorsCreditNoteActionsBarInner({
             <Menu>
               <MenuItem
                 onClick={handleCustomizeBtnClick}
-                text={'Customize Credit Note'}
+                text={intl.get('customize_credit_note')}
               />
             </Menu>
           }

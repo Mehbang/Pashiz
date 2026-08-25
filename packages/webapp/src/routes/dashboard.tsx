@@ -15,8 +15,8 @@ export const getDashboardRoutes = () => [
         default: m.AccountsImport,
       })),
     ),
-    breadcrumb: 'Accounts Import',
-    pageTitle: 'Accounts Import',
+    breadcrumb: intl.get('accounts_import'),
+    pageTitle: intl.get('accounts_import'),
   },
   {
     path: `/accounts`,
@@ -69,7 +69,7 @@ export const getDashboardRoutes = () => [
       })),
     ),
     breadcrumb: intl.get('edit'),
-    pageTitle: 'Manual Journals Import',
+    pageTitle: intl.get('manual_journals_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.MANUAL_JOURNAL,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -89,13 +89,14 @@ export const getDashboardRoutes = () => [
   },
   {
     path: `/item/categories/import`,
+    breadcrumb: intl.get('breadcrumb.import'),
     component: lazy(() =>
       import('@/containers/ItemsCategories/ItemCategoriesImport').then((m) => ({
         default: m.ItemCategoriesImport,
       })),
     ),
     backLink: true,
-    pageTitle: 'Item Categories Import',
+    pageTitle: intl.get('item_categories_import'),
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
     defaultSearchResource: RESOURCES_TYPES.ITEM,
   },
@@ -114,13 +115,14 @@ export const getDashboardRoutes = () => [
   // Items.
   {
     path: `/items/import`,
+    breadcrumb: intl.get('breadcrumb.import'),
     component: lazy(() =>
       import('@/containers/Items/ItemsImportPage').then((m) => ({
         default: m.ItemsImportpage,
       })),
     ),
     backLink: true,
-    pageTitle: 'Items Import',
+    pageTitle: intl.get('items_import'),
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
     defaultSearchResource: RESOURCES_TYPES.CUSTOMER,
   },
@@ -194,6 +196,7 @@ export const getDashboardRoutes = () => [
   // Warehouse Transfer.
   {
     path: `/warehouses-transfers/:id/edit`,
+    breadcrumb: intl.get('breadcrumb.edit'),
     component: lazy(() =>
       import(
         '@/containers/WarehouseTransfers/WarehouseTransferForm/WarehouseTransferFormPage'
@@ -206,6 +209,7 @@ export const getDashboardRoutes = () => [
   },
   {
     path: `/warehouses-transfers/new`,
+    breadcrumb: intl.get('breadcrumb.new'),
     component: lazy(() =>
       import(
         '@/containers/WarehouseTransfers/WarehouseTransferForm/WarehouseTransferFormPage'
@@ -218,6 +222,7 @@ export const getDashboardRoutes = () => [
   },
   {
     path: `/warehouses-transfers`,
+    breadcrumb: intl.get('breadcrumb.warehouse_transfers'),
     component: lazy(() =>
       import(
         '@/containers/WarehouseTransfers/WarehouseTransfersLanding/WarehouseTransfersList'
@@ -497,8 +502,8 @@ export const getDashboardRoutes = () => [
         '@/containers/FinancialStatements/SalesTaxLiabilitySummary/SalesTaxLiabilitySummary'
       ).then((m) => ({ default: m.SalesTaxLiabilitySummary })),
     ),
-    breadcrumb: 'Sales Tax Liability Summary',
-    pageTitle: 'Sales Tax Liability Summary',
+    breadcrumb: intl.get('sales_tax_liability_summary'),
+    pageTitle: intl.get('sales_tax_liability_summary'),
     backLink: true,
     sidebarExpand: false,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -535,9 +540,9 @@ export const getDashboardRoutes = () => [
         default: m.ExpensesImport,
       })),
     ),
-    breadcrumb: 'Expenses Import',
+    breadcrumb: intl.get('expenses_import'),
     hotkey: 'ctrl+shift+x',
-    pageTitle: 'Expenses Import',
+    pageTitle: intl.get('expenses_import'),
     sidebarExpand: false,
     backLink: true,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -584,13 +589,14 @@ export const getDashboardRoutes = () => [
   // Customers
   {
     path: `/customers/import`,
+    breadcrumb: intl.get('breadcrumb.import'),
     component: lazy(() =>
       import('@/containers/Customers/CustomersImport').then((m) => ({
         default: m.CustomersImport,
       })),
     ),
     backLink: true,
-    pageTitle: 'Customers Import',
+    pageTitle: intl.get('customers_import'),
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
     defaultSearchResource: RESOURCES_TYPES.CUSTOMER,
   },
@@ -654,13 +660,14 @@ export const getDashboardRoutes = () => [
   // Vendors
   {
     path: `/vendors/import`,
+    breadcrumb: intl.get('breadcrumb.import'),
     component: lazy(() =>
       import('@/containers/Vendors/VendorsImport').then((m) => ({
         default: m.VendorsImport,
       })),
     ),
     backLink: true,
-    pageTitle: 'Vendors Import',
+    pageTitle: intl.get('vendors_import'),
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
     defaultSearchResource: RESOURCES_TYPES.VENDOR,
   },
@@ -728,8 +735,8 @@ export const getDashboardRoutes = () => [
       })),
     ),
     name: 'estimate-edit',
-    breadcrumb: 'Estimates Import',
-    pageTitle: 'Estimates Import',
+    breadcrumb: intl.get('estimates_import'),
+    pageTitle: intl.get('estimates_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.ESTIMATE,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -804,8 +811,8 @@ export const getDashboardRoutes = () => [
       })),
     ),
     name: 'invoice-edit',
-    breadcrumb: 'Invoices Import',
-    pageTitle: 'Invoices Import',
+    breadcrumb: intl.get('invoices_import'),
+    pageTitle: intl.get('invoices_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.INVOICE,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -863,8 +870,8 @@ export const getDashboardRoutes = () => [
       })),
     ),
     name: 'receipt-import',
-    breadcrumb: 'Receipts Import',
-    pageTitle: 'Receipts Import',
+    breadcrumb: intl.get('receipts_import'),
+    pageTitle: intl.get('receipts_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.RECEIPT,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -923,8 +930,8 @@ export const getDashboardRoutes = () => [
       })),
     ),
     name: 'credit-note-import',
-    breadcrumb: 'Credit Notes Import',
-    pageTitle: 'Credit Notes Import',
+    breadcrumb: intl.get('credit_notes_import'),
+    pageTitle: intl.get('credit_notes_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.CREDIT_NOTE,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -995,8 +1002,8 @@ export const getDashboardRoutes = () => [
       ),
     ),
     name: 'payment-receive-import',
-    breadcrumb: 'Payments Received Import',
-    pageTitle: 'Payments Received Import',
+    breadcrumb: intl.get('payments_received_import'),
+    pageTitle: intl.get('payments_received_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.PAYMENT_RECEIVE,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -1054,7 +1061,7 @@ export const getDashboardRoutes = () => [
     ),
     name: 'bill-edit',
     // breadcrumb: intl.get('edit'),
-    pageTitle: 'Bills Import',
+    pageTitle: intl.get('bills_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.BILL,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -1112,8 +1119,8 @@ export const getDashboardRoutes = () => [
       ),
     ),
     name: 'vendor-credits-edit',
-    breadcrumb: 'Vendor Credits Import',
-    pageTitle: 'Vendor Credits Import',
+    breadcrumb: intl.get('vendor_credits_import'),
+    pageTitle: intl.get('vendor_credits_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.VENDOR_CREDIT,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -1186,7 +1193,7 @@ export const getDashboardRoutes = () => [
     ),
     name: 'payment-made-edit',
     breadcrumb: intl.get('edit'),
-    pageTitle: 'Bills Payments Import',
+    pageTitle: intl.get('bills_payments_import'),
     backLink: true,
     defaultSearchResource: RESOURCES_TYPES.PAYMENT_MADE,
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
@@ -1236,6 +1243,7 @@ export const getDashboardRoutes = () => [
   // Cash flow
   {
     path: `/cashflow-accounts/:id/transactions`,
+    breadcrumb: intl.get('breadcrumb.transactions'),
     component: lazy(() =>
       import(
         '@/containers/CashFlow/AccountTransactions/AccountTransactionsList'
@@ -1249,6 +1257,7 @@ export const getDashboardRoutes = () => [
   },
   {
     path: `/cashflow-accounts/:id/import`,
+    breadcrumb: intl.get('breadcrumb.import'),
     component: lazy(() =>
       import(
         '@/containers/CashFlow/ImportIUncategorizedTransactions/ImportUncategorizedTransactionsPage'
@@ -1256,12 +1265,13 @@ export const getDashboardRoutes = () => [
     ),
     backLink: true,
     sidebarExpand: false,
-    pageTitle: 'Bank Transactions Import',
+    pageTitle: intl.get('bank_transactions_import'),
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
     defaultSearchResource: RESOURCES_TYPES.ACCOUNT,
   },
   {
     path: `/cashflow-accounts`,
+    breadcrumb: intl.get('breadcrumb.cashflow_accounts'),
     component: lazy(() =>
       import(
         '@/containers/CashFlow/CashFlowAccounts/CashFlowAccountsList'
@@ -1273,6 +1283,7 @@ export const getDashboardRoutes = () => [
   },
   {
     path: `/transactions-locking`,
+    breadcrumb: intl.get('breadcrumb.transactions_locking'),
     component: lazy(() =>
       import('@/containers/TransactionsLocking/TransactionsLockingPage').then(
         (m) => ({ default: m.TransactionsLockingPage }),
@@ -1282,6 +1293,7 @@ export const getDashboardRoutes = () => [
   },
   {
     path: '/projects/:id/details',
+    breadcrumb: intl.get('breadcrumb.project_details'),
     component: lazy(() =>
       import('@/containers/Projects/containers/ProjectDetails').then((m) => ({
         default: m.index,
@@ -1292,6 +1304,7 @@ export const getDashboardRoutes = () => [
   },
   {
     path: '/projects',
+    breadcrumb: intl.get('breadcrumb.projects'),
     component: lazy(() =>
       import(
         '@/containers/Projects/containers/ProjectsLanding/ProjectsList'
@@ -1301,22 +1314,24 @@ export const getDashboardRoutes = () => [
   },
   {
     path: '/tax-rates/import',
+    breadcrumb: intl.get('breadcrumb.import'),
     component: lazy(() =>
       import('@/containers/TaxRates/containers/TaxRatesImport').then((m) => ({
         default: m.TaxRatesImport,
       })),
     ),
-    pageTitle: 'Tax Rates',
+    pageTitle: intl.get('tax_rates'),
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
   },
   {
     path: '/tax-rates',
+    breadcrumb: intl.get('breadcrumb.tax_rates'),
     component: lazy(() =>
       import('@/containers/TaxRates/pages/TaxRatesLanding').then((m) => ({
         default: m.TaxRatesLanding,
       })),
     ),
-    pageTitle: 'Tax Rates',
+    pageTitle: intl.get('tax_rates'),
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
   },
   // Bank Rules
@@ -1327,8 +1342,8 @@ export const getDashboardRoutes = () => [
         (m) => ({ default: m.RulesLandingPage }),
       ),
     ),
-    pageTitle: 'Bank Rules',
-    breadcrumb: 'Bank Rules',
+    pageTitle: intl.get('bank_rules'),
+    breadcrumb: intl.get('bank_rules'),
     subscriptionActive: [SUBSCRIPTION_TYPE.MAIN],
   },
   // Homepage

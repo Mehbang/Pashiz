@@ -29,6 +29,7 @@ export class TransactionsByCustomersTableInjectable {
       customersTransactions.data,
       this.i18n,
       customersTransactions.meta.dateFormat,
+      customersTransactions.meta.calendar,
     );
     return {
       table: {

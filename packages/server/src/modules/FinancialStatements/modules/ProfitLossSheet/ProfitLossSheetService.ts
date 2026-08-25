@@ -48,7 +48,11 @@ export class ProfitLossSheetService {
       this.profitLossRepository,
       filter,
       this.i18nService,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
     // Profit/loss report data and columns.
     const data = profitLossInstance.reportData();

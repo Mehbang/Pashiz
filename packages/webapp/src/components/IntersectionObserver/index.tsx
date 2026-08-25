@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import React from 'react';
 import { useIntersectionObserver } from '@/hooks/utils';
 
@@ -21,7 +22,7 @@ export function IntersectionObserver({ onIntersect }) {
       ref={loadMoreButtonRef}
       style={{ opacity: 0, height: 0, width: 0, padding: 0, margin: 0 }}
     >
-      Load Newer
+      {intl.get('load_newer')}
     </div>
   );
 }

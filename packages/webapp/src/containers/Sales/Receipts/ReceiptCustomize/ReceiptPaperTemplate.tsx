@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes, Text } from '@blueprintjs/core';
 import {
   PaperTemplate,
@@ -95,22 +96,22 @@ export function ReceiptPaperTemplate({
   showCompanyAddress = true,
   companyAddress = DefaultPdfTemplateAddressBilledFrom,
 
-  billedToLabel = 'Billed To',
+  billedToLabel = intl.get('billed_to'),
 
   total = '$1000.00',
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
   showTotal = true,
 
   subtotal = '1000/00',
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
   showSubtotal = true,
 
   showCustomerNote = true,
-  customerNoteLabel = 'Customer Note',
+  customerNoteLabel = intl.get('customer_note'),
   customerNote = DefaultPdfTemplateStatement,
 
   showTermsConditions = true,
-  termsConditionsLabel = 'Terms & Conditions',
+  termsConditionsLabel = intl.get('terms_conditions'),
   termsConditions = DefaultPdfTemplateTerms,
 
   lines = [
@@ -125,26 +126,26 @@ export function ReceiptPaperTemplate({
 
   // Receipt Number
   showReceiptNumber = true,
-  receiptNumberLabel = 'Receipt Number',
+  receiptNumberLabel = intl.get('receipt_no_'),
   receiptNumebr = '346D3D40-0001',
 
   // Receipt Date
   receiptDate = 'September 3, 2024',
   showReceiptDate = true,
-  receiptDateLabel = 'Receipt Date',
+  receiptDateLabel = intl.get('receipt_date'),
 
   // Entries
-  lineItemLabel = 'Item',
-  lineQuantityLabel = 'Qty',
-  lineRateLabel = 'Rate',
-  lineTotalLabel = 'Total',
+  lineItemLabel = intl.get('item'),
+  lineQuantityLabel = intl.get('qty_2'),
+  lineRateLabel = intl.get('rate'),
+  lineTotalLabel = intl.get('total'),
 }: ReceiptPaperTemplateProps) {
   return (
     <PaperTemplate primaryColor={primaryColor} secondaryColor={secondaryColor}>
       <Stack spacing={24}>
         <Group align={'start'} spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Receipt'} />
+            <PaperTemplate.BigTitle title={intl.get('receipt_')} />
 
             <PaperTemplate.TermsList>
               {showReceiptNumber && (

@@ -150,7 +150,9 @@ export const transformRegisterToastMessages = (
     });
   } else if (errors.find((e) => e.type === 'SIGNUP_RESTRICTED')) {
     toastErrors.push({
-      message: 'Sign-up is disabled, and no new accounts can be created.',
+      message: intl.get(
+        'sign_up_is_disabled_and_no_new_accounts_can_be_created',
+      ),
       intent: Intent.DANGER,
     });
   }

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes, Text } from '@blueprintjs/core';
 import {
   PaperTemplate,
@@ -95,27 +96,27 @@ export function EstimatePaperTemplate({
   // # Customer address
   customerAddress = DefaultPdfTemplateAddressBilledTo,
   showCustomerAddress = true,
-  billedToLabel = 'Billed To',
+  billedToLabel = intl.get('billed_to'),
 
   // # Total
   total = '$1000.00',
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
   showTotal = true,
 
   // # Subtotal
   subtotal = '1000/00',
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
   showSubtotal = true,
 
   // # Customer Note
   showCustomerNote = true,
   customerNote = DefaultPdfTemplateStatement,
-  customerNoteLabel = 'Customer Note',
+  customerNoteLabel = intl.get('customer_note'),
 
   // # Terms & Conditions
   showTermsConditions = true,
   termsConditions = DefaultPdfTemplateTerms,
-  termsConditionsLabel = 'Terms & Conditions',
+  termsConditionsLabel = intl.get('terms_conditions'),
 
   lines = [
     {
@@ -129,31 +130,31 @@ export function EstimatePaperTemplate({
 
   // Estimate number
   showEstimateNumber = true,
-  estimateNumberLabel = 'Estimate Number',
+  estimateNumberLabel = intl.get('estimate_number'),
   estimateNumebr = '346D3D40-0001',
 
   // Estimate date
   estimateDate = 'September 3, 2024',
   showEstimateDate = true,
-  estimateDateLabel = 'Estimate Date',
+  estimateDateLabel = intl.get('estimate_date'),
 
   // Expiration date
-  expirationDateLabel = 'Expiration Date',
+  expirationDateLabel = intl.get('expiration_date'),
   showExpirationDate = true,
   expirationDate = 'September 3, 2024',
 
   // Entries
-  lineItemLabel = 'Item',
-  lineQuantityLabel = 'Qty',
-  lineRateLabel = 'Rate',
-  lineTotalLabel = 'Total',
+  lineItemLabel = intl.get('item'),
+  lineQuantityLabel = intl.get('qty_2'),
+  lineRateLabel = intl.get('rate'),
+  lineTotalLabel = intl.get('total'),
 }: EstimatePaperTemplateProps) {
   return (
     <PaperTemplate primaryColor={primaryColor} secondaryColor={secondaryColor}>
       <Stack spacing={24}>
         <Group align={'start'} spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Estimate'} />
+            <PaperTemplate.BigTitle title={intl.get('estimate_')} />
 
             <PaperTemplate.TermsList>
               {showEstimateNumber && (

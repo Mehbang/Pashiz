@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import { StripePreSetupDialogContent } from './StripePreSetupDialogContent';
 import { Dialog, DialogSuspense } from '@/components';
@@ -26,7 +27,7 @@ function StripePreSetupDialogRoot({
       name={dialogName}
       isOpen={isOpen}
       payload={payload}
-      title={'Connect a Stripe account to accept card payments'}
+      title={intl.get('connect_a_stripe_account_to_accept_card_payments')}
       canEscapeJeyClose={true}
       autoFocus={true}
       style={{ width: 500 }}

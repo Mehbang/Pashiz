@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent, Position } from '@blueprintjs/core';
 import clsx from 'classnames';
 import { useFormikContext } from 'formik';
@@ -21,8 +22,9 @@ export function ImportFileMapping() {
       <ImportFileMappingForm>
         <ImportFileContainer>
           <p>
-            Review and map the column headers in your csv/xlsx file with the
-            Bigcapital fields.
+            {intl.get(
+              'review_and_map_the_column_headers_in_your_csv_xlsx_file_with',
+            )}
           </p>
 
           {entityColumns.map((entityColumn) => (
@@ -58,8 +60,8 @@ function ImportFileMappingGroup({
       <table className={clsx('bp4-html-table', styles.table)}>
         <thead>
           <tr>
-            <th className={styles.label}>Bigcapital Fields</th>
-            <th className={styles.field}>Sheet Column Headers</th>
+            <th className={styles.label}>{intl.get('bigcapital_fields')}</th>
+            <th className={styles.field}>{intl.get('sheet_column_headers')}</th>
           </tr>
         </thead>
         <tbody>

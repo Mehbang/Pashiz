@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes, Text } from '@blueprintjs/core';
 import {
   PaperTemplate,
@@ -94,27 +95,27 @@ export function CreditNotePaperTemplate({
   showCompanyAddress = true,
   companyAddress = DefaultPdfTemplateAddressBilledFrom,
 
-  billedToLabel = 'Billed To',
+  billedToLabel = intl.get('billed_to'),
 
   // Total
   total = '$1000.00',
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
   showTotal = true,
 
   // Subtotal
   subtotal = '1000/00',
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
   showSubtotal = true,
 
   // Customer note
   showCustomerNote = true,
   customerNote = DefaultPdfTemplateStatement,
-  customerNoteLabel = 'Customer Note',
+  customerNoteLabel = intl.get('customer_note'),
 
   // Terms & conditions
   showTermsConditions = true,
   termsConditions = DefaultPdfTemplateTerms,
-  termsConditionsLabel = 'Terms & Conditions',
+  termsConditionsLabel = intl.get('terms_conditions'),
 
   lines = [
     {
@@ -127,26 +128,28 @@ export function CreditNotePaperTemplate({
   ],
   // Credit note number.
   showCreditNoteNumber = true,
-  creditNoteNumberLabel = 'Credit Note Number',
+  creditNoteNumberLabel = intl.get('credit_note_number'),
   creditNoteNumebr = '346D3D40-0001',
 
   // Credit note date.
   creditNoteDate = 'September 3, 2024',
   showCreditNoteDate = true,
-  creditNoteDateLabel = 'Credit Note Date',
+  creditNoteDateLabel = intl.get('credit_note_date'),
 
   // Entries
-  lineItemLabel = 'Item',
-  lineQuantityLabel = 'Qty',
-  lineRateLabel = 'Rate',
-  lineTotalLabel = 'Total',
+  lineItemLabel = intl.get('item'),
+  lineQuantityLabel = intl.get('qty_2'),
+  lineRateLabel = intl.get('rate'),
+  lineTotalLabel = intl.get('total'),
 }: CreditNotePaperTemplateProps) {
   return (
     <PaperTemplate primaryColor={primaryColor} secondaryColor={secondaryColor}>
       <Stack spacing={24}>
         <Group align={'start'} spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Credit Note'} />
+            <PaperTemplate.BigTitle
+              title={intl.get('resource_credit_note_singular')}
+            />
 
             <PaperTemplate.TermsList>
               {showCreditNoteNumber && (

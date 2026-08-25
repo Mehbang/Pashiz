@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Position } from '@blueprintjs/core';
 import * as R from 'ramda';
 import React, { lazy } from 'react';
@@ -30,7 +31,7 @@ function ChangeSubscriptionPlanDrawerInner({
       <DrawerSuspense>
         <DrawerHeaderContent
           name={DRAWERS.CHANGE_SUBSCARIPTION_PLAN}
-          title={'Change Subscription Plan'}
+          title={intl.get('change_subscription_plan')}
         />
         <ChangeSubscriptionPlanContent />
       </DrawerSuspense>

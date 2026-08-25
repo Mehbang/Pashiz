@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Menu,
   Popover,
@@ -9,7 +10,6 @@ import {
   Tag,
 } from '@blueprintjs/core';
 import React, { useMemo } from 'react';
-import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import type { Currency } from '@bigcapital/sdk-ts';
 import { Icon } from '@/components';
@@ -72,7 +72,8 @@ export const ActionsCell = (props: ActionsCellProps) => {
 export const CurrencyNameAccessor = (value: Currency) => {
   return (
     <CurrencyNameRoot>
-      {value.currencyName} {value.isBaseCurrency && <Tag>Base Currency</Tag>}
+      {value.currencyName}{' '}
+      {value.isBaseCurrency && <Tag>{intl.get('base_currency')}</Tag>}
     </CurrencyNameRoot>
   );
 };

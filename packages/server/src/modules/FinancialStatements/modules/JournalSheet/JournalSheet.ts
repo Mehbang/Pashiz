@@ -1,3 +1,4 @@
+import { formatDateIn } from '@/utils/jalali-date';
 import { I18nService } from 'nestjs-i18n';
 import { sumBy, chain, get, head } from 'lodash';
 import * as moment from 'moment';
@@ -44,6 +45,7 @@ export class JournalSheet extends FinancialSheet {
       ...this.query.numberFormat,
     };
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
     this.i18n = i18n;
   }
 
@@ -102,7 +104,11 @@ export class JournalSheet extends FinancialSheet {
 
     return {
       date: moment(groupEntry.date).toDate(),
-      dateFormatted: moment(groupEntry.date).format(this.dateFormat),
+      dateFormatted: formatDateIn(
+        groupEntry.date,
+        this.dateFormat,
+        this.calendar,
+      ),
 
       transactionType: groupEntry.transactionType,
       referenceId: groupEntry.transactionId,

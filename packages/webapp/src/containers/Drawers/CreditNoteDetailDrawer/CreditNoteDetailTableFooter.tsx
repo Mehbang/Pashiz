@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { useCreditNoteDetailDrawerContext } from './CreditNoteDetailDrawerProvider';
 import {
@@ -27,14 +28,14 @@ export function CreditNoteDetailTableFooter() {
             title={
               creditNote?.discountPercentageFormatted
                 ? `Discount [${creditNote.discountPercentageFormatted}]`
-                : 'Discount'
+                : intl.get('discount_2')
             }
             value={creditNote?.discountAmountFormatted}
           />
         )}
         {creditNote?.adjustmentFormatted && (
           <TotalLine
-            title={'Adjustment'}
+            title={intl.get('adjustment')}
             value={creditNote.adjustmentFormatted}
           />
         )}

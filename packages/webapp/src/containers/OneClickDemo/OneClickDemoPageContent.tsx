@@ -1,4 +1,6 @@
 // @ts-nocheck
+import { PashizBrand } from '@/components/Icons/PashizBrand';
+import intl from 'react-intl-universal';
 import { Button, Intent, ProgressBar, Text } from '@blueprintjs/core';
 import { useEffect, useState } from 'react';
 import style from './OneClickDemoPage.module.scss';
@@ -59,21 +61,23 @@ export function OneClickDemoPageContent() {
     <Box className={style.root}>
       <Box className={style.inner}>
         <Stack align={'center'} spacing={40}>
-          <Icon icon="bigcapital" height={37} width={228} />
+          <PashizBrand height={34} />
 
           {isLoading && (
             <Stack align={'center'} spacing={15}>
               <ProgressBar stripes value={null} className={style.progressBar} />
               {isOneclickDemoSigningIn && (
                 <Text className={style.waitingText}>
-                  It's signin-in to your demo account, Just a second!
+                  {intl.get(
+                    'it_s_signin_in_to_your_demo_account_just_a_second',
+                  )}
                 </Text>
               )}
               {running && (
                 <Text className={style.waitingText}>
-                  We're preparing the temporary environment for trial. It
-                  typically takes a few seconds. Do not close or refresh the
-                  page.
+                  {intl.get(
+                    'we_re_preparing_the_temporary_environment_for_trial_it_typic',
+                  )}
                 </Text>
               )}
             </Stack>
@@ -87,7 +91,7 @@ export function OneClickDemoPageContent() {
             onClick={handleCreateAccountBtnClick}
             loading={isCreateOneClickLoading}
           >
-            Create Demo Account
+            {intl.get('create_demo_account')}
           </Button>
         )}
       </Box>

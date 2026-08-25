@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import React, { useCallback } from 'react';
 import { ActionsMenu, useUsersListColumns } from './components';
@@ -76,7 +77,7 @@ function UsersDataTableInner({
       resendInviation(user.id)
         .then(() => {
           AppToaster.show({
-            message: 'User invitation has been re-sent to the user.',
+            message: intl.get('user_invitation_has_been_re_sent_to_the_user'),
             intent: Intent.SUCCESS,
           });
         })

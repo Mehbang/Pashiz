@@ -1,15 +1,16 @@
+import intl from 'react-intl-universal';
 export const defaultPaymentReceiptMailProps = {
-  companyName: 'Company Name',
+  companyName: intl.get('company_name'),
   companyLogoUri: 'https://via.placeholder.com/150',
   primaryColor: 'rgb(0, 82, 204)',
   paymentDate: '2021-01-01',
-  paymentDateLabel: 'Payment Date',
+  paymentDateLabel: intl.get('payment_date'),
   total: '100.00',
-  totalLabel: 'Total',
+  totalLabel: intl.get('total'),
   paymentNumber: '123456',
-  paymentNumberLabel: 'Payment #',
-  message: 'Thank you for your payment!',
+  paymentNumberLabel: intl.get('payment_2'),
+  message: intl.get('thank_you_for_your_payment'),
   subtotal: '100.00',
-  subtotalLabel: 'Subtotal',
-  items: [{ label: 'Invoice 1', total: '100.00' }],
+  subtotalLabel: intl.get('subtotal'),
+  items: [{ label: intl.get('invoice_1'), total: '100.00' }],
 };

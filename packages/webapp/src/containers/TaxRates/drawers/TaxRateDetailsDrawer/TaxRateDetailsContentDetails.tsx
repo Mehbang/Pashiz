@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent, Tag } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { useTaxRateDetailsContext } from './TaxRateDetailsContentBoot';
@@ -13,45 +14,48 @@ export function TaxRateDetailsContentDetails() {
           <TaxRateAmount>{taxRate?.rate}%</TaxRateAmount>
           {taxRate?.active ? (
             <TaxRateActiveTag round={false} intent={Intent.SUCCESS} minimal>
-              Active
+              {intl.get('active')}
             </TaxRateActiveTag>
           ) : (
             <TaxRateActiveTag round={false} intent={Intent.NONE} minimal>
-              Inactive
+              {intl.get('inactive')}
             </TaxRateActiveTag>
           )}
         </TaxRateHeader>
         <DetailsMenu direction={'horizantal'} minLabelSize={200}>
-          <DetailItem label={'Tax Rate Name'} children={taxRate?.name} />
-          <DetailItem label={'Code'} children={taxRate?.code} />
           <DetailItem
-            label={'Description'}
+            label={intl.get('tax_rate_name')}
+            children={taxRate?.name}
+          />
+          <DetailItem label={intl.get('code')} children={taxRate?.code} />
+          <DetailItem
+            label={intl.get('description')}
             children={taxRate?.description || '-'}
           />
           <DetailItem
-            label={'Non Recoverable'}
+            label={intl.get('non_recoverable')}
             children={
               taxRate?.isNonRecoverable ? (
                 <Tag round={false} intent={Intent.SUCCESS} minimal>
-                  Enabled
+                  {intl.get('enabled')}
                 </Tag>
               ) : (
                 <Tag round={false} intent={Intent.NONE} minimal>
-                  Disabled
+                  {intl.get('disabled')}
                 </Tag>
               )
             }
           />
           <DetailItem
-            label={'Compound'}
+            label={intl.get('compound')}
             children={
               taxRate?.isCompound ? (
                 <Tag round={false} intent={Intent.SUCCESS} minimal>
-                  Enabled
+                  {intl.get('enabled')}
                 </Tag>
               ) : (
                 <Tag round={false} intent={Intent.NONE} minimal>
-                  Disabled
+                  {intl.get('disabled')}
                 </Tag>
               )
             }

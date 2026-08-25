@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { x } from '@xstyled/emotion';
 import { isEmpty } from 'lodash';
 import {
@@ -53,11 +54,11 @@ export function EstimateSendMailReceipt({
   companyName,
 
   // # Estimate number.
-  estimateNumberLabel = 'Estimate #',
+  estimateNumberLabel = intl.get('estimate'),
   estimateNumber,
 
   // # Expiration date.
-  expirationDateLabel = 'Expiration Date',
+  expirationDateLabel = intl.get('expiration_date'),
   expirationDate,
 
   // # Message
@@ -68,23 +69,23 @@ export function EstimateSendMailReceipt({
 
   // # Subtotal
   subtotal,
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
 
   // # Discount
   discount,
-  discountLabel = 'Discount',
+  discountLabel = intl.get('discount_2'),
 
   // # Adjustment
   adjustment,
-  adjsutmentLabel = 'Adjustment',
+  adjsutmentLabel = intl.get('adjustment'),
 
   // # Total.
   total,
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
 
   // # View estimate button
   showViewEstimateButton = true,
-  viewEstimateButtonLabel = 'View Estimate',
+  viewEstimateButtonLabel = intl.get('view_estimate'),
   viewEstimateButtonOnClick,
 
   ...props

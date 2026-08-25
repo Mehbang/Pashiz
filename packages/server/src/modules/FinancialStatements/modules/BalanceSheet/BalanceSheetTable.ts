@@ -68,12 +68,17 @@ export class BalanceSheetTable extends R.pipe(
     reportData: IBalanceSheetStatementData,
     query: IBalanceSheetQuery,
     i18n: any,
+    meta?: IFinancialReportMeta,
   ) {
     super();
 
     this.reportData = reportData;
     this.query = new BalanceSheetQuery(query);
     this.i18n = i18n;
+    // The table builds its own period columns, so it needs the same calendar
+    // and date format the sheet was computed with.
+    this.dateFormat = meta?.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta?.calendar || DEFAULT_REPORT_META.calendar;
   }
 
   /**

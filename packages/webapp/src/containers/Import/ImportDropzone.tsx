@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Field } from 'formik';
 import type { FieldProps } from 'formik';
 import type { ImportFileUploadValues } from './_types';
@@ -14,7 +15,9 @@ export function ImportDropzone() {
       <Field id={'file'} name={'file'} type="file">
         {({ form }: FieldProps<ImportFileUploadValues>) => (
           <ImportDropzoneField
-            title={'Drag and drop files here or click to select files'}
+            title={intl.get(
+              'drag_and_drop_files_here_or_click_to_select_files',
+            )}
             subtitle={''}
             value={form.values.file}
             onChange={(file) => {

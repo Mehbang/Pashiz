@@ -1,3 +1,4 @@
+import { formatDateIn } from '@/utils/jalali-date';
 import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import {
@@ -19,7 +20,11 @@ export class VendorBalanceSummaryMeta {
     query: IVendorBalanceSummaryQuery,
   ): Promise<IVendorBalanceSummaryMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
-    const formattedAsDate = moment(query.asDate).format(commonMeta.dateFormat);
+    const formattedAsDate = formatDateIn(
+      query.asDate,
+      commonMeta.dateFormat,
+      commonMeta.calendar,
+    );
 
     return {
       ...commonMeta,

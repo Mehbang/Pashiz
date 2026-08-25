@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 export const initialValues = {
   templateName: '',
 
@@ -12,97 +13,101 @@ export const initialValues = {
 
   // Top details.
   showEstimateNumber: true,
-  estimateNumberLabel: 'Estimate number',
+  estimateNumberLabel: intl.get('estimate_number'),
 
-  estimateDateLabel: 'Date of Issue',
+  estimateDateLabel: intl.get('date_of_issue'),
   showEstimateDate: true,
 
   showExpirationDate: true,
-  expirationDateLabel: 'Expiration Date',
+  expirationDateLabel: intl.get('expiration_date'),
 
   // Customer address
   showCustomerAddress: true,
 
   // Company address
   showCompanyAddress: true,
-  billedToLabel: 'Billed To',
+  billedToLabel: intl.get('billed_to'),
 
   // Entries
-  itemNameLabel: 'Item',
-  itemDescriptionLabel: 'Description',
-  itemRateLabel: 'Rate',
-  itemTotalLabel: 'Total',
+  itemNameLabel: intl.get('item'),
+  itemDescriptionLabel: intl.get('description'),
+  itemRateLabel: intl.get('rate'),
+  itemTotalLabel: intl.get('total'),
 
   // Totals
   showSubtotal: true,
-  subtotalLabel: 'Subtotal',
+  subtotalLabel: intl.get('subtotal'),
 
   showTotal: true,
-  totalLabel: 'Total',
+  totalLabel: intl.get('total'),
 
   // Statements
   showCustomerNote: true,
-  customerNoteLabel: 'Customer Note',
+  customerNoteLabel: intl.get('customer_note'),
 
   // Terms & Conditions
   showTermsConditions: true,
-  termsConditionsLabel: 'Terms & Conditions',
+  termsConditionsLabel: intl.get('terms_conditions'),
 };
 
 export const fieldsGroups = [
   {
-    label: 'Header',
+    label: intl.get('header'),
     fields: [
       {
         labelKey: 'estimateNumberLabel',
         enableKey: 'showEstimateNumber',
-        label: 'Estimate No.',
+        label: intl.get('estimate_no'),
       },
       {
         labelKey: 'estimateDateLabel',
         enableKey: 'showEstimateDate',
-        label: 'Issue Date',
+        label: intl.get('issue_date'),
       },
       {
         labelKey: 'expirationDateLabel',
         enableKey: 'showExpirationDate',
-        label: 'Expiration Date',
+        label: intl.get('expiration_date'),
       },
       {
         enableKey: 'showCustomerAddress',
         labelKey: 'billedToLabel',
-        label: 'Bill To',
+        label: intl.get('bill_to'),
       },
       {
         enableKey: 'showCompanyAddress',
-        label: 'Billed From',
+        label: intl.get('billed_from'),
       },
     ],
   },
   {
-    label: 'Totals',
+    label: intl.get('totals'),
     fields: [
       {
         labelKey: 'subtotalLabel',
         enableKey: 'showSubtotal',
-        label: 'Subtotal',
+        label: intl.get('subtotal'),
       },
-      { labelKey: 'totalLabel', enableKey: 'showTotal', label: 'Total' },
+      {
+        labelKey: 'totalLabel',
+        enableKey: 'showTotal',
+        label: intl.get('total'),
+      },
     ],
   },
   {
-    label: 'Footer',
+    label: intl.get('footer'),
     fields: [
       {
         labelKey: 'termsConditionsLabel',
         enableKey: 'showTermsConditions',
-        label: 'Terms & Conditions',
+        label: intl.get('terms_conditions'),
       },
       {
         labelKey: 'customerNoteLabel',
         enableKey: 'showCustomerNote',
-        label: 'Statement',
-        labelPlaceholder: 'Statement',
+        label: intl.get('statement'),
+        labelPlaceholder: intl.get('statement'),
       },
     ],
   },

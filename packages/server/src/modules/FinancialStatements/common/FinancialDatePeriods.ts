@@ -5,6 +5,7 @@ import {
   IFinancialDatePeriodsUnit,
   IFormatNumberSettings,
 } from '../types/Report.types';
+import * as moment from 'moment';
 import { dateRangeFromToCollection } from '@/utils/date-range-collection';
 import { FinancialDateRanges } from './FinancialDateRanges';
 import { GConstructor } from '@/common/types/Constructor';
@@ -23,8 +24,18 @@ export const FinancialDatePeriods = <T extends GConstructor<FinancialSheet>>(
      */
     public getDateRanges = memoize(
       (fromDate: Date, toDate: Date, unit: moment.unitOfTime.StartOf) => {
-        return dateRangeFromToCollection(fromDate, toDate, unit);
+        return dateRangeFromToCollection(
+          fromDate,
+          toDate,
+          unit,
+          1,
+          this.calendar,
+        );
       },
+      // lodash keys the cache on the first argument alone, which would collide
+      // for two ranges that share a start date but differ in end date or unit.
+      (fromDate, toDate, unit) =>
+        `${moment(fromDate).valueOf()}/${moment(toDate).valueOf()}/${unit}/${this.calendar}`,
     );
 
     /**

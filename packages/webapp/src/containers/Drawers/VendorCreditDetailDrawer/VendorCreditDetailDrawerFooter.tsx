@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { useVendorCreditDetailDrawerContext } from './VendorCreditDetailDrawerProvider';
 import {
@@ -30,7 +31,7 @@ export function VendorCreditDetailDrawerFooter() {
             title={
               vendorCredit.discountPercentageFormatted
                 ? `Discount [${vendorCredit.discountPercentageFormatted}]`
-                : 'Discount'
+                : intl.get('discount_2')
             }
             value={vendorCredit.discountAmountFormatted}
             textStyle={TotalLineTextStyle.Regular}
@@ -38,7 +39,7 @@ export function VendorCreditDetailDrawerFooter() {
         )}
         {vendorCredit?.adjustmentFormatted && (
           <TotalLine
-            title={'Adjustment'}
+            title={intl.get('adjustment')}
             value={vendorCredit.adjustmentFormatted}
             textStyle={TotalLineTextStyle.Regular}
           />

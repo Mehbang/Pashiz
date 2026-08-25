@@ -74,7 +74,7 @@ function AccountBankBalanceItem() {
 
   return (
     <AccountBalanceItemWrap>
-      Balance in Bank Account
+      {intl.get('balance_in_bank_account')}
       <AccountBalanceAmount>
         {currentAccount?.bankBalanceFormatted}
       </AccountBalanceAmount>

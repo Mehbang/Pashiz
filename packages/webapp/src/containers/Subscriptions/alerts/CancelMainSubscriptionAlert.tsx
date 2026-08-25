@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
 import * as R from 'ramda';
 import React from 'react';
@@ -35,7 +36,7 @@ function CancelMainSubscriptionAlertInner({
     cancelSubscription()
       .then(() => {
         AppToaster.show({
-          message: 'The subscription has been canceled.',
+          message: intl.get('the_subscription_has_been_canceled'),
           intent: Intent.SUCCESS,
         });
       })
@@ -48,7 +49,7 @@ function CancelMainSubscriptionAlertInner({
   return (
     <Alert
       cancelButtonText={<T id={'cancel'} />}
-      confirmButtonText={'Cancel Subscription'}
+      confirmButtonText={intl.get('cancel_subscription')}
       intent={Intent.DANGER}
       isOpen={isOpen}
       onCancel={handleCancel}
@@ -56,12 +57,15 @@ function CancelMainSubscriptionAlertInner({
       loading={isLoading}
     >
       <p>
-        <strong>The subscription for this organization will end.</strong>
+        <strong>
+          {intl.get('the_subscription_for_this_organization_will_end')}
+        </strong>
       </p>
 
       <p>
-        It will no longer be accessible to you or any other users. Make sure any
-        data has already been exported.
+        {intl.get(
+          'it_will_no_longer_be_accessible_to_you_or_any_other_users_ma',
+        )}
       </p>
     </Alert>
   );

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import type { DialogBaseProps } from '@/components/DialogReduxConnect';
 import { Dialog, DialogSuspense } from '@/components';
@@ -30,7 +31,7 @@ function DisconnectBankAccountDialogRoot({
   return (
     <Dialog
       name={dialogName}
-      title={'Disconnect Bank Account'}
+      title={intl.get('disconnect_bank_account')}
       isOpen={isOpen}
       canEscapeJeyClose={true}
       autoFocus={true}

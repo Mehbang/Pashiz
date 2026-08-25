@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Classes, Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import * as R from 'ramda';
@@ -33,7 +34,7 @@ function TaxRateFormDialogFormFooterRoot({
           style={{ minWidth: '95px' }}
           type="submit"
         >
-          Submit
+          {intl.get('submit')}
         </Button>
       </div>
     </div>

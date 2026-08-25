@@ -1,7 +1,7 @@
+import intl from 'react-intl-universal';
 import { Radio, Position, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { useRef, useEffect } from 'react';
-import intl from 'react-intl-universal';
 import { useItemFormContext } from './ItemFormProvider';
 import { ItemFormSectionTitle } from './ItemFormSectionTitle';
 import {
@@ -50,7 +50,7 @@ export function ItemFormBasicSection() {
 
   return (
     <Box data-section-id="primary">
-      <ItemFormSectionTitle>Basic details</ItemFormSectionTitle>
+      <ItemFormSectionTitle>{intl.get('basic_details')}</ItemFormSectionTitle>
 
       {/*----------- Item type ----------*/}
       <FFormGroup

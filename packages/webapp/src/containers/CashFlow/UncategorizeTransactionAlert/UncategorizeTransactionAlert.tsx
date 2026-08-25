@@ -1,6 +1,6 @@
+import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
-import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithAlertStoreConnectProps } from '@/containers/Alert/withAlertStoreConnect';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
@@ -51,7 +51,7 @@ function UncategorizeTransactionAlertInner({
     uncategorizeTransaction(uncategorizedTransactionId)
       .then(() => {
         AppToaster.show({
-          message: 'The transaction has uncategorized successfully.',
+          message: intl.get('the_transaction_has_uncategorized_successfully'),
           intent: Intent.SUCCESS,
         });
         closeAlert(name);
@@ -59,7 +59,7 @@ function UncategorizeTransactionAlertInner({
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });
@@ -68,7 +68,7 @@ function UncategorizeTransactionAlertInner({
   return (
     <Alert
       cancelButtonText={intl.get('cancel')}
-      confirmButtonText={'Uncategorize'}
+      confirmButtonText={intl.get('uncategorize')}
       intent={Intent.WARNING}
       isOpen={isOpen}
       onCancel={handleCancelDeleteAlert}

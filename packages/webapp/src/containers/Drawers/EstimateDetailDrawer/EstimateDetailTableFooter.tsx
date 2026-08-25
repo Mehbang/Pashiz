@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import styled from 'styled-components';
 import { useEstimateDetailDrawerContext } from './EstimateDetailDrawerProvider';
@@ -32,7 +33,7 @@ export function EstimateDetailTableFooter() {
             title={
               estimate.discountPercentageFormatted
                 ? `Discount [${estimate.discountPercentageFormatted}]`
-                : 'Discount'
+                : intl.get('discount_2')
             }
             value={estimate.discountAmountFormatted}
             textStyle={TotalLineTextStyle.Regular}

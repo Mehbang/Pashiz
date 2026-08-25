@@ -1,6 +1,5 @@
 import { Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import moment from 'moment';
 import React, { useLayoutEffect } from 'react';
 import intl from 'react-intl-universal';
 import {
@@ -12,6 +11,7 @@ import { Money, ExchangeRateInputGroup, MoneyFieldCell } from '@/components';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { transactionNumber } from '@/utils';
 import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
+import { formatDateLocalized } from '@/utils/locale';
 
 type InvoiceDateCellProps = {
   value?: string | number | Date | null;
@@ -21,7 +21,7 @@ type InvoiceDateCellProps = {
  * Invoice date cell.
  */
 function InvoiceDateCell({ value }: InvoiceDateCellProps) {
-  return <span>{moment(value).format('YYYY MMM DD')}</span>;
+  return <span>{formatDateLocalized(value, 'YYYY MMM DD')}</span>;
 }
 
 /**
@@ -50,7 +50,7 @@ export const usePaymentReceiveEntriesColumns = () => {
   return React.useMemo(
     () => [
       {
-        Header: 'Invoice date',
+        Header: intl.get('invoice_date'),
         id: 'invoiceDate',
         accessor: 'invoiceDate',
         Cell: InvoiceDateCell,

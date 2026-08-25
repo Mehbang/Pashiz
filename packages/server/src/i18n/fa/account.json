@@ -1,0 +1,19 @@
+{
+  "field.name": "نام حساب",
+  "field.description": "شرح",
+  "field.slug": "شناسه حساب",
+  "field.code": "کد حساب",
+  "field.code_hint": "شماره یکتا برای شناسایی حساب.",
+  "field.root_type": "نوع ریشه",
+  "field.normal": "ماهیت حساب",
+  "field.normal.credit": "بستانکار",
+  "field.normal.debit": "بدهکار",
+  "field.type": "نوع",
+  "field.active": "فعال",
+  "field.currency": "ارز",
+  "field.balance": "مانده",
+  "field.bank_balance": "مانده بانکی",
+  "field.parent_account": "حساب والد",
+  "field.created_at": "تاریخ ایجاد",
+  "field.account_hint": "با نام یا کد حساب مطابقت دارد."
+}

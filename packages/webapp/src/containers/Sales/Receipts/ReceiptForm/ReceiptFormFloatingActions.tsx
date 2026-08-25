@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Intent,
   Button,
@@ -217,7 +218,7 @@ export function ReceiptFormFloatingActions() {
         {/* ----------- Branding Template Select ----------- */}
         <BrandingThemeFormGroup
           name={'pdfTemplateId'}
-          label={'Branding'}
+          label={intl.get('branding')}
           inline
           fastField
           style={{ marginLeft: 20 }}
@@ -226,7 +227,10 @@ export function ReceiptFormFloatingActions() {
             name={'pdfTemplateId'}
             items={brandingTemplatesOptions}
             input={() => (
-              <BrandingThemeSelectButton text={'Brand Theme'} minimal />
+              <BrandingThemeSelectButton
+                text={intl.get('brand_theme')}
+                minimal
+              />
             )}
             filterable={false}
             popoverProps={{ minimal: true }}
@@ -244,7 +248,7 @@ export function ReceiptFormFloatingActions() {
           content={
             <Menu>
               <MenuItem
-                text={'Customize Templates'}
+                text={intl.get('customize_templates')}
                 onClick={handleCustomizeBtnClick}
               />
             </Menu>

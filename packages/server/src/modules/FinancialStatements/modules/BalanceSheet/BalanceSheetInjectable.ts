@@ -48,6 +48,7 @@ export class BalanceSheetInjectable {
       {
         baseCurrency: tenantMetadata.baseCurrency,
         dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
       },
     );
     // Balance sheet data.

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   NavbarGroup,
   NavbarDivider,
@@ -114,7 +115,7 @@ function VendorActionsBarInner({
   };
   // Handle the print button click.
   const handlePrintBtnClick = () => {
-    downloadExportPdf({ resource: 'Vendor' });
+    downloadExportPdf({ resource: intl.get('vendor') });
   };
 
   const handleBulkDelete = () => {

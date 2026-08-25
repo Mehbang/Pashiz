@@ -78,6 +78,7 @@ export class SalesByItemsReportService {
       {
         baseCurrency: tenantMetadata.baseCurrency,
         dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
       },
     );
     const salesByItemsData = sheet.reportData();

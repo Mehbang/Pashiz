@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import * as R from 'ramda';
 import { EmptyStatus, Can, FormattedMessage as T } from '@/components';
@@ -16,8 +17,9 @@ function TaxRatesLandingEmptyStateRoot({
       title={"The organization doesn't have taxes, yet!"}
       description={
         <p>
-          Setup the organization taxes to start tracking taxes on sales
-          transactions.
+          {intl.get(
+            'setup_the_organization_taxes_to_start_tracking_taxes_on_sale',
+          )}
         </p>
       }
       action={
@@ -30,7 +32,7 @@ function TaxRatesLandingEmptyStateRoot({
                 openDialog(DialogsName.TaxRateForm);
               }}
             >
-              New tax rate
+              {intl.get('new_tax_rate')}
             </Button>
             <Button intent={Intent.NONE} large={true}>
               <T id={'learn_more'} />

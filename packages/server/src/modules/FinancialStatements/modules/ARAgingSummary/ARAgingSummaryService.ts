@@ -35,7 +35,11 @@ export class ARAgingSummaryService {
     const ARAgingSummaryReport = new ARAgingSummarySheet(
       filter,
       this.ARAgingSummaryRepository,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
     // A/R aging summary report data and columns.
     const data = ARAgingSummaryReport.reportData();

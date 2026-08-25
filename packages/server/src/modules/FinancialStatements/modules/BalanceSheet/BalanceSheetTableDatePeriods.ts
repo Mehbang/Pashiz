@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { formatDateIn } from '@/utils/jalali-date';
 import * as R from 'ramda';
 import * as moment from 'moment';
 import { ITableColumn, ITableColumnAccessor } from '../../types/Table.types';
@@ -34,9 +35,12 @@ export const BalanceSheetTableDatePeriods = <
      * @return {string}
      */
     public formatColumnLabel = (dateRange: ICashFlowDateRange) => {
-      const monthFormat = (range) => moment(range.toDate).format('YYYY-MM');
-      const yearFormat = (range) => moment(range.toDate).format('YYYY');
-      const dayFormat = (range) => moment(range.toDate).format('YYYY-MM-DD');
+      const label = (format: string) => (range) =>
+        formatDateIn(range.toDate, format, this.calendar);
+
+      const monthFormat = label('YYYY-MM');
+      const yearFormat = label('YYYY');
+      const dayFormat = label('YYYY-MM-DD');
 
       const conditions = [
         ['month', monthFormat],

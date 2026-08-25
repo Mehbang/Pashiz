@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
@@ -41,7 +42,7 @@ export function InvoiceExclusiveInclusiveSelect(
   return (
     <InclusiveFormGroup
       name={'inclusiveExclusiveTax'}
-      label={'Amounts are'}
+      label={intl.get('amounts_are')}
       inline={true}
     >
       <FSelect

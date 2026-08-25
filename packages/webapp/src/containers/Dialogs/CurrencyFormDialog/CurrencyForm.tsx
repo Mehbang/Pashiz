@@ -83,7 +83,7 @@ function CurrencyFormInner({
       if (errors.find((e) => e.type === 'CURRENCY_CODE_EXISTS')) {
         // FIXME: hardcoded English string — should use intl.
         AppToaster.show({
-          message: 'The given currency code is already exists.',
+          message: intl.get('the_given_currency_code_is_already_exists'),
           intent: Intent.DANGER,
         });
       }

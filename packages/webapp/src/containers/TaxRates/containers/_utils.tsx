@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent, Tag, Classes } from '@blueprintjs/core';
 import clsx from 'classnames';
 import type { TaxRate } from '@bigcapital/sdk-ts';
@@ -14,11 +15,11 @@ const codeAccessor = (taxRate: TaxRate) => {
 const statusAccessor = (taxRate: TaxRate) => {
   return taxRate.active ? (
     <Tag round={false} intent={Intent.SUCCESS}>
-      Active
+      {intl.get('active')}
     </Tag>
   ) : (
     <Tag round={false} intent={Intent.NONE}>
-      Inactive
+      {intl.get('inactive')}
     </Tag>
   );
 };
@@ -46,28 +47,28 @@ const DescriptionAccessor = (taxRate: TaxRate) => {
 export const useTaxRatesTableColumns = () => {
   return [
     {
-      Header: 'Name',
+      Header: intl.get('name'),
       accessor: nameAccessor,
       width: 60,
     },
     {
-      Header: 'Code',
+      Header: intl.get('code'),
       accessor: codeAccessor,
       width: 40,
     },
     {
-      Header: 'Rate',
+      Header: intl.get('rate'),
       accessor: 'rateFormatted',
       align: Align.Right,
       width: 30,
     },
     {
-      Header: 'Description',
+      Header: intl.get('description'),
       accessor: DescriptionAccessor,
       width: 100,
     },
     {
-      Header: 'Status',
+      Header: intl.get('status'),
       accessor: statusAccessor,
       width: 30,
       align: Align.Right,

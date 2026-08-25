@@ -44,7 +44,11 @@ export class InventoryDetailsService {
       filter,
       this.inventoryItemDetailsRepository,
       this.i18n,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
 
     return {

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik, type FormikHelpers } from 'formik';
 import { ExportDialogFormSchema } from './ExportDialogForm.schema';
@@ -52,7 +53,7 @@ function ExportDialogFormRoot({
         setSubmitting(false);
         AppToaster.show({
           intent: Intent.DANGER,
-          message: 'Something went wrong!',
+          message: intl.get('something_went_wrong'),
         });
       });
   };

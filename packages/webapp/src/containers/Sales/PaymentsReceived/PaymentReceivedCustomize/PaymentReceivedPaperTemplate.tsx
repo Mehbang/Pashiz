@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   PaperTemplate,
   PaperTemplateProps,
@@ -74,14 +75,14 @@ export function PaymentReceivedPaperTemplate({
   showCompanyAddress = true,
   companyAddress = DefaultPdfTemplateAddressBilledFrom,
 
-  billedToLabel = 'Billed To',
+  billedToLabel = intl.get('billed_to'),
 
   total = '$1000.00',
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
   showTotal = true,
 
   subtotal = '1000/00',
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
   showSubtotal = true,
 
   lines = [
@@ -92,19 +93,19 @@ export function PaymentReceivedPaperTemplate({
     },
   ],
   showPaymentReceivedNumber = true,
-  paymentReceivedNumberLabel = 'Payment Number',
+  paymentReceivedNumberLabel = intl.get('payment_no_'),
   paymentReceivedNumebr = '346D3D40-0001',
 
   paymentReceivedDate = 'September 3, 2024',
   showPaymentReceivedDate = true,
-  paymentReceivedDateLabel = 'Payment Date',
+  paymentReceivedDateLabel = intl.get('payment_date'),
 }: PaymentReceivedPaperTemplateProps) {
   return (
     <PaperTemplate primaryColor={primaryColor} secondaryColor={secondaryColor}>
       <Stack spacing={24}>
         <Group align={'start'} spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Payment'} />
+            <PaperTemplate.BigTitle title={intl.get('payment')} />
 
             <PaperTemplate.TermsList>
               {showPaymentReceivedNumber && (
@@ -144,13 +145,17 @@ export function PaymentReceivedPaperTemplate({
         <Stack spacing={0}>
           <PaperTemplate.Table
             columns={[
-              { label: 'Invoice #', accessor: 'invoiceNumber' },
+              { label: intl.get('invoice_no'), accessor: 'invoiceNumber' },
               {
-                label: 'Invoice Amount',
+                label: intl.get('invoice_amount'),
                 accessor: 'invoiceAmount',
                 align: 'right',
               },
-              { label: 'Paid Amount', accessor: 'paidAmount', align: 'right' },
+              {
+                label: intl.get('paid_amount'),
+                accessor: 'paidAmount',
+                align: 'right',
+              },
             ]}
             data={lines}
           />

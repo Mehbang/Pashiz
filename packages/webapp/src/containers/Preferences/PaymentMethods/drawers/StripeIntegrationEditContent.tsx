@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes } from '@blueprintjs/core';
 import React from 'react';
 import { StripeIntegrationEditBoot } from './StripeIntegrationEditBoot';
@@ -11,7 +12,7 @@ import { DrawerBody, DrawerHeaderContent } from '@/components';
 export function StripeIntegrationEditContent() {
   return (
     <>
-      <DrawerHeaderContent title={'Edit Stripe Integration'} />
+      <DrawerHeaderContent title={intl.get('edit_stripe_integration')} />
 
       <StripeIntegrationEditBoot>
         <StripeIntegrationEditForm>

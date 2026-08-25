@@ -1,0 +1,14 @@
+{
+  "decrement": "کاهش",
+  "increment": "افزایش",
+  "field.date": "تاریخ تعدیل",
+  "field.type": "نوع تعدیل",
+  "field.type.increment": "افزایش",
+  "field.type.decrement": "کاهش",
+  "field.adjustment_account": "حساب تعدیل",
+  "field.reason": "دلیل",
+  "field.reference_no": "شماره مرجع",
+  "field.description": "شرح",
+  "field.published_at": "تاریخ قطعی‌سازی",
+  "field.created_at": "تاریخ ایجاد"
+}

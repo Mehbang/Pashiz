@@ -1,0 +1,276 @@
+// Right-to-left corrections for Blueprint.
+//
+// Blueprint 4 ships left-to-right styles only, and the app's `stylis-rtlcss`
+// plugin flips styled-components rules — not Blueprint's own stylesheet. So
+// every Blueprint rule that reserves space on one side (control indicators,
+// input icons, menu items) still points left in a right-to-left document and
+// lands on top of the label it belongs to. The rules below mirror those.
+//
+// Only properties Blueprint sets with a physical side are restated here; the
+// mirrored value is written with the opposite side and the original is reset.
+
+$rtl-control-padding: 26px; // indicator size (16px) + spacing (10px)
+$rtl-switch-padding: 38px; // switch indicator (28px) + spacing (10px)
+
+[dir='rtl'] {
+  // ---------------------------------------------------------------
+  // Checkbox, radio and switch
+  // ---------------------------------------------------------------
+  .bp4-control:not(.bp4-align-right) {
+    padding-left: 0;
+    padding-right: $rtl-control-padding;
+
+    .bp4-control-indicator {
+      float: right;
+      margin-left: 10px;
+      margin-right: -$rtl-control-padding;
+    }
+  }
+
+  .bp4-control.bp4-align-right {
+    padding-left: $rtl-control-padding;
+    padding-right: 0;
+
+    .bp4-control-indicator {
+      float: left;
+      margin-left: -$rtl-control-padding;
+      margin-right: 10px;
+    }
+  }
+
+  .bp4-control.bp4-switch:not(.bp4-align-right) {
+    padding-right: $rtl-switch-padding;
+
+    .bp4-control-indicator {
+      margin-right: -$rtl-switch-padding;
+    }
+  }
+
+  .bp4-control.bp4-switch.bp4-align-right {
+    padding-left: $rtl-switch-padding;
+
+    .bp4-control-indicator {
+      margin-left: -$rtl-switch-padding;
+    }
+  }
+
+  // The switch knob travels left-to-right; send it the other way.
+  .bp4-control.bp4-switch input:checked ~ .bp4-control-indicator::before {
+    left: 0;
+    right: calc(100% - 1em);
+  }
+
+  .bp4-control-group .bp4-control:not(:last-child) {
+    margin-left: 10px;
+    margin-right: 0;
+  }
+
+  // ---------------------------------------------------------------
+  // Input groups — leading icon and trailing actions
+  // ---------------------------------------------------------------
+  .bp4-input-group {
+    .bp4-input:not(:first-child) {
+      padding-left: 10px;
+      padding-right: 30px;
+    }
+
+    .bp4-input:not(:last-child) {
+      padding-left: 30px;
+      padding-right: 10px;
+    }
+
+    > .bp4-icon,
+    > .bp4-input-left-container {
+      left: auto;
+      right: 0;
+    }
+
+    > .bp4-input-action,
+    > .bp4-button,
+    > .bp4-spinner {
+      left: 0;
+      right: auto;
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // Form groups
+  // ---------------------------------------------------------------
+  .bp4-form-group.bp4-inline {
+    label.bp4-label {
+      margin-left: 10px;
+      margin-right: 0;
+    }
+  }
+
+  .bp4-label .bp4-text-muted {
+    margin-left: 0;
+    margin-right: 4px;
+  }
+
+  // ---------------------------------------------------------------
+  // Menus and select popovers
+  // ---------------------------------------------------------------
+  .bp4-menu-item {
+    text-align: right;
+
+    // Blueprint separates the glyph from the label with `margin-right` on the
+    // icon wrapper. Read right-to-left that margin lands on the outer edge, so
+    // the glyph ends up flush against the text.
+    > .bp4-menu-item-icon {
+      margin-left: 7px;
+      margin-right: 0;
+    }
+
+    .bp4-menu-item-label {
+      margin-left: 0;
+      margin-right: auto;
+    }
+  }
+
+  .bp4-menu-item.bp4-popover-open > .bp4-icon,
+  .bp4-submenu .bp4-popover-target {
+    text-align: right;
+  }
+
+  // ---------------------------------------------------------------
+  // Buttons — icon spacing sits on the wrong side
+  // ---------------------------------------------------------------
+  .bp4-button:not([class*='bp4-icon-']) > .bp4-icon:first-child:last-child,
+  .bp4-button > :first-child {
+    margin-left: 7px;
+    margin-right: 0;
+  }
+
+  .bp4-button > :last-child:not(:first-child) {
+    margin-left: 0;
+    margin-right: 7px;
+  }
+
+  .bp4-button-group .bp4-button:not(:first-child) {
+    margin-left: 0;
+    margin-right: -1px;
+  }
+
+  // ---------------------------------------------------------------
+  // Native select arrow
+  // ---------------------------------------------------------------
+  .bp4-html-select {
+    select {
+      padding-left: 25px;
+      padding-right: 10px;
+      text-align: right;
+    }
+
+    .bp4-icon,
+    &::after {
+      left: 7px;
+      right: auto;
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // Callouts, tags and numeric inputs
+  // ---------------------------------------------------------------
+  .bp4-callout.bp4-callout-icon {
+    padding-left: 10px;
+    padding-right: 40px;
+
+    > .bp4-icon:first-child {
+      left: auto;
+      right: 10px;
+    }
+  }
+
+  .bp4-tag > .bp4-tag-remove {
+    margin-left: -6px;
+    margin-right: 7px;
+  }
+
+  .bp4-tag > .bp4-icon:first-child {
+    margin-left: 7px;
+    margin-right: -2px;
+  }
+
+  .bp4-numeric-input .bp4-button-group.bp4-vertical > .bp4-button {
+    margin-left: 0;
+  }
+
+  // ---------------------------------------------------------------
+  // Trees and tabs
+  // ---------------------------------------------------------------
+  .bp4-tree-node-content {
+    padding-left: 0;
+    padding-right: 5px;
+  }
+
+  .bp4-tree-node-caret,
+  .bp4-tree-node-caret-none {
+    transform: scaleX(-1);
+  }
+
+  .bp4-tab-indicator-wrapper .bp4-tab-indicator {
+    right: 0;
+  }
+
+  // ---------------------------------------------------------------
+  // Preferences page — fixed sidebar and the gutter reserved for it
+  // ---------------------------------------------------------------
+  // The sidebar is `position: fixed` with no offsets, so it lands wherever the
+  // flow puts it — the right in a right-to-left document. The content, though,
+  // reserves its gutter with `margin-left`, which leaves the sidebar sitting on
+  // top of the content instead of beside it.
+  .preferences-page__content {
+    margin-left: 0;
+    margin-right: 220px;
+  }
+
+  .preferences-sidebar {
+    border-left: 1px solid var(--color-sidebar-preferences-border);
+    border-right: 0;
+  }
+
+  // ---------------------------------------------------------------
+  // Vertical tab lists
+  // ---------------------------------------------------------------
+  // Blueprint spaces horizontal tabs with `margin-right`. In a column list that
+  // margin does nothing left-to-right, but right-to-left it shoves every tab
+  // except the last one off the edge of its container.
+  .bp4-vertical > .bp4-tab-list > *:not(:last-child),
+  .bp4-vertical .bp4-tab-list > *:not(:last-child) {
+    margin-right: 0;
+  }
+
+  // ---------------------------------------------------------------
+  // Dashboard topbar — title and breadcrumbs
+  // ---------------------------------------------------------------
+  // These gaps are written in plain SCSS, which the RTL plugin does not touch,
+  // so they opened on the far side and left the collapsed-breadcrumbs button
+  // pressed up against the page title.
+  .dashboard__breadcrumbs {
+    margin-left: 0;
+    margin-right: 20px;
+  }
+
+  .dashboard__title {
+    margin-left: 0;
+    margin-right: 2px;
+  }
+
+  .dashboard__back-link {
+    margin-left: 0;
+    margin-right: 20px;
+  }
+
+  // ---------------------------------------------------------------
+  // Actions-bar switch (e.g. the "inactive" toggle on list screens)
+  // ---------------------------------------------------------------
+  // The bar separates this switch from the divider beside it with
+  // `margin-left`, written in plain SCSS and so never mirrored. Read
+  // right-to-left the divider moves to the other side, leaving the switch's
+  // toggle sitting directly on top of it.
+  .navbar--dashboard-actions-bar .bp4-control.bp4-switch {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+}

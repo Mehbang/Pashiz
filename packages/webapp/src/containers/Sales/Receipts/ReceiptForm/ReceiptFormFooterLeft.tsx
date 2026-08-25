@@ -10,7 +10,7 @@ export function ReceiptFormFooterLeft() {
       <ReceiptMsgFormGroup
         name={'receiptMessage'}
         label={intl.get('receipt_form.label.receipt_message')}
-        helperText={'Will be displayed on the Receipt'}
+        helperText={intl.get('will_be_displayed_on_the_receipt')}
       >
         <FEditableText
           name={'receiptMessage'}

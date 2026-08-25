@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
@@ -26,7 +27,7 @@ export function DashboardSockets() {
       });
 
       AppToaster.show({
-        message: 'The Plaid connected accounts have been updated.',
+        message: intl.get('the_plaid_connected_accounts_have_been_updated'),
         intent: Intent.SUCCESS,
       });
     });

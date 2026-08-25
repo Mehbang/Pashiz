@@ -38,7 +38,11 @@ export class JournalSheetService {
       filter,
       this.journalRepository,
       this.i18n,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
     // Retrieve journal report columns.
     const journalSheetData = journalSheetInstance.reportData();

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import { x } from '@xstyled/emotion';
 import { AuthInsiderCard } from './_components';
@@ -21,13 +22,13 @@ export function RegisterVerify() {
       .then(() => {
         AppToaster.show({
           intent: Intent.SUCCESS,
-          message: 'The verification mail has sent successfully.',
+          message: intl.get('the_verification_mail_has_sent_successfully'),
         });
       })
       .catch(() => {
         AppToaster.show({
           intent: Intent.DANGER,
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
         });
       });
   };
@@ -45,7 +46,7 @@ export function RegisterVerify() {
             mb="0.5rem"
             color={isDarkMode ? 'rgba(255, 255, 255, 0.85)' : '#252A31'}
           >
-            Please verify your email
+            {intl.get('please_verify_your_email')}
           </x.h2>
           <x.p
             mb="1rem"
@@ -65,7 +66,7 @@ export function RegisterVerify() {
               intent={Intent.NONE}
               onClick={handleResendMailBtnClick}
             >
-              Resend email
+              {intl.get('resend_email')}
             </Button>
 
             <Button
@@ -75,7 +76,7 @@ export function RegisterVerify() {
               intent={Intent.DANGER}
               onClick={handleSignOutBtnClick}
             >
-              Not my email
+              {intl.get('not_my_email')}
             </Button>
           </Stack>
         </AuthInsiderCard>

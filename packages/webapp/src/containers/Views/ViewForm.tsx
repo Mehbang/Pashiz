@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import {
   InputGroup,
   FormGroup,
@@ -15,7 +16,6 @@ import { useFormik } from 'formik';
 import { pick, get } from 'lodash';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Row, Col } from 'react-grid-system';
-import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
 import { ReactSortable } from 'react-sortablejs';
 import * as Yup from 'yup';
@@ -194,18 +194,18 @@ function ViewFormInner({
   );
 
   const whenConditionalsItems = useMemo(
-    () => [{ value: '', label: 'When' }],
+    () => [{ value: '', label: intl.get('when') }],
     [],
   );
 
   // Compatotors items.
   const compatatorsItems = useMemo(
     () => [
-      { value: '', label: 'Compatator' },
-      { value: 'equals', label: 'Equals' },
-      { value: 'not_equal', label: 'Not Equal' },
-      { value: 'contain', label: 'Contain' },
-      { value: 'not_contain', label: 'Not Contain' },
+      { value: '', label: intl.get('compatator') },
+      { value: 'equals', label: intl.get('equals') },
+      { value: 'not_equal', label: intl.get('not_equal') },
+      { value: 'contain', label: intl.get('contain') },
+      { value: 'not_contain', label: intl.get('not_contain') },
     ],
     [],
   );
@@ -213,7 +213,7 @@ function ViewFormInner({
   // Resource fields.
   const resourceFieldsOptions = useMemo(
     () => [
-      { value: '', label: 'Select a field' },
+      { value: '', label: intl.get('select_a_field') },
       ...resourceFields.map((field) => ({
         value: field.key,
         label: field.label_name,
@@ -293,7 +293,7 @@ function ViewFormInner({
           </Row>
         </div>
 
-        <H5 className="mb2">Define the conditionals</H5>
+        <H5 className="mb2">{intl.get('define_the_conditionals')}</H5>
 
         {values.roles.map((role, index) => (
           <Row class="view-form__role-conditional">
@@ -404,12 +404,14 @@ function ViewFormInner({
           </Row>
         </div>
 
-        <H5 className={'mb2'}>Columns Preferences</H5>
+        <H5 className={'mb2'}>{intl.get('columns_preferences')}</H5>
 
         <div class="dragable-columns">
           <Row gutterWidth={14}>
             <Col sm={4} className="dragable-columns__column">
-              <H6 className="dragable-columns__title">Available Columns</H6>
+              <H6 className="dragable-columns__title">
+                {intl.get('available_columns')}
+              </H6>
 
               <InputGroup placeholder={intl.get('search')} leftIcon="search" />
 
@@ -448,7 +450,9 @@ function ViewFormInner({
             </Col>
 
             <Col sm={4} className="dragable-columns__column">
-              <H6 className="dragable-columns__title">Selected Columns</H6>
+              <H6 className="dragable-columns__title">
+                {intl.get('selected_columns')}
+              </H6>
               <InputGroup placeholder={intl.get('search')} leftIcon="search" />
 
               <div class="dragable-columns__items">

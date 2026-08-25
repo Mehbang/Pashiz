@@ -86,7 +86,7 @@ export const defaultEntry: MakeJournalEntry = {
 export const defaultManualJournal: MakeJournalFormValues = {
   journalNumber: '',
   journalNumberManually: '',
-  journalType: 'Journal',
+  journalType: intl.get('journal'),
   date: moment(new Date()).format('YYYY-MM-DD'),
   description: '',
   reference: '',

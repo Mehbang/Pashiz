@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -70,20 +71,20 @@ export function StripePaymentMethod() {
           <Group spacing={10}>
             {isStripeEnabled && (
               <Tag minimal intent={Intent.SUCCESS}>
-                Active
+                {intl.get('active')}
               </Tag>
             )}
             {!isPaymentEnabled && isAccountCreated && (
               <Tooltip content="The account cannot accept payments because verification may be incomplete, there may be legal or compliance issues, or required documents haven't been submitted or verified.">
                 <Tag minimal intent={Intent.DANGER}>
-                  Payment Not Enabled
+                  {intl.get('payment_not_enabled')}
                 </Tag>
               </Tooltip>
             )}
             {!isPayoutEnabled && isAccountCreated && (
               <Tooltip content="The account cannot receive payouts due to incomplete or invalid bank details, pending identity verification, or compliance restrictions.">
                 <Tag minimal intent={Intent.DANGER}>
-                  Payout Not Enabled
+                  {intl.get('payout_not_enabled')}
                 </Tag>
               </Tooltip>
             )}
@@ -97,7 +98,7 @@ export function StripePaymentMethod() {
           )}
           {!isAccountCreated && (
             <Button intent={Intent.PRIMARY} small onClick={handleSetUpBtnClick}>
-              Set it Up
+              {intl.get('set_it_up')}
             </Button>
           )}
           {isAccountCreated && (
@@ -106,7 +107,7 @@ export function StripePaymentMethod() {
                 <Menu>
                   <MenuItem
                     intent={Intent.DANGER}
-                    text={'Delete Connection'}
+                    text={intl.get('delete_connection')}
                     onClick={handleDeleteConnectionClick}
                   />
                 </Menu>
@@ -122,23 +123,22 @@ export function StripePaymentMethod() {
         className={Classes.TEXT_MUTED}
         style={{ fontSize: 13 }}
       >
-        Stripe is a secure online payment platform that lets you easily accept
-        both one-time and recurring payments. It simplifies managing
-        transactions and streamlines reconciliation. Setup is quick, helping you
-        get paid faster and more efficiently.
+        {intl.get(
+          'stripe_is_a_secure_online_payment_platform_that_lets_you_eas',
+        )}
       </PaymentDescription>
 
       <PaymentFooter>
         <Stack spacing={10}>
           <Text>
             <a target="_blank" rel="noreferrer" href={STRIPE_PRICING_LINK}>
-              View Stripe's Transaction Fees
+              {intl.get('view_stripe_s_transaction_fees')}
             </a>
           </Text>
 
           {!isStripeServerConfigured && (
             <Text style={{ color: '#CD4246' }}>
-              Stripe payment is not configured from the server.{' '}
+              {intl.get('stripe_payment_is_not_configured')}{' '}
             </Text>
           )}
         </Stack>

@@ -99,6 +99,7 @@ export class CashFlowStatementService {
       {
         baseCurrency: tenant.metadata.baseCurrency,
         dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
       },
     );
 

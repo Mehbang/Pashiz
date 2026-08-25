@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   InvoiceMailReceipt,
   InvoiceMailReceiptProps,
@@ -31,7 +32,9 @@ export function InvoiceMailReceiptPreview(
     dueDate: '2 Oct 2024',
     subtotal: '$1,000.00',
     dueAmount: '$1,000.00',
-    items: [{ label: 'Web development', total: '$1000.00', quantity: 1 }],
+    items: [
+      { label: intl.get('web_development'), total: '$1000.00', quantity: 1 },
+    ],
     companyLogoUri: ' ',
     ...props,
   };

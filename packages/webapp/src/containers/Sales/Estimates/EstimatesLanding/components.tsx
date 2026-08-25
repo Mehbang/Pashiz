@@ -1,7 +1,7 @@
+import intl from 'react-intl-universal';
 import { Intent, Tag, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 import clsx from 'classnames';
 import React from 'react';
-import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
 import type { SaleEstimatesListResponse } from '@bigcapital/sdk-ts';
 import {
@@ -152,7 +152,7 @@ export function ActionsMenu({
       <Can I={SaleEstimateAction.View} a={AbilitySubject.Estimate}>
         <MenuItem
           icon={<Icon icon={'envelope'} iconSize={16} />}
-          text={'Send Mail'}
+          text={intl.get('send_mail')}
           onClick={safeCallback(onSendMail, original)}
         />
         <MenuItem

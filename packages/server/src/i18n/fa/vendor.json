@@ -1,0 +1,19 @@
+{
+  "field.first_name": "نام",
+  "field.last_name": "نام خانوادگی",
+  "field.display_name": "نام نمایشی",
+  "field.email": "ایمیل",
+  "field.work_phone": "تلفن محل کار",
+  "field.personal_phone": "تلفن شخصی",
+  "field.company_name": "نام شرکت",
+  "field.website": "وب‌سایت",
+  "field.opening_balance": "مانده افتتاحیه",
+  "field.opening_balance_at": "تاریخ مانده افتتاحیه",
+  "field.currency": "ارز",
+  "field.created_at": "تاریخ ایجاد",
+  "field.balance": "مانده",
+  "field.note": "یادداشت",
+  "field.status": "وضعیت",
+  "field.status.overdue": "معوق",
+  "field.status.unpaid": "پرداخت‌نشده"
+}

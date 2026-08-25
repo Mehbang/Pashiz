@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes, Intent, ProgressBar } from '@blueprintjs/core';
 import type { ComponentType } from 'react';
 import React, { Suspense } from 'react';
@@ -19,7 +20,9 @@ function AlertLazyFallbackMessage({
 }: AlertLazyFallbackMessageProps): React.ReactElement {
   return (
     <React.Fragment>
-      <ToastText>Alert content is loading, just a second.</ToastText>
+      <ToastText>
+        {intl.get('alert_content_is_loading_just_a_second')}
+      </ToastText>
       <ProgressBar
         className={clsx({
           [Classes.PROGRESS_NO_STRIPES]: amount >= 100,

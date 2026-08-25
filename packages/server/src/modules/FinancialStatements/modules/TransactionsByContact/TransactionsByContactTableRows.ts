@@ -1,3 +1,4 @@
+import { CalendarSystem, formatDateIn } from '@/utils/jalali-date';
 import * as moment from 'moment';
 import * as R from 'ramda';
 import { ITransactionsByContactsContact } from './TransactionsByContact.types';
@@ -15,9 +16,11 @@ enum ROW_TYPE {
 export class TransactionsByContactsTableRows {
   public i18n: I18nService;
   public dateFormat: string;
+  /** Calendar the transaction dates are rendered in. */
+  public calendar: CalendarSystem = 'gregorian';
 
   public dateAccessor = (value): string => {
-    return moment(value.date).format(this.dateFormat);
+    return formatDateIn(value.date, this.dateFormat, this.calendar);
   };
 
   /**

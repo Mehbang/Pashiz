@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import clsx from 'classnames';
 import type { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -33,8 +34,8 @@ export function ImportDropzoneField({
   onChange,
   dropzoneProps,
   uploadIcon = <Icon icon="download" iconSize={26} />,
-  title = 'Drag images here or click to select files',
-  subtitle = 'Drag and Drop file here or Choose file',
+  title = intl.get('drag_images_here_or_click_to_select_files'),
+  subtitle = intl.get('drag_and_drop_file_here_or_choose_file'),
   classNames,
 }: ImportDropzoneFieldProps) {
   const [localValue, handleChange] = useUncontrolled<File | null>({
@@ -71,7 +72,7 @@ export function ImportDropzoneField({
           <Stack spacing={6} justify="center" align="center">
             <h4 className={styles.title}>{localValue.name}</h4>
             <Button small minimal intent={Intent.DANGER} onClick={handleRemove}>
-              Remove
+              {intl.get('remove')}
             </Button>
           </Stack>
         ) : (
@@ -87,7 +88,7 @@ export function ImportDropzoneField({
           minimal
           outlined
         >
-          {localValue ? 'Replace File' : 'Upload File'}
+          {localValue ? intl.get('replace_file') : intl.get('upload_file')}
         </Button>
       </Stack>
     </DropzoneWithChildren>

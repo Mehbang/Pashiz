@@ -9,7 +9,6 @@ import {
   Popover,
 } from '@blueprintjs/core';
 import { isNumber } from 'lodash';
-import moment from 'moment';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { InventoryAdjustment } from '@bigcapital/sdk-ts';
@@ -19,6 +18,7 @@ import {
   AbilitySubject,
 } from '@/constants/abilityOption';
 import { isBlank, safeCallback } from '@/utils';
+import { formatDateLocalized } from '@/utils/locale';
 
 interface ActionsMenuPayload {
   onDelete: (row: InventoryAdjustment) => void;
@@ -173,7 +173,7 @@ export const useInventoryAdjustmentsColumns = () => {
       {
         id: 'date',
         Header: intl.get('date'),
-        accessor: (r) => moment(r.date).format('YYYY MMM DD'),
+        accessor: (r) => formatDateLocalized(r.date, 'YYYY MMM DD'),
         width: 115,
         className: 'date',
         clickable: true,
@@ -213,7 +213,7 @@ export const useInventoryAdjustmentsColumns = () => {
       {
         id: 'created_at',
         Header: intl.get('created_at'),
-        accessor: (r) => moment(r.createdAt).format('YYYY MMM DD'),
+        accessor: (r) => formatDateLocalized(r.createdAt, 'YYYY MMM DD'),
         width: 125,
         className: 'created_at',
         clickable: true,

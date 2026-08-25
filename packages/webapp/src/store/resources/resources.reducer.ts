@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { createReducer } from '@reduxjs/toolkit';
 import {
   RESOURCE_COLUMNS_SET,
@@ -33,15 +34,15 @@ const initialState: ResourcesState = {
 
   metadata: {
     accounts: {
-      label: 'Accounts',
+      label: intl.get('accounts'),
       baseRoute: '/accounts',
     },
     items: {
-      label: 'Items',
+      label: intl.get('items'),
       baseRoute: '/items',
     },
     manual_journals: {
-      label: 'Journals',
+      label: intl.get('journals'),
       baseRoute: '/manual-journals',
     },
   },

@@ -42,7 +42,11 @@ export class TransactionsByVendorsInjectable {
       this.transactionsByVendorRepository,
       filter,
       this.i18n,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
 
     // Triggers `onVendorTransactionsViewed` event.

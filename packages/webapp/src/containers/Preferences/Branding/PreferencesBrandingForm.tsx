@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { omit } from 'lodash';
@@ -89,7 +90,7 @@ export const PreferencesBrandingForm = ({
     await updateOrganization({ ...__values });
 
     AppToaster.show({
-      message: 'Organization branding has been updated.',
+      message: intl.get('organization_branding_has_been_updated'),
       intent: Intent.SUCCESS,
     });
   };

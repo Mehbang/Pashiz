@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -43,7 +44,7 @@ export function ReceiptSendMailForm({ children }: ReceiptSendMailFormProps) {
     sendReceiptMail([receiptId, values])
       .then(() => {
         AppToaster.show({
-          message: 'The receipt mail has been sent to the customer.',
+          message: intl.get('the_receipt_mail_has_been_sent_to_the_customer'),
           intent: Intent.SUCCESS,
         });
         setSubmitting(false);
@@ -52,7 +53,7 @@ export function ReceiptSendMailForm({ children }: ReceiptSendMailFormProps) {
       .catch((error) => {
         setSubmitting(false);
         AppToaster.show({
-          message: 'Something went wrong!',
+          message: intl.get('something_went_wrong'),
           intent: Intent.SUCCESS,
         });
       });

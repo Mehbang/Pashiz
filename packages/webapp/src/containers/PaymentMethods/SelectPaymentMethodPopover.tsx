@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Classes,
   Popover,
@@ -25,13 +26,15 @@ export function PaymentOptionsButtonPopver({
       minimal={true}
       content={
         <Stack spacing={8}>
-          <PaymentMethodsTitle>Payment Options</PaymentMethodsTitle>
+          <PaymentMethodsTitle>
+            {intl.get('payment_options')}
+          </PaymentMethodsTitle>
 
           <Stack spacing={8}>
             {paymentMethods?.map((service, key) => (
               <PaymentMethodSelectField
                 name={`payment_methods.${service.id}.enable`}
-                label={'Card (Stripe)'}
+                label={intl.get('card_stripe')}
                 key={key}
               />
             ))}

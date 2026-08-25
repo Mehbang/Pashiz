@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -68,7 +69,9 @@ export function ImportFileUploadForm({ children }: ImportFileUploadFormProps) {
         ) {
           AppToaster.show({
             intent: Intent.DANGER,
-            message: 'The extenstion of uploaded file is not supported.',
+            message: intl.get(
+              'the_extenstion_of_uploaded_file_is_not_supported',
+            ),
           });
         }
         if (data.errors.find((er) => er.type === 'IMPORTED_SHEET_EMPTY')) {

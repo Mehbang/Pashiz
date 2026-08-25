@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent, Text } from '@blueprintjs/core';
 import React from 'react';
 import { withBankingActions } from '../../withBankingActions';
@@ -65,13 +66,13 @@ function RecognizedTransactionsTableRoot({
       .then(() => {
         AppToaster.show({
           intent: Intent.SUCCESS,
-          message: 'The bank transaction has been excluded.',
+          message: intl.get('the_bank_transaction_has_been_excluded'),
         });
       })
       .catch(() => {
         AppToaster.show({
           intent: Intent.DANGER,
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
         });
       });
   };
@@ -123,19 +124,22 @@ function RecognizedTransactionsTableNoResults() {
   return (
     <Stack spacing={12} className={styles.emptyState}>
       <Text>
-        There are no Recognized transactions due to one of the following
-        reasons:
+        {intl.get(
+          'there_are_no_recognized_transactions_due_to_one_of_the_follo',
+        )}
       </Text>
 
       <ul>
         <li>
-          Transaction Rules have not yet been created. Transactions are
-          recognized based on the rule criteria.
+          {intl.get(
+            'transaction_rules_have_not_yet_been_created_transactions_are',
+          )}
         </li>
 
         <li>
-          The transactions in your bank do not satisfy the criteria in any of
-          your transaction rule(s).
+          {intl.get(
+            'the_transactions_in_your_bank_do_not_satisfy_the_criteria_in',
+          )}
         </li>
       </ul>
     </Stack>

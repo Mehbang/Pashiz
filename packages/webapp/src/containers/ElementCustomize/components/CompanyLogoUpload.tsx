@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import clsx from 'classnames';
 import { useRef, useState } from 'react';
@@ -41,7 +42,7 @@ export function CompanyLogoUpload({
   onChange,
   dropzoneProps,
   uploadIcon = <Icon icon="download" iconSize={26} />,
-  title = 'Drag images here or click to select files',
+  title = intl.get('drag_images_here_or_click_to_select_files'),
   classNames,
 }: CompanyLogoUploadProps) {
   const [localValue, handleChange] = useUncontrolled<File | null>({
@@ -99,7 +100,7 @@ export function CompanyLogoUpload({
             outlined
             small
           >
-            {'Upload File'}
+            {intl.get('upload_file')}
           </Button>
         </Stack>
       )}

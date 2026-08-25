@@ -1,0 +1,16 @@
+{
+  "income": "درآمد",
+  "cost_of_sales": "بهای تمام‌شده فروش",
+  "gross_profit": "سود ناخالص",
+  "expenses": "هزینه‌ها",
+  "net_operating_income": "سود عملیاتی خالص",
+  "other_income": "سایر درآمدها",
+  "other_expenses": "سایر هزینه‌ها",
+  "net_income": "سود خالص",
+  "account_name": "نام حساب",
+  "total": "جمع",
+  "percentage_of_income": "٪ از درآمد",
+  "percentage_of_expenses": "٪ از هزینه",
+  "percentage_of_column": "٪ از ستون",
+  "percentage_of_row": "٪ از سطر"
+}

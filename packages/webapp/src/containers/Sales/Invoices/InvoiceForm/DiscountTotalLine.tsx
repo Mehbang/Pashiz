@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { x } from '@xstyled/emotion';
@@ -51,8 +52,8 @@ export function DiscountTotalLine({
   );
 
   const discountTypeItems = [
-    { text: currencyCode, value: 'amount', label: 'Fixed Amount' },
-    { text: '%', value: 'percentage', label: 'Percentage' },
+    { text: currencyCode, value: 'amount', label: intl.get('fixed_amount') },
+    { text: '%', value: 'percentage', label: intl.get('percentage') },
   ];
 
   const isDarkMode = useIsDarkMode();
@@ -68,7 +69,7 @@ export function DiscountTotalLine({
           alignItems={'center'}
           justifyContent={'space-between'}
         >
-          <x.span pr={2}>Discount</x.span>
+          <x.span pr={2}>{intl.get('discount_2')}</x.span>
           <FFormGroup
             name={'discount'}
             className={formGroupCss}

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
@@ -41,8 +42,8 @@ export function InvoiceFormFooterRight() {
         title={
           <>
             {inclusiveExclusiveTax === TaxType.Inclusive
-              ? 'Subtotal (Tax Inclusive)'
-              : 'Subtotal'}
+              ? intl.get('subtotal_tax_inclusive')
+              : intl.get('sub_total')}
           </>
         }
         value={subtotalFormatted}
@@ -62,7 +63,7 @@ export function InvoiceFormFooterRight() {
         />
       ))}
       <TotalLine
-        title={`Total (${currencyCode})`}
+        title={intl.get('total_currency', { currency: currencyCode })}
         value={totalFormatted}
         borderStyle={TotalLineBorderStyle.SingleDark}
         textStyle={TotalLineTextStyle.Bold}

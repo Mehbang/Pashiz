@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes } from '@blueprintjs/core';
 import { SendMailViewHeader } from '../SendMailViewDrawer/SendMailViewHeader';
 import { SendMailViewLayout } from '../SendMailViewDrawer/SendMailViewLayout';
@@ -13,7 +14,9 @@ export function EstimateSendMailContent() {
       <EstimateSendMailBoot>
         <EstimateSendMailForm>
           <SendMailViewLayout
-            header={<SendMailViewHeader label={'Send Estimate Mail'} />}
+            header={
+              <SendMailViewHeader label={intl.get('send_estimate_mail')} />
+            }
             fields={<EstimateSendMailFields />}
             preview={<EstimateSendMailPreviewTabs />}
           />

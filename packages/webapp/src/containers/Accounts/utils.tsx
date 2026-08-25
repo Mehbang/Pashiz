@@ -114,7 +114,7 @@ export const useAccountsTableColumns =
           },
           {
             id: 'bank_balance',
-            Header: 'Bank Balance',
+            Header: intl.get('bank_balance'),
             accessor: 'bankBalanceFormatted',
             Cell: BankBalanceCell,
             width: 150,

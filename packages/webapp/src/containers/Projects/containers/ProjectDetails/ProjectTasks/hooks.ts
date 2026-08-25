@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import React from 'react';
 import { TaskAccessor, TaskTimeAccessor } from './components';
 
@@ -10,7 +11,7 @@ export function useProjectTaskColumns() {
     () => [
       {
         id: 'name',
-        Header: 'Header',
+        Header: intl.get('header'),
         accessor: TaskAccessor,
         width: 100,
         className: 'name',
@@ -19,7 +20,7 @@ export function useProjectTaskColumns() {
       },
       {
         id: 'actions',
-        Header: 'Header',
+        Header: intl.get('header'),
         accessor: TaskTimeAccessor,
         width: 100,
         className: 'name',

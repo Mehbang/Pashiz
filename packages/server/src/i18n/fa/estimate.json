@@ -1,0 +1,20 @@
+{
+  "field.customer": "مشتری",
+  "field.estimate_date": "تاریخ پیش‌فاکتور",
+  "field.expiration_date": "تاریخ انقضا",
+  "field.estimate_number": "شماره پیش‌فاکتور",
+  "field.reference_no": "شماره مرجع",
+  "field.exchange_rate": "نرخ تسعیر",
+  "field.currency": "ارز",
+  "field.note": "یادداشت",
+  "field.terms_conditions": "شرایط و ضوابط",
+  "field.delivered": "تحویل‌شده",
+  "field.entries": "اقلام",
+  "field.amount": "مبلغ",
+  "field.status": "وضعیت",
+  "field.status.draft": "پیش‌نویس",
+  "field.status.delivered": "تحویل‌شده",
+  "field.status.rejected": "ردشده",
+  "field.status.approved": "تأییدشده",
+  "field.created_at": "تاریخ ایجاد"
+}

@@ -1,3 +1,4 @@
+import { PashizBrand } from '@/components/Icons/PashizBrand';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@/components';
@@ -11,7 +12,7 @@ export function AuthContainer({ children }: AuthContainerProps) {
     <AuthPage>
       <AuthInsider>
         <AuthLogo>
-          <Icon icon="bigcapital" height={37} width={214} />
+          <PashizBrand height={34} />
         </AuthLogo>
 
         {children}

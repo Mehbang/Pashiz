@@ -30,7 +30,9 @@ export const transformErrors = (
     errors.find((error) => error.type === 'CREDIT_NOTE_HAS_NO_REMAINING_AMOUNT')
   ) {
     AppToaster.show({
-      message: 'The total amount bigger than from remaining credit note amount',
+      message: intl.get(
+        'the_total_amount_bigger_than_from_remaining_credit_note_amou',
+      ),
       intent: Intent.DANGER,
     });
   }

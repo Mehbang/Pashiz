@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Callout, Classes } from '@blueprintjs/core';
 import * as R from 'ramda';
 import { ChangeSubscriptionPlans } from './ChangeSubscriptionPlans';
@@ -16,9 +17,9 @@ export function ChangeSubscriptionPlanContent() {
         }}
       >
         <Callout style={{ marginBottom: '2rem' }} icon={null}>
-          Simple plans. Simple prices. Only pay for what you really need. All
-          plans come with award-winning 24/7 customer support. Prices do not
-          include applicable taxes.
+          {intl.get(
+            'simple_plans_simple_prices_only_pay_for_what_you_really_need',
+          )}
         </Callout>
 
         <SubscriptionPlansPeriodSwitcher />

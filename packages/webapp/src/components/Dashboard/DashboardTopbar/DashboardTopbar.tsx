@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Navbar,
   NavbarGroup,
@@ -136,21 +137,21 @@ function DashboardTopbar({
               content={
                 <Menu>
                   <MenuItem
-                    text={'Documents'}
+                    text={intl.get('documents')}
                     onClick={() => window.open(DOCS_BIGCAPITAL_LINK)}
                     labelElement={<Icon icon={'share'} iconSize={16} />}
                   />
                   <MenuItem
-                    text={'Community support'}
+                    text={intl.get('community_support')}
                     onClick={() => window.open(COMMUNITY_BIGCAPITAL_LINK)}
                     labelElement={<Icon icon={'share'} iconSize={16} />}
                   />
                   <MenuItem
-                    text={'Keyboard shortcuts'}
+                    text={intl.get('keyboard_shortcuts')}
                     onClick={() => openDialog(DialogsName.KeyboardShortcutForm)}
                   />
                   <MenuDivider />
-                  <MenuItem text={'Share feedback'} />
+                  <MenuItem text={intl.get('share_feedback')} />
                 </Menu>
               }
             >

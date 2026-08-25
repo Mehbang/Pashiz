@@ -7,7 +7,6 @@ import {
   IsBoolean,
   IsDateString,
   IsInt,
-  IsISO4217CurrencyCode,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -15,6 +14,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
+import { IsSupportedCurrencyCode } from '@/common/decorators/IsSupportedCurrencyCode.decorator';
 
 class AttachmentDto {
   @IsString()
@@ -118,7 +118,7 @@ export class CommandExpenseDto {
   @IsString()
   @MaxLength(3)
   @IsOptional()
-  @IsISO4217CurrencyCode()
+  @IsSupportedCurrencyCode()
   @ApiProperty({
     description: 'The currency code of the expense',
     example: 'USD',

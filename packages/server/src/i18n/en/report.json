@@ -1,0 +1,19 @@
+{
+  "as_date": "As {date}",
+  "from_to": "From {from} | To {to}",
+  "from_to_plain": "From {from} to {to}",
+  "sheet.balance_sheet": "Balance Sheet Statement",
+  "sheet.trial_balance": "Trial Balance Sheet",
+  "sheet.profit_loss": "Profit & Loss Sheet",
+  "sheet.sales_by_items": "Sales By Items",
+  "sheet.purchases_by_items": "Purchases By Items",
+  "sheet.sales_tax_liability": "Sales Tax Liability Summary",
+  "sheet.transactions_by_vendor": "Transactions By Vendor",
+  "sheet.transactions_by_customer": "Transactions By Customer",
+  "sheet.inventory_item_details": "Inventory Item Details",
+  "sheet.inventory_valuation": "Inventory Valuation Sheet",
+  "sheet.general_ledger": "General Ledger Sheet",
+  "sheet.journal": "Journal Sheet",
+  "sheet.customer_balance_summary": "Customer Balance Summary",
+  "sheet.vendor_balance_summary": "Vendor Balance Summary"
+}

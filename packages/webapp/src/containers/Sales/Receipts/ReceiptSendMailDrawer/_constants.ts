@@ -1,14 +1,15 @@
+import intl from 'react-intl-universal';
 export const defaultReceiptMailProps = {
   companyLogoUri: 'https://via.placeholder.com/150',
-  companyName: 'Company Name',
+  companyName: intl.get('company_name'),
   receiptNumber: '1234',
   total: '1000',
-  message: 'Thank you for your business!',
+  message: intl.get('thank_you_for_your_business'),
   items: [
-    { label: 'Item 1', quantity: 1, total: '500' },
-    { label: 'Item 2', quantity: 2, total: '500' },
+    { label: intl.get('item_1'), quantity: 1, total: '500' },
+    { label: intl.get('item_2'), quantity: 2, total: '500' },
   ],
   subtotal: '1000',
   showViewReceiptButton: true,
-  viewReceiptButtonLabel: 'View Receipt',
+  viewReceiptButtonLabel: intl.get('view_receipt'),
 };

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { camelCase, get, upperFirst } from 'lodash';
 import { MoneyCategoryPerCreditAccountRootType } from '@/constants/cashflowOptions';
 
@@ -34,26 +35,26 @@ export interface RuleFormValues {
 }
 
 export const TransactionTypeOptions = [
-  { value: 'deposit', text: 'Deposit' },
-  { value: 'withdrawal', text: 'Withdrawal' },
+  { value: 'deposit', text: intl.get('deposit') },
+  { value: 'withdrawal', text: intl.get('withdrawal') },
 ];
 export const Fields = [
-  { value: 'description', text: 'Description' },
-  { value: 'amount', text: 'Amount' },
-  { value: 'payee', text: 'Payee' },
+  { value: 'description', text: intl.get('description') },
+  { value: 'amount', text: intl.get('amount') },
+  { value: 'payee', text: intl.get('payee') },
 ];
 
 export const TextFieldConditions = [
-  { value: 'contains', text: 'Contains' },
-  { value: 'equals', text: 'Equals' },
-  { value: 'not_contains', text: 'Not Contains' },
+  { value: 'contains', text: intl.get('contains') },
+  { value: 'equals', text: intl.get('equals') },
+  { value: 'not_contains', text: intl.get('not_contains') },
 ];
 export const NumberFieldConditions = [
-  { value: 'equal', text: 'Equal' },
-  { value: 'bigger', text: 'Bigger' },
-  { value: 'bigger_or_equal', text: 'Bigger or Equal' },
-  { value: 'smaller', text: 'Smaller' },
-  { value: 'smaller_or_equal', text: 'Smaller or Equal' },
+  { value: 'equal', text: intl.get('equal') },
+  { value: 'bigger', text: intl.get('bigger') },
+  { value: 'bigger_or_equal', text: intl.get('bigger_or_equal') },
+  { value: 'smaller', text: intl.get('smaller') },
+  { value: 'smaller_or_equal', text: intl.get('smaller_or_equal') },
 ];
 
 export const FieldCondition = [
@@ -62,7 +63,7 @@ export const FieldCondition = [
 ];
 
 export const AssignTransactionTypeOptions = [
-  { value: 'expense', text: 'Expense' },
+  { value: 'expense', text: intl.get('expense') },
 ];
 
 export const getAccountRootFromMoneyCategory = (category: string): string[] => {

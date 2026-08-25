@@ -20,7 +20,7 @@ export class BalanceSheetTableInjectable {
     const { data, query, meta } =
       await this.balanceSheetService.balanceSheet(filter);
 
-    const table = new BalanceSheetTable(data, query, this.i18nService);
+    const table = new BalanceSheetTable(data, query, this.i18nService, meta);
 
     return {
       table: {

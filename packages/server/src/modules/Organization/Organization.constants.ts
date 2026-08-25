@@ -11,7 +11,7 @@ export const DATE_FORMATS = [
   'DD MMMM YYYY',
   'MMMM DD, YYYY',
 ];
-export const MONTHS = [
+const GREGORIAN_MONTHS = [
   'january',
   'february',
   'march',
@@ -26,7 +26,29 @@ export const MONTHS = [
   'december',
 ];
 
-export const ACCEPTED_LOCALES = ['en', 'ar'];
+/**
+ * Jalaali month keys, offered alongside the Gregorian ones so an organization
+ * working in the Persian calendar can open its fiscal year on Farvardin.
+ */
+export const JALAALI_MONTHS = [
+  'farvardin',
+  'ordibehesht',
+  'khordad',
+  'tir',
+  'mordad',
+  'shahrivar',
+  'mehr',
+  'aban',
+  'azar',
+  'dey',
+  'bahman',
+  'esfand',
+];
+
+/** Every month name a fiscal year may start on, in either calendar. */
+export const MONTHS = [...GREGORIAN_MONTHS, ...JALAALI_MONTHS];
+
+export const ACCEPTED_LOCALES = ['en', 'ar', 'fa'];
 
 export const ERRORS = {
   TENANT_DATABASE_UPGRADED: 'TENANT_DATABASE_UPGRADED',

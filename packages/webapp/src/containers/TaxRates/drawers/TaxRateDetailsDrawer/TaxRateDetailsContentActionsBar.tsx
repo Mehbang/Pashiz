@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -59,13 +60,13 @@ function TaxRateDetailsContentActionsBarInner({
     activateTaxRateMutate(taxRateId)
       .then(() => {
         AppToaster.show({
-          message: 'The tax rate has been activated successfully.',
+          message: intl.get('the_tax_rate_has_been_activated_successfully'),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });
@@ -75,13 +76,13 @@ function TaxRateDetailsContentActionsBarInner({
     inactivateTaxRateMutate(taxRateId)
       .then(() => {
         AppToaster.show({
-          message: 'The tax rate has been inactivated successfully.',
+          message: intl.get('the_tax_rate_has_been_inactivated_successfully'),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });
@@ -94,7 +95,7 @@ function TaxRateDetailsContentActionsBarInner({
           <Button
             className={Classes.MINIMAL}
             icon={<Icon icon="pen-18" />}
-            text={'Edit Tax Rate'}
+            text={intl.get('edit_tax_rate')}
             onClick={handleEditTaxRate}
           />
         </Can>
@@ -102,7 +103,7 @@ function TaxRateDetailsContentActionsBarInner({
           <NavbarDivider />
           <Button
             className={Classes.MINIMAL}
-            text={'Delete'}
+            text={intl.get('delete')}
             icon={<Icon icon={'trash-16'} iconSize={16} />}
             intent={Intent.DANGER}
             onClick={handleDeleteTaxRate}
@@ -122,13 +123,13 @@ function TaxRateDetailsContentActionsBarInner({
               <Menu>
                 {!taxRate?.active && (
                   <MenuItem
-                    text={'Activate Tax Rate'}
+                    text={intl.get('activate_tax_rate')}
                     onClick={handleActivateTaxRate}
                   />
                 )}
                 {!!taxRate?.active && (
                   <MenuItem
-                    text={'Inactivate Tax Rate'}
+                    text={intl.get('inactivate_tax_rate')}
                     onClick={handleInactivateTaxRate}
                   />
                 )}

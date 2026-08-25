@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   NavbarGroup,
@@ -124,7 +125,7 @@ function EstimateDetailActionsBarInner({
           <Button
             className={Classes.MINIMAL}
             icon={<Icon icon="envelope" />}
-            text={'Send Mail'}
+            text={intl.get('send_mail')}
             onClick={handleMailEstimate}
           />
           <Button

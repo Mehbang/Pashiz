@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import { MenuItem } from '@blueprintjs/core';
 import type { ItemRendererProps } from '@blueprintjs/select';
@@ -42,7 +43,7 @@ export function AccountsTypesSelect({
       valueAccessor={'key'}
       labelAccessor={'label'}
       textAccessor={'label'}
-      placeholder={'Select an account...'}
+      placeholder={intl.get('select_an_account')}
       buttonProps={{ 'data-testId': 'account-type-select' }}
       itemRenderer={AccountTypeItemRenderer}
       {...props}

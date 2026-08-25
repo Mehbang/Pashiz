@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -84,7 +85,7 @@ function BillActionsBar({
     openDialog(DialogsName.Export, { resource: 'bill' });
   };
   const handlePrintBtnClick = () => {
-    downloadExportPdf({ resource: 'Bill' });
+    downloadExportPdf({ resource: intl.get('resource_bill_singular') });
   };
   const { openBulkDeleteDialog, isValidatingBulkDeleteBills } =
     useBulkDeleteBillsDialog();

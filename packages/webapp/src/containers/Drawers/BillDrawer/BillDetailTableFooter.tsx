@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { useBillDrawerContext } from './BillDrawerProvider';
 import {
@@ -39,14 +40,17 @@ export function BillDetailTableFooter() {
             title={
               bill.discountPercentageFormatted
                 ? `Discount [${bill.discountPercentageFormatted}]`
-                : 'Discount'
+                : intl.get('discount_2')
             }
             value={bill.discountAmountFormatted}
             textStyle={TotalLineTextStyle.Regular}
           />
         )}
         {bill.adjustmentFormatted && (
-          <TotalLine title={'Adjustment'} value={bill.adjustmentFormatted} />
+          <TotalLine
+            title={intl.get('adjustment')}
+            value={bill.adjustmentFormatted}
+          />
         )}
         <TotalLine
           title={<T id={'bill.details.total'} />}

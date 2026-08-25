@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   NavbarGroup,
@@ -145,13 +146,15 @@ function AccountTransactionsActionsBarInner({
     updateBankAccount({ bankAccountId: accountId })
       .then(() => {
         AppToaster.show({
-          message: 'The transactions of the bank account has been updated.',
+          message: intl.get(
+            'the_transactions_of_the_bank_account_has_been_updated',
+          ),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });
@@ -178,13 +181,13 @@ function AccountTransactionsActionsBarInner({
     })
       .then(() => {
         AppToaster.show({
-          message: 'The selected transactions have been excluded.',
+          message: intl.get('the_selected_transactions_have_been_excluded'),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong',
+          message: intl.get('something_went_wrong_2'),
           intent: Intent.DANGER,
         });
       });
@@ -197,13 +200,15 @@ function AccountTransactionsActionsBarInner({
     })
       .then(() => {
         AppToaster.show({
-          message: 'The selected excluded transactions have been unexcluded.',
+          message: intl.get(
+            'the_selected_excluded_transactions_have_been_unexcluded',
+          ),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong',
+          message: intl.get('something_went_wrong_2'),
           intent: Intent.DANGER,
         });
       });
@@ -299,9 +304,9 @@ function AccountTransactionsActionsBarInner({
             content={
               isFeedsActive
                 ? isFeedsPaused
-                  ? 'The bank syncing is paused'
-                  : 'The bank syncing is active'
-                : 'The bank syncing is disconnected'
+                  ? intl.get('the_bank_syncing_is_paused')
+                  : intl.get('the_bank_syncing_is_active')
+                : intl.get('the_bank_syncing_is_disconnected')
             }
             minimal={true}
             position={Position.BOTTOM}
@@ -357,7 +362,7 @@ function AccountTransactionsActionsBarInner({
         {!isEmpty(uncategorizedTransationsIdsSelected) && (
           <Button
             icon={<Icon icon="disable" iconSize={16} />}
-            text={'Exclude'}
+            text={intl.get('exclude')}
             onClick={handleExcludeUncategorizedBtnClick}
             className={Classes.MINIMAL}
             intent={Intent.DANGER}
@@ -367,7 +372,7 @@ function AccountTransactionsActionsBarInner({
         {!isEmpty(excludedTransactionsIdsSelected) && (
           <Button
             icon={<Icon icon="disable" iconSize={16} />}
-            text={'Unexclude'}
+            text={intl.get('unexclude')}
             onClick={handleUnexcludeUncategorizedBtnClick}
             className={Classes.MINIMAL}
             intent={Intent.DANGER}
@@ -376,7 +381,7 @@ function AccountTransactionsActionsBarInner({
         )}
         {!isEmpty(categorizedTransactionsSelected) && (
           <Button
-            text={'Uncategorize'}
+            text={intl.get('uncategorize')}
             onClick={handleUncategorizeCategorizedBulkBtnClick}
             intent={Intent.DANGER}
             minimal
@@ -387,14 +392,14 @@ function AccountTransactionsActionsBarInner({
       <NavbarGroup align={Alignment.RIGHT}>
         {openMatchingTransactionAside && (
           <Tooltip
-            content={
-              'Enables to categorize or matching multiple bank transactions into one transaction.'
-            }
+            content={intl.get(
+              'enables_to_categorize_or_matching_multiple_bank_transactions',
+            )}
             position={Position.BOTTOM}
             minimal
           >
             <Switch
-              label={'Multi Select'}
+              label={intl.get('multi_select')}
               inline
               onChange={handleMultipleCategorizingSwitch}
             />
@@ -411,14 +416,17 @@ function AccountTransactionsActionsBarInner({
           content={
             <Menu>
               <If condition={isSyncingOwner && isFeedsActive}>
-                <MenuItem onClick={handleBankUpdateClick} text={'Update'} />
+                <MenuItem
+                  onClick={handleBankUpdateClick}
+                  text={intl.get('update')}
+                />
                 <MenuDivider />
               </If>
 
               <If condition={isSyncingOwner && isFeedsActive && !isFeedsPaused}>
                 <MenuItem
                   onClick={handlePauseFeedsSyncing}
-                  text={'Pause bank feeds'}
+                  text={intl.get('pause_bank_feeds')}
                 />
                 <MenuDivider />
               </If>
@@ -426,24 +434,27 @@ function AccountTransactionsActionsBarInner({
               <If condition={isSyncingOwner && isFeedsActive && isFeedsPaused}>
                 <MenuItem
                   onClick={handleResumeFeedsSyncing}
-                  text={'Resume bank feeds'}
+                  text={intl.get('resume_bank_feeds')}
                 />
                 <MenuDivider />
               </If>
 
-              <MenuItem onClick={handleBankRulesClick} text={'Bank rules'} />
+              <MenuItem
+                onClick={handleBankRulesClick}
+                text={intl.get('bank_rules')}
+              />
               <MenuDivider />
               <If condition={isSyncingOwner && isFeedsActive}>
                 <MenuItem
                   intent={Intent.DANGER}
                   onClick={handleDisconnectClick}
-                  text={'Disconnect'}
+                  text={intl.get('disconnect')}
                 />
               </If>
               <MenuItem
                 intent={Intent.DANGER}
                 onClick={handleDeleteAccountClick}
-                text={'Delete'}
+                text={intl.get('delete')}
               />
             </Menu>
           }

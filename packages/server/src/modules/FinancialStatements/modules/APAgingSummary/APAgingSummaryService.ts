@@ -39,7 +39,11 @@ export class APAgingSummaryService {
     const APAgingSummaryReport = new APAgingSummarySheet(
       filter,
       this.APAgingSummaryRepository,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
     // A/P aging summary report data and columns.
     const data = APAgingSummaryReport.reportData();

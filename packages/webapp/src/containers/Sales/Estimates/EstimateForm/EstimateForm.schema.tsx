@@ -1,8 +1,8 @@
-import moment from 'moment';
 import intl from 'react-intl-universal';
 import * as Yup from 'yup';
 import { DATATYPES_LENGTH } from '@/constants/dataTypes';
 import { isBlank } from '@/utils';
+import { formatDateLocalized } from '@/utils/locale';
 
 const Schema = Yup.object().shape({
   customerId: Yup.number().label(intl.get('customer_name_')).required(),
@@ -12,7 +12,7 @@ const Schema = Yup.object().shape({
     .min(Yup.ref('estimateDate'), ({ path, min }) =>
       intl.get('estimate.validation.expiration_date', {
         path,
-        min: moment(min).format('YYYY/MM/DD'),
+        min: formatDateLocalized(min, 'YYYY/MM/DD'),
       }),
     )
     .label(intl.get('expiration_date_')),

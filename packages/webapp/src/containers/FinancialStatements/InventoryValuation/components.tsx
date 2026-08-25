@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Classes,
   Intent,
@@ -8,7 +9,6 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useMemo } from 'react';
-import intl from 'react-intl-universal';
 import { FinancialLoadingBar } from '../FinancialLoadingBar';
 import { useInventoryValuationContext } from './InventoryValuationProvider';
 import type {
@@ -106,8 +106,8 @@ export const InventoryValuationExportMenu = () => {
       <Stack spacing={8}>
         <Text>
           {done
-            ? 'The report has been exported successfully.'
-            : 'Exporting the report…'}
+            ? intl.get('the_report_has_been_exported_successfully')
+            : intl.get('exporting_the_report')}
         </Text>
         <ProgressBar
           className={classNames('toast-progress', {
@@ -150,7 +150,7 @@ export const InventoryValuationExportMenu = () => {
   return (
     <Menu>
       <MenuItem
-        text={'XLSX (Microsoft Excel)'}
+        text={intl.get('xlsx_microsoft_excel')}
         onClick={handleXlsxExportBtnClick}
       />
       <MenuItem text={'CSV'} onClick={handleCsvExportBtnClick} />

@@ -1,6 +1,6 @@
+import intl from 'react-intl-universal';
 import { isUndefined } from 'lodash';
 import * as R from 'ramda';
-import intl from 'react-intl-universal';
 import type { AccountDialogPayload } from './types';
 import { defaultFastFieldShouldUpdate } from '@/utils';
 import { Account } from '@bigcapital/sdk-ts';

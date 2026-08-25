@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { AnchorButton, Button, Intent, Tag, Text } from '@blueprintjs/core';
 import {
   FastField,
@@ -64,7 +65,9 @@ function MatchingBankTransactionRoot({
 
     if (_values.matchedTransactions?.length === 0) {
       AppToaster.show({
-        message: 'You should select at least one transaction for matching.',
+        message: intl.get(
+          'you_should_select_at_least_one_transaction_for_matching',
+        ),
         intent: Intent.DANGER,
       });
       return;
@@ -76,7 +79,9 @@ function MatchingBankTransactionRoot({
       .then(() => {
         AppToaster.show({
           intent: Intent.SUCCESS,
-          message: 'The bank transaction has been matched successfully.',
+          message: intl.get(
+            'the_bank_transaction_has_been_matched_successfully',
+          ),
         });
         setSubmitting(false);
         closeMatchingTransactionAside();
@@ -99,7 +104,7 @@ function MatchingBankTransactionRoot({
           }
           AppToaster.show({
             intent: Intent.DANGER,
-            message: 'Something went wrong.',
+            message: intl.get('something_wentwrong'),
           });
           setSubmitting(false);
         },
@@ -224,7 +229,9 @@ function PerfectMatchingTransactions() {
     <>
       <Box className={styles.matchBar}>
         <Group spacing={6}>
-          <h2 className={styles.matchBarTitle}>Perfect Matchines</h2>
+          <h2 className={styles.matchBarTitle}>
+            {intl.get('perfect_matchines')}
+          </h2>
           <Tag minimal round intent={Intent.SUCCESS}>
             {perfectMatchesCount}
           </Tag>
@@ -260,7 +267,9 @@ function PossibleMatchingTransactions() {
     <>
       <Box className={styles.matchBar}>
         <Stack spacing={2}>
-          <h2 className={styles.matchBarTitle}>Possible Matches</h2>
+          <h2 className={styles.matchBarTitle}>
+            {intl.get('possible_matches')}
+          </h2>
         </Stack>
       </Box>
 
@@ -356,7 +365,7 @@ const MatchTransactionFooter = compose(withBankingActions)(({
               intent={Intent.PRIMARY}
               onClick={handleReconcileTransaction}
             >
-              Add Reconcile Transaction +
+              {intl.get('add_reconcile_transaction')}
             </AnchorButton>
           )}
           <Text
@@ -389,7 +398,7 @@ const MatchTransactionFooter = compose(withBankingActions)(({
             Match
           </Button>
 
-          <Button onClick={handleCancelBtnClick}>Cancel</Button>
+          <Button onClick={handleCancelBtnClick}>{intl.get('cancel')}</Button>
         </Group>
       </Box>
     </Box>

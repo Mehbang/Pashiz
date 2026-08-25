@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Spinner, Text } from '@blueprintjs/core';
 import { useBillingPageBoot } from './BillingPageBoot';
 import styles from './BillingPageContent.module.scss';
@@ -15,8 +16,9 @@ export function BillingPageContent() {
   return (
     <Box className={styles.root}>
       <Text>
-        Only pay for what you really need. All plans come with 24/7 customer
-        support.
+        {intl.get(
+          'only_pay_for_what_you_really_need_all_plans_come_with_24_7_c',
+        )}
       </Text>
 
       <Group style={{ marginTop: '2rem' }}>

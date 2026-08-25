@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Classes, Intent, Text } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import type { PreferencesBrandingFormValues } from './_types';
@@ -10,7 +11,7 @@ import { useIsDarkMode } from '@/hooks/useDarkMode';
 export function PreferencesBrandingFormContent() {
   return (
     <Stack style={{ flex: '1' }} spacing={10}>
-      <FFormGroup name={'companyLogo'} label={'Company Logo'}>
+      <FFormGroup name={'companyLogo'} label={intl.get('company_logo')}>
         <Group spacing={15} align={'left'}>
           <BrandingCompanyLogoUpload />
           <BrandingCompanyLogoDesc />
@@ -19,10 +20,10 @@ export function PreferencesBrandingFormContent() {
 
       <FFormGroup
         name={'primaryColor'}
-        label={'Primary Color'}
-        helperText={
-          'Note: These preferences will be applied across PDF and mail templates, including the customer payment page.'
-        }
+        label={intl.get('primary_color')}
+        helperText={intl.get(
+          'note_these_preferences_will_be_applied_across_pdf_and_mail_t',
+        )}
       >
         <FColorInput name={'primaryColor'} />
       </FFormGroup>
@@ -42,7 +43,7 @@ export function PreferencesBrandingFormFooter() {
       }}
     >
       <Button intent={Intent.PRIMARY} type={'submit'} loading={isSubmitting}>
-        Submit
+        {intl.get('submit')}
       </Button>
     </Group>
   );
@@ -73,11 +74,14 @@ function BrandingCompanyLogoDesc() {
   return (
     <Stack spacing={10} style={{ fontSize: 12, paddingTop: 12, flex: 1 }}>
       <Text className={Classes.TEXT_MUTED}>
-        This logo will be displayed in transaction PDFs and email notifications.
+        {intl.get(
+          'this_logo_will_be_displayed_in_transaction_pdfs_and_email_no',
+        )}
       </Text>
       <Text className={Classes.TEXT_MUTED}>
-        Preferred Image Dimensions: 240 × 240 pixels @ 72 DPI Maximum File Size:
-        1MB
+        {intl.get(
+          'preferred_image_dimensions_240_240_pixels_72_dpi_maximum_fil',
+        )}
       </Text>
     </Stack>
   );

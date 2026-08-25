@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   NavbarGroup,
   NavbarDivider,
@@ -128,7 +129,7 @@ function CustomerActionsBar({
   };
   // Handle the print button click.
   const handlePrintBtnClick = () => {
-    downloadExportPdf({ resource: 'Customer' });
+    downloadExportPdf({ resource: intl.get('customer') });
   };
 
   if (!isEmpty(customersSelectedRows)) {

@@ -57,7 +57,7 @@ function statusAccessor(transaction: UncategorizedTransactionRow) {
     >
       <Box>
         <Tag intent={Intent.SUCCESS} interactive>
-          Recognized
+          {intl.get('recognized')}
         </Tag>
       </Box>
     </Tooltip>
@@ -112,7 +112,7 @@ export function useAccountUncategorizedTransactionsColumns(): DataTableColumn<Un
       },
       {
         id: 'description',
-        Header: 'Description',
+        Header: intl.get('description'),
         accessor: 'description',
         width: 160,
         textOverview: true,
@@ -121,7 +121,7 @@ export function useAccountUncategorizedTransactionsColumns(): DataTableColumn<Un
       },
       {
         id: 'payee',
-        Header: 'Payee',
+        Header: intl.get('payee'),
         accessor: 'payee',
         width: 60,
         clickable: true,
@@ -129,7 +129,7 @@ export function useAccountUncategorizedTransactionsColumns(): DataTableColumn<Un
       },
       {
         id: 'reference_number',
-        Header: 'Ref.#',
+        Header: intl.get('ref'),
         accessor: 'referenceNo',
         width: 50,
         clickable: true,
@@ -137,7 +137,7 @@ export function useAccountUncategorizedTransactionsColumns(): DataTableColumn<Un
       },
       {
         id: 'status',
-        Header: 'Status',
+        Header: intl.get('status'),
         accessor: statusAccessor,
       },
       {

@@ -32,6 +32,7 @@ export class TransactionsByReference extends FinancialSheet {
     this.query = query;
     this.baseCurrency = meta.baseCurrency;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
     // this.numberFormat = this.query.numberFormat;
   }
 

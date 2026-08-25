@@ -1,4 +1,3 @@
-import moment from 'moment';
 import React, { useMemo, useCallback } from 'react';
 import intl from 'react-intl-universal';
 import {
@@ -12,7 +11,7 @@ import {
   FinancialSheetType,
   FinancialSheetTitle,
 } from './StyledFinancialSheet';
-import { FormattedMessage as T } from '@/components';
+import { FormattedMessage as T, FormatDate } from '@/components';
 
 interface FinancialSheetProps {
   companyName?: string;
@@ -95,7 +94,10 @@ export function FinancialSheet({
         )}
         {currentDate && (
           <FinancialSheetFooterCurrentTime>
-            {moment().format('YYYY MMM DD HH:mm')}
+            {/* Rendered through `FormatDate` so each locale can map this onto
+                the order it reads dates in — Persian puts the day first and
+                drops the clock time. */}
+            <FormatDate value={new Date()} format={'YYYY MMM DD HH:mm'} />
           </FinancialSheetFooterCurrentTime>
         )}
       </FinancialSheetFooter>

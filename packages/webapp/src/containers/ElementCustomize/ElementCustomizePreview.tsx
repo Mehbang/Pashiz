@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import * as R from 'ramda';
 import { ElementCustomizeHeader } from './ElementCustomizeHeader';
 import { ElementCustomizePreviewContent } from './ElementCustomizePreviewContent';
@@ -22,7 +23,7 @@ function ElementCustomizePreviewRoot({ closeDrawer }) {
       }}
     >
       <ElementCustomizeHeader
-        label={'Preview'}
+        label={intl.get('preview')}
         closeButton
         onClose={handleCloseBtnClick}
       />

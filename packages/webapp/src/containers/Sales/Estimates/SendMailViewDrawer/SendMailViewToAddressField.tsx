@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, MenuItem } from '@blueprintjs/core';
 import { FormGroupProps } from '@blueprintjs-formik/core';
 import { SelectOptionProps } from '@blueprintjs-formik/select';
@@ -41,7 +42,7 @@ const createNewItemRenderer = (
   return (
     <MenuItem
       icon="add"
-      text={'Now contact address'}
+      text={intl.get('now_contact_address')}
       active={active}
       onClick={handleClick}
     />
@@ -185,7 +186,7 @@ export function SendMailViewToAddressField({
           <FMultiSelect
             items={[]}
             name={'bcc'}
-            placeholder={'Bcc'}
+            placeholder={intl.get('bcc')}
             popoverProps={{ minimal: true, fill: true }}
             tagInputProps={{
               tagProps: { round: true, minimal: true, large: true },

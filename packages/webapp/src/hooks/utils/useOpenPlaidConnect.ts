@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { useCallback } from 'react';
 import { useGetPlaidLinkToken } from '../query';
@@ -16,7 +17,7 @@ export const useOpenPlaidConnect = () => {
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });

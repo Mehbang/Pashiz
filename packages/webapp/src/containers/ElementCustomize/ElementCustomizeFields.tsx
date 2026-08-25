@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import * as R from 'ramda';
@@ -35,7 +36,7 @@ export function ElementCustomizeFieldsMain() {
 
   return (
     <Stack spacing={0} className={styles.mainFields}>
-      <ElementCustomizeHeader label={'Customize'} />
+      <ElementCustomizeHeader label={intl.get('customize')} />
 
       <Stack spacing={0} flex="1 1 auto" overflow="auto">
         <Box flex={'1 1'} overflow="auto">
@@ -69,7 +70,7 @@ function ElementCustomizeFooterActionsRoot({ closeDrawer }) {
       >
         Save
       </Button>
-      <Button onClick={handleCancelBtnClick}>Cancel</Button>
+      <Button onClick={handleCancelBtnClick}>{intl.get('cancel')}</Button>
     </Group>
   );
 }

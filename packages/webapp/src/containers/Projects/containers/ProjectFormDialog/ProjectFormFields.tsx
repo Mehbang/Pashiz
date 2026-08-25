@@ -1,10 +1,10 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Classes, Position, FormGroup, ControlGroup } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { FastField } from 'formik';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { useProjectFormContext } from './ProjectFormProvider';
 import {
   FFormGroup,
@@ -97,7 +97,7 @@ function ProjectFormCustomerSelect() {
       <CustomersSelect
         name={'contact_id'}
         items={customers}
-        placeholder={'Find or create a customer'}
+        placeholder={intl.get('find_or_create_a_customer')}
         allowCreate={true}
         popoverFill={true}
       />

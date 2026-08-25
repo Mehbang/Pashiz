@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useFormikContext } from 'formik';
 import { initialValues } from './constants';
 import { ReceiptCustomizeFieldsContent } from './ReceiptCustomizeFieldsContent';
@@ -50,13 +51,13 @@ function ReceiptCustomizeFormContent() {
         </Box>
       </ElementCustomize.PaperTemplate>
 
-      <ElementCustomize.FieldsTab id={'general'} label={'General'}>
+      <ElementCustomize.FieldsTab id={'general'} label={intl.get('general')}>
         <ReceiptCustomizeGeneralField />
       </ElementCustomize.FieldsTab>
 
       <ElementCustomize.FieldsTab
         id={'content'}
-        label={'Content'}
+        label={intl.get('content')}
         tabProps={{ disabled: !isTemplateNameFilled }}
       >
         <ReceiptCustomizeFieldsContent />

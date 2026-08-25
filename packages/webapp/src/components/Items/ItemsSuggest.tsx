@@ -116,7 +116,7 @@ function withItemsSuggestLogic<C extends ComponentType<any>>(
   return function ItemsSuggestLogic({
     openDrawer,
     items,
-    defaultSelectText = 'Select item',
+    defaultSelectText = intl.get('select_item'),
     sellable = false,
     purchasable = false,
     restrictType,

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Divider } from '@blueprintjs/core';
 import * as R from 'ramda';
 import React, { useMemo } from 'react';
@@ -74,7 +75,7 @@ export function AccountTransactionsUncategorizeFilter() {
       </Group>
 
       <TagsControl
-        options={[{ value: 'excluded', label: 'Excluded' }]}
+        options={[{ value: 'excluded', label: intl.get('excluded') }]}
         value={locationQuery?.uncategorizedFilter || 'all'}
         onValueChange={handleTabsChange}
       />

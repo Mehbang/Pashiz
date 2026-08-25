@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Button,
   NavbarGroup,
@@ -119,7 +120,7 @@ function AccountsActionsBarInner({
   };
   // Handle the print button click.
   const handlePrintBtnClick = () => {
-    downloadExportPdf({ resource: 'Account' });
+    downloadExportPdf({ resource: intl.get('account') });
   };
   // Handle click new account.
   const onClickNewAccount = () => {

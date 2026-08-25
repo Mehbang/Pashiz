@@ -70,6 +70,7 @@ export class CustomerBalanceSummaryService {
     const report = new CustomerBalanceSummaryReport(ledger, customers, filter, {
       baseCurrency: tenantMetadata.baseCurrency,
       dateFormat: meta.dateFormat,
+      calendar: meta.calendar,
     });
 
     // Triggers `onCustomerBalanceSummaryViewed` event.

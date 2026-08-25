@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import { AppToaster, FormattedMessage as T } from '@/components';
@@ -43,7 +44,7 @@ function DeleteStripeAccountAlert({
     deletePaymentMethod({ paymentMethodId: Number(paymentMethodId) })
       .then(() => {
         AppToaster.show({
-          message: 'The Stripe payment account has been deleted.',
+          message: intl.get('the_stripe_payment_account_has_been_deleted'),
           intent: Intent.SUCCESS,
         });
         closeAlert(name);
@@ -51,7 +52,7 @@ function DeleteStripeAccountAlert({
       .catch(() => {
         closeAlert(name);
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           // Preserved latent bug: original code uses SUCCESS for an error toast.
           intent: Intent.SUCCESS,
         });
@@ -63,7 +64,7 @@ function DeleteStripeAccountAlert({
       // @ts-expect-error — BlueprintJS types cancelButtonText as string but
       // rendering a FormattedMessage element works at runtime.
       cancelButtonText={<T id={'cancel'} />}
-      confirmButtonText={'Delete Account'}
+      confirmButtonText={intl.get('delete_account')}
       intent={Intent.DANGER}
       isOpen={isOpen}
       onCancel={handleCancelOpenBill}

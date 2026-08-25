@@ -1,3 +1,5 @@
+import { I18nService } from 'nestjs-i18n';
+import { formatDateIn } from '@/utils/jalali-date';
 import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { FinancialSheetMeta } from '../../common/FinancialSheetMeta';
@@ -8,7 +10,10 @@ import {
 
 @Injectable()
 export class SalesByItemsMeta {
-  constructor(private financialSheetMeta: FinancialSheetMeta) {}
+  constructor(
+    private financialSheetMeta: FinancialSheetMeta,
+    private readonly i18n: I18nService,
+  ) {}
 
   /**
    * Retrieve the sales by items meta.
@@ -18,13 +23,19 @@ export class SalesByItemsMeta {
     query: ISalesByItemsReportQuery,
   ): Promise<ISalesByItemsSheetMeta> {
     const commonMeta = await this.financialSheetMeta.meta();
-    const formattedToDate = moment(query.toDate).format(commonMeta.dateFormat);
+    const formattedToDate = formatDateIn(
+      query.toDate,
+      commonMeta.dateFormat,
+      commonMeta.calendar,
+    );
     const formattedFromDate = moment(query.fromDate).format(
       commonMeta.dateFormat,
     );
-    const formattedDateRange = `From ${formattedFromDate} | To ${formattedToDate}`;
+    const formattedDateRange = this.i18n.t('report.from_to', {
+      args: { from: formattedFromDate, to: formattedToDate },
+    }) as string;
 
-    const sheetName = 'Sales By Items';
+    const sheetName = this.i18n.t('report.sheet.sales_by_items') as string;
 
     return {
       ...commonMeta,

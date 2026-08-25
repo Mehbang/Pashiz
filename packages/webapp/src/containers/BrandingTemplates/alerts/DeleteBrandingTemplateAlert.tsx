@@ -28,7 +28,9 @@ function DeleteBrandingTemplateAlertInner({
     deleteBrandingTemplateMutate({ templateId })
       .then(() => {
         AppToaster.show({
-          message: 'The branding template has been deleted successfully.',
+          message: intl.get(
+            'the_branding_template_has_been_deleted_successfully',
+          ),
           intent: Intent.SUCCESS,
         });
         closeAlert(name);
@@ -40,12 +42,12 @@ function DeleteBrandingTemplateAlertInner({
           )
         ) {
           AppToaster.show({
-            message: 'Cannot delete a predefined branding template.',
+            message: intl.get('cannot_delete_a_predefined_branding_template'),
             intent: Intent.DANGER,
           });
         } else {
           AppToaster.show({
-            message: 'Something went wrong.',
+            message: intl.get('something_wentwrong'),
             intent: Intent.DANGER,
           });
         }

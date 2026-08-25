@@ -1,7 +1,8 @@
 // @ts-nocheck
-import moment from 'moment';
+import { PashizBrand } from '@/components/Icons/PashizBrand';
 import React from 'react';
 import { Icon, If, Money } from '@/components';
+import { formatDateLocalized } from '@/utils/locale';
 
 export const TemplateHeader = ({ defaultLabels }) => (
   <div className={'template__header'}>
@@ -9,7 +10,7 @@ export const TemplateHeader = ({ defaultLabels }) => (
       <h1>{defaultLabels.name}</h1>
       <p>info@bigcapital.ly </p>
     </div>
-    <Icon icon="bigcapital" height={30} width={200} />
+    <PashizBrand height={28} />
   </div>
 );
 
@@ -30,7 +31,9 @@ export const TemplateContent = ({
     </div>
     <div className="template__content__info">
       <span> {defaultLabels.date} </span>
-      <p className={'info-paragraph'}>{moment(date).format('YYYY MMM DD')}</p>
+      <p className={'info-paragraph'}>
+        {formatDateLocalized(date, 'YYYY MMM DD')}
+      </p>
     </div>
     <div className="template__content__info">
       <span> {defaultLabels.refNo} </span>
@@ -50,7 +53,7 @@ export const TemplateContent = ({
       <If condition={dueDate}>
         <span> {defaultLabels.dueDate} </span>
         <p className={'info-paragraph'}>
-          {moment(dueDate).format('YYYY MMM DD')}
+          {formatDateLocalized(dueDate, 'YYYY MMM DD')}
         </p>
       </If>
     </div>

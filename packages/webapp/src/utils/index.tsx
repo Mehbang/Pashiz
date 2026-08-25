@@ -3,13 +3,15 @@ import { Intent } from '@blueprintjs/core';
 import accounting from 'accounting';
 import clsx from 'classnames';
 import jsCookie from 'js-cookie';
-import Currencies from 'js-money/lib/currency';
-import Currency from 'js-money/lib/currency';
 import _ from 'lodash';
 import { isEqual, castArray, isEmpty, includes, pickBy } from 'lodash';
 import moment from 'moment';
 import * as R from 'ramda';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
+import { toPersianDigits } from '@bigcapital/utils';
+import { CURRENCIES as Currencies } from '@bigcapital/utils';
+import { dateFormatter } from './date-formatter';
+import { currentLocaleSettings } from './locale';
 import { deepMapKeys } from './map-key-deep';
 import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
 export * from './deep';
@@ -76,13 +78,11 @@ export function numberComma(number) {
   return `${integer.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}${postfix}`;
 }
 
-export const momentFormatter = (format) => {
-  return {
-    formatDate: (date) => moment(date).format(format),
-    parseDate: (str) => moment(str, format).toDate(),
-    placeholder: `${format}`,
-  };
-};
+/**
+ * Gregorian date-input formatter. Prefer the `useDateInputFormatter()` hook in
+ * components — it also honours the calendar of the active locale.
+ */
+export const momentFormatter = (format) => dateFormatter(format);
 
 /** Event handler that exposes the target element's value as a boolean. */
 export const handleBooleanChange = (handler) => {
@@ -191,10 +191,11 @@ export const defaultExpanderReducer = (tableRows, level) => {
 };
 
 export function formattedAmount(cents, currencyCode = '', props = {}) {
-  const currency = Currency[currencyCode];
+  const currency = Currencies[currencyCode];
 
   const parsedCurrency = {
     symbol: '',
+    symbol_native: '',
     decimal_digits: 0,
     ...currency,
   };
@@ -202,17 +203,30 @@ export function formattedAmount(cents, currencyCode = '', props = {}) {
     noZero: false,
     ...props,
   };
+  const { persianDigits } = currentLocaleSettings();
+
+  // Persian names the currency after the amount ("۱۲٬۳۴۵ تومان") and in its own
+  // script, where English puts the symbol in front ("$12,345").
+  const symbol =
+    persianDigits && parsedCurrency.symbol_native
+      ? parsedCurrency.symbol_native
+      : parsedCurrency.symbol;
+
+  const value = persianDigits && symbol ? '%v %s' : '%s%v';
+  const negative = persianDigits && symbol ? '-%v %s' : '%s-%v';
+
   const formatOptions = {
-    symbol: parsedCurrency.symbol,
+    symbol,
     precision: parsedCurrency.decimal_digits,
     format: {
-      pos: '%s%v',
-      neg: '%s-%v',
-      zero: parsedProps.noZero ? '' : '%s%v',
+      pos: value,
+      neg: negative,
+      zero: parsedProps.noZero ? '' : value,
     },
   };
+  const formatted = accounting.formatMoney(cents, formatOptions);
 
-  return accounting.formatMoney(cents, formatOptions);
+  return persianDigits ? toPersianDigits(formatted) : formatted;
 }
 
 export function formattedNumber(amount, props) {
@@ -230,7 +244,10 @@ export function formattedNumber(amount, props) {
     },
     ...props,
   };
-  return accounting.formatMoney(amount, formatOptions);
+  const { persianDigits } = currentLocaleSettings();
+  const formatted = accounting.formatMoney(amount, formatOptions);
+
+  return persianDigits ? toPersianDigits(formatted) : formatted;
 }
 
 export function formattedExchangeRate(amount, currency) {

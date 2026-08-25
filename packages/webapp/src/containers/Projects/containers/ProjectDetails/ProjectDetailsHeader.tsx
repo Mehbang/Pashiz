@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import intl from 'react-intl-universal';
+import React from 'react';
 import { DetailFinancialCard, DetailFinancialSection } from './components';
 import { useProjectDetailContext } from './ProjectDetailProvider';
 import { useCalculateProject } from './utils';
@@ -47,7 +47,7 @@ export function ProjectDetailHeader() {
         value={project.total_billable_formatted}
       />
       <DetailFinancialCard
-        label={'Deadline'}
+        label={intl.get('deadline')}
         value={<FormatDate value={project.deadline_formatted} />}
         description={'4 days to go'}
       />

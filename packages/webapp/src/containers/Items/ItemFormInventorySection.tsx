@@ -17,7 +17,9 @@ export function ItemFormInventorySection() {
 
   return (
     <Box data-section-id="inventory">
-      <ItemFormSectionTitle>Inventory details</ItemFormSectionTitle>
+      <ItemFormSectionTitle>
+        {intl.get('inventory_details')}
+      </ItemFormSectionTitle>
 
       <Row>
         <Col xs={6}>

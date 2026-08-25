@@ -666,6 +666,9 @@ $breadcrumbs-collapsed-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.o
 
 $sidebar-zindex: 16;
 $pt-font-family:
+  // Shipped with the app so Persian renders identically on every platform;
+  // see `_fonts.scss`.
+  'Vazirmatn',
   'Noto Sans',
   -apple-system,
   BlinkMacSystemFont,

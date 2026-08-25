@@ -1,0 +1,18 @@
+{
+  "field.payment_date": "تاریخ پرداخت",
+  "field.payment_account": "حساب پرداخت",
+  "field.amount": "مبلغ",
+  "field.currency_code": "ارز",
+  "field.exchange_rate": "نرخ تسعیر",
+  "field.reference_no": "شماره مرجع",
+  "field.description": "شرح",
+  "field.line_description": "شرح ردیف",
+  "field.published": "قطعی‌شده",
+  "field.categories": "دسته‌بندی‌ها",
+  "field.expense_account": "حساب هزینه",
+  "field.publish": "قطعی کردن",
+  "field.status": "وضعیت",
+  "field.status.draft": "پیش‌نویس",
+  "field.status.published": "قطعی‌شده",
+  "field.created_at": "تاریخ ایجاد"
+}

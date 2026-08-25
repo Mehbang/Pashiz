@@ -29,11 +29,11 @@ export const billableTypeOption = [
   {
     id: 2,
     name: intl.get('project_billable_entries.dialog.bill'),
-    value: 'Bill',
+    value: intl.get('resource_bill_singular'),
   },
   {
     id: 3,
     name: intl.get('project_billable_entries.dialog.expense'),
-    value: 'Expense',
+    value: intl.get('expense'),
   },
 ];

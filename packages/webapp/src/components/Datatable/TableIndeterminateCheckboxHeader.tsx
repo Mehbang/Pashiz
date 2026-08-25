@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Checkbox } from '@blueprintjs/core';
 import React from 'react';
 

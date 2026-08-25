@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import classNames from 'classnames';
 import React, { lazy } from 'react';
 import { Dialog, DialogSuspense } from '@/components';
@@ -24,7 +25,7 @@ function APAgingSummaryPdfDialogRoot({
   return (
     <Dialog
       name={dialogName}
-      title={'A/P Aging Summary Print Preview'}
+      title={intl.get('a_p_aging_summary_print_preview')}
       className={classNames(CLASSES.DIALOG_PDF_PREVIEW)}
       autoFocus={true}
       canEscapeKeyClose={true}

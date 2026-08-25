@@ -81,6 +81,7 @@ export class CashFlowStatement extends R.pipe(
     this.query = query;
     this.numberFormat = this.query.numberFormat;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
     this.dateRangeSet = [];
     this.comparatorDateType =
       query.displayColumnsType === 'total' ? 'day' : query.displayColumnsBy;

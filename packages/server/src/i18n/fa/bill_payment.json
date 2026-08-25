@@ -1,0 +1,19 @@
+{
+  "field.vendor": "تأمین‌کننده",
+  "field.payment_date": "تاریخ پرداخت",
+  "field.payment_number": "شماره پرداخت",
+  "field.payment_account": "حساب پرداخت",
+  "field.exchange_rate": "نرخ تسعیر",
+  "field.note": "یادداشت",
+  "field.reference": "مرجع",
+  "field.entries": "اقلام",
+  "field.entries.bill": "فاکتور خرید",
+  "field.entries.payment_amount": "مبلغ پرداخت",
+  "field.amount": "مبلغ",
+  "field.due_amount": "مبلغ سررسیدشده",
+  "field.reference_no": "شماره مرجع",
+  "field.description": "شرح",
+  "field.created_at": "تاریخ ایجاد",
+  "field.payment_number_hint": "شماره پرداخت باید یکتا باشد.",
+  "field.bill_hint": "با شماره فاکتور خرید مطابقت دارد."
+}

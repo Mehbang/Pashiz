@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Text, Classes, Button, Intent } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import clsx from 'classnames';
@@ -43,7 +44,7 @@ export function PaymentPortal() {
       .catch(() => {
         AppToaster.show({
           intent: Intent.DANGER,
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
         });
       });
   };
@@ -57,7 +58,7 @@ export function PaymentPortal() {
       .catch((error) => {
         AppToaster.show({
           intent: Intent.DANGER,
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
         });
       });
   };
@@ -113,12 +114,12 @@ export function PaymentPortal() {
               position={'apart'}
               className={clsx(styles.totalItem, styles.borderBottomGray)}
             >
-              <Text>Sub Total</Text>
+              <Text>{intl.get('sub_total')}</Text>
               <Text>{sharableLinkMeta?.subtotalFormatted}</Text>
             </Group>
 
             <Group position={'apart'} className={styles.totalItem}>
-              <Text>Total</Text>
+              <Text>{intl.get('total')}</Text>
               <Text style={{ fontWeight: 500 }}>
                 {sharableLinkMeta?.totalFormatted}
               </Text>
@@ -134,7 +135,7 @@ export function PaymentPortal() {
               position={'apart'}
               className={clsx(styles.totalItem, styles.borderBottomGray)}
             >
-              <Text>Paid Amount (-)</Text>
+              <Text>{intl.get('paid_amount_2')}</Text>
               <Text>{sharableLinkMeta?.paymentAmountFormatted}</Text>
             </Group>
 
@@ -142,7 +143,7 @@ export function PaymentPortal() {
               position={'apart'}
               className={clsx(styles.totalItem, styles.borderBottomDark)}
             >
-              <Text>Due Amount</Text>
+              <Text>{intl.get('due_amount')}</Text>
               <Text style={{ fontWeight: 500 }}>
                 {sharableLinkMeta?.dueAmountFormatted}
               </Text>
@@ -157,14 +158,14 @@ export function PaymentPortal() {
             onClick={handleInvoiceDownloadBtnClick}
             loading={isInvoiceGenerating}
           >
-            Download Invoice
+            {intl.get('download_invoice')}
           </Button>
 
           <Button
             onClick={handleInvoicePreviewBtnClick}
             className={clsx(styles.footerButton, styles.viewInvoiceButton)}
           >
-            View Invoice
+            {intl.get('view_invoice')}
           </Button>
 
           {sharableLinkMeta?.isReceivable &&
@@ -196,9 +197,9 @@ export function PaymentPortal() {
         </Stack>
 
         <Text className={clsx(Classes.TEXT_MUTED, styles.buyNote)}>
-          By confirming your payment, you allow Bigcapital Technology, Inc. to
-          charge you for this payment and save your payment information in
-          accordance with their terms.
+          {intl.get(
+            'by_confirming_your_payment_you_allow_bigcapital_technology_i',
+          )}
         </Text>
       </Stack>
 
@@ -212,7 +213,7 @@ export function PaymentPortal() {
         <Stack spacing={0} className={styles.footerText}>
           © 2024 Bigcapital Technology, Inc.
           <br />
-          All rights reserved.
+          {intl.get('all_rights_reserved_2')}
         </Stack>
       </Stack>
     </Box>

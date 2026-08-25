@@ -48,8 +48,9 @@ function ClearAllLinesAlert({
       loading={false}
     >
       <p>
-        Clearing the table lines will delete all credits and payments were
-        applied. Is this okay?
+        {intl.get(
+          'clearing_the_table_lines_will_delete_all_credits_and_payment',
+        )}
       </p>
     </Alert>
   );

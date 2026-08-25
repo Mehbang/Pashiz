@@ -17,7 +17,7 @@ export const defaultInitialItem: AllocateLandedCostItem = {
 
 // Default form initial values.
 export const defaultInitialValues = {
-  transactionType: 'Bill',
+  transactionType: intl.get('resource_bill_singular'),
   transactionId: '',
   transactionEntryId: '',
   amount: '',

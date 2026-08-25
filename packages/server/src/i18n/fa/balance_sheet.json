@@ -1,0 +1,21 @@
+{
+  "assets": "دارایی‌ها",
+  "current_asset": "دارایی جاری",
+  "cash_and_cash_equivalents": "نقد و معادل‌های نقد",
+  "accounts_receivable": "حساب‌های دریافتنی",
+  "inventory": "موجودی کالا",
+  "other_current_assets": "سایر دارایی‌های جاری",
+  "fixed_asset": "دارایی ثابت",
+  "non_current_assets": "دارایی‌های غیرجاری",
+  "liabilities_and_equity": "بدهی‌ها و حقوق صاحبان سهام",
+  "liabilities": "بدهی‌ها",
+  "current_liabilities": "بدهی‌های جاری",
+  "long_term_liabilities": "بدهی‌های بلندمدت",
+  "non_current_liabilities": "بدهی‌های غیرجاری",
+  "equity": "حقوق صاحبان سهام",
+  "net_income": "سود خالص",
+  "account_name": "نام حساب",
+  "total": "جمع",
+  "percentage_of_column": "٪ از ستون",
+  "percentage_of_row": "٪ از سطر"
+}

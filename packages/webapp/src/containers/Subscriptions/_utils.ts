@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 export const getSubscriptionStatusText = (subscription) => {
   if (subscription.status === 'on_trial') {
     return subscription.onTrial
@@ -7,7 +8,7 @@ export const getSubscriptionStatusText = (subscription) => {
   } else if (subscription.status === 'active') {
     return subscription.endsAtFormatted
       ? `Renews in ${subscription.endsAtFormatted}`
-      : 'Lifetime subscription';
+      : intl.get('lifetime_subscription');
   } else if (subscription.status === 'canceled') {
     return subscription.ended
       ? `Expires ${subscription.endsAtFormatted}`

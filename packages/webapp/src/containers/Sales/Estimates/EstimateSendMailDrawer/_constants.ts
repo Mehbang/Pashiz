@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 export const defaultEstimateMailReceiptProps = {
   companyName: 'Bigcapital Technology, Inc.',
   companyLogoUri: ' ',
@@ -7,7 +8,9 @@ export const defaultEstimateMailReceiptProps = {
   estimateNumber: 'INV-0001',
   expirationDate: '2 Oct 2024',
   dueAmount: '$1,000.00',
-  items: [{ label: 'Web development', total: '$1000.00', quantity: 1 }],
+  items: [
+    { label: intl.get('web_development'), total: '$1000.00', quantity: 1 },
+  ],
   message: `Hi Ahmed Bouhuolia,
 
 Here's invoice # INV-00002 for $738.30

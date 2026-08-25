@@ -36,6 +36,7 @@ export class SalesTaxLiabilitySummary extends FinancialSheet {
     this.repository = repository;
     this.baseCurrency = meta.baseCurrency;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
     this.numberFormat = {
       ...this.numberFormat,
       ...this.query.numberFormat,

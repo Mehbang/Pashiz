@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Classes, Intent, Radio, Tag } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { get } from 'lodash';
@@ -68,14 +69,14 @@ function RuleFormContentFormRoot({
       closeDialog(DialogsName.BankRuleForm);
       AppToaster.show({
         intent: Intent.SUCCESS,
-        message: 'The bank rule has been created successfully.',
+        message: intl.get('the_bank_rule_has_been_created_successfully'),
       });
     };
     const handleError = (error) => {
       setSubmitting(false);
       AppToaster.show({
         intent: Intent.DANGER,
-        message: 'Something went wrong!',
+        message: intl.get('something_went_wrong'),
       });
     };
     if (isEditMode) {
@@ -96,8 +97,8 @@ function RuleFormContentFormRoot({
       <Form>
         <FFormGroup
           name={'name'}
-          label={'Rule Name'}
-          labelInfo={<Tag minimal>Required</Tag>}
+          label={intl.get('rule_name')}
+          labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
           style={{ maxWidth: 300 }}
           fastField
         >
@@ -110,8 +111,8 @@ function RuleFormContentFormRoot({
 
         <FFormGroup
           name={'applyIfAccountId'}
-          label={'Apply the rule to account'}
-          labelInfo={<Tag minimal>Required</Tag>}
+          label={intl.get('apply_the_rule_to_account')}
+          labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
           style={{ maxWidth: 350 }}
           fastField
         >
@@ -128,21 +129,24 @@ function RuleFormContentFormRoot({
 
         <FFormGroup
           name={'conditionsType'}
-          label={'Categorize the transactions when'}
+          label={intl.get('categorize_the_transactions_when')}
           fastField
         >
           <FRadioGroup name={'conditionsType'}>
-            <Radio value={'and'} label={'All the following criteria matches'} />
+            <Radio
+              value={'and'}
+              label={intl.get('all_the_following_criteria_matches')}
+            />
             <Radio
               value={'or'}
-              label={'Any one of the following criteria matches'}
+              label={intl.get('any_one_of_the_following_criteria_matches')}
             />
           </FRadioGroup>
         </FFormGroup>
 
         <RuleFormConditions />
         <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: '0.8rem' }}>
-          Then Assign
+          {intl.get('then_assign')}
         </h3>
 
         <RuleAssignCategoryField />
@@ -150,7 +154,7 @@ function RuleFormContentFormRoot({
 
         <FFormGroup
           name={'assignRef'}
-          label={'Reference'}
+          label={intl.get('reference_2')}
           style={{ maxWidth: 300 }}
           fastField
         >
@@ -196,7 +200,7 @@ function RuleFormConditions() {
           <Group key={index} style={{ width: 500 }}>
             <FFormGroup
               name={`conditions[${index}].field`}
-              label={'Field'}
+              label={intl.get('field')}
               style={{ marginBottom: 0, flex: '1 0' }}
               fastField
             >
@@ -211,7 +215,7 @@ function RuleFormConditions() {
 
             <FFormGroup
               name={`conditions[${index}].comparator`}
-              label={'Condition'}
+              label={intl.get('condition')}
               style={{ marginBottom: 0, flex: '1 0' }}
               fastField
             >
@@ -230,7 +234,7 @@ function RuleFormConditions() {
 
             <FFormGroup
               name={`conditions[${index}].value`}
-              label={'Value'}
+              label={intl.get('value')}
               style={{ marginBottom: 0, flex: '1 0 ', width: '40%' }}
               fastField
             >
@@ -252,7 +256,7 @@ function RuleFormConditions() {
         onClick={handleAddConditionBtnClick}
         style={{ marginTop: 8 }}
       >
-        Add Condition
+        {intl.get('add_condition')}
       </Button>
     </Box>
   );
@@ -278,7 +282,7 @@ function RuleFormActionsRoot({
   return (
     <Box className={Classes.DIALOG_FOOTER}>
       <Box className={Classes.DIALOG_FOOTER_ACTIONS}>
-        <Button onClick={handleCancelBtnClick}>Cancel</Button>
+        <Button onClick={handleCancelBtnClick}>{intl.get('cancel')}</Button>
         <Button
           type="submit"
           intent={Intent.PRIMARY}
@@ -310,7 +314,7 @@ function RuleApplyIfTransactionTypeField() {
   return (
     <FFormGroup
       name={'applyIfTransactionType'}
-      label={'Apply to transactions are'}
+      label={intl.get('apply_to_transactions_are')}
       style={{ maxWidth: 350 }}
       fastField
     >
@@ -350,8 +354,8 @@ function RuleAssignCategoryField() {
   return (
     <FFormGroup
       name={'assignCategory'}
-      label={'Transaction type'}
-      labelInfo={<Tag minimal>Required</Tag>}
+      label={intl.get('transaction_type')}
+      labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
       style={{ maxWidth: 300 }}
       fastField
     >
@@ -381,8 +385,8 @@ function RuleAssignCategoryAccountField() {
   return (
     <FFormGroup
       name={'assignAccountId'}
-      label={'Account category'}
-      labelInfo={<Tag minimal>Required</Tag>}
+      label={intl.get('account_category')}
+      labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
       style={{ maxWidth: 300 }}
       fastField
       shouldUpdateDeps={{ accountRoot }}

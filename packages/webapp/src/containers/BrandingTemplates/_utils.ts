@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { omit } from 'lodash';
 import * as R from 'ramda';
 import { useBrandingTemplateBoot } from './BrandingTemplateBoot';
@@ -81,11 +82,11 @@ export const getCustomizeDrawerNameFromResource = (resource: string) => {
 
 export const getButtonLabelFromResource = (resource: string) => {
   const pairs = {
-    SaleInvoice: 'Create Invoice Branding',
-    SaleEstimate: 'Create Estimate Branding',
-    SaleReceipt: 'Create Receipt Branding',
-    CreditNote: 'Create Credit Note Branding',
-    PaymentReceive: 'Create Payment Branding',
+    SaleInvoice: intl.get('create_invoice_branding'),
+    SaleEstimate: intl.get('create_estimate_branding'),
+    SaleReceipt: intl.get('create_receipt_branding'),
+    CreditNote: intl.get('create_credit_note_branding'),
+    PaymentReceive: intl.get('create_payment_branding'),
   };
-  return R.prop(resource, pairs) || 'Create Branding Template';
+  return R.prop(resource, pairs) || intl.get('create_branding_template');
 };

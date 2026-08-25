@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import type { PreferencesMenuItem } from './types';
 import { FormattedMessage as T } from '@/components';
@@ -9,7 +10,7 @@ export const PreferencesMenu: PreferencesMenuItem[] = [
     href: '/preferences/general',
   },
   {
-    text: 'Branding',
+    text: intl.get('branding'),
     disabled: false,
     href: '/preferences/branding',
   },
@@ -22,7 +23,7 @@ export const PreferencesMenu: PreferencesMenuItem[] = [
     href: '/preferences/users',
   },
   {
-    text: 'Payment Methods',
+    text: intl.get('payment_methods'),
     href: '/preferences/payment-methods',
   },
   {
@@ -69,7 +70,7 @@ export const PreferencesMenu: PreferencesMenuItem[] = [
   //   href: '/preferences/integrations'
   // },
   {
-    text: 'API Keys',
+    text: intl.get('api_keys'),
     disabled: false,
     href: '/preferences/api-keys',
   },

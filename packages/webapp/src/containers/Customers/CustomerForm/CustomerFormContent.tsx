@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Tab } from '@blueprintjs/core';
 import { Tabs } from '@blueprintjs/core';
 import { css } from '@emotion/css';
@@ -39,11 +40,11 @@ export function CustomerFormContent() {
           `}
           vertical
         >
-          <Tab id={'primary'} title={'Basic'} />
-          <Tab id={'financial'} title={'Financial'} />
-          <Tab id={'billingAddress'} title={'Billing address'} />
-          <Tab id={'shippingAddress'} title={'Shipping address'} />
-          <Tab id={'notes'} title={'Notes'} />
+          <Tab id={'primary'} title={intl.get('basic')} />
+          <Tab id={'financial'} title={intl.get('financial')} />
+          <Tab id={'billingAddress'} title={intl.get('billing_address')} />
+          <Tab id={'shippingAddress'} title={intl.get('shipping_address')} />
+          <Tab id={'notes'} title={intl.get('notes')} />
         </Tabs>
 
         <CustomerFormSections />

@@ -1,3 +1,4 @@
+import { formatDateIn } from '@/utils/jalali-date';
 import * as R from 'ramda';
 import * as moment from 'moment';
 import { defaultTo, sumBy, get } from 'lodash';
@@ -53,6 +54,7 @@ export class InventoryDetails extends FinancialSheet {
     this.numberFormat = this.query.numberFormat;
     this.i18n = i18n;
     this.dateFormat = meta.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta.calendar || DEFAULT_REPORT_META.calendar;
   }
 
   /**
@@ -94,7 +96,7 @@ export class InventoryDetails extends FinancialSheet {
    */
   public getDateMeta(date: Date | string): IInventoryDetailsDate {
     return {
-      formattedDate: moment(date).format(this.dateFormat),
+      formattedDate: formatDateIn(date, this.dateFormat, this.calendar),
       date: moment(date).toDate(),
     };
   }

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Classes } from '@blueprintjs/core';
 import { fieldsGroups } from './constants';
 import { FInputGroup, FSwitch, Group, Stack } from '@/components';
@@ -11,10 +12,11 @@ export function EstimateCustomizeContentFields() {
       style={{ padding: 20, paddingBottom: 40, flex: '1 1 auto' }}
     >
       <Stack spacing={10}>
-        <h3 style={{ fontWeight: 600 }}>Estimate Content</h3>
+        <h3 style={{ fontWeight: 600 }}>{intl.get('estimate_content')}</h3>
         <p className={Classes.TEXT_MUTED}>
-          Customize your estimate by editing the items label or hiding some
-          items to match your needs.
+          {intl.get(
+            'customize_your_estimate_by_editing_the_items_label_or_hiding',
+          )}
         </p>
       </Stack>
 

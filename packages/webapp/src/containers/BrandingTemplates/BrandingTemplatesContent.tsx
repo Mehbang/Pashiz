@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Classes, Intent } from '@blueprintjs/core';
 import * as R from 'ramda';
 import { BrandingTemplateActionsBar } from './BrandingTemplatesActionsBar';
@@ -13,7 +14,7 @@ export function BrandingTemplateContent() {
     <Box>
       <DrawerHeaderContent
         name={DRAWERS.BRANDING_TEMPLATES}
-        title={'Branding Templates'}
+        title={intl.get('branding_templates')}
       />
       <Box className={Classes.DRAWER_BODY}>
         <BrandingTemplatesBoot>
@@ -37,7 +38,7 @@ const BrandingTemplateHeader = R.compose(withDrawerActions)(({
   return (
     <Group>
       <Button intent={Intent.PRIMARY} onClick={handleCreateBtnClick}>
-        Create Invoice Branding
+        {intl.get('create_invoice_branding')}
       </Button>
     </Group>
   );

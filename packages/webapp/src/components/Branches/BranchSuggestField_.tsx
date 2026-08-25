@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import { FSuggest } from '../Forms';
 
@@ -11,7 +12,7 @@ export function BranchSuggestField(props: BranchSuggestFieldProps) {
       valueAccessor={'id'}
       labelAccessor={'code'}
       textAccessor={'name'}
-      inputProps={{ placeholder: 'Select a branch' }}
+      inputProps={{ placeholder: intl.get('select_a_branch') }}
       {...props}
     />
   );

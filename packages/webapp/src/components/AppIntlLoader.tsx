@@ -10,25 +10,45 @@ import { useWatchImmediate } from '../hooks';
 import { AppIntlProvider } from './AppIntlProvider';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { useSplashLoading } from '@/hooks/state';
+import {
+  DEFAULT_LOCALE,
+  SUPPORTED_LOCALES,
+  localeSettings,
+} from '@/constants/languagesOptions';
 
-const SUPPORTED_LOCALES = [
-  { name: 'English', value: 'en' },
-  { name: 'العربية', value: 'ar' },
-];
+/**
+ * Locale used for any key a translation file has not covered yet, so a partial
+ * translation degrades to English instead of showing raw message keys.
+ */
+const FALLBACK_LOCALE = 'en';
 
 /**
  * Retrieve the current local.
  */
 function getCurrentLocal() {
-  let currentLocale = intl.determineLocale({
+  // Only an explicit choice selects the language: the `?lang=` parameter, the
+  // `locale` cookie (which the dashboard boot fills from the organization's
+  // language setting), or a previous choice kept in local storage.
+  //
+  // `intl.determineLocale()` is deliberately not used here: its last resort is
+  // the browser language, which would open this Iranian distribution in English
+  // on any machine whose browser is set to English.
+  const options = {
     urlLocaleKey: 'lang',
     cookieLocaleKey: 'locale',
     localStorageLocaleKey: 'lang',
-  });
-  if (!find(SUPPORTED_LOCALES, { value: currentLocale })) {
-    currentLocale = 'en';
-  }
-  return currentLocale;
+  };
+  const chosen =
+    intl.getLocaleFromURL(options) ||
+    intl.getLocaleFromCookie(options) ||
+    intl.getLocaleFromLocalStorage(options);
+
+  // A stored value may carry a region ("fa-IR"); match on the language subtag.
+  const language = String(chosen || '').split(/[-_]/)[0];
+
+  return find(SUPPORTED_LOCALES, { value: language })
+    ? language
+    : DEFAULT_LOCALE.value;
 }
 
 /**
@@ -52,10 +72,36 @@ async function loadYupLocales(currentLocale) {
 /**
  * Dynamically loads the moment.js locale bundle for the given locale.
  */
+/**
+ * Loaders for moment's locale bundles, one entry per locale.
+ *
+ * These cannot be written as a single `import(`moment/locale/${locale}`)`: a
+ * template literal over a bare package path is not statically analysable, so
+ * the bundler cannot resolve it and the import fails at runtime.
+ */
+const MOMENT_LOCALE_LOADERS = {
+  'ar-ly': () => import('moment/locale/ar-ly'),
+  fa: () => import('moment/locale/fa'),
+};
+
 async function loadMomentLocale(currentLocale) {
   const momentLocale = transformMomentLocale(currentLocale);
-  if (momentLocale === 'en') return;
-  await import(`moment/locale/${momentLocale}`);
+  const loadLocaleBundle = MOMENT_LOCALE_LOADERS[momentLocale];
+
+  // English is moment's built-in locale and needs no bundle.
+  if (!loadLocaleBundle) return;
+
+  await loadLocaleBundle();
+
+  // moment's Persian locale rewrites every formatted number into Persian digit
+  // glyphs, including the `YYYY-MM-DD` strings the app sends to the API — which
+  // would corrupt request payloads. (It is the same hazard that makes Arabic
+  // map onto `ar-ly` above, the one Arabic variant that leaves digits alone.)
+  // Persian digits are applied at the presentation layer instead, so drop the
+  // locale's postformat hook while keeping its Persian wording.
+  if (momentLocale === 'fa') {
+    moment.updateLocale('fa', { postformat: (value) => value });
+  }
 }
 
 /**
@@ -85,13 +131,21 @@ function useAppLoadLocales(currentLocale) {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    // Lodas the locales data file.
-    loadLocales(currentLocale)
-      .then((results) => {
+    // Loads the locales data file, alongside the fallback locale so partially
+    // translated languages still render English for the keys they are missing.
+    Promise.all([
+      loadLocales(currentLocale),
+      currentLocale === FALLBACK_LOCALE
+        ? Promise.resolve(null)
+        : loadLocales(FALLBACK_LOCALE),
+    ])
+      .then(([results, fallbackResults]) => {
         return intl.init({
           currentLocale,
+          fallbackLocale: FALLBACK_LOCALE,
           locales: {
             [currentLocale]: results,
+            ...(fallbackResults ? { [FALLBACK_LOCALE]: fallbackResults } : {}),
           },
         });
       })
@@ -146,6 +200,9 @@ function AppIntlLoader({ children }) {
   // Detarmines the document direction based on the given locale.
   const isRTL = rtlDetect.isRtlLang(currentLocale);
 
+  // Calendar and digit system that belong to the given locale.
+  const { calendar, persianDigits } = localeSettings(currentLocale);
+
   // Modifies the html document direction
   useDocumentDirectionModifier(currentLocale, isRTL);
 
@@ -160,7 +217,12 @@ function AppIntlLoader({ children }) {
   const isLoading = isAppYupLocalesLoading || isAppLocalesLoading;
 
   return (
-    <AppIntlProvider currentLocale={currentLocale} isRTL={isRTL}>
+    <AppIntlProvider
+      currentLocale={currentLocale}
+      isRTL={isRTL}
+      calendar={calendar}
+      persianDigits={persianDigits}
+    >
       {isLoading ? null : children}
     </AppIntlProvider>
   );

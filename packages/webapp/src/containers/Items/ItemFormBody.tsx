@@ -1,7 +1,7 @@
+import intl from 'react-intl-universal';
 import { FormGroup, Checkbox, ControlGroup } from '@blueprintjs/core';
 import { useFormikContext, FastField, ErrorMessage } from 'formik';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { useItemFormContext } from './ItemFormProvider';
 import {
   sellDescriptionFieldShouldUpdate,
@@ -112,7 +112,11 @@ function ItemFormBodyInner() {
           </FFormGroup>
 
           {/*------------- Sell Tax Rate ------------- */}
-          <FFormGroup name={'sellTaxRateId'} label={'Tax Rate'} inline={true}>
+          <FFormGroup
+            name={'sellTaxRateId'}
+            label={intl.get('tax_rate')}
+            inline={true}
+          >
             <TaxRatesSelect
               name={'sellTaxRateId'}
               items={taxRates}
@@ -205,7 +209,7 @@ function ItemFormBodyInner() {
           {/*------------- Purchase Tax Rate ------------- */}
           <FFormGroup
             name={'purchaseTaxRateId'}
-            label={'Tax Rate'}
+            label={intl.get('tax_rate')}
             inline={true}
           >
             <TaxRatesSelect

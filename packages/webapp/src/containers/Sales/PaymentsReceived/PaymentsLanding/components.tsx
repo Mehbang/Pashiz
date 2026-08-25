@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Intent,
   Button,
@@ -9,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 import clsx from 'classnames';
 import React from 'react';
-import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
 import type { PaymentsReceivedListResponse } from '@bigcapital/sdk-ts';
 import { Money, Icon, Can } from '@/components';
@@ -49,7 +49,7 @@ export function ActionsMenu({
       />
       <MenuItem
         icon={<Icon icon={'envelope'} iconSize={16} />}
-        text={'Send Mail'}
+        text={intl.get('send_mail')}
         onClick={safeCallback(onSendMail, paymentReceive)}
       />
       <Can I={PaymentReceiveAction.Edit} a={AbilitySubject.PaymentReceive}>

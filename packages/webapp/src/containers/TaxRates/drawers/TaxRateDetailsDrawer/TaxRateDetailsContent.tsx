@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { TaxRateDetailsContentActionsBar } from './TaxRateDetailsContentActionsBar';
 import { TaxRateDetailsContentBoot } from './TaxRateDetailsContentBoot';
 import { TaxRateDetailsContentDetails } from './TaxRateDetailsContentDetails';
@@ -14,7 +15,7 @@ export function TaxRateDetailsContent({
 }: TaxRateDetailsContentProps) {
   return (
     <TaxRateDetailsContentBoot taxRateId={taxRateId}>
-      <DrawerHeaderContent name={name} title={'Tax Rate Details'} />
+      <DrawerHeaderContent name={name} title={intl.get('tax_rate_details')} />
       <TaxRateDetailsContentActionsBar />
 
       <DrawerBody>

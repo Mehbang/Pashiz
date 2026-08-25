@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { css } from '@emotion/css';
 import { x } from '@xstyled/emotion';
 import { SetupCongratsPage } from './SetupCongratsPage';
@@ -30,19 +31,19 @@ export function SetupWizardContent({
           items: itemsClassName,
         }}
       >
-        <Stepper.Step label={'Subscription'}>
+        <Stepper.Step label={intl.get('subscription')}>
           <SetupSubscription />
         </Stepper.Step>
 
-        <Stepper.Step label={'Organization'}>
+        <Stepper.Step label={intl.get('organization_2')}>
           <SetupOrganizationPage />
         </Stepper.Step>
 
-        <Stepper.Step label={'Initializing'}>
+        <Stepper.Step label={intl.get('Initializing')}>
           <SetupInitializingForm />
         </Stepper.Step>
 
-        <Stepper.Step label={'Congrats'}>
+        <Stepper.Step label={intl.get('congrats')}>
           <SetupCongratsPage />
         </Stepper.Step>
       </Stepper>

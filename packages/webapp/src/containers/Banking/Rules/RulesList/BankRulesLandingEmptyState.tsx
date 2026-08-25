@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import * as R from 'ramda';
 import styles from './BankRulesLandingEmptyState.module.scss';
@@ -17,11 +18,14 @@ function BankRulesLandingEmptyStateRoot({
 
   return (
     <EmptyStatus
-      title={'Create rules to categorize bank transactions automatically'}
+      title={intl.get(
+        'create_rules_to_categorize_bank_transactions_automatically',
+      )}
       description={
         <p>
-          Bank rules will run automatically to categorize the incoming bank
-          transactions under the conditions you set up.
+          {intl.get(
+            'bank_rules_will_run_automatically_to_categorize_the_incoming',
+          )}
         </p>
       }
       action={
@@ -32,7 +36,7 @@ function BankRulesLandingEmptyStateRoot({
               large={true}
               onClick={handleNewBtnClick}
             >
-              New Bank Rule
+              {intl.get('new_bank_rule')}
             </Button>
 
             <Button intent={Intent.NONE} large={true}>

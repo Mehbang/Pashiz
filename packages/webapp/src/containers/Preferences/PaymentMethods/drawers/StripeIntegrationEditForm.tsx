@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik, FormikHelpers } from 'formik';
 import React from 'react';
@@ -47,7 +48,7 @@ export function StripeIntegrationEditForm({
   ) => {
     if (!paymentMethodId) {
       AppToaster.show({
-        message: 'Payment method ID is missing.',
+        message: intl.get('payment_method_id_is_missing'),
         intent: Intent.DANGER,
       });
       return;
@@ -62,7 +63,7 @@ export function StripeIntegrationEditForm({
     })
       .then(() => {
         AppToaster.show({
-          message: 'The Stripe settings have been updated.',
+          message: intl.get('the_stripe_settings_have_been_updated'),
           intent: Intent.SUCCESS,
         });
         setSubmitting(false);
@@ -71,7 +72,7 @@ export function StripeIntegrationEditForm({
       .catch(() => {
         setSubmitting(false);
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });

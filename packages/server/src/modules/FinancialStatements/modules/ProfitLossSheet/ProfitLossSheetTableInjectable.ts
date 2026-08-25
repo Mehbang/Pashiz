@@ -25,7 +25,7 @@ export class ProfitLossSheetTableInjectable {
     const { data, query, meta } =
       await this.profitLossSheet.profitLossSheet(filter);
 
-    const table = new ProfitLossSheetTable(data, query, this.i18n);
+    const table = new ProfitLossSheetTable(data, query, this.i18n, meta);
 
     return {
       table: {

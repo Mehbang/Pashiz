@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
@@ -35,7 +36,7 @@ export function PaymentMadeFormFooterRight() {
         textStyle={TotalLineTextStyle.Bold}
       />
       <TotalLine
-        title={'Excess Amount'}
+        title={intl.get('excess_amount')}
         value={
           <FormatNumber
             value={excessAmount}

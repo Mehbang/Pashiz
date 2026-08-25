@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Callout, Intent, Text } from '@blueprintjs/core';
 import clsx from 'classnames';
 import { ImportStepperStep } from './_types';
@@ -156,7 +157,7 @@ function ImportFilePreviewFloatingActions() {
   return (
     <div className={clsx(CLASSES.PAGE_FORM_FLOATING_ACTIONS)}>
       <Group spacing={10}>
-        <Button onClick={handleCancelBtnClick}>Cancel</Button>
+        <Button onClick={handleCancelBtnClick}>{intl.get('cancel')}</Button>
         <Button
           type="submit"
           intent={Intent.PRIMARY}
@@ -164,7 +165,7 @@ function ImportFilePreviewFloatingActions() {
           onClick={handleSubmitBtn}
           disabled={!isValidToImport}
         >
-          Import
+          {intl.get('import')}
         </Button>
       </Group>
     </div>

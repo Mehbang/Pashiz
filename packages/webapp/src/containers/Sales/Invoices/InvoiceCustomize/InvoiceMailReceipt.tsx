@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { x } from '@xstyled/emotion';
@@ -63,31 +64,31 @@ export function InvoiceMailReceipt({
 
   // # Due date
   dueDate,
-  dueDateLabel = 'Due',
+  dueDateLabel = intl.get('due'),
 
   // # Subtotal
   subtotal,
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
 
   // # Discount amount
   discount,
-  discountLabel = 'Discount',
+  discountLabel = intl.get('discount_2'),
 
   // # Adjustment
   adjustment,
-  adjustmentLabel = 'Adjustment',
+  adjustmentLabel = intl.get('adjustment'),
 
   // # Total
   total,
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
 
   // # Due amount
-  dueAmountLabel = 'Due Amount',
+  dueAmountLabel = intl.get('due_amount'),
   dueAmount,
 
   // # Invoice number
   invoiceNumber,
-  invoiceNumberLabel = 'Invoice #',
+  invoiceNumberLabel = intl.get('invoice_no'),
 
   // # Invoice message
   message,
@@ -97,7 +98,7 @@ export function InvoiceMailReceipt({
 
   // # View invoice button
   showViewInvoiceButton = true,
-  viewInvoiceButtonLabel = 'View Invoice',
+  viewInvoiceButtonLabel = intl.get('view_invoice'),
   viewInvoiceButtonOnClick,
   ...restProps
 }: InvoiceMailReceiptProps) {

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import classNames from 'classnames';
 import React, { lazy } from 'react';
 import { Dialog, DialogSuspense } from '@/components';
@@ -29,7 +30,7 @@ function InventoryItemDetailsPdfDialogRoot({
   return (
     <Dialog
       name={dialogName}
-      title={'Inventory Item Details Print Preview'}
+      title={intl.get('inventory_item_details_print_preview')}
       className={classNames(CLASSES.DIALOG_PDF_PREVIEW)}
       autoFocus={true}
       canEscapeKeyClose={true}

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { FormGroup } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import React, { lazy } from 'react';
@@ -28,11 +29,16 @@ export function CategorizeTransactionFormContent() {
 
   return (
     <Box style={{ flex: 1, margin: 20 }}>
-      <FormGroup label={'Amount'} inline>
+      <FormGroup label={intl.get('amount')} inline>
         <Title>{formattedAmount}</Title>
       </FormGroup>
 
-      <FFormGroup name={'category'} label={'Category'} fastField inline>
+      <FFormGroup
+        name={'category'}
+        label={intl.get('category')}
+        fastField
+        inline
+      >
         <FSelect
           name={'transactionType'}
           items={transactionTypes}

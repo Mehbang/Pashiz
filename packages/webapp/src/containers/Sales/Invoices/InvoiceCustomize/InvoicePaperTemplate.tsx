@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Classes, Text } from '@blueprintjs/core';
 import {
   PaperTemplate,
@@ -111,15 +112,15 @@ export function InvoicePaperTemplate({
   companyLogoUri = '',
 
   dueDate = 'September 3, 2024',
-  dueDateLabel = 'Date due',
+  dueDateLabel = intl.get('date_due'),
   showDueDate = true,
 
   dateIssue = 'September 3, 2024',
-  dateIssueLabel = 'Date of issue',
+  dateIssueLabel = intl.get('date_of_issue'),
   showDateIssue = true,
 
   // dateIssue,
-  invoiceNumberLabel = 'Invoice number',
+  invoiceNumberLabel = intl.get('invoice_no_'),
   invoiceNumber = '346D3D40-0001',
   showInvoiceNumber = true,
 
@@ -130,19 +131,19 @@ export function InvoicePaperTemplate({
   showCompanyAddress = true,
   companyAddress = DefaultPdfTemplateAddressBilledFrom,
 
-  billedToLabel = 'Billed To',
+  billedToLabel = intl.get('billed_to'),
 
   // Entries
-  lineItemLabel = 'Item',
-  lineQuantityLabel = 'Qty',
-  lineRateLabel = 'Rate',
-  lineTotalLabel = 'Total',
+  lineItemLabel = intl.get('item'),
+  lineQuantityLabel = intl.get('qty_2'),
+  lineRateLabel = intl.get('rate'),
+  lineTotalLabel = intl.get('total'),
 
-  totalLabel = 'Total',
-  subtotalLabel = 'Subtotal',
-  discountLabel = 'Discount',
-  paymentMadeLabel = 'Payment Made',
-  balanceDueLabel = 'Balance Due',
+  totalLabel = intl.get('total'),
+  subtotalLabel = intl.get('subtotal'),
+  discountLabel = intl.get('discount_2'),
+  paymentMadeLabel = intl.get('payment_made'),
+  balanceDueLabel = intl.get('balance_due'),
 
   // Totals
   showTotal = true,
@@ -160,7 +161,7 @@ export function InvoicePaperTemplate({
   balanceDue = '$562.75',
 
   // Footer paragraphs.
-  termsConditionsLabel = 'Terms & Conditions',
+  termsConditionsLabel = intl.get('terms_conditions'),
   showTermsConditions = true,
   termsConditions = DefaultPdfTemplateTerms,
 
@@ -174,11 +175,11 @@ export function InvoicePaperTemplate({
     },
   ],
   taxes = [
-    { label: 'Sample Tax1 (4.70%)', amount: '11.75' },
-    { label: 'Sample Tax2 (7.00%)', amount: '21.74' },
+    { label: intl.get('sample_tax1_4_70'), amount: '11.75' },
+    { label: intl.get('sample_tax2_7_00'), amount: '21.74' },
   ],
 
-  statementLabel = 'Statement',
+  statementLabel = intl.get('statement'),
   showStatement = true,
   statement = DefaultPdfTemplateStatement,
   ...props
@@ -192,7 +193,7 @@ export function InvoicePaperTemplate({
       <Stack spacing={24}>
         <Group align="start" spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Invoice'} />
+            <PaperTemplate.BigTitle title={intl.get('invoice')} />
 
             <PaperTemplate.TermsList>
               {showInvoiceNumber && (

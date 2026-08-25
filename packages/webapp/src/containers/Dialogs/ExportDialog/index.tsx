@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React, { lazy } from 'react';
 import type { DialogBaseProps } from '@/components/DialogReduxConnect';
 import { Dialog, DialogSuspense } from '@/components';
@@ -30,7 +31,7 @@ function ExportDialogRoot({
   return (
     <Dialog
       name={dialogName}
-      title={'Export Data'}
+      title={intl.get('export_data')}
       autoFocus={true}
       canEscapeKeyClose={true}
       isOpen={isOpen}

@@ -1,3 +1,4 @@
+import { formatDateIn } from '@/utils/jalali-date';
 import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
@@ -23,8 +24,16 @@ export class CashflowSheetMeta {
     query: ICashFlowStatementQuery,
   ): Promise<ICashFlowStatementMeta> {
     const meta = await this.financialSheetMeta.meta();
-    const formattedToDate = moment(query.toDate).format(meta.dateFormat);
-    const formattedFromDate = moment(query.fromDate).format(meta.dateFormat);
+    const formattedToDate = formatDateIn(
+      query.toDate,
+      meta.dateFormat,
+      meta.calendar,
+    );
+    const formattedFromDate = formatDateIn(
+      query.fromDate,
+      meta.dateFormat,
+      meta.calendar,
+    );
     const fromLabel = this.i18n.t('cash_flow_statement.from_date');
     const toLabel = this.i18n.t('cash_flow_statement.to_date');
     const formattedDateRange = `${fromLabel} ${formattedFromDate} | ${toLabel} ${formattedToDate}`;

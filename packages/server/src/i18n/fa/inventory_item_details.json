@@ -1,0 +1,14 @@
+{
+  "opening_balance": "مانده افتتاحیه",
+  "closing_balance": "مانده اختتامیه",
+  "date": "تاریخ",
+  "transaction_type": "نوع تراکنش",
+  "transaction_number": "شماره تراکنش",
+  "quantity": "تعداد",
+  "rate": "نرخ",
+  "total": "جمع",
+  "value": "ارزش",
+  "profit_margin": "حاشیه سود",
+  "running_quantity": "تعداد تجمعی",
+  "running_value": "ارزش تجمعی"
+}

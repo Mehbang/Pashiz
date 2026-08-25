@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useFormikContext } from 'formik';
 import type { TaxRate } from '@bigcapital/sdk-ts';
 import { transformToForm } from '@/utils';
@@ -43,7 +44,7 @@ export const transformApiErrors = (
   const fields: Record<string, string> = {};
 
   if (errors.find((e) => e.type === 'TAX_CODE_NOT_UNIQUE')) {
-    fields.code = 'The tax rate is not unique.';
+    fields.code = intl.get('the_tax_rate_is_not_unique');
   }
   return fields;
 };

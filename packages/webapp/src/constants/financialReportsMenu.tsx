@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import type { FinancialSection } from '@/containers/FinancialStatements/FilterFinancialReports';
 import { FormattedMessage as T } from '@/components';
@@ -185,11 +186,11 @@ export const financialReportMenus: FinancialSection[] = [
     ],
   },
   {
-    sectionTitle: 'Taxes',
+    sectionTitle: <T id={'taxes'} />,
     reports: [
       {
-        title: 'Sales Tax Liability Summary',
-        desc: 'Reports the total amount of sales tax collected from customers',
+        title: intl.get('sales_tax_liability_summary'),
+        desc: <T id={'sales_tax_liability_summary_desc'} />,
         link: '/financial-reports/sales-tax-liability-summary',
         subject: AbilitySubject.Report,
         ability: ReportsAction.READ_SALES_TAX_LIABILITY_SUMMARY,

@@ -3,6 +3,7 @@ import { IDateRange, IFinancialDatePeriodsUnit } from '../types/Report.types';
 import { GConstructor } from '@/common/types/Constructor';
 import { FinancialSheet } from './FinancialSheet';
 import { DateInput } from '@/common/types/Date';
+import { JalaaliDateUnit, addJalaali } from '@/utils/jalali-date';
 
 export const FinancialDateRanges = <T extends GConstructor<FinancialSheet>>(
   Base: T,
@@ -20,6 +21,13 @@ export const FinancialDateRanges = <T extends GConstructor<FinancialSheet>>(
       value: number = 1,
       unit: IFinancialDatePeriodsUnit = IFinancialDatePeriodsUnit.Day,
     ): Date => {
+      if (this.calendar === 'jalali') {
+        return addJalaali(
+          moment(date).toDate(),
+          -value,
+          unit as JalaaliDateUnit,
+        );
+      }
       return moment(date).subtract(value, unit).toDate();
     };
 
@@ -97,6 +105,11 @@ export const FinancialDateRanges = <T extends GConstructor<FinancialSheet>>(
      * @returns {Date}
      */
     getPreviousYearDate = (date: DateInput) => {
+      // Subtracting a Gregorian year from a Jalaali date can land in the wrong
+      // Jalaali year, because the two calendars' leap years do not line up.
+      if (this.calendar === 'jalali') {
+        return addJalaali(moment(date).toDate(), -1, 'year');
+      }
       return moment(date).subtract(1, 'years').toDate();
     };
 

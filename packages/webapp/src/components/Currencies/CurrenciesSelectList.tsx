@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { MenuItem, Button } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import React, { useCallback } from 'react';
@@ -8,12 +9,12 @@ export function CurrenciesSelectList({ selectProps, onItemSelect, className }) {
     {
       id: 'USD',
       code: 'USD',
-      name: 'USD US dollars',
+      name: intl.get('usd_us_dollars'),
     },
     {
       id: 'CAD',
       code: 'CAD',
-      name: 'CAD Canadian dollars',
+      name: intl.get('cad_canadian_dollars'),
     },
   ];
 
@@ -57,7 +58,7 @@ export function CurrenciesSelectList({ selectProps, onItemSelect, className }) {
       onItemSelect={onCurrencySelect}
       {...selectProps}
     >
-      <Button text={'USD US dollars'} />
+      <Button text={intl.get('usd_us_dollars')} />
     </Select>
   );
 }

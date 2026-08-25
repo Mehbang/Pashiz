@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import * as R from 'ramda';
 import { useEffect } from 'react';
 import { PreferencesBrandingBoot } from './PreferencesBrandingBoot';
@@ -19,7 +20,7 @@ function PreferencesBrandingPageRoot({
   changePreferencesPageTitle,
 }: PreferencesBrandingPageRootProps) {
   useEffect(() => {
-    changePreferencesPageTitle('Branding');
+    changePreferencesPageTitle(intl.get('branding'));
   }, [changePreferencesPageTitle]);
 
   return (

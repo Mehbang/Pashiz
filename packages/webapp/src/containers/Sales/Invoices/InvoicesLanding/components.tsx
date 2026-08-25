@@ -1,7 +1,7 @@
+import intl from 'react-intl-universal';
 import { Intent, Tag, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 import clsx from 'classnames';
 import React from 'react';
-import intl from 'react-intl-universal';
 import type { DataTableColumn } from '@/components/Datatable/types';
 import type { SaleInvoicesListResponse } from '@bigcapital/sdk-ts';
 import {
@@ -127,7 +127,9 @@ export const handleDeleteErrors = (errors: DeleteError[]) => {
   if (errors.find((e) => e.type === 'CANNOT_DELETE_TRANSACTION_MATCHED')) {
     AppToaster.show({
       intent: Intent.DANGER,
-      message: 'Cannot delete a transaction matched with a bank transaction.',
+      message: intl.get(
+        'cannot_delete_a_transaction_matched_with_a_bank_transaction',
+      ),
     });
   }
 };
@@ -184,7 +186,7 @@ export function ActionsMenu({
       <Can I={SaleInvoiceAction.View} a={AbilitySubject.Invoice}>
         <MenuItem
           icon={<Icon icon={'envelope'} iconSize={16} />}
-          text={'Send Mail'}
+          text={intl.get('send_mail')}
           onClick={safeCallback(onSendMail, original)}
         />
         <MenuItem

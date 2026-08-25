@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { uniq } from 'lodash';
-import * as Currencies from 'js-money/lib/currency';
+import { CURRENCIES as Currencies } from '@bigcapital/utils';
 import { InitialCurrencies } from '../Currencies.constants';
 import { TenantModelProxy } from '../../System/models/TenantBaseModel';
 import { Currency } from '../models/Currency.model';
@@ -18,6 +18,10 @@ export class InitialCurrenciesSeedService {
    */
   public async seedCurrencyByCode(currencyCode: string): Promise<void> {
     const currencyMeta = Currencies[currencyCode];
+
+    // A code the table does not know (a currency outside ISO 4217 that has not
+    // been declared) would otherwise insert a row of undefined values.
+    if (!currencyMeta) return;
 
     const foundBaseCurrency = await this.currencyModel()
       .query()

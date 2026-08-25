@@ -1,11 +1,11 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { getAllCountries } from '@bigcapital/utils';
 import { Button, FormGroup, Intent } from '@blueprintjs/core';
 import { TimezonePicker, getTimezoneMetadata } from '@blueprintjs/timezone';
 import classNames from 'classnames';
 import { ErrorMessage, Form, useFormikContext } from 'formik';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useGeneralFormContext } from './GeneralFormProvider';
@@ -23,6 +23,7 @@ import {
 import { SelectButton } from '@/components/Forms/Select';
 import { CLASSES } from '@/constants/classes';
 import { getAllCurrenciesOptions } from '@/constants/currencies';
+import { useAppIntlContext } from '@/components/AppIntlProvider';
 import { getFiscalYear } from '@/constants/fiscalYearOptions';
 import { getLanguages } from '@/constants/languagesOptions';
 import { inputIntent } from '@/utils';
@@ -41,7 +42,8 @@ export function PreferencesGeneralForm({
 }: PreferencesGeneralFormProps) {
   const history = useHistory();
 
-  const FiscalYear = getFiscalYear();
+  const { calendar } = useAppIntlContext();
+  const FiscalYear = getFiscalYear(calendar);
   const Languages = getLanguages();
   const Currencies = getAllCurrenciesOptions();
 
@@ -111,38 +113,42 @@ export function PreferencesGeneralForm({
       {/* ---------- Address ---------- */}
       <FFormGroup
         name={'address'}
-        label={'Organization Address'}
+        label={intl.get('organization_address')}
         inline
         fastField
       >
         <Stack>
           <FInputGroup
             name={'address.address1'}
-            placeholder={'Address 1'}
+            placeholder={intl.get('address_1')}
             fastField
           />
           <FInputGroup
             name={'address.address2'}
-            placeholder={'Address 2'}
+            placeholder={intl.get('address_2')}
             fastField
           />
           <Group spacing={15}>
-            <FInputGroup name={'address.city'} placeholder={'City'} fastField />
+            <FInputGroup
+              name={'address.city'}
+              placeholder={intl.get('city')}
+              fastField
+            />
             <FInputGroup
               name={'address.postalCode'}
-              placeholder={'ZIP Code'}
+              placeholder={intl.get('zip_code_2')}
               fastField
             />
           </Group>
           <Group spacing={15}>
             <FInputGroup
               name={'address.stateProvince'}
-              placeholder={'State or Province'}
+              placeholder={intl.get('state_or_province')}
               fastField
             />
             <FInputGroup
               name={'address.phone'}
-              placeholder={'Phone number'}
+              placeholder={intl.get('phone_number')}
               fastField
             />
           </Group>

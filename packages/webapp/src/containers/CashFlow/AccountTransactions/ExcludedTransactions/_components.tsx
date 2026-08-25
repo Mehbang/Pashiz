@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Menu, MenuItem } from '@blueprintjs/core';
 import React from 'react';
 import type { ExcludedTransactionRow } from './_utils';
@@ -16,7 +17,7 @@ export function ActionsMenu({
   return (
     <Menu>
       <MenuItem
-        text={'Restore'}
+        text={intl.get('restore')}
         icon={<Icon icon="redo" iconSize={16} />}
         onClick={safeCallback(onRestore, original)}
       />

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
 import * as R from 'ramda';
 import React from 'react';
@@ -35,7 +36,7 @@ function ResumeMainSubscriptionAlertInner({
     resumeSubscription()
       .then(() => {
         AppToaster.show({
-          message: 'The subscription has been resumed.',
+          message: intl.get('the_subscription_has_been_resumed'),
           intent: Intent.SUCCESS,
         });
       })
@@ -48,7 +49,7 @@ function ResumeMainSubscriptionAlertInner({
   return (
     <Alert
       cancelButtonText={<T id={'cancel'} />}
-      confirmButtonText={'Resume Subscription'}
+      confirmButtonText={intl.get('resume_subscription')}
       intent={Intent.DANGER}
       isOpen={isOpen}
       onCancel={handleCancel}
@@ -56,10 +57,14 @@ function ResumeMainSubscriptionAlertInner({
       loading={isLoading}
     >
       <p>
-        <strong>The subscription for this organization will resume.</strong>
+        <strong>
+          {intl.get('the_subscription_for_this_organization_will_resume')}
+        </strong>
 
         <p>
-          Are you sure want to resume the subscription of this organization?
+          {intl.get(
+            'are_you_sure_want_to_resume_the_subscription_of_this_organiz',
+          )}
         </p>
       </p>
     </Alert>

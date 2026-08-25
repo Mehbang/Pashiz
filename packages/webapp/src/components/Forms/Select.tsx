@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button } from '@blueprintjs/core';
 import { FormikSelect, Select } from '@blueprintjs-formik/select';
 import clsx from 'classnames';
@@ -10,7 +11,7 @@ export function FSelect<T extends SelectOptionProps = SelectOptionProps>({
 }) {
   const input = ({ activeItem, text, label, value }) => (
     <SelectButton
-      text={text || props.placeholder || 'Select an item ...'}
+      text={text || props.placeholder || intl.get('select_an_item')}
       disabled={props.disabled || false}
       {...props.buttonProps}
       className={clsx({ 'is-selected': !!text }, props.className)}
@@ -24,7 +25,7 @@ export function BPSelect<T extends SelectOptionProps = SelectOptionProps>({
 }) {
   const input = ({ activeItem, text, label, value }) => (
     <SelectButton
-      text={text || props.placeholder || 'Select an item ...'}
+      text={text || props.placeholder || intl.get('select_an_item')}
       disabled={props.disabled || false}
       {...props.buttonProps}
       className={clsx({ 'is-selected': !!text }, props.className)}

@@ -4,6 +4,7 @@ import {
   INumberFormatQuery,
 } from '../types/Report.types';
 import { formatNumber } from '@/utils/format-number';
+import { CalendarSystem, formatDateIn } from '@/utils/jalali-date';
 import { IFinancialTableTotal } from '../types/Table.types';
 
 export class FinancialSheet {
@@ -16,6 +17,8 @@ export class FinancialSheet {
   };
   public baseCurrency: string;
   public dateFormat: string = 'YYYY MMM DD';
+  /** Calendar the sheet's displayed dates and period boundaries follow. */
+  public calendar: CalendarSystem = 'gregorian';
 
   /**
    * Transformes the number format query to settings
@@ -144,14 +147,14 @@ export class FinancialSheet {
   protected getDateMeta(date: moment.MomentInput, format?: string) {
     const dateFormat = format || this.dateFormat || 'YYYY MMM DD';
     return {
-      formattedDate: moment(date).format(dateFormat),
+      formattedDate: formatDateIn(date, dateFormat, this.calendar),
       date: moment(date).toDate(),
     };
   }
 
   protected getDateFormatted(date: moment.MomentInput, format?: string) {
     const dateFormat = format || this.dateFormat || 'YYYY MMM DD';
-    return moment(date).format(dateFormat);
+    return formatDateIn(date, dateFormat, this.calendar);
   }
 
   getPercentageBasis = (base, amount) => {

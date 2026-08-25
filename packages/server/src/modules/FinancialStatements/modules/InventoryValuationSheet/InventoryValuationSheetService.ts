@@ -40,7 +40,11 @@ export class InventoryValuationSheetService {
     const inventoryValuationInstance = new InventoryValuationSheet(
       filter,
       this.inventoryValuationSheetRepository,
-      { baseCurrency: meta.baseCurrency, dateFormat: meta.dateFormat },
+      {
+        baseCurrency: meta.baseCurrency,
+        dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
+      },
     );
     // Retrieve the inventory valuation report data.
     const inventoryValuationData = inventoryValuationInstance.reportData();

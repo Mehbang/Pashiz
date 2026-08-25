@@ -88,7 +88,7 @@ export const useReceiptTransactionsColumns = () => {
       },
       {
         id: 'rate',
-        Header: 'Rate',
+        Header: intl.get('rate'),
         accessor: 'formattedRate',
         align: 'right',
         width: 100,

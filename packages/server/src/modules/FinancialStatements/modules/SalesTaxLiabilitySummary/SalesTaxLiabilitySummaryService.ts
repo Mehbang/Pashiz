@@ -33,6 +33,7 @@ export class SalesTaxLiabilitySummaryService {
       {
         baseCurrency: tenantMetadata.baseCurrency,
         dateFormat: meta.dateFormat,
+        calendar: meta.calendar,
       },
     );
 

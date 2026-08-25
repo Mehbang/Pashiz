@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import styled from 'styled-components';
@@ -83,13 +84,13 @@ function AccountTransactionsDataTableInner({
     unmatchTransaction({ id: transaction.uncategorizedTransactionId })
       .then(() => {
         AppToaster.show({
-          message: 'The bank transaction has been unmatched.',
+          message: intl.get('the_bank_transaction_has_been_unmatched'),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });
@@ -101,13 +102,13 @@ function AccountTransactionsDataTableInner({
     uncategorizeTransaction(transaction.uncategorizedTransactionId)
       .then(() => {
         AppToaster.show({
-          message: 'The bank transaction has been uncategorized.',
+          message: intl.get('the_bank_transaction_has_been_uncategorized'),
           intent: Intent.SUCCESS,
         });
       })
       .catch(() => {
         AppToaster.show({
-          message: 'Something went wrong.',
+          message: intl.get('something_wentwrong'),
           intent: Intent.DANGER,
         });
       });

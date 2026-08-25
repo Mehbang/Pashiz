@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Classes, Text } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
 import { MANAGE_LINK_URL } from './constants';
@@ -26,17 +27,18 @@ export function InvoiceCustomizeGeneralField() {
     <Stack style={{ padding: 20, flex: '1 1 auto' }}>
       <Stack spacing={0}>
         <h2 style={{ fontSize: 16, marginBottom: 10, fontWeight: 600 }}>
-          General Branding
+          {intl.get('general_branding')}
         </h2>
         <p className={Classes.TEXT_MUTED}>
-          Set your company logo and branding colors to be automatically applied
-          to your invoices.
+          {intl.get(
+            'set_your_company_logo_and_branding_colors_to_be_automaticall_3',
+          )}
         </p>
       </Stack>
 
       <FFormGroup
         name={'templateName'}
-        label={'Template Name'}
+        label={intl.get('template_name')}
         labelInfo={<FieldRequiredHint />}
         fastField
         style={{ marginBottom: 10 }}
@@ -48,7 +50,7 @@ export function InvoiceCustomizeGeneralField() {
         <Stack spacing={0}>
           <FFormGroup
             name={'primaryColor'}
-            label={'Primary Color'}
+            label={intl.get('primary_color')}
             style={{ justifyContent: 'space-between' }}
             inline
             fastField
@@ -62,7 +64,7 @@ export function InvoiceCustomizeGeneralField() {
 
           <FFormGroup
             name={'secondaryColor'}
-            label={'Secondary Color'}
+            label={intl.get('secondary_color')}
             style={{ justifyContent: 'space-between' }}
             inline
             fastField
@@ -77,13 +79,13 @@ export function InvoiceCustomizeGeneralField() {
           <Stack spacing={10}>
             <FFormGroup
               name={'showCompanyLogo'}
-              label={'Logo'}
+              label={intl.get('logo')}
               fastField
               style={{ marginBottom: 0 }}
             >
               <FSwitch
                 name={'showCompanyLogo'}
-                label={'Display company logo in the paper'}
+                label={intl.get('display_company_logo_in_the_paper')}
                 style={{ fontSize: 14 }}
                 fastField
               />
@@ -111,7 +113,7 @@ function InvoiceCustomizePaymentManage() {
     <Group className={styles.customizePayment} position={'apart'}>
       <Group spacing={10}>
         <CreditCardIcon fill={'#7D8897'} height={16} width={16} />
-        <Text>Accept payment methods</Text>
+        <Text>{intl.get('accept_payment_methods')}</Text>
       </Group>
 
       <Link
@@ -119,7 +121,7 @@ function InvoiceCustomizePaymentManage() {
         to={MANAGE_LINK_URL}
         onClick={handleLinkClick}
       >
-        Manage
+        {intl.get('manage')}
       </Link>
     </Group>
   );

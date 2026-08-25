@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Intent, Menu, MenuDivider, MenuItem } from '@blueprintjs/core';
 import { safeCallback } from '@/utils';
 
@@ -14,19 +15,19 @@ export function ActionsMenu({
       {!original.default && (
         <>
           <MenuItem
-            text={'Mark as Default'}
+            text={intl.get('mark_as_default')}
             onClick={safeCallback(onMarkDefaultTemplate, original)}
           />
           <MenuDivider />
         </>
       )}
       <MenuItem
-        text={'Edit Template'}
+        text={intl.get('edit_template')}
         onClick={safeCallback(onEditTemplate, original)}
       />
       <MenuDivider />
       <MenuItem
-        text={'Delete Template'}
+        text={intl.get('delete_template')}
         intent={Intent.DANGER}
         onClick={safeCallback(onDeleteTemplate, original)}
       />

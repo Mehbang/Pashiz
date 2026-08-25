@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import { DialogsName } from './dialogs';
 import { FormattedMessage as T } from '@/components';
@@ -426,7 +427,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
                 type: ISidebarMenuItemType.Link,
               },
               {
-                text: 'Tax Rates',
+                text: intl.get('tax_rates'),
                 href: '/tax-rates',
                 type: ISidebarMenuItemType.Link,
                 permission: {
@@ -477,7 +478,7 @@ export const SidebarMenu: SidebarMenuItem[] = [
             },
           },
           {
-            text: 'Rules',
+            text: intl.get('rules'),
             href: '/bank-rules',
             type: ISidebarMenuItemType.Link,
           },
@@ -719,11 +720,11 @@ export const SidebarMenu: SidebarMenuItem[] = [
         ],
       },
       {
-        text: 'Taxes',
+        text: intl.get('taxes'),
         type: ISidebarMenuItemType.Group,
         children: [
           {
-            text: 'Sales Tax Liability Summary',
+            text: intl.get('sales_tax_liability_summary'),
             href: '/financial-reports/sales-tax-liability-summary',
             type: ISidebarMenuItemType.Link,
             permission: {

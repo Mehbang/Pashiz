@@ -1,52 +1,56 @@
+import { JALAALI_MONTHS } from '@bigcapital/utils';
 import intl from 'react-intl-universal';
+import type { CalendarSystem } from '@/utils/date-formatter';
 
-export const getFiscalYear = (): Array<{ name: string; key: string }> => [
-  {
-    name: `${intl.get('january')} - ${intl.get('december')}`,
-    key: 'january',
-  },
-  {
-    name: `${intl.get('february')} - ${intl.get('january')}`,
-    key: 'february',
-  },
-  {
-    name: `${intl.get('march')} - ${intl.get('february')}`,
-    key: 'march',
-  },
-  {
-    name: `${intl.get('april')} - ${intl.get('march')}`,
-    key: 'april',
-  },
-  {
-    name: `${intl.get('may')} - ${intl.get('april')}`,
-    key: 'may',
-  },
-  {
-    name: `${intl.get('june')} - ${intl.get('may')}`,
-    key: 'june',
-  },
-  {
-    name: `${intl.get('july')} - ${intl.get('june')}`,
-    key: 'july',
-  },
-  {
-    name: `${intl.get('august')} - ${intl.get('july')}`,
-    key: 'august',
-  },
-  {
-    name: `${intl.get('september')} - ${intl.get('august')}`,
-    key: 'september',
-  },
-  {
-    name: `${intl.get('october')} - ${intl.get('november')}`,
-    key: 'october',
-  },
-  {
-    name: `${intl.get('november')} - ${intl.get('october')}`,
-    key: 'november',
-  },
-  {
-    name: `${intl.get('december')} - ${intl.get('november')}`,
-    key: 'december',
-  },
+const GREGORIAN_MONTH_KEYS = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
 ];
+
+/**
+ * Jalaali month keys, stored in the same lowercase-name form the Gregorian
+ * options use so the setting stays a readable string on the server.
+ */
+const JALAALI_MONTH_KEYS = [
+  'farvardin',
+  'ordibehesht',
+  'khordad',
+  'tir',
+  'mordad',
+  'shahrivar',
+  'mehr',
+  'aban',
+  'azar',
+  'dey',
+  'bahman',
+  'esfand',
+];
+
+/**
+ * Fiscal year options — twelve windows, each named for the month it opens on
+ * and the month it closes on, in the calendar the organization works in.
+ */
+export const getFiscalYear = (
+  calendar: CalendarSystem = 'gregorian',
+): Array<{ name: string; key: string }> => {
+  const isJalaali = calendar === 'jalali';
+  const keys = isJalaali ? JALAALI_MONTH_KEYS : GREGORIAN_MONTH_KEYS;
+  const monthName = (index: number) =>
+    isJalaali ? JALAALI_MONTHS[index] : intl.get(GREGORIAN_MONTH_KEYS[index]);
+
+  return keys.map((key, index) => ({
+    // A fiscal year that opens in month N closes in the month before it.
+    name: `${monthName(index)} - ${monthName((index + 11) % 12)}`,
+    key,
+  }));
+};

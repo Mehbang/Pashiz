@@ -1,5 +1,4 @@
 import { Classes, Popover, Position } from '@blueprintjs/core';
-import moment from 'moment';
 import { useState } from 'react';
 import { withBanking } from '../../withBanking';
 import { withBankingActions } from '../../withBankingActions';
@@ -12,6 +11,8 @@ import type { AccountTransactionsDateFilterFormValues } from '../AccountTransact
 import type { FormikConfig, FormikHelpers } from 'formik';
 import { Box, Icon } from '@/components';
 import { compose } from '@/utils';
+import { formatDateLocalized } from '@/utils/locale';
+import intl from 'react-intl-universal';
 
 interface AccountUncategorizedDateFilterRootProps
   extends Pick<WithBankingProps, 'uncategorizedTransactionsFilter'> {}
@@ -22,21 +23,26 @@ function AccountUncategorizedDateFilterRoot({
   const fromDate = uncategorizedTransactionsFilter?.fromDate;
   const toDate = uncategorizedTransactionsFilter?.toDate;
 
-  const fromDateFormatted = fromDate
-    ? moment(fromDate).isSame(moment().format('YYYY'), 'year')
-      ? moment(fromDate).format('MMM, DD')
-      : moment(fromDate).format('MMM, DD, YYYY')
-    : '';
-  const toDateFormatted = toDate
-    ? moment(toDate).isSame(moment().format('YYYY'), 'year')
-      ? moment(toDate).format('MMM, DD')
-      : moment(toDate).format('MMM, DD, YYYY')
-    : '';
+  // The year is only spelled out when the date falls outside the current one,
+  // which has to be judged in the active calendar rather than the Gregorian.
+  const thisYear = formatDateLocalized(new Date(), 'YYYY');
+  const formatBound = (date: string | undefined) =>
+    date
+      ? formatDateLocalized(
+          date,
+          formatDateLocalized(date, 'YYYY') === thisYear
+            ? 'MMM, DD'
+            : 'MMM, DD, YYYY',
+        )
+      : '';
+
+  const fromDateFormatted = formatBound(fromDate);
+  const toDateFormatted = formatBound(toDate);
 
   const buttonText =
     fromDate && toDate
-      ? `Date: ${fromDateFormatted} → ${toDateFormatted}`
-      : 'Date Filter';
+      ? `${intl.get('date')}: ${fromDateFormatted} → ${toDateFormatted}`
+      : intl.get('date_filter');
 
   // Popover open state.
   const [isOpen, setIsOpen] = useState<boolean>(false);

@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Callout } from '@blueprintjs/core';
 import { SubscriptionPlans } from './SubscriptionPlans';
 import { SubscriptionPlansOfferChecks } from './SubscriptionPlansOfferChecks';
@@ -10,9 +11,9 @@ export function SubscriptionPlansSection() {
   return (
     <section>
       <Callout style={{ marginBottom: '2rem' }} icon={null}>
-        Simple plans. Simple prices. Only pay for what you really need. All
-        plans come with award-winning 24/7 customer support. Prices do not
-        include applicable taxes.
+        {intl.get(
+          'simple_plans_simple_prices_only_pay_for_what_you_really_need',
+        )}
       </Callout>
 
       <SubscriptionPlansOfferChecks />

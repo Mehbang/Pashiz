@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Tab, Tabs } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { useState } from 'react';
@@ -38,10 +39,10 @@ export function ItemFormContent() {
           `}
           vertical
         >
-          <Tab id={'primary'} title={'Basic'} />
-          <Tab id={'selling'} title={'Selling'} />
-          <Tab id={'purchasing'} title={'Purchasing'} />
-          <Tab id={'inventory'} title={'Inventory'} />
+          <Tab id={'primary'} title={intl.get('basic')} />
+          <Tab id={'selling'} title={intl.get('selling')} />
+          <Tab id={'purchasing'} title={intl.get('purchasing')} />
+          <Tab id={'inventory'} title={intl.get('inventory')} />
         </Tabs>
 
         <ItemFormSections />

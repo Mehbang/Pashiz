@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import styled from 'styled-components';
 import { useReceiptDetailDrawerContext } from './ReceiptDetailDrawerProvider';
@@ -31,7 +32,7 @@ export function ReceiptDetailTableFooter() {
             title={
               receipt.discountPercentageFormatted
                 ? `Discount [${receipt.discountPercentageFormatted}]`
-                : 'Discount'
+                : intl.get('discount_2')
             }
             value={receipt.discountAmountFormatted}
             textStyle={TotalLineTextStyle.Regular}
@@ -39,7 +40,7 @@ export function ReceiptDetailTableFooter() {
         )}
         {receipt.adjustmentFormatted && (
           <TotalLine
-            title={'Adjustment'}
+            title={intl.get('adjustment')}
             value={receipt.adjustmentFormatted}
             textStyle={TotalLineTextStyle.Regular}
           />

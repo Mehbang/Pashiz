@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import {
   Button,
   Classes,
@@ -56,7 +57,7 @@ function CashflowTransactionDrawerActionBarInner({
           <If condition={cashflowTransaction.uncategorized_transaction_id}>
             <NavbarDivider />
             <Button
-              text={'Uncategorize'}
+              text={intl.get('uncategorize')}
               onClick={handleUncategorizeBtnClick}
               className={Classes.MINIMAL}
             />

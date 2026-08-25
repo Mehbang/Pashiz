@@ -46,7 +46,7 @@ export function ProjectExpenseFormFields() {
         <ExpenseSelect
           name={'estimatedExpense'}
           popoverProps={{ minimal: true }}
-          expenses={[{ id: 1, name: 'Expense 1' }]}
+          expenses={[{ id: 1, name: intl.get('expense_1') }]}
         />
       </FFormGroup>
 

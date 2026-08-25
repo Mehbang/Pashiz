@@ -1,7 +1,7 @@
+import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import { isEmpty } from 'lodash';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useInvoiceFormContext } from './InvoiceFormProvider';
@@ -50,11 +50,11 @@ export function InvoiceFormFooterLeft() {
 
       {/* --------- Payment Options --------- */}
       <PaymentOptionsFormGroup
-        label={'Payment Options'}
+        label={intl.get('payment_options')}
         name={'paymentMethodId'}
       >
         <PaymentOptionsText>
-          Select an online payment option to get paid faster{' '}
+          {intl.get('select_an_online_payment_option')}{' '}
           <Group spacing={6} style={{ marginLeft: 8 }}>
             <VisaIcon />
             <MastercardIcon />
@@ -66,12 +66,12 @@ export function InvoiceFormFooterLeft() {
               small
               minimal
             >
-              Setup payment gateways
+              {intl.get('setup_payment_gateways')}
             </PaymentOptionsButton>
           ) : (
             <PaymentOptionsButtonPopver paymentMethods={paymentServices ?? []}>
               <PaymentOptionsButton intent={Intent.PRIMARY} small minimal>
-                Payment Options
+                {intl.get('payment_options')}
               </PaymentOptionsButton>
             </PaymentOptionsButtonPopver>
           )}

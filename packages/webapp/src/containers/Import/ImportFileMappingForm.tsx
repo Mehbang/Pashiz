@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers } from 'formik';
 import type {
@@ -39,7 +40,9 @@ export function ImportFileMappingForm({
       .catch(({ data }: { data: ImportErrorResponse }) => {
         if (data.errors.find((e) => e.type === 'DUPLICATED_FROM_MAP_ATTR')) {
           AppToaster.show({
-            message: 'Selected the same sheet columns to multiple fields.',
+            message: intl.get(
+              'selected_the_same_sheet_columns_to_multiple_fields',
+            ),
             intent: Intent.DANGER,
           });
         }

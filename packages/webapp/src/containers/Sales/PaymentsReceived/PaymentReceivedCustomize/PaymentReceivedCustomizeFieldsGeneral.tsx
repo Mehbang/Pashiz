@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Classes } from '@blueprintjs/core';
 import { Overlay } from '../../Invoices/InvoiceCustomize/Overlay';
 import {
@@ -19,18 +20,19 @@ export function PaymentReceivedCustomizeGeneralField() {
     <Stack style={{ padding: 20, flex: '1 1 auto' }}>
       <Stack spacing={0}>
         <h2 style={{ fontSize: 16, marginBottom: 10, fontWeight: 600 }}>
-          General Branding
+          {intl.get('general_branding')}
         </h2>
 
         <p className={Classes.TEXT_MUTED}>
-          Set your company logo and branding colors to be automatically applied
-          to your payment receipts.
+          {intl.get(
+            'set_your_company_logo_and_branding_colors_to_be_automaticall_4',
+          )}
         </p>
       </Stack>
 
       <FFormGroup
         name={'templateName'}
-        label={'Template Name'}
+        label={intl.get('template_name')}
         labelInfo={<FieldRequiredHint />}
         style={{ marginBottom: 10 }}
         fastField
@@ -42,7 +44,7 @@ export function PaymentReceivedCustomizeGeneralField() {
         <Stack spacing={0}>
           <FFormGroup
             name={'primaryColor'}
-            label={'Primary Color'}
+            label={intl.get('primary_color')}
             style={{ justifyContent: 'space-between' }}
             inline
             fastField
@@ -56,7 +58,7 @@ export function PaymentReceivedCustomizeGeneralField() {
 
           <FFormGroup
             name={'secondaryColor'}
-            label={'Secondary Color'}
+            label={intl.get('secondary_color')}
             style={{ justifyContent: 'space-between' }}
             inline
             fastField
@@ -71,13 +73,13 @@ export function PaymentReceivedCustomizeGeneralField() {
           <Stack spacing={10}>
             <FFormGroup
               name={'showCompanyLogo'}
-              label={'Logo'}
+              label={intl.get('logo')}
               fastField
               style={{ marginBottom: 0 }}
             >
               <FSwitch
                 name={'showCompanyLogo'}
-                label={'Display company logo in the paper'}
+                label={intl.get('display_company_logo_in_the_paper')}
                 style={{ fontSize: 14 }}
                 fastField
               />

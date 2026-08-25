@@ -48,8 +48,9 @@ function ExpenseDeleteEntriesAlertInner({
       loading={false}
     >
       <p>
-        Clearing the table lines will delete all expense amounts were applied,
-        Is this okay?
+        {intl.get(
+          'clearing_the_table_lines_will_delete_all_expense_amounts_wer',
+        )}
       </p>
     </Alert>
   );

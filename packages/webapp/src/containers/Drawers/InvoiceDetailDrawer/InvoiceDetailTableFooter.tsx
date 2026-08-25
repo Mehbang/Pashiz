@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React from 'react';
 import styled from 'styled-components';
 import { useInvoiceDetailDrawerContext } from './InvoiceDetailDrawerProvider';
@@ -40,7 +41,7 @@ export function InvoiceDetailTableFooter() {
             title={
               invoice.discountPercentageFormatted
                 ? `Discount [${invoice.discountPercentageFormatted}]`
-                : 'Discount'
+                : intl.get('discount_2')
             }
             value={invoice.discountAmountFormatted}
             textStyle={TotalLineTextStyle.Regular}

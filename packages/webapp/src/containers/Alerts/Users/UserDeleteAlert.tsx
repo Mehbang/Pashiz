@@ -50,7 +50,7 @@ function UserDeleteAlertInner({
         ({ data: { errors } }: { data: { errors: UserDeleteError[] } }) => {
           if (errors.find((e) => e.type === 'CANNOT_DELETE_LAST_USER')) {
             AppToaster.show({
-              message: 'Cannot delete the last user in the system.',
+              message: intl.get('cannot_delete_the_last_user_in_the_system'),
               intent: Intent.DANGER,
             });
           }
@@ -72,8 +72,9 @@ function UserDeleteAlertInner({
       loading={isLoading}
     >
       <p>
-        Once you delete this user, you won't be able to restore it later. Are
-        you sure you want to delete ?
+        {intl.get(
+          'once_you_delete_this_user_you_won_t_be_able_to_restore_it_la',
+        )}
       </p>
     </Alert>
   );

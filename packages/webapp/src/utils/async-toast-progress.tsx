@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import {
   Classes,
   Intent,
@@ -30,7 +31,7 @@ export function asyncToastProgress({
       message: (
         <>
           <Text style={{ fontSize: 12, marginBottom: 6 }}>
-            Preparing the document.
+            {intl.get('preparing_the_document')}
           </Text>
           <ProgressBar
             className={clsx({

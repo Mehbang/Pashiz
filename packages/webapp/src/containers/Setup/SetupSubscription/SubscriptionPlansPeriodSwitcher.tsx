@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Intent, Switch, Tag, Text } from '@blueprintjs/core';
 import * as R from 'ramda';
 import { ChangeEvent } from 'react';
@@ -26,7 +27,7 @@ function SubscriptionPlansPeriodSwitcherRoot({
   };
   return (
     <Group position={'center'} spacing={10} style={{ marginBottom: '1.6rem' }}>
-      <Text>Pay Monthly</Text>
+      <Text>{intl.get('pay_monthly')}</Text>
       <Switch
         large
         onChange={handleSwitchChange}

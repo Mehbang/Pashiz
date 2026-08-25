@@ -1,4 +1,8 @@
 // @ts-nocheck
+import {
+  DEFAULT_REPORT_META,
+  IFinancialReportMeta,
+} from '../../types/Report.types';
 import * as R from 'ramda';
 import {
   IProfitLossSheetQuery,
@@ -43,12 +47,21 @@ export class ProfitLossSheetTable extends R.pipe(
    * @param {} date
    * @param {IProfitLossSheetQuery} query
    */
-  constructor(data: any, query: IProfitLossSheetQuery, i18n: I18nService) {
+  constructor(
+    data: any,
+    query: IProfitLossSheetQuery,
+    i18n: I18nService,
+    meta?: IFinancialReportMeta,
+  ) {
     super();
 
     this.query = new ProfitLossSheetQuery(query);
     this.reportData = data;
     this.i18n = i18n;
+    // The table builds its own period columns, so it needs the same calendar
+    // and date format the sheet was computed with.
+    this.dateFormat = meta?.dateFormat || DEFAULT_REPORT_META.dateFormat;
+    this.calendar = meta?.calendar || DEFAULT_REPORT_META.calendar;
   }
 
   // ----------------------------------

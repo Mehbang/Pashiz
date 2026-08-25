@@ -89,7 +89,7 @@ export const useInvoiceReadonlyEntriesColumns = () => {
       },
       {
         id: 'discount',
-        Header: 'Discount',
+        Header: intl.get('discount_2'),
         accessor: 'discountFormatted',
         align: 'right',
         disableSortBy: true,

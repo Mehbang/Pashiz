@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import React from 'react';
 import { firstLettersArgs } from '@/utils';
 import '@/ee/workspaces/style/components/WorkspaceSwitchingOverlay.scss';
@@ -22,7 +23,7 @@ export function WorkspaceSwitchingOverlay({
       <div className="workspace-switching-overlay__card">
         <div className="workspace-switching-overlay__avatar">{initials}</div>
         <div className="workspace-switching-overlay__subtitle">
-          Switching to
+          {intl.get('switching_to')}
         </div>
         <div className="workspace-switching-overlay__title">
           {workspaceName}

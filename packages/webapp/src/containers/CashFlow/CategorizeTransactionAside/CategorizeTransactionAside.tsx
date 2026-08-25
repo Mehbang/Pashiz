@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
 import { withBanking } from '../withBanking';
@@ -55,7 +56,10 @@ function CategorizeTransactionAsideRoot({
     return null;
   }
   return (
-    <Aside title={'Categorize Bank Transaction'} onClose={handleClose}>
+    <Aside
+      title={intl.get('categorize_bank_transaction')}
+      onClose={handleClose}
+    >
       <Aside.Body>
         <CategorizeTransactionTabsBoot
           uncategorizedTransactionIds={transactionsToCategorizeIdsSelected.filter(

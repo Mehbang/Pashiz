@@ -1,0 +1,16 @@
+{
+  "field.customer": "مشتری",
+  "field.payment_date": "تاریخ پرداخت",
+  "field.amount": "مبلغ",
+  "field.reference_no": "شماره مرجع",
+  "field.deposit_account": "حساب واریز",
+  "field.payment_receive_no": "شماره دریافت",
+  "field.statement": "شرح",
+  "field.entries": "اقلام",
+  "field.exchange_rate": "نرخ تسعیر",
+  "field.invoice": "فاکتور",
+  "field.entries.payment_amount": "مبلغ پرداخت",
+  "field.created_at": "تاریخ ایجاد",
+  "field.payment_no_hint": "شماره دریافت باید یکتا باشد.",
+  "field.invoice_hint": "با شماره فاکتور مطابقت دارد."
+}

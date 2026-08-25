@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, FormGroup, Intent, Position } from '@blueprintjs/core';
 import {
   Form,
@@ -82,7 +83,7 @@ export function AccountTransactionsDateFilterForm({
 
             <FFormGroup
               name={'fromDate'}
-              label={'From Date'}
+              label={intl.get('from_date')}
               style={{ marginBottom: 0, flex: '1' }}
             >
               <FDateInput
@@ -97,7 +98,10 @@ export function AccountTransactionsDateFilterForm({
               />
             </FFormGroup>
 
-            <FormGroup label={'To Date'} style={{ marginBottom: 0, flex: '1' }}>
+            <FormGroup
+              label={intl.get('to_date')}
+              style={{ marginBottom: 0, flex: '1' }}
+            >
               <FDateInput
                 name={'toDate'}
                 popoverProps={{ position: Position.BOTTOM, minimal: true }}
@@ -140,7 +144,7 @@ function AccountTransactionsDateFilterFooter() {
         onClick={handleFilterBtnClick}
         style={{ minWidth: 75 }}
       >
-        Filter
+        {intl.get('filter')}
       </Button>
 
       <Button
@@ -170,7 +174,7 @@ function AccountTransactionDatePeriodField() {
   return (
     <FFormGroup
       name={'period'}
-      label={'Date'}
+      label={intl.get('date')}
       style={{ marginBottom: 0, flex: '0 28%' }}
     >
       <FSelect
@@ -184,17 +188,17 @@ function AccountTransactionDatePeriodField() {
 }
 
 const periodOptions: DatePeriodOption[] = [
-  { text: 'All Dates', value: 'all_dates' },
-  { text: 'Custom', value: 'custom' },
-  { text: 'Today', value: 'today' },
-  { text: 'Yesterday', value: 'yesterday' },
-  { text: 'This week', value: 'this_week' },
-  { text: 'This year', value: 'this_year' },
-  { text: 'This month', value: 'this_month' },
+  { text: intl.get('all_dates'), value: 'all_dates' },
+  { text: intl.get('custom'), value: 'custom' },
+  { text: intl.get('today'), value: 'today' },
+  { text: intl.get('yesterday'), value: 'yesterday' },
+  { text: intl.get('this_week'), value: 'this_week' },
+  { text: intl.get('this_year'), value: 'this_year' },
+  { text: intl.get('this_month'), value: 'this_month' },
   { text: 'last week', value: 'last_week' },
-  { text: 'Last year', value: 'last_year' },
-  { text: 'Last month', value: 'last_month' },
-  { text: 'Last month', value: 'last_month' },
+  { text: intl.get('last_year'), value: 'last_year' },
+  { text: intl.get('last_month'), value: 'last_month' },
+  { text: intl.get('last_month'), value: 'last_month' },
 ];
 
 const getDateRangePeriod = (

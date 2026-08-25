@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import React, { lazy } from 'react';
 import styled from 'styled-components';
 import { Dialog, DialogSuspense } from '@/components';
@@ -25,7 +26,9 @@ function TaxRateFormDialogInner({
   return (
     <TaxRateDialog
       name={dialogName}
-      title={payload.id ? 'Edit Tax Rate' : 'Create Tax Rate'}
+      title={
+        payload.id ? intl.get('edit_tax_rate') : intl.get('create_tax_rate')
+      }
       autoFocus={true}
       canEscapeKeyClose={true}
       isOpen={isOpen}

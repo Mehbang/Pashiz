@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 export enum ISidebarMenuItemType {
   Label = 'label',
   Link = 'link',
@@ -62,14 +63,14 @@ export type ISidebarMenuItem =
   | ISidebarMenuItemDrawer;
 
 export enum ISidebarMenuOverlayIds {
-  Items = 'Items',
-  Reports = 'Reports',
-  Sales = 'Sales',
-  Purchases = 'Purchases',
-  Financial = 'Financial',
-  Contacts = 'Contacts',
+  Items = intl.get('items'),
+  Reports = intl.get('Reports'),
+  Sales = intl.get('sales'),
+  Purchases = intl.get('purchases'),
+  Financial = intl.get('financial'),
+  Contacts = intl.get('contacts'),
   Cashflow = 'Cashflow',
-  Expenses = 'Expenses',
+  Expenses = intl.get('expenses'),
   Projects = 'Projects',
 }
 

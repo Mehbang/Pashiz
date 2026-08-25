@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { x } from '@xstyled/emotion';
 import { isEmpty } from 'lodash';
 import {
@@ -44,20 +45,20 @@ export function ReceiptSendMailReceipt({
   companyName,
 
   // # Receipt number.
-  receiptNumberLabel = 'Receipt #',
+  receiptNumberLabel = intl.get('receipt'),
   receiptNumber,
 
   // # Total.
   total,
-  totalLabel = 'Total',
+  totalLabel = intl.get('total'),
 
   // # Discount
   discount,
-  discountLabel = 'Discount',
+  discountLabel = intl.get('discount_2'),
 
   // # Adjustment
   adjustment,
-  adjustmentLabel = 'Adjustment',
+  adjustmentLabel = intl.get('adjustment'),
 
   // # Message
   message,
@@ -65,7 +66,7 @@ export function ReceiptSendMailReceipt({
   // # Items
   items,
   subtotal,
-  subtotalLabel = 'Subtotal',
+  subtotalLabel = intl.get('subtotal'),
   ...rest
 }: ReceiptSendMailReceiptProps) {
   return (

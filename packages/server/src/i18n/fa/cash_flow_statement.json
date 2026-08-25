@@ -1,0 +1,18 @@
+{
+  "operating_activities": "فعالیت‌های عملیاتی",
+  "net_income": "سود خالص",
+  "operating_accounts": "تعدیل سود خالص بابت فعالیت‌های عملیاتی.",
+  "net_cash_operating": "خالص وجه نقد حاصل از فعالیت‌های عملیاتی",
+  "investment_activities": "فعالیت‌های سرمایه‌گذاری",
+  "net_cash_investing": "خالص وجه نقد حاصل از فعالیت‌های سرمایه‌گذاری",
+  "financial_activities": "فعالیت‌های تأمین مالی",
+  "net_cash_financing": "خالص وجه نقد حاصل از فعالیت‌های تأمین مالی",
+  "cash_beginning_period": "موجودی نقد ابتدای دوره",
+  "net_cash_increase": "خالص افزایش وجه نقد دوره",
+  "cash_end_period": "موجودی نقد پایان دوره",
+  "account_name": "نام حساب",
+  "total": "جمع",
+  "sheet_name": "صورت جریان وجوه نقد",
+  "from_date": "از",
+  "to_date": "تا"
+}

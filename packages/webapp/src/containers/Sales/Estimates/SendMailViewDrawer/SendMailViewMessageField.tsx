@@ -1,4 +1,5 @@
 // @ts-nocheck
+import intl from 'react-intl-universal';
 import { Button, Icon, Position } from '@blueprintjs/core';
 import { FormGroupProps, TextAreaProps } from '@blueprintjs-formik/core';
 import { SelectOptionProps } from '@blueprintjs-formik/select';
@@ -57,7 +58,11 @@ export function SendMailViewMessageField({
   };
 
   return (
-    <FFormGroup label={'Message'} name={'message'} {...formGroupProps}>
+    <FFormGroup
+      label={intl.get('message')}
+      name={'message'}
+      {...formGroupProps}
+    >
       <Stack spacing={0}>
         <Group
           border={`1px solid ${isDarkmode ? 'rgba(255, 255, 255, 0.2)' : '#ced4da'}`}
@@ -82,7 +87,7 @@ export function SendMailViewMessageField({
                 minimal
                 rightIcon={<Icon icon={'caret-down-16'} color={'#8F99A8'} />}
               >
-                Insert Variable
+                {intl.get('insert_variable')}
               </Button>
             )}
             fill={false}

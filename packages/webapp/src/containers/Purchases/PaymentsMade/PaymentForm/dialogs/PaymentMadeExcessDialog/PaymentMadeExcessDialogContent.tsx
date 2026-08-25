@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { Button, Classes, Intent } from '@blueprintjs/core';
 import { Form, Formik, type FormikHelpers, useFormikContext } from 'formik';
 import * as R from 'ramda';
@@ -100,9 +101,9 @@ function ExcessPaymentDialogContentForm({
             disabled={isSubmitting}
             onClick={() => submitForm()}
           >
-            Save Payment as Credit
+            {intl.get('save_payment_as_credit')}
           </Button>
-          <Button onClick={handleCloseBtn}>Cancel</Button>
+          <Button onClick={handleCloseBtn}>{intl.get('cancel')}</Button>
         </div>
       </div>
     </>
