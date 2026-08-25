@@ -17,6 +17,9 @@ export interface IFormatNumberSettings {
   zeroSign?: string;
   currencyCode?: string;
   money?: boolean;
+  symbol?: string;
+  /** Render the digits as Persian (۱۲۳) and name the currency in its own script. */
+  persianDigits?: boolean;
 }
 
 export enum ReportsAction {

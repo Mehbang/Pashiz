@@ -20,6 +20,7 @@ import {
 } from '@/constants/abilityOption';
 import { CLASSES } from '@/constants/classes';
 import { formattedAmount, safeCallback } from '@/utils';
+import { localizedDigits } from '@/utils/locale';
 
 export type InvoiceTableRow = NonNullable<
   SaleInvoicesListResponse['data']
@@ -56,13 +57,15 @@ export function InvoiceStatus({ invoice }: { invoice: InvoiceTableRow }) {
 
       <Choose.When condition={!!(invoice.isDelivered && invoice.isOverdue)}>
         <Tag intent={Intent.DANGER} round minimal>
-          {intl.get('overdue_by', { overdue: invoice.overdueDays })}
+          {intl.get('overdue_by', {
+            overdue: localizedDigits(invoice.overdueDays),
+          })}
         </Tag>
       </Choose.When>
 
       <Choose.When condition={!!(invoice.isDelivered && !invoice.isOverdue)}>
         <Tag intent={Intent.WARNING} round minimal>
-          {intl.get('due_in', { due: invoice.remainingDays })}
+          {intl.get('due_in', { due: localizedDigits(invoice.remainingDays) })}
         </Tag>
       </Choose.When>
 

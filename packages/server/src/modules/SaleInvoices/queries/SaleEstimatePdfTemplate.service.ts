@@ -17,14 +17,12 @@ export class SaleEstimatePdfTemplate {
    * @returns
    */
   public async getEstimatePdfTemplate(estimateTemplateId?: number) {
-    // Retrieves the organization branding attributes.
-    const commonOrgBrandingAttrs = await this.getOrgBrandingAttrs.execute();
-
     // Merge the default branding attributes with organization attrs.
-    const orgainizationBrandingAttrs = {
-      ...defaultEstimatePdfBrandingAttributes,
-      ...commonOrgBrandingAttrs,
-    };
+    const orgainizationBrandingAttrs =
+      await this.getOrgBrandingAttrs.withDefaults(
+        defaultEstimatePdfBrandingAttributes,
+        { titleKey: 'title_estimate' },
+      );
 
     // The estimate may have no assigned template and no default template set for
     // the resource, in which case we fall back to the default branding attributes.

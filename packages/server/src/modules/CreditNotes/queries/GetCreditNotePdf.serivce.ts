@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { renderCreditNotePaperTemplateHtml } from '@bigcapital/pdf-templates';
 import { GetCreditNoteService } from './GetCreditNote.service';
 import { CreditNoteBrandingTemplate } from './CreditNoteBrandingTemplate.service';
@@ -22,6 +23,7 @@ export class GetCreditNotePdf {
    * @param {typeof PdfTemplateModel} pdfTemplateModel - Pdf template model.
    */
   constructor(
+    private readonly tenancyContext: TenancyContext,
     private readonly chromiumlyTenancy: ChromiumlyTenancy,
     private readonly getCreditNoteService: GetCreditNoteService,
     private readonly creditNoteBrandingTemplate: CreditNoteBrandingTemplate,
@@ -55,7 +57,9 @@ export class GetCreditNotePdf {
         '',
     };
 
-    return renderCreditNotePaperTemplateHtml(props);
+    return renderCreditNotePaperTemplateHtml(props, {
+      lang: await this.getOrganizationLanguage(),
+    });
   }
 
   /**
@@ -122,5 +126,15 @@ export class GetCreditNotePdf {
       ...brandingTemplate.attributes,
       ...transformCreditNoteToPdfTemplate(creditNote),
     };
+  }
+
+  /**
+   * The language the organization prints its documents in, which decides the
+   * document direction and the font the paper template is rendered with.
+   * @returns {Promise<string | undefined>}
+   */
+  private async getOrganizationLanguage(): Promise<string | undefined> {
+    const tenant = await this.tenancyContext.getTenant(true);
+    return tenant.metadata?.language;
   }
 }

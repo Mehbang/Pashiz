@@ -51,7 +51,7 @@ export function CurrenciesSelectList({ selectProps, onItemSelect, className }) {
   return (
     <Select
       items={currencies}
-      noResults={<MenuItem disabled={true} text="No results." />}
+      noResults={<MenuItem disabled={true} text={intl.get('no_results')} />}
       itemRenderer={currencyItem}
       itemPredicate={filterCurrenciesPredicator}
       popoverProps={{ minimal: true }}

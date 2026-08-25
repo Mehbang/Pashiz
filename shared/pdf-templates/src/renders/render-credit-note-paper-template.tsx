@@ -2,7 +2,7 @@ import {
   CreditNotePaperTemplate,
   CreditNotePaperTemplateProps,
 } from '../components/CreditNotePaperTemplate';
-import { renderSSR } from './render-ssr';
+import { renderSSR, RenderSSROptions } from './render-ssr';
 
 /**
  * Renders credit note paper template html.
@@ -10,8 +10,9 @@ import { renderSSR } from './render-ssr';
  * @returns {string}
  */
 export const renderCreditNotePaperTemplateHtml = (
-  props: CreditNotePaperTemplateProps
+  props: CreditNotePaperTemplateProps,
+  options?: RenderSSROptions
 ) => {
-  return renderSSR(<CreditNotePaperTemplate {...props} />);
+  return renderSSR(<CreditNotePaperTemplate {...props} />, options);
 };
 

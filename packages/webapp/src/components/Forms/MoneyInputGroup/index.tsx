@@ -2,6 +2,7 @@
 import { InputGroup } from '@blueprintjs/core';
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { CurrencyInputProps } from './CurrencyInputProps';
+import { currentLocaleSettings } from '@/utils/locale';
 import {
   isNumber,
   cleanValue,
@@ -52,6 +53,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = ({
     groupSeparator,
     turnOffSeparators,
     prefix,
+    persianDigits: currentLocaleSettings().persianDigits,
   };
 
   const cleanValueOptions: Partial<CleanValueOptions> = {

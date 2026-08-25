@@ -18,6 +18,7 @@ export interface PaymentReceivedPaperTemplateProps extends PaperTemplateProps {
 
   // # Company name
   companyName?: string;
+  bigtitle?: string;
 
   // Customer address
   showCustomerAddress?: boolean;
@@ -76,6 +77,7 @@ export function PaymentReceivedPaperTemplate({
   showCompanyAddress = true,
   companyAddress = DefaultPdfTemplateAddressBilledFrom,
 
+  bigtitle = 'Payment',
   billedToLabel = 'Billed To',
 
   total = '$1000.00',
@@ -106,7 +108,7 @@ export function PaymentReceivedPaperTemplate({
       <Stack spacing={24}>
         <Group align={'start'} spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Payment'} />
+            <PaperTemplate.BigTitle title={bigtitle} />
 
             <PaperTemplate.TermsList>
               {showPaymentReceivedNumber && (

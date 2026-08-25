@@ -194,7 +194,7 @@ export default function InviteUsersStep({
                     onChange={(e) =>
                       updateInviteRow(invite.id, 'email', e.target.value)
                     }
-                    placeholder="Email address"
+                    placeholder={intl.get('email_address')}
                     intent={errors[invite.id] ? Intent.DANGER : Intent.NONE}
                   />
                   {errors[invite.id] && (

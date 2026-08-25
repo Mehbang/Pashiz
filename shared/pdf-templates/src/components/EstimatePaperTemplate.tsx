@@ -40,6 +40,7 @@ export interface EstimatePaperTemplateProps extends PaperTemplateProps {
 
   // # Customer name
   companyName?: string;
+  bigtitle?: string;
 
   // Address
   showCustomerAddress?: boolean;
@@ -115,6 +116,7 @@ export function EstimatePaperTemplate({
   // # Customer address
   customerAddress = DefaultPdfTemplateAddressBilledTo,
   showCustomerAddress = true,
+  bigtitle = 'Estimate',
   billedToLabel = 'Billed To',
 
   // # Total
@@ -187,7 +189,7 @@ export function EstimatePaperTemplate({
       <Stack spacing={24}>
         <Group align={'start'} spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Estimate'} />
+            <PaperTemplate.BigTitle title={bigtitle} />
 
             <PaperTemplate.TermsList>
               {showEstimateNumber && (

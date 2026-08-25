@@ -1,35 +1,41 @@
-import { FormGroup, NumericInput, Intent } from '@blueprintjs/core';
+import { FormGroup, Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { MoneyInputGroup } from '@/components';
 import { CellType } from '@/constants';
 import { CLASSES } from '@/constants/classes';
 
 /**
  * Numeric input table cell.
+ *
+ * Built on the same input as the money and percent cells rather than
+ * Blueprint's `NumericInput`: the steppers were switched off anyway, and
+ * sharing the input means the quantity column reads in the locale's digits and
+ * accepts them back, exactly as the rate beside it does.
  */
 export default function NumericInputCell({
   row: { index },
   column: { id },
-  cell: { value: controlledInputValue },
+  cell: { value: initialValue },
   payload,
 }: any) {
-  const [valueAsNumber, setValueAsNumber] = useState<number | null>(
-    controlledInputValue || null,
-  );
-  const handleInputValueChange = (
-    valueAsNumber: number,
-    valueAsString: string,
-  ) => {
-    setValueAsNumber(valueAsNumber);
-  };
-  const handleInputBlur = () => {
-    payload.updateData(index, id, valueAsNumber);
+  const [value, setValue] = useState(initialValue);
+
+  const handleChange = useCallback((newValue?: string) => {
+    setValue(newValue ?? '');
+  }, []);
+
+  const handleBlur = () => {
+    // `cleanValue()` has already normalised the digits, so this is a plain
+    // Latin numeric string by the time it lands here.
+    const parsed = parseFloat(value);
+
+    payload.updateData(index, id, Number.isNaN(parsed) ? null : parsed);
   };
 
   useEffect(() => {
-    setValueAsNumber(controlledInputValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledInputValue]);
+    setValue(initialValue);
+  }, [initialValue]);
 
   const error = payload.errors?.[index]?.[id];
 
@@ -38,13 +44,10 @@ export default function NumericInputCell({
       intent={error ? Intent.DANGER : undefined}
       className={classNames(CLASSES.FILL)}
     >
-      <NumericInput
-        asyncControl
-        value={controlledInputValue}
-        onValueChange={handleInputValueChange}
-        onBlur={handleInputBlur}
-        buttonPosition={'none'}
-        fill
+      <MoneyInputGroup
+        value={value}
+        onChange={handleChange}
+        onBlur={handleBlur}
       />
     </FormGroup>
   );

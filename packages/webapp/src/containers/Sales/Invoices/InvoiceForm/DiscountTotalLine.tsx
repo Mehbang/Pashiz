@@ -5,11 +5,12 @@ import { x } from '@xstyled/emotion';
 import type { CSSProperties } from 'react';
 import {
   FFormGroup,
-  FInputGroup,
+  FMoneyInputGroup,
   FSelect,
   TotalLinePrimitive,
 } from '@/components';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 const borderColorStyle = (isDarkMode: boolean): CSSProperties =>
   ({
@@ -52,7 +53,11 @@ export function DiscountTotalLine({
   );
 
   const discountTypeItems = [
-    { text: currencyCode, value: 'amount', label: intl.get('fixed_amount') },
+    {
+      text: localizedCurrencyLabel(currencyCode),
+      value: 'amount',
+      label: intl.get('fixed_amount'),
+    },
     { text: '%', value: 'percentage', label: intl.get('percentage') },
   ];
 
@@ -76,7 +81,10 @@ export function DiscountTotalLine({
             inline
             fastField
           >
-            <FInputGroup
+            {/* A money input rather than a plain text field: it renders the
+                amount in the locale's digits and hands Formik back a Latin
+                number, the same as the rate and quantity cells above. */}
+            <FMoneyInputGroup
               name={'discount'}
               rightElement={
                 <FSelect

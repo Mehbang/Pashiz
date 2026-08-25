@@ -21,15 +21,12 @@ export class SaleReceiptBrandingTemplate {
    * @returns {Promise<Object>} The sale receipt branding template with merged attributes.
    */
   public async getSaleReceiptBrandingTemplate(templateId?: number) {
-    // Retrieves the organization branding attributes.
-    const commonOrgBrandingAttrs =
-      await this.getOrgBrandingAttributes.execute();
-
     // Merges the default branding attributes with organization common branding attrs.
-    const organizationBrandingAttrs = {
-      ...defaultSaleReceiptBrandingAttributes,
-      ...commonOrgBrandingAttrs,
-    };
+    const organizationBrandingAttrs =
+      await this.getOrgBrandingAttributes.withDefaults(
+        defaultSaleReceiptBrandingAttributes,
+        { titleKey: 'title_receipt' },
+      );
 
     // The receipt may have no assigned template and no default template set for
     // the resource, in which case we fall back to the default branding attributes.

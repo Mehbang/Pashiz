@@ -53,7 +53,7 @@ export function RoleFormHeader() {
           name={'role_description'}
           growVertically={true}
           height={280}
-          placeholder="Max. 500 characters"
+          placeholder={intl.get('max_500_characters')}
           fill
           fastField
         />

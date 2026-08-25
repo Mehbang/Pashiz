@@ -2899,5 +2899,13 @@
   "breadcrumb.projects": "Projects",
   "breadcrumb.project_details": "Project Details",
   "breadcrumb.tax_rates": "Tax Rates",
-  "breadcrumb.item_categories": "Item Categories"
+  "breadcrumb.item_categories": "Item Categories",
+  "contact_code_hint": "Add a unique account number to identify, reference and search for the contact.",
+  "contact_display_name_hint": "This is the name that appears on invoices and emails.",
+  "categorize_transaction": "Categorize Transaction",
+  "matching_transaction": "Matching Transaction",
+  "max_500_characters": "Max. 500 characters",
+  "payment_page.sent_an_invoice_for": "{organization} Sent an Invoice for {amount}",
+  "payment_page.invoice_due": "Invoice due {date}",
+  "payment_page.invoice_number": "Invoice {number}"
 }

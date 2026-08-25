@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { renderInvoicePaperTemplateHtml } from '@bigcapital/pdf-templates';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { GetSaleInvoice } from './GetSaleInvoice.service';
@@ -14,6 +15,7 @@ import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
 @Injectable()
 export class SaleInvoicePdf {
   constructor(
+    private readonly tenancyContext: TenancyContext,
     private chromiumlyTenancy: ChromiumlyTenancy,
     private getInvoiceService: GetSaleInvoice,
     private invoiceBrandingTemplateService: SaleInvoicePdfTemplate,
@@ -35,9 +37,10 @@ export class SaleInvoicePdf {
     const brandingAttributes =
       await this.getInvoiceBrandingAttributes(invoiceId);
 
-    return renderInvoicePaperTemplateHtml({
-      ...brandingAttributes,
-    });
+    return renderInvoicePaperTemplateHtml(
+      { ...brandingAttributes },
+      { lang: await this.getOrganizationLanguage() },
+    );
   }
 
   /**
@@ -100,7 +103,20 @@ export class SaleInvoicePdf {
     // Merge the branding template attributes with the invoice.
     return {
       ...brandingTemplate.attributes,
-      ...transformInvoiceToPdfTemplate(invoice),
+      ...transformInvoiceToPdfTemplate(
+        invoice,
+        brandingTemplate.attributes?.discountLabel,
+      ),
     };
+  }
+
+  /**
+   * The language the organization prints its documents in, which decides the
+   * document direction and the font the paper template is rendered with.
+   * @returns {Promise<string | undefined>}
+   */
+  private async getOrganizationLanguage(): Promise<string | undefined> {
+    const tenant = await this.tenancyContext.getTenant(true);
+    return tenant.metadata?.language;
   }
 }

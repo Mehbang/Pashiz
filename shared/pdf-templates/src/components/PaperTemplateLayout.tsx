@@ -9,15 +9,18 @@ const theme = {
 export function PaperTemplateLayout({
   cache,
   children,
+  lang = 'en',
 }: {
   children: React.ReactNode;
   cache: EmotionCache;
+  lang?: string;
 }) {
   return (
     <CacheProvider value={cache}>
       <ThemeProvider theme={theme}>
         <Preflight />
         <GlobalStyles />
+        {lang === 'fa' && <PersianStyles />}
 
         {children}
       </ThemeProvider>
@@ -63,5 +66,14 @@ body, h1, h2, h3, h4, h5, h6{
 }
 strong {
   font-weight: 600;
+}
+`;
+
+// Persian documents lead with Vazirmatn, which carries the Persian digit forms
+// the rest of the application renders with. Open Sans stays behind it for any
+// Latin text — a currency code or an invoice number — the document still holds.
+const PersianStyles = createGlobalStyle`
+body, h1, h2, h3, h4, h5, h6, th, td, input, button {
+  font-family: "Vazirmatn", "Open Sans", sans-serif;
 }
 `;

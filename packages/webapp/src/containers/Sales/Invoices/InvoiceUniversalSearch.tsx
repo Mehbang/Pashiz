@@ -8,6 +8,7 @@ import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { highlightText } from '@/utils';
+import { localizedDigits } from '@/utils/locale';
 
 /**
  * Universal search invoice item select action.
@@ -46,12 +47,16 @@ function InvoiceStatus({ customer }) {
         <Choose>
           <Choose.When condition={customer.is_overdue}>
             <TextStatus intent={Intent.DANGER}>
-              {intl.get('overdue_by', { overdue: customer.overdue_days })}
+              {intl.get('overdue_by', {
+                overdue: localizedDigits(customer.overdue_days),
+              })}
             </TextStatus>
           </Choose.When>
           <Choose.Otherwise>
             <TextStatus intent={Intent.WARNING}>
-              {intl.get('due_in', { due: customer.remaining_days })}
+              {intl.get('due_in', {
+                due: localizedDigits(customer.remaining_days),
+              })}
             </TextStatus>
           </Choose.Otherwise>
         </Choose>

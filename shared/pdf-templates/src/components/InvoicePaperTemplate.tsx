@@ -155,6 +155,7 @@ export function InvoicePaperTemplate({
   showCompanyAddress = true,
   companyAddress = DefaultPdfTemplateAddressBilledFrom,
 
+  bigtitle = 'Invoice',
   billedToLabel = 'Billed To',
 
   // Entries
@@ -225,7 +226,7 @@ export function InvoicePaperTemplate({
       <Stack spacing={24}>
         <Group align="start" spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Invoice'} />
+            <PaperTemplate.BigTitle title={bigtitle} />
 
             <PaperTemplate.TermsList>
               {showInvoiceNumber && (

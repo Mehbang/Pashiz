@@ -20,6 +20,7 @@ import {
 import { AdjustmentTotalLine } from '@/containers/Sales/Invoices/InvoiceForm/AdjustmentTotalLine';
 import { DiscountTotalLine } from '@/containers/Sales/Invoices/InvoiceForm/DiscountTotalLine';
 import { TaxType } from '@/interfaces/TaxRates';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 export function BillFormFooterRight() {
   const {
@@ -62,7 +63,9 @@ export function BillFormFooterRight() {
         ),
       )}
       <TotalLine
-        title={`TOTAL (${currencyCode})`}
+        title={intl.get('total_currency', {
+          currency: localizedCurrencyLabel(currencyCode),
+        })}
         value={totalFormatted}
         borderStyle={TotalLineBorderStyle.SingleDark}
         textStyle={TotalLineTextStyle.Bold}

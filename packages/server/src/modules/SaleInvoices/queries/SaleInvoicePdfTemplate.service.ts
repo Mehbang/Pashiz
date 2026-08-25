@@ -17,14 +17,12 @@ export class SaleInvoicePdfTemplate {
    * @returns
    */
   async getInvoicePdfTemplate(invoiceTemplateId?: number) {
-    // Retrieves the organization branding attributes.
-    const commonOrgBrandingAttrs =
-      await this.getOrgBrandingAttributes.execute();
-
-    const organizationBrandingAttrs = {
-      ...defaultInvoicePdfTemplateAttributes,
-      ...commonOrgBrandingAttrs,
-    };
+    // Retrieves the organization branding attributes over the defaults.
+    const organizationBrandingAttrs =
+      await this.getOrgBrandingAttributes.withDefaults(
+        defaultInvoicePdfTemplateAttributes,
+        { titleKey: 'title_invoice' },
+      );
 
     // The invoice may have no assigned template and no default template set for
     // the resource, in which case we fall back to the default branding attributes.

@@ -7,6 +7,11 @@ import { contactAddressTextFormat } from '@/utils/address-text-format';
 
 export const transformReceiptToBrandingTemplateAttributes = (
   saleReceipt: ISaleReceipt,
+  /**
+   * The already-translated discount label from the branding attributes; the
+   * percentage is appended to it when the discount is a percentage.
+   */
+  discountLabel = 'Discount',
 ): Partial<ISaleReceiptBrandingTemplateAttributes> => {
   return {
     total: saleReceipt.totalFormatted,
@@ -23,8 +28,8 @@ export const transformReceiptToBrandingTemplateAttributes = (
     adjustment: saleReceipt.adjustmentFormatted,
     discount: saleReceipt.discountAmountFormatted,
     discountLabel: saleReceipt.discountPercentageFormatted
-      ? `Discount [${saleReceipt.discountPercentageFormatted}]`
-      : 'Discount',
+      ? `${discountLabel} [${saleReceipt.discountPercentageFormatted}]`
+      : discountLabel,
     customerAddress: contactAddressTextFormat(saleReceipt.customer),
   };
 };

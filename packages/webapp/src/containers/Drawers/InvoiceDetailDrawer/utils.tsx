@@ -78,11 +78,11 @@ export const useInvoiceReadonlyEntriesColumns = () => {
       },
       {
         Header: intl.get('rate'),
-        accessor: 'rate',
+        accessor: 'rateFormatted',
         align: 'right',
         disableSortBy: true,
         textOverview: true,
-        width: getColumnWidth(entries, 'rate', {
+        width: getColumnWidth(entries, 'rateFormatted', {
           minWidth: 60,
           magicSpacing: 5,
         }),

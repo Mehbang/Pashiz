@@ -25,6 +25,7 @@ export interface ReceiptPaperTemplateProps extends PaperTemplateProps {
 
   // # Company name
   companyName?: string;
+  bigtitle?: string;
 
   // Addresses
   showCustomerAddress?: boolean;
@@ -115,6 +116,7 @@ export function ReceiptPaperTemplate({
   showCompanyAddress = true,
   companyAddress = DefaultPdfTemplateAddressBilledFrom,
 
+  bigtitle = 'Receipt',
   billedToLabel = 'Billed To',
 
   // # Total
@@ -180,7 +182,7 @@ export function ReceiptPaperTemplate({
       <Stack spacing={24}>
         <Group align={'start'} spacing={10}>
           <Stack flex={1}>
-            <PaperTemplate.BigTitle title={'Receipt'} />
+            <PaperTemplate.BigTitle title={bigtitle} />
 
             <PaperTemplate.TermsList>
               {showReceiptNumber && (

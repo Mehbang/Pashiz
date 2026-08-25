@@ -17,15 +17,12 @@ export class PaymentReceivedBrandingTemplate {
    * @returns
    */
   public async getPaymentReceivedPdfTemplate(paymentTemplateId?: number) {
-    // Retrieves the organization branding attributes.
-    const commonOrgBrandingAttrs =
-      await this.getOrgBrandingAttributes.execute();
-
     // Merges the default branding attributes with common organization branding attrs.
-    const organizationBrandingAttrs = {
-      ...defaultPaymentReceivedPdfTemplateAttributes,
-      ...commonOrgBrandingAttrs,
-    };
+    const organizationBrandingAttrs =
+      await this.getOrgBrandingAttributes.withDefaults(
+        defaultPaymentReceivedPdfTemplateAttributes,
+        { titleKey: 'title_payment_received' },
+      );
 
     // The payment may have no assigned template and no default template set for
     // the resource, in which case we fall back to the default branding attributes.

@@ -114,10 +114,14 @@ export function InvoicePaymentPage({
   payInvoiceButtonProps,
 
   // # Buy note
-  buyNote = 'By confirming your payment, you allow Bigcapital Technology, Inc. to charge you for this payment and save your payment information in accordance with their terms.',
+  buyNote = intl.get(
+    'by_confirming_your_payment_you_allow_bigcapital_technology_i',
+  ),
 
   // # Copyright
-  copyrightText = `© 2024 Bigcapital Technology, Inc. <br /> All rights reserved.`,
+  copyrightText = `© 2024 Bigcapital Technology, Inc. <br /> ${intl.get(
+    'all_rights_reserved_2',
+  )}`,
   classNames,
 }: PaymentPageProps) {
   return (
@@ -138,11 +142,14 @@ export function InvoicePaymentPage({
 
           <Stack spacing={6}>
             <h1 className={clsx(styles.bigTitle, classNames?.bigTitle)}>
-              {organizationName} Sent an Invoice for {total}
+              {intl.get('payment_page.sent_an_invoice_for', {
+                organization: organizationName,
+                amount: total,
+              })}
             </h1>
             <Group spacing={10}>
               <Text className={clsx(Classes.TEXT_MUTED, styles.invoiceDueDate)}>
-                Invoice due {dueDate}{' '}
+                {intl.get('payment_page.invoice_due', { date: dueDate })}
               </Text>
             </Group>
           </Stack>

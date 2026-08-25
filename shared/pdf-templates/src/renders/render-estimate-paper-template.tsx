@@ -2,7 +2,7 @@ import {
   EstimatePaperTemplate,
   EstimatePaperTemplateProps,
 } from '../components/EstimatePaperTemplate';
-import { renderSSR } from './render-ssr';
+import { renderSSR, RenderSSROptions } from './render-ssr';
 
 /**
  * Renders estimate paper template html.
@@ -10,7 +10,8 @@ import { renderSSR } from './render-ssr';
  * @returns {string}
  */
 export const renderEstimatePaperTemplateHtml = (
-  props: EstimatePaperTemplateProps
+  props: EstimatePaperTemplateProps,
+  options?: RenderSSROptions
 ) => {
-  return renderSSR(<EstimatePaperTemplate {...props} />);
+  return renderSSR(<EstimatePaperTemplate {...props} />, options);
 };

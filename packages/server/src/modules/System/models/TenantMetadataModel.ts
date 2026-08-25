@@ -4,6 +4,7 @@ import {
   organizationAddressTextFormat,
 } from '@/utils/address-text-format';
 import { findByIsoCountryCode } from '@bigcapital/utils';
+import { localizedCountryName } from '@/utils/localized-country';
 
 export class TenantMetadata extends BaseModel {
   public baseCurrency!: string;
@@ -78,7 +79,11 @@ export class TenantMetadata extends BaseModel {
       city: this.address?.city,
       postalCode: this.address?.postalCode,
       phone: this.address?.phone,
-      country: addressCountry?.name ?? '',
+      country: localizedCountryName(
+        this.location,
+        this.language,
+        addressCountry?.name ?? '',
+      ),
     });
   }
 }

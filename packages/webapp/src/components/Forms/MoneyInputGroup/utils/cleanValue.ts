@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { toLatinDigits } from '@bigcapital/utils';
 import { escapeRegExp } from './escapeRegExp';
 import { parseAbbrValue } from './parseAbbrValue';
 import { removeInvalidChars } from './removeInvalidChars';
@@ -29,6 +30,12 @@ export const cleanValue = ({
   prefix = '',
 }: CleanValueOptions): string => {
   const abbreviations = turnOffAbbreviations ? [] : ['k', 'm', 'b'];
+
+  // Persian digits are what the field shows and what an Iranian keyboard
+  // types, but every step below — and the value handed to the form — is
+  // Latin. Normalise once, here, so nothing downstream has to know.
+  value = toLatinDigits(value);
+
   const isNegative = value.includes('-');
 
   const [prefixWithValue, preValue] =

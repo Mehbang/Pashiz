@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { GetSaleReceipt } from './GetSaleReceipt.service';
 import { SaleReceiptBrandingTemplate } from './SaleReceiptBrandingTemplate.service';
 import { transformReceiptToBrandingTemplateAttributes } from '../utils';
@@ -23,6 +24,7 @@ export class SaleReceiptsPdfService {
    * @param {typeof PdfTemplateModel} pdfTemplateModel -
    */
   constructor(
+    private readonly tenancyContext: TenancyContext,
     private readonly chromiumlyTenancy: ChromiumlyTenancy,
     private readonly getSaleReceiptService: GetSaleReceipt,
     private readonly saleReceiptBrandingTemplate: SaleReceiptBrandingTemplate,
@@ -44,7 +46,9 @@ export class SaleReceiptsPdfService {
   public async saleReceiptHtml(saleReceiptId: number) {
     const brandingAttributes =
       await this.getReceiptBrandingAttributes(saleReceiptId);
-    return renderReceiptPaperTemplateHtml(brandingAttributes);
+    return renderReceiptPaperTemplateHtml(brandingAttributes, {
+      lang: await this.getOrganizationLanguage(),
+    });
   }
 
   /**
@@ -109,7 +113,20 @@ export class SaleReceiptsPdfService {
       );
     return {
       ...brandingTemplate.attributes,
-      ...transformReceiptToBrandingTemplateAttributes(saleReceipt),
+      ...transformReceiptToBrandingTemplateAttributes(
+        saleReceipt,
+        brandingTemplate.attributes?.discountLabel,
+      ),
     };
+  }
+
+  /**
+   * The language the organization prints its documents in, which decides the
+   * document direction and the font the paper template is rendered with.
+   * @returns {Promise<string | undefined>}
+   */
+  private async getOrganizationLanguage(): Promise<string | undefined> {
+    const tenant = await this.tenancyContext.getTenant(true);
+    return tenant.metadata?.language;
   }
 }

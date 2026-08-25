@@ -2,10 +2,11 @@ import {
   PaymentReceivedPaperTemplateProps,
   PaymentReceivedPaperTemplate,
 } from '../components/PaymentReceivedPaperTemplate';
-import { renderSSR } from './render-ssr';
+import { renderSSR, RenderSSROptions } from './render-ssr';
 
 export const renderPaymentReceivedPaperTemplateHtml = (
-  props: PaymentReceivedPaperTemplateProps
+  props: PaymentReceivedPaperTemplateProps,
+  options?: RenderSSROptions
 ) => {
-  return renderSSR(<PaymentReceivedPaperTemplate {...props} />);
+  return renderSSR(<PaymentReceivedPaperTemplate {...props} />, options);
 };

@@ -21,6 +21,15 @@ export class FinancialSheet {
   public calendar: CalendarSystem = 'gregorian';
 
   /**
+   * Whether the sheet's amounts are rendered with Persian digits. Follows the
+   * calendar: an organization reading its dates in Jalaali reads its numbers in
+   * Persian digits too.
+   */
+  protected get persianDigits(): boolean {
+    return this.calendar === 'jalali';
+  }
+
+  /**
    * Transformes the number format query to settings
    */
   protected transfromFormatQueryToSettings(): IFormatNumberSettings {
@@ -33,6 +42,7 @@ export class FinancialSheet {
       negativeFormat: numberFormat.negativeFormat,
       money: numberFormat.formatMoney === 'always',
       currencyCode: this.baseCurrency,
+      persianDigits: this.persianDigits,
     };
   }
 
@@ -83,6 +93,7 @@ export class FinancialSheet {
     const percentage = amount * 100;
     const settings = {
       excerptZero: true,
+      persianDigits: this.persianDigits,
       ...overrideSettings,
       symbol: '%',
       money: false,

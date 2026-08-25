@@ -19,6 +19,7 @@ import {
   AbilitySubject,
 } from '@/constants/abilityOption';
 import { formattedAmount, safeCallback } from '@/utils';
+import { localizedDigits } from '@/utils/locale';
 
 export type BillTableRow = NonNullable<BillsListResponse['data']>[number];
 
@@ -118,12 +119,16 @@ export function StatusAccessor(bill: BillTableRow) {
           <Choose>
             <Choose.When condition={!!bill.isOverdue}>
               <Tag round minimal intent={Intent.DANGER}>
-                {intl.get('overdue_by', { overdue: bill.overdueDays })}
+                {intl.get('overdue_by', {
+                  overdue: localizedDigits(bill.overdueDays),
+                })}
               </Tag>
             </Choose.When>
             <Choose.Otherwise>
               <Tag round minimal intent={Intent.WARNING}>
-                {intl.get('due_in', { due: bill.remainingDays })}
+                {intl.get('due_in', {
+                  due: localizedDigits(bill.remainingDays),
+                })}
               </Tag>
             </Choose.Otherwise>
           </Choose>

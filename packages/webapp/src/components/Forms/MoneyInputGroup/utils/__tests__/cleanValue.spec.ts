@@ -218,4 +218,22 @@ describe('cleanValue', () => {
       ).toEqual('9');
     });
   });
+
+  describe('Persian digits', () => {
+    it('normalises Persian digits to Latin', () => {
+      expect(cleanValue({ value: '۱۲۳۴' })).toEqual('1234');
+    });
+
+    it('normalises a Persian value that still carries separators', () => {
+      expect(cleanValue({ value: '۱,۲۳۴.۵۶' })).toEqual('1234.56');
+    });
+
+    it('normalises a negative Persian value', () => {
+      expect(cleanValue({ value: '-۲۵۰' })).toEqual('-250');
+    });
+
+    it('accepts Latin and Persian digits mixed in one entry', () => {
+      expect(cleanValue({ value: '1۲3۴' })).toEqual('1234');
+    });
+  });
 });

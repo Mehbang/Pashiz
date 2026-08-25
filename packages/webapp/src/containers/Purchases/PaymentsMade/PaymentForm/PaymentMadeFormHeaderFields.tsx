@@ -38,6 +38,7 @@ import { ACCOUNT_TYPE } from '@/constants/accountTypes';
 import { useDateInputFormatter } from '@/hooks';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { safeSumBy } from '@/utils';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 type VendorContact = {
   id: string | number;
@@ -135,7 +136,9 @@ function PaymentMadeFormHeaderFieldsInner() {
       >
         <>
           <ControlGroup>
-            <InputPrependText text={currencyCode}>{null}</InputPrependText>
+            <InputPrependText text={localizedCurrencyLabel(currencyCode)}>
+              {null}
+            </InputPrependText>
             <FMoneyInputGroup
               fastField
               name={'amount'}

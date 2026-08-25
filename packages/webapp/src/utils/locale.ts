@@ -1,5 +1,6 @@
 import intl from 'react-intl-universal';
 import { localeSettings } from '@/constants/languagesOptions';
+import { CURRENCIES, toPersianDigits } from '@bigcapital/utils';
 import { formatDateValue } from './date-formatter';
 
 /**
@@ -25,4 +26,44 @@ export const formatDateLocalized = (
   const { calendar, persianDigits } = currentLocaleSettings();
 
   return formatDateValue(value, format, { calendar, persianDigits });
+};
+
+/**
+ * Renders a bare number in the digits of the active locale.
+ *
+ * For counts that get interpolated into a translated sentence — "{due} days",
+ * "{count} items" — where the surrounding text is Persian but the number would
+ * otherwise arrive as Latin. Thousand separators are deliberately not applied;
+ * use `formattedNumber()` for amounts.
+ */
+export const localizedDigits = (
+  value: number | string | null | undefined,
+): string => {
+  if (value === null || value === undefined) return '';
+
+  const text = String(value);
+  return currentLocaleSettings().persianDigits ? toPersianDigits(text) : text;
+};
+
+/**
+ * A currency written the way the active locale names it.
+ *
+ * Currency codes are what the interface falls back to when there is no room
+ * for an amount — "Total (IRT)", the unit beside a discount field. A Persian
+ * reader knows the unit as تومان, not as `IRT`, so the native name is used
+ * whenever the currency has one written in Persian script. Currencies whose
+ * native symbol is punctuation ($, €, ¥) keep their code, which reads better
+ * in a label than a lone glyph.
+ */
+export const localizedCurrencyLabel = (code?: string): string => {
+  if (!code) return '';
+
+  const nativeSymbol = CURRENCIES[code]?.symbol_native;
+  const isPersianScript = nativeSymbol
+    ? /[\u0600-\u06FF]/.test(nativeSymbol)
+    : false;
+
+  return currentLocaleSettings().persianDigits && isPersianScript
+    ? nativeSymbol
+    : code;
 };

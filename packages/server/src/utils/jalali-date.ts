@@ -152,6 +152,15 @@ export function calendarOfLanguage(language?: string): CalendarSystem {
 }
 
 /**
+ * Whether an organization reading in the given language expects Persian digits
+ * (۱۲۳) rather than Latin ones. Kept separate from the calendar because it
+ * applies to money and plain numbers too, not only to dates.
+ */
+export function usesPersianDigits(language?: string): boolean {
+  return calendarOfLanguage(language) === 'jalali';
+}
+
+/**
  * Formats a date for display in the given calendar, using a moment-style format
  * string so organization date-format settings apply to both calendars.
  *
@@ -162,11 +171,10 @@ export function formatDateIn(
   date: moment.MomentInput,
   format: string,
   calendar: CalendarSystem = 'gregorian',
+  { persianDigits = true }: { persianDigits?: boolean } = {},
 ): string {
   if (calendar === 'jalali') {
-    return formatJalaali(moment(date).toDate(), format, {
-      persianDigits: true,
-    });
+    return formatJalaali(moment(date).toDate(), format, { persianDigits });
   }
   return moment(date).format(format);
 }

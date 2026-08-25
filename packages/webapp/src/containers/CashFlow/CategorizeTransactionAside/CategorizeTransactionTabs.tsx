@@ -1,4 +1,5 @@
 import { Tab, Tabs } from '@blueprintjs/core';
+import intl from 'react-intl-universal';
 import React from 'react';
 import { CategorizeTransactionContent } from '../CategorizeTransaction/drawers/CategorizeTransactionDrawer/CategorizeTransactionContent';
 import styles from './CategorizeTransactionTabs.module.scss';
@@ -16,12 +17,12 @@ export function CategorizeTransactionTabs() {
     >
       <Tab
         id="categorize"
-        title="Categorize Transaction"
+        title={intl.get('categorize_transaction')}
         panel={<CategorizeTransactionContent />}
       />
       <Tab
         id="matching"
-        title="Matching Transaction"
+        title={intl.get('matching_transaction')}
         panel={<MatchingBankTransaction />}
       />
     </Tabs>

@@ -8,6 +8,7 @@ import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { formattedAmount } from '@/utils';
+import { localizedDigits } from '@/utils/locale';
 
 /**
  * Universal search bill item select action.
@@ -47,12 +48,16 @@ export function BillStatus({ bill }) {
         <Choose>
           <Choose.When condition={bill.is_overdue}>
             <TextStatus intent={Intent.DANGER}>
-              {intl.get('overdue_by', { overdue: bill.overdue_days })}
+              {intl.get('overdue_by', {
+                overdue: localizedDigits(bill.overdue_days),
+              })}
             </TextStatus>
           </Choose.When>
           <Choose.Otherwise>
             <TextStatus intent={Intent.WARNING}>
-              {intl.get('due_in', { due: bill.remaining_days })}
+              {intl.get('due_in', {
+                due: localizedDigits(bill.remaining_days),
+              })}
             </TextStatus>
           </Choose.Otherwise>
         </Choose>

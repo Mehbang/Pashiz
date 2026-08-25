@@ -91,6 +91,18 @@ $rtl-switch-padding: 38px; // switch indicator (28px) + spacing (10px)
       left: 0;
       right: auto;
     }
+
+    // Blueprint measures the trailing element and writes the room it needs
+    // onto the input as an inline `padding-right`. The rules above move that
+    // element to the left, so the reserved space ends up on the empty side
+    // while the value runs underneath the element itself. The inline style can
+    // only be answered with `!important`; the width cannot be read from CSS,
+    // so a fixed reservation stands in — wide enough for a currency name such
+    // as «تومان», and merely a little roomy for a narrow icon button.
+    .bp4-input[style*='padding-right'] {
+      padding-right: 10px !important;
+      padding-left: var(--rtl-input-action-space, 56px) !important;
+    }
   }
 
   // ---------------------------------------------------------------
@@ -111,6 +123,14 @@ $rtl-switch-padding: 38px; // switch indicator (28px) + spacing (10px)
   // ---------------------------------------------------------------
   // Menus and select popovers
   // ---------------------------------------------------------------
+  // Blueprint pins `text-align: left` on the menu itself. Menu items lay
+  // themselves out with flex so they are unaffected, but any plain text block
+  // inside — the sidebar's section labels, a menu header — reads from the
+  // left edge while everything around it reads from the right.
+  .bp4-menu {
+    text-align: right;
+  }
+
   .bp4-menu-item {
     text-align: right;
 
@@ -260,6 +280,17 @@ $rtl-switch-padding: 38px; // switch indicator (28px) + spacing (10px)
   .dashboard__back-link {
     margin-left: 0;
     margin-right: 20px;
+  }
+
+  // ---------------------------------------------------------------
+  // Dialog header actions (the PDF preview's view/download buttons)
+  // ---------------------------------------------------------------
+  // Pinned with `right: 44px` in plain SCSS to sit beside the close button.
+  // Read right-to-left the close button moves to the left edge but the buttons
+  // stay put, landing on top of the dialog title.
+  .dialog__header-actions {
+    right: auto;
+    left: 44px;
   }
 
   // ---------------------------------------------------------------

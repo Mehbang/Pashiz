@@ -5,6 +5,7 @@ import { TransactionsByReference } from './TransactionsByReferenceReport';
 import { getTransactionsByReferenceQuery } from './_utils';
 import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { TransactionsByReferenceQueryDto } from './TransactionsByReferenceQuery.dto';
+import { calendarOfLanguage } from '@/utils/jalali-date';
 
 @Injectable()
 export class TransactionsByReferenceService {
@@ -36,6 +37,7 @@ export class TransactionsByReferenceService {
     const report = new TransactionsByReference(transactions, filter, {
       baseCurrency: tenantMetadata.baseCurrency,
       dateFormat: tenantMetadata.dateFormat,
+      calendar: calendarOfLanguage(tenantMetadata.language),
     });
 
     return {

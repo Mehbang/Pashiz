@@ -3,6 +3,11 @@ import { EstimatePdfBrandingAttributes } from './constants';
 
 export const transformEstimateToPdfTemplate = (
   estimate,
+  /**
+   * The already-translated discount label from the branding attributes; the
+   * percentage is appended to it when the discount is a percentage.
+   */
+  discountLabel = 'Discount',
 ): Partial<EstimatePdfBrandingAttributes> => {
   return {
     expirationDate: estimate.formattedExpirationDate,
@@ -15,8 +20,16 @@ export const transformEstimateToPdfTemplate = (
       quantity: entry.quantityFormatted,
       total: entry.totalFormatted,
     })),
-    total: estimate.formattedSubtotal,
+    // `total` was reading the subtotal, so a discounted estimate printed its
+    // pre-discount figure as the total.
+    total: estimate.totalFormatted,
     subtotal: estimate.formattedSubtotal,
+
+    discount: estimate.discountAmountFormatted,
+    discountLabel: estimate.discountPercentageFormatted
+      ? `${discountLabel} [${estimate.discountPercentageFormatted}]`
+      : discountLabel,
+    adjustment: estimate.adjustmentFormatted,
     customerNote: estimate.note,
     termsConditions: estimate.termsConditions,
     customerAddress: contactAddressTextFormat(estimate.customer),

@@ -81,12 +81,16 @@ export function PaymentPortal() {
 
           <Stack spacing={6}>
             <h1 className={styles.bigTitle}>
-              {sharableLinkMeta?.organization?.name} Sent an Invoice for{' '}
-              {sharableLinkMeta?.totalFormatted}
+              {intl.get('payment_page.sent_an_invoice_for', {
+                organization: sharableLinkMeta?.organization?.name,
+                amount: sharableLinkMeta?.totalFormatted,
+              })}
             </h1>
             <Group spacing={10}>
               <Text className={clsx(Classes.TEXT_MUTED, styles.invoiceDueDate)}>
-                Invoice due {sharableLinkMeta?.dueDateFormatted}{' '}
+                {intl.get('payment_page.invoice_due', {
+                  date: sharableLinkMeta?.dueDateFormatted,
+                })}
               </Text>
             </Group>
           </Stack>
@@ -106,7 +110,9 @@ export function PaymentPortal() {
           </Stack>
 
           <h2 className={styles.invoiceNumber}>
-            Invoice {sharableLinkMeta?.invoiceNo}
+            {intl.get('payment_page.invoice_number', {
+              number: sharableLinkMeta?.invoiceNo,
+            })}
           </h2>
 
           <Stack spacing={0} className={styles.totals}>

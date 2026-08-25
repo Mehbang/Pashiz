@@ -41,7 +41,7 @@ export function EstimateDetailTableFooter() {
         )}
         {estimate?.adjustmentFormatted && (
           <TotalLine
-            title="Adjustment"
+            title={intl.get('adjustment')}
             value={estimate.adjustmentFormatted}
             textStyle={TotalLineTextStyle.Regular}
           />

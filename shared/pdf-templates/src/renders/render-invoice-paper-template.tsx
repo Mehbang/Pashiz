@@ -2,12 +2,11 @@ import {
   InvoicePaperTemplate,
   InvoicePaperTemplateProps,
 } from '../components/InvoicePaperTemplate';
-import { renderSSR } from './render-ssr';
+import { renderSSR, RenderSSROptions } from './render-ssr';
 
 export const renderInvoicePaperTemplateHtml = (
-  props: InvoicePaperTemplateProps
+  props: InvoicePaperTemplateProps,
+  options?: RenderSSROptions
 ) => {
-  return renderSSR(
-    <InvoicePaperTemplate {...props} />
-  );
+  return renderSSR(<InvoicePaperTemplate {...props} />, options);
 };

@@ -73,8 +73,8 @@ export const useBillReadonlyEntriesTableColumns = () => {
       },
       {
         Header: intl.get('rate'),
-        accessor: 'rate',
-        width: getColumnWidth(entries, 'rate', {
+        accessor: 'rateFormatted',
+        width: getColumnWidth(entries, 'rateFormatted', {
           minWidth: 60,
           magicSpacing: 5,
         }),

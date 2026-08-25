@@ -2899,5 +2899,13 @@
   "breadcrumb.projects": "پروژه‌ها",
   "breadcrumb.project_details": "جزئیات پروژه",
   "breadcrumb.tax_rates": "نرخ‌های مالیات",
-  "breadcrumb.item_categories": "دسته‌بندی کالاها"
+  "breadcrumb.item_categories": "دسته‌بندی کالاها",
+  "contact_code_hint": "یک شمارهٔ حساب یکتا وارد کنید تا طرف حساب با آن شناسایی، ارجاع و جست‌وجو شود.",
+  "contact_display_name_hint": "این نامی است که روی فاکتورها و ایمیل‌ها نمایش داده می‌شود.",
+  "categorize_transaction": "دسته‌بندی تراکنش",
+  "matching_transaction": "تطبیق تراکنش",
+  "max_500_characters": "حداکثر ۵۰۰ نویسه",
+  "payment_page.sent_an_invoice_for": "{organization} فاکتوری به مبلغ {amount} برای شما فرستاده است",
+  "payment_page.invoice_due": "سررسید فاکتور {date}",
+  "payment_page.invoice_number": "فاکتور {number}"
 }

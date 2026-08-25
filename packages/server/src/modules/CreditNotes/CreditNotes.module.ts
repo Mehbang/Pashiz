@@ -13,6 +13,7 @@ import { ItemsModule } from '../Items/Items.module';
 import { BranchesModule } from '../Branches/Branches.module';
 import { WarehousesModule } from '../Warehouses/Warehouses.module';
 import { PdfTemplatesModule } from '../PdfTemplate/PdfTemplates.module';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { ChromiumlyTenancyModule } from '../ChromiumlyTenancy/ChromiumlyTenancy.module';
 import { TemplateInjectableModule } from '../TemplateInjectable/TemplateInjectable.module';
 import { GetCreditNoteService } from './queries/GetCreditNote.service';
@@ -39,6 +40,7 @@ import { ValidateBulkDeleteCreditNotesService } from './ValidateBulkDeleteCredit
 
 @Module({
   imports: [
+    TenancyModule,
     ItemsModule,
     BranchesModule,
     WarehousesModule,

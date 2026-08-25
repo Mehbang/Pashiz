@@ -22,6 +22,7 @@ import {
   TotalLineTextStyle,
 } from '@/components';
 import { TaxType } from '@/interfaces/TaxRates';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 export function InvoiceFormFooterRight() {
   const {
@@ -63,7 +64,9 @@ export function InvoiceFormFooterRight() {
         />
       ))}
       <TotalLine
-        title={intl.get('total_currency', { currency: currencyCode })}
+        title={intl.get('total_currency', {
+          currency: localizedCurrencyLabel(currencyCode),
+        })}
         value={totalFormatted}
         borderStyle={TotalLineBorderStyle.SingleDark}
         textStyle={TotalLineTextStyle.Bold}

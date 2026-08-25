@@ -170,4 +170,18 @@ describe('formatValue', () => {
       }),
     ).toEqual('-£123-456');
   });
+
+  it('renders the formatted value in Persian digits when asked', () => {
+    expect(formatValue({ value: '1234.56', persianDigits: true })).toEqual(
+      '۱,۲۳۴.۵۶',
+    );
+  });
+
+  it('keeps the minus sign ahead of a negative Persian value', () => {
+    expect(formatValue({ value: '-250', persianDigits: true })).toEqual('-۲۵۰');
+  });
+
+  it('leaves the digits Latin by default', () => {
+    expect(formatValue({ value: '1234.56' })).toEqual('1,234.56');
+  });
 });

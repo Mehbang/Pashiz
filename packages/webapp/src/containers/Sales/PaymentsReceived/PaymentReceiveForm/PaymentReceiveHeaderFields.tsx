@@ -45,6 +45,7 @@ import { ACCOUNT_TYPE } from '@/constants/accountTypes';
 import { ProjectsSelect } from '@/containers/Projects/components';
 import { useDateInputFormatter } from '@/hooks';
 import { safeSumBy } from '@/utils';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 const getHeaderFieldsStyle = (theme: Theme) => css`
   .${theme.bpPrefix}-form-group {
@@ -135,7 +136,9 @@ export function PaymentReceiveHeaderFields() {
       >
         <>
           <ControlGroup>
-            <InputPrependText text={currencyCode}>{null}</InputPrependText>
+            <InputPrependText text={localizedCurrencyLabel(currencyCode)}>
+              {null}
+            </InputPrependText>
             <FMoneyInputGroup
               name={'amount'}
               onBlurValue={onFullAmountBlur}

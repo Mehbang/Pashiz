@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { GetSaleEstimate } from './GetSaleEstimate.service';
 import { transformEstimateToPdfTemplate } from '../utils';
@@ -14,6 +15,7 @@ import { renderEstimatePaperTemplateHtml } from '@bigcapital/pdf-templates';
 @Injectable()
 export class GetSaleEstimatePdf {
   constructor(
+    private readonly tenancyContext: TenancyContext,
     private readonly chromiumlyTenancy: ChromiumlyTenancy,
     private readonly getSaleEstimate: GetSaleEstimate,
     private readonly estimatePdfTemplate: SaleEstimatePdfTemplate,
@@ -36,7 +38,10 @@ export class GetSaleEstimatePdf {
     const brandingAttributes =
       await this.getEstimateBrandingAttributes(estimateId);
 
-    return renderEstimatePaperTemplateHtml({ ...brandingAttributes });
+    return renderEstimatePaperTemplateHtml(
+      { ...brandingAttributes },
+      { lang: await this.getOrganizationLanguage() },
+    );
   }
 
   /**
@@ -97,7 +102,20 @@ export class GetSaleEstimatePdf {
       await this.estimatePdfTemplate.getEstimatePdfTemplate(templateId);
     return {
       ...brandingTemplate.attributes,
-      ...transformEstimateToPdfTemplate(saleEstimate),
+      ...transformEstimateToPdfTemplate(
+        saleEstimate,
+        brandingTemplate.attributes?.discountLabel,
+      ),
     };
+  }
+
+  /**
+   * The language the organization prints its documents in, which decides the
+   * document direction and the font the paper template is rendered with.
+   * @returns {Promise<string | undefined>}
+   */
+  private async getOrganizationLanguage(): Promise<string | undefined> {
+    const tenant = await this.tenancyContext.getTenant(true);
+    return tenant.metadata?.language;
   }
 }

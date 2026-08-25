@@ -2,10 +2,11 @@ import {
   ReceiptPaperTemplate,
   ReceiptPaperTemplateProps,
 } from '../components/ReceiptPaperTemplate';
-import { renderSSR } from './render-ssr';
+import { renderSSR, RenderSSROptions } from './render-ssr';
 
 export const renderReceiptPaperTemplateHtml = (
-  props: ReceiptPaperTemplateProps
+  props: ReceiptPaperTemplateProps,
+  options?: RenderSSROptions
 ) => {
-  return renderSSR(<ReceiptPaperTemplate {...props} />);
+  return renderSSR(<ReceiptPaperTemplate {...props} />, options);
 };

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { toPersianDigits } from '@bigcapital/utils';
 import { addSeparators } from './addSeparators';
 
 type Props = {
@@ -34,6 +35,14 @@ type Props = {
    * Prefix
    */
   prefix?: string;
+
+  /**
+   * Render the digits as Persian (۱۲۳).
+   *
+   * Display only — `cleanValue()` turns them back into Latin before the value
+   * reaches the form.
+   */
+  persianDigits?: boolean;
 };
 
 /**
@@ -46,6 +55,7 @@ export const formatValue = (props: Props): string => {
     decimalSeparator = '.',
     turnOffSeparators = false,
     prefix,
+    persianDigits = false,
   } = props;
 
   if (_value === '' || _value === undefined) {
@@ -80,5 +90,7 @@ export const formatValue = (props: Props): string => {
         ? `${decimalSeparator}`
         : '';
 
-  return `${includeNegative}${includePrefix}${formattedInt}${includeDecimals}`;
+  const formatted = `${includeNegative}${includePrefix}${formattedInt}${includeDecimals}`;
+
+  return persianDigits ? toPersianDigits(formatted) : formatted;
 };

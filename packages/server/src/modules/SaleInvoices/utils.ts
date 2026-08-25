@@ -19,6 +19,11 @@ export const mergePdfTemplateWithDefaultAttributes = (
 
 export const transformInvoiceToPdfTemplate = (
   invoice: ISaleInvoice,
+  /**
+   * The already-translated discount label from the branding attributes; the
+   * percentage is appended to it when the discount is a percentage.
+   */
+  discountLabel = 'Discount',
 ): Partial<InvoicePdfTemplateAttributes> => {
   return {
     dueDate: invoice.dueDateFormatted,
@@ -46,8 +51,8 @@ export const transformInvoiceToPdfTemplate = (
     })),
     discount: invoice.discountAmountFormatted,
     discountLabel: invoice.discountPercentageFormatted
-      ? `Discount [${invoice.discountPercentageFormatted}]`
-      : 'Discount',
+      ? `${discountLabel} [${invoice.discountPercentageFormatted}]`
+      : discountLabel,
     customerAddress: contactAddressTextFormat(invoice.customer),
   };
 };

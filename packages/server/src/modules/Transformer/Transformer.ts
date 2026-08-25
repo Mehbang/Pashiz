@@ -3,6 +3,11 @@ import * as R from 'ramda';
 import { includes, isFunction, isObject, isUndefined, omit } from 'lodash';
 // import { EXPORT_DTE_FORMAT } from '@/services/Export/constants';
 import { formatNumber } from '@/utils/format-number';
+import {
+  calendarOfLanguage,
+  formatDateIn,
+  usesPersianDigits,
+} from '@/utils/jalali-date';
 import { TransformerContext } from './Transformer.types';
 
 const EXPORT_DTE_FORMAT = 'YYYY-MM-DD';
@@ -168,11 +173,34 @@ export class Transformer<T = {}, ExtraContext = {}> {
   protected formatDate(date: string | Date, format?: string) {
     // Use the export date format if the async operation is in exporting,
     // otherwise use the given or default format.
-    const _format = this.context.exportAls.isExport
-      ? EXPORT_DTE_FORMAT
-      : format || this.dateFormat;
+    const isExport = this.context.exportAls.isExport;
+    const _format = isExport ? EXPORT_DTE_FORMAT : format || this.dateFormat;
 
-    return date ? moment(date).format(_format) : '';
+    if (!date) return '';
+
+    // Exported files stay Gregorian with Latin digits: a spreadsheet has to be
+    // able to read the column back as a date.
+    if (isExport) return moment(date).format(_format);
+
+    return formatDateIn(date, _format, this.calendar());
+  }
+
+  /**
+   * The calendar the organization reads dates in.
+   */
+  protected calendar() {
+    return calendarOfLanguage(this.context.organization?.language);
+  }
+
+  /**
+   * Whether amounts and dates should be rendered with Persian digits. Never
+   * during an export, where the file has to stay machine-readable.
+   */
+  protected persianDigits() {
+    return (
+      !this.context.exportAls.isExport &&
+      usesPersianDigits(this.context.organization?.language)
+    );
   }
 
   /**
@@ -191,7 +219,11 @@ export class Transformer<T = {}, ExtraContext = {}> {
    * @returns {string}
    */
   protected formatNumber(number: number | string, props?) {
-    return formatNumber(number, { money: false, ...props });
+    return formatNumber(number, {
+      money: false,
+      persianDigits: this.persianDigits(),
+      ...props,
+    });
   }
 
   /**
@@ -204,6 +236,7 @@ export class Transformer<T = {}, ExtraContext = {}> {
     return formatNumber(money, {
       currencyCode: this.context.organization?.baseCurrency,
       money: true,
+      persianDigits: this.persianDigits(),
       ...options,
     });
   }

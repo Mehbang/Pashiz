@@ -24,6 +24,7 @@ import { useUpdateEffect } from '@/hooks';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { useFeatureCan } from '@/hooks/state';
 import { transactionNumber } from '@/utils';
+import { localizedCurrencyLabel } from '@/utils/locale';
 
 type JournalExchangeRateInputFieldRootProps = Omit<
   React.ComponentProps<typeof ExchangeRateInputGroup>,
@@ -56,7 +57,9 @@ type CurrencyHeaderCellProps = {
 export function CreditHeaderCell({
   payload: { currencyCode },
 }: CurrencyHeaderCellProps): string {
-  return intl.get('credit_currency', { currency: currencyCode });
+  return intl.get('credit_currency', {
+    currency: localizedCurrencyLabel(currencyCode),
+  });
 }
 
 /**
@@ -65,7 +68,9 @@ export function CreditHeaderCell({
 export function DebitHeaderCell({
   payload: { currencyCode },
 }: CurrencyHeaderCellProps): string {
-  return intl.get('debit_currency', { currency: currencyCode });
+  return intl.get('debit_currency', {
+    currency: localizedCurrencyLabel(currencyCode),
+  });
 }
 
 type ActionsCellRendererProps = {

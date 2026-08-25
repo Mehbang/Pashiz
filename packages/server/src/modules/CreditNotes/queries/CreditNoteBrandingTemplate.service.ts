@@ -17,15 +17,12 @@ export class CreditNoteBrandingTemplate {
    * @returns {}
    */
   public async getCreditNoteBrandingTemplate(templateId?: number) {
-    // Retrieves the organization branding attributes.
-    const commonOrgBrandingAttrs =
-      await this.getOrgBrandingAttributes.execute();
-
     // Merges the default branding attributes with common organization branding attrs.
-    const organizationBrandingAttrs = {
-      ...defaultCreditNoteBrandingAttributes,
-      ...commonOrgBrandingAttrs,
-    };
+    const organizationBrandingAttrs =
+      await this.getOrgBrandingAttributes.withDefaults(
+        defaultCreditNoteBrandingAttributes,
+        { titleKey: 'title_credit_note' },
+      );
 
     // The credit note may have no assigned template and no default template set
     // for the resource, in which case we fall back to the default branding attributes.

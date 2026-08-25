@@ -69,7 +69,7 @@ export function VendorFormBasicSection() {
       <FFormGroup
         name={'code'}
         label={intl.get('vendor_code')}
-        helperText="Add a unique account number to identify, reference and search for the contact."
+        helperText={intl.get('contact_code_hint')}
         inline
         fastField
       >
@@ -101,7 +101,7 @@ export function VendorFormBasicSection() {
       <FFormGroup
         name={'displayName'}
         label={intl.get('display_name')}
-        helperText="This is the name that appears on invoices and emails."
+        helperText={intl.get('contact_display_name_hint')}
         inline
         fastField
       >
