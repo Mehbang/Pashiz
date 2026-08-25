@@ -77,26 +77,135 @@ require_env() {
 
 # ------------------------------------------------------------- commands ----
 
+# The Garage volume, declared with an explicit name in the prod compose file.
+GARAGE_VOLUME="bigcapital_prod_garage"
+
+# Secrets that bind the database rows and the object store together. A restored
+# copy needs these, because the S3 key and the Garage node identity live inside
+# the volume and are referenced from .env. Everything else in .env — the domain,
+# the database password — belongs to the machine, not to the data.
+BINDING_KEYS="GARAGE_RPC_SECRET GARAGE_ADMIN_TOKEN S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_BUCKET S3_REGION JWT_SECRET APP_JWT_SECRET"
+
+# Everything needed to reproduce this installation somewhere else: the
+# organizations' data, the files attached to it, and the secrets that tie the
+# two together.
 cmd_backup() {
   require_env
   step "پشتیبان‌گیری"
   mkdir -p "$BACKUP_DIR"
 
-  local stamp archive
+  local stamp work archive
   stamp=$(date +%Y%m%d-%H%M%S)
-  archive="$BACKUP_DIR/pashiz-$stamp.sql.gz"
+  archive="$(cd "$BACKUP_DIR" && pwd)/pashiz-$stamp.tar.gz"
+  work=$(mktemp -d)
+  trap 'rm -rf "$work"' RETURN
 
-  # --all-databases covers the system database and every tenant database,
-  # whose names are generated at run time.
+  # The application databases only. `--all-databases` would also carry the
+  # server's MySQL grants, and restoring those onto another machine replaces
+  # its accounts, leaving that machine's own .env password no longer valid.
+  local databases
+  databases=$(docker exec pashiz-mysql sh -c \
+    "exec mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\" -N -e \
+     \"SHOW DATABASES LIKE 'bigcapital%'\"" 2>/dev/null | tr -d '\r' | tr '\n' ' ')
+
+  [ -n "$databases" ] || die "هیچ پایگاه‌دادهٔ پشیز پیدا نشد."
+  info "پایگاه‌داده‌ها: $(echo "$databases" | wc -w | tr -d ' ') مورد"
+
   docker exec pashiz-mysql sh -c \
-    "exec mysqldump -uroot -p\"\$MYSQL_ROOT_PASSWORD\" --all-databases --single-transaction --quick" \
-    2>/dev/null | gzip > "$archive" || die "پشتیبان‌گیری از پایگاه‌داده ناموفق بود."
+    "exec mysqldump -uroot -p\"\$MYSQL_ROOT_PASSWORD\" --databases $databases \
+     --single-transaction --quick --routines --events" \
+    2>/dev/null | gzip > "$work/databases.sql.gz" \
+    || die "پشتیبان‌گیری از پایگاه‌داده ناموفق بود."
 
-  cp .env "$BACKUP_DIR/env-$stamp"
-  chmod 600 "$BACKUP_DIR/env-$stamp"
+  # Attachments and the company logo live in the object store, not in MySQL.
+  # Garage is paused so the volume is captured at rest.
+  info "فایل‌های پیوست..."
+  dc stop garage >/dev/null 2>&1 || true
+  docker run --rm -v "${GARAGE_VOLUME}:/data:ro" -v "$work:/out" alpine \
+    tar czf /out/garage.tar.gz -C /data . >/dev/null 2>&1 \
+    || warn "پشتیبان‌گیری از فضای ذخیره‌سازی ناموفق بود."
+  dc start garage >/dev/null 2>&1 || true
 
-  info "پایگاه‌داده : $archive  ($(du -h "$archive" | cut -f1))"
-  info "تنظیمات    : $BACKUP_DIR/env-$stamp"
+  # Only the binding secrets, never the whole .env.
+  : > "$work/secrets.env"
+  chmod 600 "$work/secrets.env"
+  local key value
+  for key in $BINDING_KEYS; do
+    value=$(get_env "$key")
+    [ -n "$value" ] && printf '%s=%s\n' "$key" "$value" >> "$work/secrets.env"
+  done
+
+  printf 'pashiz-backup 1\ncreated=%s\ncommit=%s\ndatabases=%s\n' \
+    "$(date -Iseconds)" "$(git rev-parse --short HEAD 2>/dev/null || echo unknown)" \
+    "$databases" > "$work/MANIFEST"
+
+  tar czf "$archive" -C "$work" MANIFEST databases.sql.gz garage.tar.gz secrets.env 2>/dev/null \
+    || tar czf "$archive" -C "$work" MANIFEST databases.sql.gz secrets.env
+  chmod 600 "$archive"
+
+  info "بایگانی: $archive  ($(du -h "$archive" | cut -f1))"
+  info "شامل پایگاه‌داده‌ها، پیوست‌ها و کلیدهای پیوند‌دهنده است."
+}
+
+# Brings a backup up on this installation. Intended for a machine that has
+# already been through setup.sh, whose own .env therefore holds this machine's
+# domain and database password; only the binding secrets are taken from the
+# archive.
+cmd_restore() {
+  require_root
+  require_env
+
+  local archive="${1:-}"
+  [ -n "$archive" ] || die "بایگانی را بدهید:  sudo ./update.sh restore backups/pashiz-….tar.gz"
+  [ -f "$archive" ] || die "پروندهٔ $archive پیدا نشد."
+  archive=$(cd "$(dirname "$archive")" && pwd)/$(basename "$archive")
+
+  local work
+  work=$(mktemp -d)
+  trap 'rm -rf "$work"' RETURN
+  tar xzf "$archive" -C "$work" || die "بایگانی خوانده نشد."
+  [ -f "$work/databases.sql.gz" ] || die "این بایگانی پشتیبان پشیز نیست."
+
+  step "بازیابی از $(basename "$archive")"
+  sed 's/^/    /' "$work/MANIFEST" 2>/dev/null || true
+  echo
+  warn "داده‌های کنونی این نصب کاملاً جایگزین می‌شوند."
+  read -rp "    ادامه می‌دهید؟ [y/N] " answer
+  [[ "$answer" =~ ^[Yy]$ ]] || { info "لغو شد."; return 0; }
+
+  # A safety copy of what is about to be replaced.
+  cmd_backup
+
+  step "بازیابی پایگاه‌داده"
+  dc stop server webapp >/dev/null 2>&1 || true
+  gunzip -c "$work/databases.sql.gz" | docker exec -i pashiz-mysql sh -c \
+    "exec mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\"" \
+    || die "بازیابی پایگاه‌داده ناموفق بود."
+  info "پایگاه‌داده بازیابی شد."
+
+  if [ -f "$work/garage.tar.gz" ]; then
+    step "بازیابی فایل‌های پیوست"
+    dc stop garage >/dev/null 2>&1 || true
+    docker run --rm -v "${GARAGE_VOLUME}:/data" -v "$work:/in" alpine sh -c \
+      'rm -rf /data/* /data/..?* 2>/dev/null; tar xzf /in/garage.tar.gz -C /data' \
+      >/dev/null 2>&1 || warn "بازیابی فضای ذخیره‌سازی ناموفق بود."
+    info "پیوست‌ها بازیابی شدند."
+  fi
+
+  # The object store only answers to the keys it was created with, so those
+  # travel with the data rather than being regenerated here.
+  step "به‌کارگیری کلیدهای پیوند‌دهنده"
+  local line key value
+  while IFS= read -r line; do
+    key="${line%%=*}"; value="${line#*=}"
+    [ -n "$key" ] && set_env "$key" "$value"
+  done < "$work/secrets.env"
+  info "$(wc -l < "$work/secrets.env" | tr -d " ") کلید به .env نوشته شد."
+
+  step "راه‌اندازی دوباره"
+  dc up -d --force-recreate >/dev/null 2>&1
+  wait_for_migration
+  info "بازیابی انجام شد ✅  نشانی: $(get_env BASE_URL)"
 }
 
 cmd_update() {
@@ -298,7 +407,8 @@ usage() {
   sudo ./update.sh              دریافت نسخهٔ تازه، پشتیبان‌گیری، ساخت و راه‌اندازی
   sudo ./update.sh rebuild      ساخت دوبارهٔ ایمیج‌ها بدون دریافت نسخهٔ تازه
   sudo ./update.sh rollback     بازگشت به نسخهٔ پیش از آخرین به‌روزرسانی
-       ./update.sh backup       پشتیبان از پایگاه‌داده و تنظیمات
+       ./update.sh backup       بایگانی کامل: پایگاه‌داده + پیوست‌ها + کلیدها
+  sudo ./update.sh restore <بایگانی>  بالا آوردن یک بایگانی روی این نصب
        ./update.sh status       وضعیت سرویس‌ها
        ./update.sh logs [نام]   دنبال‌کردن گزارش‌ها
        ./update.sh start|stop|restart
@@ -321,6 +431,7 @@ case "${1:-update}" in
   stop)     cmd_stop ;;
   restart)  cmd_restart ;;
   status)   cmd_status ;;
+  restore)  shift; cmd_restore "$@" ;;
   https)    shift; cmd_https "$@" ;;
   logs)     shift; cmd_logs "$@" ;;
   help|-h|--help) usage ;;
