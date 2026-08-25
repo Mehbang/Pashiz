@@ -165,11 +165,11 @@ jobs:
 
           curl --fail-with-body -sS -X POST "$API_URL/auth/signup" \
             -H 'Content-Type: application/json' \
-            -d '{"firstName":"Test","lastName":"User","email":"kk@kk.com","password":"123123123"}'
+            -d '{"firstName":"Test","lastName":"User","email":"kk@kk.com","password":"1231231230"}'
 
           SIGNIN=$(curl --fail-with-body -sS -X POST "$API_URL/auth/signin" \
             -H 'Content-Type: application/json' \
-            -d '{"email":"kk@kk.com","password":"123123123"}')
+            -d '{"email":"kk@kk.com","password":"1231231230"}')
 
           TOKEN=$(printf '%s' "$SIGNIN" | jq -r '.access_token')
           ORG_ID=$(printf '%s' "$SIGNIN" | jq -r '.organization_id')
@@ -226,7 +226,13 @@ jobs:
           sleep 5
 
       - name: Run server tests
-        run: pnpm --filter @bigcapital/server test:e2e
+        run: |
+          pnpm --filter @bigcapital/server test:e2e --shard=1/4
+          pnpm --filter @bigcapital/server test:e2e --shard=2/4
+          pnpm --filter @bigcapital/server test:e2e --shard=3/4
+          pnpm --filter @bigcapital/server test:e2e --shard=4/4
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
 
       - name: Print server log on failure
         if: failure()
