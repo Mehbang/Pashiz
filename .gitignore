@@ -14,3 +14,6 @@ e2e/.auth/
 
 
 .pnpm-store
+# Pashiz deployment artefacts (created on the server by setup.sh / update.sh)
+backups/
+.pashiz-previous-version

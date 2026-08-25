@@ -1,0 +1,61 @@
+# Pashiz production overlay.
+#
+# `docker-compose.prod.yml` pulls `bigcapitalhq/server` and
+# `bigcapitalhq/webapp` from Docker Hub. Those images are upstream Bigcapital
+# and contain none of this fork's work, so here the two are built from the
+# source in this repository instead.
+#
+# Always pass both files, in this order:
+#
+#   docker compose -f docker-compose.prod.yml -f docker-compose.pashiz.yml ...
+#
+# `setup.sh` and `update.sh` do that for you.
+
+services:
+  webapp:
+    container_name: pashiz-webapp
+    image: pashiz/webapp:latest
+    build:
+      context: .
+      dockerfile: packages/webapp/Dockerfile
+
+  server:
+    container_name: pashiz-server
+    image: pashiz/server:latest
+    build:
+      context: .
+      dockerfile: packages/server/Dockerfile
+
+  # Upstream builds a dedicated migration image `FROM bigcapitalhq/server` that
+  # clones a wait-for-it helper from GitHub at build time. The migration is
+  # only the server image running a different command, so it reuses the image
+  # built above — one build instead of two, and no network fetch during the
+  # build, which matters where GitHub is not reliably reachable.
+  database_migration:
+    container_name: pashiz-database-migration
+    image: pashiz/server:latest
+    build:
+      context: .
+      dockerfile: packages/server/Dockerfile
+    command:
+      - sh
+      - -c
+      - |
+        until nc -z mysql 3306; do
+          echo 'waiting for the database...'
+          sleep 2
+        done
+        node packages/server/dist/cli.js system:migrate:latest &&
+        node packages/server/dist/cli.js tenants:migrate:latest
+
+  mysql:
+    container_name: pashiz-mysql
+
+  redis:
+    container_name: pashiz-redis
+
+  garage:
+    container_name: pashiz-garage
+
+  gotenberg:
+    container_name: pashiz-gotenberg
