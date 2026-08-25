@@ -1,0 +1,42 @@
+# Caddy fronts the Envoy proxy and terminates TLS.
+#
+# The certificate is obtained from Let's Encrypt and renewed automatically;
+# nothing here has to be edited when it expires. The domain comes from the
+# environment, which `setup.sh` writes into .env.
+#
+# Requirements for the certificate to be issued:
+#   - PASHIZ_DOMAIN resolves to this server
+#   - ports 80 and 443 are reachable from the internet
+#
+# No ACME contact address is configured. Caddy registers without one, and an
+# `email` directive fed an empty value is a parse error — which is what an
+# optional prompt would produce whenever it was skipped.
+
+{$PASHIZ_DOMAIN} {
+	encode zstd gzip
+
+	# Envoy is reached over the compose network, not through its published
+	# ports, which the HTTPS overlay binds to localhost.
+	reverse_proxy proxy:80
+
+	# The API streams file downloads (PDF invoices, exports) that can take a
+	# while to render.
+	timeouts {
+		read_body 5m
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MB
+			roll_keep 5
+		}
+	}
+}

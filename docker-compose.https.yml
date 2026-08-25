@@ -1,0 +1,48 @@
+# HTTPS overlay — adds Caddy in front of the Envoy proxy.
+#
+# Used only when a domain is configured. `setup.sh` and `update.sh` include
+# this file automatically whenever PASHIZ_DOMAIN is set in .env:
+#
+#   docker compose -f docker-compose.prod.yml \
+#                  -f docker-compose.pashiz.yml \
+#                  -f docker-compose.https.yml ...
+#
+# Envoy's own published ports are bound to localhost by the same switch
+# (PUBLIC_PROXY_PORT in .env), so the only way in from outside is through
+# Caddy, and therefore through TLS.
+
+services:
+  caddy:
+    container_name: pashiz-caddy
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - proxy
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      - PASHIZ_DOMAIN=${PASHIZ_DOMAIN}
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      # The issued certificates live here. Losing this volume means asking
+      # Let's Encrypt for a new certificate, which is rate limited.
+      - caddy_data:/data
+      - caddy_config:/config
+      - caddy_logs:/var/log/caddy
+    networks:
+      - bigcapital_network
+
+volumes:
+  caddy_data:
+    name: pashiz_caddy_data
+    driver: local
+
+  caddy_config:
+    name: pashiz_caddy_config
+    driver: local
+
+  caddy_logs:
+    name: pashiz_caddy_logs
+    driver: local

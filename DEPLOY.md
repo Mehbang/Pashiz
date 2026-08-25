@@ -44,6 +44,7 @@ sudo BASE_URL=https://hesab.example.ir PASHIZ_DIR=/srv/pashiz ./setup.sh
 | `PASHIZ_BRANCH` | `pashiz` |
 | `BASE_URL` | `http://<ip سرور>` |
 | `PUBLIC_PROXY_PORT` | `80` |
+| `PASHIZ_DOMAIN` | ندارد (بدون HTTPS) |
 | `DOCKER_REGISTRY_MIRROR` | ندارد |
 
 ### اگر رجیستری داکر در دسترس نیست
@@ -101,17 +102,39 @@ gunzip < backups/pashiz-<تاریخ>.sql.gz | docker exec -i pashiz-mysql sh -c 
 
 ## دامنه و HTTPS
 
-`setup.sh` روی HTTP و پورت ۸۰ راه می‌اندازد. برای دامنه با گواهی، ساده‌ترین
-راه گذاشتن یک nginx یا Caddy جلوی آن است:
+هنگام نصب، اسکریپت دامنه را می‌پرسد. اگر بدهید، Caddy جلوی برنامه گذاشته
+می‌شود و گواهی Let's Encrypt را خودکار می‌گیرد و تمدید می‌کند. اگر خالی
+بگذارید، روی HTTP می‌ماند.
 
-1. در `.env` مقدار `PUBLIC_PROXY_PORT=8080` را بگذارید و
-   `BASE_URL=https://hesab.example.ir` را تنظیم کنید.
-2. `sudo ./update.sh restart`
-3. پروکسی بیرونی را روی `http://127.0.0.1:8080` تنظیم کنید و گواهی را
-   با Let's Encrypt بگیرید.
+```bash
+sudo PASHIZ_DOMAIN=hesab.example.ir ./setup.sh
+```
+
+روشن‌کردن HTTPS روی نصبی که از قبل روی HTTP بالا آمده:
+
+```bash
+cd /opt/pashiz
+sudo ./update.sh https hesab.example.ir
+sudo ./update.sh https off      # بازگشت به HTTP
+```
+
+**پیش‌نیازها:** رکورد DNS دامنه به IP این سرور اشاره کند و پورت‌های ۸۰ و
+۴۴۳ از اینترنت باز باشند. هر دو اسکریپت پیش از شروع، DNS را می‌آزمایند و
+اگر جور نبود هشدار می‌دهند.
+
+وقتی HTTPS روشن است، پورت‌های خود Envoy روی `127.0.0.1` بسته می‌شوند تا
+راهی برای دور زدن TLS و رسیدن مستقیم به برنامه با HTTP باقی نماند.
 
 `BASE_URL` باید دقیقاً همان نشانی‌ای باشد که کاربر در مرورگر می‌بیند؛
-لینک‌های پرداخت و ایمیل‌ها از روی آن ساخته می‌شوند.
+لینک‌های پرداخت و ایمیل‌ها از روی آن ساخته می‌شوند. اسکریپت‌ها خودشان
+تنظیمش می‌کنند.
+
+گواهی‌ها در volume به نام `pashiz_caddy_data` می‌مانند. پاک‌کردن آن یعنی
+درخواست گواهی تازه از Let's Encrypt، که سقف تعداد دارد.
+
+هیچ نشانی تماسی به Let's Encrypt داده نمی‌شود؛ Caddy بدون آن هم گواهی
+می‌گیرد. یعنی ایمیل هشدار انقضا دریافت نمی‌کنید — که چون تمدید خودکار
+است، اهمیتی ندارد.
 
 ## نخستین سازمان
 
@@ -142,6 +165,7 @@ docker exec pashiz-server node packages/server/dist/cli.js tenants:translate-see
 | `redis` | صف‌ها و کش |
 | `gotenberg` | تولید PDF برای چاپ فاکتور |
 | `garage` | فضای S3 برای پیوست‌ها و لوگو |
+| `caddy` | فقط با دامنه؛ TLS و گواهی خودکار |
 | `database_migration` | یک‌بار اجرا می‌شود و مهاجرت‌ها را انجام می‌دهد |
 
 بر خلاف بالادست، `server` و `webapp` از روی منبع همین مخزن ساخته می‌شوند نه
@@ -160,6 +184,10 @@ docker exec pashiz-server node packages/server/dist/cli.js tenants:translate-see
 
 **چاپ یا دانلود PDF کار نمی‌کند** — `gotenberg` باید بالا باشد و
 `GOTENBERG_DOCS_URL` در `.env` باید `http://server:3000/public/` باشد.
+
+**گواهی گرفته نمی‌شود** — `./update.sh logs caddy`. معمول‌ترین علت‌ها:
+دامنه به این سرور اشاره نمی‌کند، یا پورت ۸۰ از بیرون بسته است (ACME برای
+تأیید مالکیت به آن نیاز دارد).
 
 **سرور بالا نمی‌آید** — بیشتر وقت‌ها مهاجرت پایگاه‌داده شکست خورده است:
 `./update.sh logs database_migration`

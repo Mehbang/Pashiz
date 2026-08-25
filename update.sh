@@ -23,15 +23,49 @@ PREVIOUS_REF_FILE=".pashiz-previous-version"
 
 COMPOSE_FILES=(-f docker-compose.prod.yml -f docker-compose.pashiz.yml)
 
+# The HTTPS overlay is included whenever a domain is configured, so both
+# scripts act on the same set of services without being told which mode the
+# server is in.
+add_https_overlay_if_configured() {
+  [ -f .env ] || return 0
+  local domain
+  # `|| true`: under `pipefail` a grep that matches nothing would otherwise
+  # take the whole script down through `set -e`.
+  domain=$(grep -E '^PASHIZ_DOMAIN=' .env 2>/dev/null | head -1 | cut -d= -f2- || true)
+
+  if [ -n "$domain" ]; then
+    COMPOSE_FILES+=(-f docker-compose.https.yml)
+  fi
+}
+
 bold() { printf '\033[1m%s\033[0m\n' "$*"; }
 step() { printf '\n\033[1;34m==>\033[0m \033[1m%s\033[0m\n' "$*"; }
 info() { printf '    %s\n' "$*"; }
 warn() { printf '\033[1;33m    ! %s\033[0m\n' "$*"; }
 die()  { printf '\033[1;31m\nخطا: %s\033[0m\n' "$*" >&2; exit 1; }
 
+add_https_overlay_if_configured
+
 dc() { docker compose "${COMPOSE_FILES[@]}" --env-file .env "$@"; }
 
-get_env() { grep -E "^$1=" .env 2>/dev/null | head -1 | cut -d= -f2-; }
+# `|| true` keeps a missing key from tripping `set -e` under `pipefail`.
+get_env() { grep -E "^$1=" .env 2>/dev/null | head -1 | cut -d= -f2- || true; }
+
+# Values can contain characters special to sed, so they travel through the
+# environment and are written literally.
+set_env() {
+  local key="$1" value="$2"
+
+  if grep -qE "^${key}=" .env; then
+    KEY="$key" VALUE="$value" awk '
+      BEGIN { prefix = ENVIRON["KEY"] "="; value = ENVIRON["VALUE"] }
+      index($0, prefix) == 1 { print prefix value; next }
+      { print }
+    ' .env > .env.tmp && mv .env.tmp .env
+  else
+    printf '%s=%s\n' "$key" "$value" >> .env
+  fi
+}
 
 require_root() {
   [ "$(id -u)" -eq 0 ] || die "این کار را با sudo اجرا کنید:  sudo ./update.sh $*"
@@ -166,6 +200,82 @@ wait_for_migration() {
   info "مهاجرت پایگاه‌داده انجام شد ✅"
 }
 
+
+# Turns HTTPS on (or off) after the fact, for a server installed on plain HTTP
+# that has since been given a domain.
+cmd_https() {
+  require_root
+  require_env
+
+  local domain="${1:-}"
+
+  if [ "$domain" = "off" ]; then
+    step "خاموش‌کردن HTTPS"
+    set_env PASHIZ_DOMAIN ""
+    set_env PUBLIC_PROXY_PORT "80"
+    set_env PUBLIC_PROXY_SSL_PORT "443"
+
+    local ip
+    ip=$(hostname -I 2>/dev/null | awk '{print $1}')
+    set_env BASE_URL "http://${ip:-localhost}"
+
+    # Caddy is stopped through the overlay it was started with, before the
+    # file set is recomputed without it.
+    docker compose -f docker-compose.prod.yml -f docker-compose.pashiz.yml \
+      -f docker-compose.https.yml --env-file .env rm -sf caddy >/dev/null 2>&1 || true
+
+    COMPOSE_FILES=(-f docker-compose.prod.yml -f docker-compose.pashiz.yml)
+    dc up -d
+    info "روی HTTP: $(get_env BASE_URL)"
+    return
+  fi
+
+  if [ -z "$domain" ]; then
+    die "دامنه را بدهید:  sudo ./update.sh https hesab.example.ir"
+  fi
+  domain=$(echo "$domain" | tr -d '[:space:]' | sed -E 's#^https?://##; s#/.*$##')
+
+  step "روشن‌کردن HTTPS برای $domain"
+
+  local resolved public
+  resolved=$(getent hosts "$domain" 2>/dev/null | awk '{print $1}' | head -1)
+  public=$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || echo "")
+
+  if [ -z "$resolved" ]; then
+    warn "دامنه به هیچ نشانی‌ای resolve نمی‌شود؛ گواهی گرفته نخواهد شد."
+  elif [ -n "$public" ] && [ "$resolved" != "$public" ]; then
+    warn "دامنه به $resolved اشاره می‌کند ولی این سرور $public است."
+  else
+    info "DNS درست است: $domain → $resolved"
+  fi
+
+  set_env PASHIZ_DOMAIN "$domain"
+  set_env BASE_URL "https://$domain"
+  set_env PUBLIC_PROXY_PORT "127.0.0.1:8080"
+  set_env PUBLIC_PROXY_SSL_PORT "127.0.0.1:8443"
+
+  COMPOSE_FILES=(-f docker-compose.prod.yml -f docker-compose.pashiz.yml -f docker-compose.https.yml)
+
+  # The proxy has to be recreated so its published ports move to loopback.
+  dc up -d --force-recreate proxy
+  dc up -d
+
+  info "در انتظار گواهی..."
+  local ok=""
+  for _ in $(seq 1 30); do
+    if docker logs pashiz-caddy 2>&1 | grep -q "certificate obtained successfully\|serving initial configuration"; then
+      ok=1; break
+    fi
+    sleep 2
+  done
+
+  if [ -n "$ok" ]; then
+    info "HTTPS فعال شد ✅  https://$domain"
+  else
+    warn "گواهی هنوز گرفته نشده. گزارش را ببینید:  ./update.sh logs caddy"
+  fi
+}
+
 cmd_start()   { require_env; dc up -d; info "بالا آمد."; }
 cmd_stop()    { require_env; dc down;  info "متوقف شد."; }
 cmd_restart() { require_env; dc restart; info "دوباره راه‌اندازی شد."; }
@@ -193,6 +303,9 @@ usage() {
        ./update.sh logs [نام]   دنبال‌کردن گزارش‌ها
        ./update.sh start|stop|restart
 
+  sudo ./update.sh https <دامنه>    روشن‌کردن HTTPS روی نصب موجود
+  sudo ./update.sh https off        بازگشت به HTTP
+
 پشتیبان‌ها در ./backups ذخیره می‌شوند. به‌روزرسانی هرگز .env یا
 داده‌های پایگاه‌داده را پاک نمی‌کند.
 
@@ -208,6 +321,7 @@ case "${1:-update}" in
   stop)     cmd_stop ;;
   restart)  cmd_restart ;;
   status)   cmd_status ;;
+  https)    shift; cmd_https "$@" ;;
   logs)     shift; cmd_logs "$@" ;;
   help|-h|--help) usage ;;
   *) usage; die "دستور ناشناخته: $1" ;;

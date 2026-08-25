@@ -19,6 +19,9 @@
 #   PASHIZ_REPO      git remote                       (default this fork)
 #   BASE_URL         URL the application is served on (default http://<host-ip>)
 #   PUBLIC_PROXY_PORT  http port                      (default 80)
+#   PASHIZ_DOMAIN    domain to serve over HTTPS; when set, Caddy is put in
+#                    front and a Let's Encrypt certificate is obtained.
+#                    Leave empty to stay on plain HTTP.
 #   DOCKER_REGISTRY_MIRROR  registry mirror to pull the base images through,
 #                    for networks where Docker Hub is blocked or throttled.
 
@@ -30,6 +33,21 @@ PASHIZ_DIR="${PASHIZ_DIR:-/opt/pashiz}"
 PUBLIC_PROXY_PORT="${PUBLIC_PROXY_PORT:-80}"
 
 COMPOSE_FILES=(-f docker-compose.prod.yml -f docker-compose.pashiz.yml)
+
+# The HTTPS overlay is included whenever a domain is configured, so both
+# scripts act on the same set of services without being told which mode the
+# server is in.
+add_https_overlay_if_configured() {
+  [ -f .env ] || return 0
+  local domain
+  # `|| true`: under `pipefail` a grep that matches nothing would otherwise
+  # take the whole script down through `set -e`.
+  domain=$(grep -E '^PASHIZ_DOMAIN=' .env 2>/dev/null | head -1 | cut -d= -f2- || true)
+
+  if [ -n "$domain" ]; then
+    COMPOSE_FILES+=(-f docker-compose.https.yml)
+  fi
+}
 
 # ---------------------------------------------------------------- output ----
 
@@ -217,7 +235,8 @@ set_env() {
   fi
 }
 
-get_env() { grep -E "^$1=" .env 2>/dev/null | head -1 | cut -d= -f2-; }
+# `|| true` keeps a missing key from tripping `set -e` under `pipefail`.
+get_env() { grep -E "^$1=" .env 2>/dev/null | head -1 | cut -d= -f2- || true; }
 
 detect_base_url() {
   local ip
@@ -227,6 +246,57 @@ detect_base_url() {
     echo "http://${ip}"
   else
     echo "http://${ip}:${PUBLIC_PROXY_PORT}"
+  fi
+}
+
+# Asked before .env is written, since the answer decides BASE_URL, which port
+# Envoy publishes on, and whether Caddy joins the stack.
+ask_for_domain() {
+  # Already installed, or answered through the environment.
+  [ -f .env ] && return 0
+  [ -n "${PASHIZ_DOMAIN:-}" ] && return 0
+
+  if [ ! -t 0 ]; then
+    # Piped from curl with no terminal to ask on.
+    info "بدون دامنه روی HTTP نصب می‌شود. برای HTTPS متغیر PASHIZ_DOMAIN را بدهید."
+    PASHIZ_DOMAIN=""
+    return 0
+  fi
+
+  step "دامنه و HTTPS"
+  cat <<'EOF'
+    اگر دامنه‌ای دارید که به IP این سرور اشاره می‌کند، آن را وارد کنید تا
+    گواهی Let's Encrypt خودکار گرفته و تمدید شود.
+
+    شرط‌ها: رکورد DNS به این سرور اشاره کند و پورت‌های ۸۰ و ۴۴۳ از
+    اینترنت باز باشند.
+
+    خالی بگذارید تا روی HTTP نصب شود (فقط برای شبکهٔ داخلی مناسب است).
+
+EOF
+  read -rp "    دامنه [خالی = بدون HTTPS]: " PASHIZ_DOMAIN
+  PASHIZ_DOMAIN=$(echo "${PASHIZ_DOMAIN:-}" | tr -d '[:space:]' | sed -E 's#^https?://##; s#/.*$##')
+
+  if [ -n "$PASHIZ_DOMAIN" ]; then
+    check_dns_points_here "$PASHIZ_DOMAIN"
+  fi
+}
+
+# A certificate cannot be issued if the domain does not resolve here, and the
+# failure surfaces minutes later inside Caddy's log. Better to say so now.
+check_dns_points_here() {
+  local domain="$1" resolved public
+  resolved=$(getent hosts "$domain" 2>/dev/null | awk '{print $1}' | head -1)
+  public=$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || echo "")
+
+  if [ -z "$resolved" ]; then
+    warn "دامنهٔ $domain به هیچ نشانی‌ای resolve نمی‌شود."
+    warn "گواهی گرفته نخواهد شد تا وقتی رکورد DNS ساخته شود."
+  elif [ -n "$public" ] && [ "$resolved" != "$public" ]; then
+    warn "دامنه به $resolved اشاره می‌کند ولی نشانی این سرور $public است."
+    warn "تا وقتی این دو یکی نشوند، گواهی گرفته نمی‌شود."
+  else
+    info "DNS درست است: $domain → ${resolved}"
   fi
 }
 
@@ -253,8 +323,19 @@ create_env() {
   set_env GARAGE_RPC_SECRET "$(openssl rand -hex 32)"
   set_env GARAGE_ADMIN_TOKEN "$(openssl rand -hex 32)"
 
-  set_env PUBLIC_PROXY_PORT "$PUBLIC_PROXY_PORT"
-  set_env BASE_URL "${BASE_URL:-$(detect_base_url)}"
+  if [ -n "${PASHIZ_DOMAIN:-}" ]; then
+    set_env PASHIZ_DOMAIN "$PASHIZ_DOMAIN"
+    set_env BASE_URL "${BASE_URL:-https://$PASHIZ_DOMAIN}"
+
+    # Caddy takes 80 and 443. Envoy keeps its published ports on loopback so
+    # the application cannot be reached over plain HTTP from outside.
+    set_env PUBLIC_PROXY_PORT "127.0.0.1:8080"
+    set_env PUBLIC_PROXY_SSL_PORT "127.0.0.1:8443"
+  else
+    set_env PASHIZ_DOMAIN ""
+    set_env PUBLIC_PROXY_PORT "$PUBLIC_PROXY_PORT"
+    set_env BASE_URL "${BASE_URL:-$(detect_base_url)}"
+  fi
 
   # Gotenberg reaches the API by its service name on the compose network.
   set_env GOTENBERG_URL "http://gotenberg:3000"
@@ -374,7 +455,9 @@ main() {
   configure_registry_mirror
   check_registry_reachable
   fetch_source
+  ask_for_domain
   create_env
+  add_https_overlay_if_configured
   build_images
   bootstrap_garage
   start_services
