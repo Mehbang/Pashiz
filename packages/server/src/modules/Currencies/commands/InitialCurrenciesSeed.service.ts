@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { uniq } from 'lodash';
 import { CURRENCIES as Currencies } from '@bigcapital/utils';
 import { InitialCurrencies } from '../Currencies.constants';
@@ -10,7 +11,31 @@ export class InitialCurrenciesSeedService {
   constructor(
     @Inject(Currency.name)
     private readonly currencyModel: TenantModelProxy<typeof Currency>,
+
+    private readonly tenancyContext: TenancyContext,
   ) {}
+
+  /**
+   * The currency's name in the organization's language.
+   *
+   * The shared currency table carries English names only. `Intl.DisplayNames`
+   * already knows every ISO currency in every locale, so no translation table
+   * is needed; the toman, which has no ISO code, falls back to its own native
+   * name, and anything else the runtime cannot name keeps the English one.
+   */
+  private currencyName(currencyMeta, lang?: string): string {
+    if (!lang || lang === 'en') return currencyMeta.name;
+
+    try {
+      const displayNames = new Intl.DisplayNames([lang], { type: 'currency' });
+      const named = displayNames.of(currencyMeta.code);
+
+      if (named && named !== currencyMeta.code) return named;
+    } catch {
+      // The runtime has no data for this language; fall through.
+    }
+    return currencyMeta.symbol_native || currencyMeta.name;
+  }
 
   /**
    * Seeds the given base currency to the currencies list.
@@ -27,11 +52,18 @@ export class InitialCurrenciesSeedService {
       .query()
       .findOne('currency_code', currencyCode);
     if (!foundBaseCurrency) {
-      await this.currencyModel().query().insert({
-        currencyCode: currencyMeta.code,
-        currencyName: currencyMeta.name,
-        currencySign: currencyMeta.symbol,
-      });
+      const tenant = await this.tenancyContext.getTenant(true);
+
+      await this.currencyModel()
+        .query()
+        .insert({
+          currencyCode: currencyMeta.code,
+          currencyName: this.currencyName(
+            currencyMeta,
+            tenant.metadata?.language,
+          ),
+          currencySign: currencyMeta.symbol,
+        });
     }
   }
 

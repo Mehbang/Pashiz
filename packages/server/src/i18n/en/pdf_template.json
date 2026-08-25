@@ -29,5 +29,6 @@
   "title_estimate": "Estimate",
   "title_receipt": "Receipt",
   "title_credit_note": "Credit Note",
-  "title_payment_received": "Payment"
+  "title_payment_received": "Payment",
+  "standard_template": "Standard Template"
 }

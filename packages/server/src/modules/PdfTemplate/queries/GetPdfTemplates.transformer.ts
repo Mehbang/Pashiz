@@ -15,7 +15,7 @@ export class GetPdfTemplatesTransformer extends Transformer {
    * @returns {string[]}
    */
   public includeAttributes = (): string[] => {
-    return ['createdAtFormatted', 'resourceFormatted'];
+    return ['templateName', 'createdAtFormatted', 'resourceFormatted'];
   };
 
   /**
@@ -34,5 +34,20 @@ export class GetPdfTemplatesTransformer extends Transformer {
    */
   protected resourceFormatted = (template) => {
     // return getTransactionTypeLabel(template.resource);
+  };
+
+  /**
+   * The name of the template as the organization reads it.
+   *
+   * The seeded templates are created by a migration, which has no tenant and
+   * no i18n, so their English name is translated here on the way out. A name
+   * the user typed is their own wording and is left alone.
+   */
+  protected templateName = (template) => {
+    return template.predefined
+      ? (this.context.i18n.t('pdf_template.standard_template', {
+          lang: this.context.organization?.language,
+        }) as string)
+      : template.templateName;
   };
 }

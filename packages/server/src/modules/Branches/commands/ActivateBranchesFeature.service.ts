@@ -14,6 +14,7 @@ import { UnitOfWork } from '@/modules/Tenancy/TenancyDB/UnitOfWork.service';
 import { Branch } from '../models/Branch.model';
 import { events } from '@/common/events/events';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
+import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 
 @Injectable()
 export class ActivateBranches {
@@ -23,6 +24,7 @@ export class ActivateBranches {
     private readonly createBranch: CreateBranchService,
     private readonly branchesSettings: BranchesSettingsService,
     private readonly i18n: I18nService,
+    private readonly tenancyContext: TenancyContext,
   ) {}
 
   /**
@@ -37,9 +39,15 @@ export class ActivateBranches {
   /**
    * Creates a new initial branch.
    */
-  private createInitialBranch = () => {
+  private createInitialBranch = async () => {
+    // The organization's own language rather than the request's, so a branch
+    // created from a background job is named the same way.
+    const tenant = await this.tenancyContext.getTenant(true);
+
     return this.createBranch.createBranch({
-      name: this.i18n.t('branches.head_branch'),
+      name: this.i18n.t('branches.head_branch', {
+        lang: tenant.metadata?.language,
+      }),
       code: '10001',
       primary: true,
     });

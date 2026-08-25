@@ -29,5 +29,6 @@
   "title_estimate": "پیش‌فاکتور فروش",
   "title_receipt": "رسید فروش",
   "title_credit_note": "برگه بستانکار",
-  "title_payment_received": "رسید دریافت"
+  "title_payment_received": "رسید دریافت",
+  "standard_template": "قالب استاندارد"
 }
