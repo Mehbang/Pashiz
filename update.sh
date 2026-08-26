@@ -48,6 +48,71 @@ add_https_overlay_if_configured
 
 dc() { docker compose "${COMPOSE_FILES[@]}" --env-file .env "$@"; }
 
+# Building the webapp is the heaviest thing this software ever does: Vite and
+# rollup hold the whole application in memory at once. On a small server the
+# kernel kills the builder part-way through, and Docker reports only
+# `failed to execute bake: signal: killed`.
+#
+# The bar here is deliberately well above what the build needs at rest. A
+# 3.8GB machine looks comfortable and is not — with no swap it dies every
+# time.
+ensure_swap() {
+  local mem_mb swap_mb disk_gb
+  mem_mb=$(( $(grep MemTotal /proc/meminfo | awk '{print $2}') / 1024 ))
+  swap_mb=$(( $(grep SwapTotal /proc/meminfo | awk '{print $2}') / 1024 ))
+
+  [ $(( mem_mb + swap_mb )) -lt 8000 ] || return 0
+
+  if [ "$swap_mb" -gt 0 ]; then
+    info "حافظه کم است، ولی swap فعال است (${swap_mb}MB)."
+    return 0
+  fi
+
+  if [ -f /swapfile ]; then
+    swapon /swapfile && info "فایل swap موجود فعال شد."
+    return 0
+  fi
+
+  disk_gb=$(df -BG --output=avail / | tail -1 | tr -dc '0-9')
+  if [ "${disk_gb:-0}" -lt 10 ]; then
+    warn "حافظه برای ساخت ایمیج کم است و برای فایل swap هم فضای دیسک نیست."
+    return 0
+  fi
+
+  step "ساخت فایل swap چهار گیگابایتی"
+  # fallocate is instant but is not supported on every filesystem.
+  fallocate -l 4G /swapfile 2>/dev/null ||
+    dd if=/dev/zero of=/swapfile bs=1M count=4096 status=none
+  chmod 600 /swapfile
+  mkswap /swapfile >/dev/null
+  swapon /swapfile
+  grep -q '^/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  info "swap فعال شد و پس از راه‌اندازی دوبارهٔ سرور هم فعال می‌ماند."
+}
+
+build_failed() {
+  warn "ساخت ایمیج «$1» به پایان نرسید."
+  warn "اگر پیام «signal: killed» دیدید، حافظهٔ سرور در میانهٔ ساخت تمام شده است."
+  warn "با «free -h» ببینید swap فعال است؛ سپس «./update.sh rebuild» را بزنید."
+  die "ساخت ایمیج‌ها ناتمام ماند."
+}
+
+# One service per invocation, deliberately. `docker compose build server
+# webapp` hands both to buildx bake, which builds them concurrently — two
+# pnpm installs and two bundlers at once, which a small server does not
+# survive.
+build_images() {
+  step "ساخت ایمیج‌ها (چند دقیقه طول می‌کشد)"
+  ensure_swap
+
+  local service
+  for service in server webapp; do
+    info "ساخت $service …"
+    dc build "$@" "$service" || build_failed "$service"
+  done
+  info "ایمیج‌های پشیز ساخته شد."
+}
+
 # `|| true` keeps a missing key from tripping `set -e` under `pipefail`.
 get_env() { grep -E "^$1=" .env 2>/dev/null | head -1 | cut -d= -f2- || true; }
 
@@ -253,8 +318,7 @@ cmd_rebuild() {
   require_root
   require_env
 
-  step "ساخت ایمیج‌ها"
-  dc build server webapp
+  build_images
 
   step "راه‌اندازی دوباره"
   dc up -d

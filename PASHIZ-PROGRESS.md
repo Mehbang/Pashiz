@@ -123,6 +123,12 @@ Each of these passed every local check and still broke:
   `Content-Disposition` filename needs RFC 5987.
 - zsh does not word-split unquoted expansions. A command that works inside
   `update.sh` (bash) can fail pasted into a mac terminal.
+- `docker compose build server webapp` hands both services to buildx bake,
+  which builds them **concurrently**. Two pnpm installs and two bundlers at
+  once exhaust a 3.8GB server; the kernel kills buildx and Docker reports only
+  `failed to execute bake: signal: killed`. Each image is now built by its own
+  invocation, and `ensure_swap` refuses to start a build on a machine with
+  under 8GB of RAM+swap and nothing to fall back on.
 
 ## Pre-existing Bigcapital bugs fixed along the way
 

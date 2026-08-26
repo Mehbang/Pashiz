@@ -7,12 +7,14 @@
 | | کمینه | پیشنهادی |
 |---|---|---|
 | اوبونتو | 22.04 | 24.04 |
-| حافظه | 2GB + swap | 4GB |
+| حافظه | 4GB + swap | 8GB |
 | دیسک | 10GB | 20GB |
 | پورت | 80 | 80 و 443 |
 
-ساخت رابط کاربری سنگین‌ترین بخش است. روی سرور کم‌حافظه، `setup.sh` خودش
-یک فایل swap دو گیگابایتی می‌سازد.
+ساخت رابط کاربری سنگین‌ترین کاری است که این نرم‌افزار انجام می‌دهد. اگر
+مجموع حافظه و swap کمتر از ۸ گیگابایت باشد، `setup.sh` و `update.sh` خودشان
+یک فایل swap چهار گیگابایتی می‌سازند. سروری با ۴ گیگابایت حافظه و بدون swap
+به‌ظاهر کافی است ولی نیست — ساخت در میانهٔ کار کشته می‌شود.
 
 ## نصب
 
@@ -192,10 +194,15 @@ docker exec pashiz-server node packages/server/dist/cli.js tenants:translate-see
 **سرور بالا نمی‌آید** — بیشتر وقت‌ها مهاجرت پایگاه‌داده شکست خورده است:
 `./update.sh logs database_migration`
 
-**ساخت رابط کاربری در میانهٔ کار می‌میرد** — حافظه کم آمده. swap اضافه کنید:
+**ساخت در میانهٔ کار می‌میرد** یا پیام `failed to execute bake: signal: killed`
+می‌دهد — حافظهٔ سرور تمام شده است. با `free -h` ببینید swap فعال است؛ اگر
+نبود:
 
 ```bash
 sudo fallocate -l 4G /swapfile && sudo chmod 600 /swapfile
 sudo mkswap /swapfile && sudo swapon /swapfile
 echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 ```
+
+سپس `sudo ./update.sh rebuild`. کد پس از این خودش swap را می‌سازد و
+ایمیج‌ها را یکی‌یکی می‌سازد، نه هم‌زمان.
