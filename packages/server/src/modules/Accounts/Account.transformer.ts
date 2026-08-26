@@ -36,11 +36,19 @@ export class AccountTransformer extends Transformer {
    * @returns {string}
    */
   public flattenName = (account: Account): string => {
-    const parentDependantsIds = this.options.accountsGraph.dependantsOf(
-      account.id,
-    );
+    // The graph is only worth building where a whole chart of accounts is
+    // listed. Without it the account still has a name, and every other
+    // attribute here — the type label and the account normal among them —
+    // resolves as usual, so a caller that just created an account can use this
+    // transformer rather than serialising the model bare and leaking the
+    // untranslated i18n keys.
+    const accountsGraph = this.options?.accountsGraph;
+
+    if (!accountsGraph) return account.name;
+
+    const parentDependantsIds = accountsGraph.dependantsOf(account.id);
     const prefixAccounts = parentDependantsIds.map((dependId) => {
-      const node = this.options.accountsGraph.getNodeData(dependId);
+      const node = accountsGraph.getNodeData(dependId);
       return `${node.name}: `;
     });
     return `${prefixAccounts}${account.name}`;

@@ -1,4 +1,5 @@
 import { Transformer } from '../Transformer/Transformer';
+import { AccountTransformer } from '../Accounts/Account.transformer';
 import { Item } from './models/Item';
 // import { GetItemWarehouseTransformer } from '@/services/Warehouses/Items/GettItemWarehouseTransformer';
 
@@ -22,37 +23,27 @@ export class ItemTransformer extends Transformer {
   /**
    * The accounts hanging off an item.
    *
-   * Two of their fields — the type label and the account normal — are i18n
-   * keys, resolved by `AccountTransformer`. Running that transformer here
-   * would mean building the accounts graph its `flattenName` needs, which the
-   * item queries have no other reason to fetch, so only the two keys are
-   * resolved.
+   * Serialised bare they carry i18n keys where the type label and the account
+   * normal should be, so they go through the account transformer like any
+   * other account. It needs no accounts graph for these — nothing here shows a
+   * flattened parent chain.
    */
   public sellAccount(item: Item) {
-    return this.translateAccountLabels(item.sellAccount);
+    return item.sellAccount
+      ? this.item(item.sellAccount, new AccountTransformer())
+      : null;
   }
 
   public inventoryAccount(item: Item) {
-    return this.translateAccountLabels(item.inventoryAccount);
+    return item.inventoryAccount
+      ? this.item(item.inventoryAccount, new AccountTransformer())
+      : null;
   }
 
   public costAccount(item: Item) {
-    return this.translateAccountLabels(item.costAccount);
-  }
-
-  private translateAccountLabels(account: any) {
-    if (!account) return null;
-
-    return {
-      ...account,
-      accountTypeLabel: this.context.i18n.t(account.accountTypeLabel, {
-        defaultValue: account.accountTypeLabel,
-      }),
-      accountNormalFormatted: this.context.i18n.t(
-        account.accountNormalFormatted,
-        { defaultValue: account.accountNormalFormatted },
-      ),
-    };
+    return item.costAccount
+      ? this.item(item.costAccount, new AccountTransformer())
+      : null;
   }
 
   /**

@@ -19,6 +19,8 @@ import { BulkActivateAccountsService } from './BulkActivateAccounts.service';
 import { BulkDeleteAccountsService } from './BulkDeleteAccounts.service';
 import { ValidateBulkDeleteAccountsService } from './ValidateBulkDeleteAccounts.service';
 import { ValidateBulkDeleteResponseDto } from '@/common/dtos/BulkDelete.dto';
+import { AccountTransformer } from './Account.transformer';
+import { TransformerInjectable } from '@/modules/Transformer/TransformerInjectable.service';
 
 @Injectable()
 export class AccountsApplication {
@@ -44,6 +46,7 @@ export class AccountsApplication {
     private readonly bulkDeleteAccountsService: BulkDeleteAccountsService,
     private readonly bulkActivateAccountsService: BulkActivateAccountsService,
     private readonly validateBulkDeleteAccountsService: ValidateBulkDeleteAccountsService,
+    private readonly transformer: TransformerInjectable,
   ) {}
 
   /**
@@ -52,11 +55,15 @@ export class AccountsApplication {
    * @param {IAccountCreateDTO} accountDTO
    * @returns {Promise<IAccount>}
    */
-  public createAccount = (
+  public createAccount = async (
     accountDTO: CreateAccountDTO,
     trx?: Knex.Transaction,
-  ): Promise<Account> => {
-    return this.createAccountService.createAccount(accountDTO, trx);
+  ) => {
+    const account = await this.createAccountService.createAccount(
+      accountDTO,
+      trx,
+    );
+    return this.transformAccount(account);
   };
 
   /**
@@ -76,8 +83,26 @@ export class AccountsApplication {
    * @param {IAccountEditDTO} accountDTO
    * @returns
    */
-  public editAccount = (accountId: number, accountDTO: EditAccountDTO) => {
-    return this.editAccountService.editAccount(accountId, accountDTO);
+  public editAccount = async (
+    accountId: number,
+    accountDTO: EditAccountDTO,
+  ) => {
+    const account = await this.editAccountService.editAccount(
+      accountId,
+      accountDTO,
+    );
+    return this.transformAccount(account);
+  };
+
+  /**
+   * The written account is returned to the client the same way a read one is.
+   * Serialised straight off the model it carries i18n keys where the type
+   * label and the account normal should be — only the transformer resolves
+   * those. No accounts graph is passed: a single account has no parent chain
+   * to flatten, and building one would cost a query per write.
+   */
+  private transformAccount = (account: Account) => {
+    return this.transformer.transform(account, new AccountTransformer());
   };
 
   /**
