@@ -318,7 +318,13 @@ $pt-popover-box-shadow:
   0 2px 4px rgba(16, 22, 26, 0.1),
   0 8px 24px rgba(16, 22, 26, 0.1);
   
-body.bp4-dark  {
+// Both elements, and not the bare class: `:root` above carries the light
+// palette at the same specificity, so matching only `.bp4-dark` would leave
+// which one wins to the order of the file. `<html>` is named because the class
+// lands there before the first paint; `<body>` because that is where the rest
+// of the application looks for it.
+html.bp4-dark,
+body.bp4-dark {
   --color-primary: #8abbff;
   --color-danger: rgb(213, 103, 103);
 

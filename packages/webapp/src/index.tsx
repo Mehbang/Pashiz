@@ -11,6 +11,12 @@ import '@/services/yup';
 import App from '@/components/App';
 import * as serviceWorker from '@/serviceWorker';
 import { store, persistor } from '@/store/create-store';
+import { syncTheme, watchSystemTheme } from '@/utils/theme';
+
+// The head script could only reach <html>; <body> exists by now and a few
+// rules name it.
+syncTheme();
+watchSystemTheme();
 
 ReactDOM.render(
   <Provider store={store}>

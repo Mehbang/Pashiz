@@ -101,6 +101,22 @@ Two different backups exist, for two different jobs:
   file. For carrying a set of books to a Bigcapital you already have an
   account on. Leaves the target's users and other organizations alone.
 
+## Light and dark
+
+Both themes were already written — the light palette on `:root` in
+`style/_variables.scss`, the dark one beside it, with every component's own
+dark rules hanging off `.bp4-dark`. Only the light one was unreachable:
+`index.html` pinned `class="bp4-dark"` on `<body>`, and the script meant to
+decide was loaded from `/public/preload-theme.js`, a path the single-page
+fallback answers with index.html, so in production it never ran.
+
+The script is inlined in `<head>` now and writes the class to `<html>` before
+the first paint; `src/utils/theme.ts` holds the choice and `ThemeSwitch` in the
+topbar flips it. `shift+H` goes through the same code, so it persists too. The
+palette block is keyed on `html.bp4-dark, body.bp4-dark` rather than the bare
+class — `:root` carries the light palette at equal specificity, and the bare
+class would leave the winner to the order of the file.
+
 ## Traps that only a real Linux server or a live run exposed
 
 Each of these passed every local check and still broke:

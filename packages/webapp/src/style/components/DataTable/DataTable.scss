@@ -382,7 +382,7 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    body.bp4-dark & {
+    .bp4-dark & {
       background: rgba(28, 33, 39, 0.6);
     }
   }
@@ -396,7 +396,7 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    body.bp4-dark & {
+    .bp4-dark & {
       background: rgba(28, 33, 39, 0.6);
     }
   }

@@ -2936,5 +2936,7 @@
   "backup.import.unnamed_organization": "Unnamed organization",
   "backup.import.summary.exported_at": "Exported on {date}",
   "backup.import.summary.rows": "{rows} records across {tables} tables",
-  "backup.import.summary.attachments": "{count} attachments"
+  "backup.import.summary.attachments": "{count} attachments",
+  "theme.switch_to_dark": "Dark theme",
+  "theme.switch_to_light": "Light theme"
 }

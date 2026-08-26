@@ -17,6 +17,7 @@ import {
   DashboardHamburgerButton,
   DashboardQuickSearchButton,
 } from './_components';
+import { ThemeSwitch } from './ThemeSwitch';
 import type { WithDashboardProps } from '@/containers/Dashboard/withDashboard';
 import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
@@ -123,6 +124,7 @@ function DashboardTopbar({
           <NavbarGroup>
             <DashboardQuickSearchButton onClick={() => openGlobalSearch()} />
             <QuickNewDropdown />
+            <ThemeSwitch />
             <Tooltip
               content={<T id={'notifications'} />}
               position={Position.BOTTOM}

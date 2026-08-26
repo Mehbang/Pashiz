@@ -10,10 +10,37 @@
       content="سامانه مالی پشیز"
     />
     <link rel="modulepreload" href="/manifest.json" />
-    <script type="module" src="/public/preload-theme.js"></script>
+    <script>
+      // Chooses the theme before the first paint, so the page never shows one
+      // and then flips to the other.
+      //
+      // Inline rather than a file under /public: it was loaded from
+      // `/public/preload-theme.js`, a path the single-page fallback answers
+      // with index.html, so in production the browser refused it as a module
+      // and the script never ran at all.
+      (function () {
+        var isDark;
+        try {
+          var stored = localStorage.getItem('theme');
+          isDark = stored
+            ? stored === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        } catch (error) {
+          isDark = false;
+        }
+        // The payment portal is opened by the organization's customers, who
+        // have chosen nothing here and are looking at an invoice to pay.
+        if (window.location.pathname.indexOf('/payment') === 0) {
+          isDark = false;
+        }
+        if (isDark) {
+          document.documentElement.classList.add('bp4-dark');
+        }
+      })();
+    </script>
     <title>سامانه مالی پشیز</title>
   </head>
-  <body class="bp4-dark">
+  <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <div id="nprogress"></div>
