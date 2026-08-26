@@ -25,6 +25,9 @@ export class CashflowAccountTransformer extends Transformer {
       'index',
       'accountRootType',
       'accountTypeLabel',
+      // Beside its siblings above: ledger metadata a bank account card has no
+      // use for, and an i18n key that only the account transformer resolves.
+      'accountNormalFormatted',
       'accountParentType',
       'isBalanceSheetAccount',
       'isPlSheet',

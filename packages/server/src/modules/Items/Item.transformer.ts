@@ -13,8 +13,47 @@ export class ItemTransformer extends Transformer {
       'sellPriceFormatted',
       'costPriceFormatted',
       'itemWarehouses',
+      'sellAccount',
+      'inventoryAccount',
+      'costAccount',
     ];
   };
+
+  /**
+   * The accounts hanging off an item.
+   *
+   * Two of their fields — the type label and the account normal — are i18n
+   * keys, resolved by `AccountTransformer`. Running that transformer here
+   * would mean building the accounts graph its `flattenName` needs, which the
+   * item queries have no other reason to fetch, so only the two keys are
+   * resolved.
+   */
+  public sellAccount(item: Item) {
+    return this.translateAccountLabels(item.sellAccount);
+  }
+
+  public inventoryAccount(item: Item) {
+    return this.translateAccountLabels(item.inventoryAccount);
+  }
+
+  public costAccount(item: Item) {
+    return this.translateAccountLabels(item.costAccount);
+  }
+
+  private translateAccountLabels(account: any) {
+    if (!account) return null;
+
+    return {
+      ...account,
+      accountTypeLabel: this.context.i18n.t(account.accountTypeLabel, {
+        defaultValue: account.accountTypeLabel,
+      }),
+      accountNormalFormatted: this.context.i18n.t(
+        account.accountNormalFormatted,
+        { defaultValue: account.accountNormalFormatted },
+      ),
+    };
+  }
 
   /**
    * Formatted item type.

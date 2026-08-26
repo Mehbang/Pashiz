@@ -1,4 +1,5 @@
 import { Warehouse } from '@/modules/Warehouses/models/Warehouse.model';
+import { Account } from '@/modules/Accounts/models/Account.model';
 import { TenantBaseModel } from '@/modules/System/models/TenantBaseModel';
 import { Model } from 'objection';
 import { ExportableModel } from '@/modules/Export/decorators/ExportableModel.decorator';
@@ -39,6 +40,12 @@ export class Item extends TenantBaseModel {
   public readonly purchaseTaxRateId: number;
 
   public readonly warehouse!: Warehouse;
+
+  // Eagerly fetched by the item queries; declared so the transformer can reach
+  // them. Optional because a service item has no inventory account.
+  public readonly costAccount?: Account;
+  public readonly inventoryAccount?: Account;
+  public readonly sellAccount?: Account;
 
   static get tableName() {
     return 'items';
