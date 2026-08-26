@@ -25,7 +25,11 @@ becomes a value again. 98 call sites build API payloads with
 | Bundled font (Vazirmatn) | `packages/webapp/src/style/_fonts.scss` + `style/fonts/` |
 | Client translations | `packages/webapp/src/lang/{en,fa}/index.json` |
 | Server translations | `packages/server/src/i18n/{en,fa}/` |
-| Jalali period arithmetic (server) | `packages/server/src/utils/jalali-date.ts` |
+| Jalali period arithmetic (shared) | `shared/bigcapital-utils/src/jalali/period.ts` |
+| Calendar/digit helpers (server) | `packages/server/src/utils/jalali-date.ts` |
+| Per-organization export/import | `packages/server/src/modules/OrganizationBackup/` |
+| Its settings tab | `packages/webapp/src/containers/Preferences/Backup/` |
+| Deployment | `setup.sh`, `update.sh`, `docker-compose.pashiz.yml`, `docker-compose.https.yml`, `DEPLOY.md` |
 
 ## How a calendar is chosen
 
@@ -83,6 +87,43 @@ will not catch:
 Merged so far: `2bbd98cba` (2026-08-25), which brought the password-length
 policy, the ESLint workflow, Garage object storage, and the e2e test overhaul.
 
+## Deployment
+
+Runs at **https://pashiz.shishek.ir** (`91.107.171.86`, Ubuntu 26.04),
+installed at `/opt/pashiz`. `DEPLOY.md` covers install, update, backup, HTTPS
+and troubleshooting.
+
+Two different backups exist, for two different jobs:
+
+- `./update.sh backup` / `restore` — the whole installation, users included.
+  For moving a server.
+- **Preferences → پشتیبان‌گیری** — one organization's books, as a `.pashiz`
+  file. For carrying a set of books to a Bigcapital you already have an
+  account on. Leaves the target's users and other organizations alone.
+
+## Traps that only a real Linux server or a live run exposed
+
+Each of these passed every local check and still broke:
+
+- The repo holds **two** module directories, `EE/` (AuditLogs) and `ee/`
+  (Workspaces). macOS merges them, so a Docker image built from a macOS
+  checkout is missing one. Build on Linux.
+- The migration container needs `working_dir: /app/packages/server`; the
+  system migration path is relative to the working directory.
+- `timeouts` is not a site-level Caddyfile directive — Caddy refused the whole
+  config and restart-looped.
+- The Garage image has **no shell at all**, and its v1.3.1 CLI takes the key
+  name and bucket positionally. Upstream's mounted bootstrap script cannot run
+  and never could.
+- Identifiers passed to the tenant knex must be camelCase; objection's mappers
+  turn `ACCOUNTS_TRANSACTIONS` into `ACCOUNTS__TRANSACTIONS`.
+- `DATETIME` values JSON-serialise to ISO-8601 with a `Z`, which MySQL then
+  refuses on insert.
+- An organization name is Persian and an HTTP header is latin-1, so any
+  `Content-Disposition` filename needs RFC 5987.
+- zsh does not word-split unquoted expansions. A command that works inside
+  `update.sh` (bash) can fail pasted into a mac terminal.
+
 ## Pre-existing Bigcapital bugs fixed along the way
 
 1. `import('moment/locale/${x}')` could not be resolved by Vite — this broke
@@ -103,7 +144,12 @@ policy, the ESLint workflow, Garage object storage, and the e2e test overhaul.
 
 ## Not done
 
-- The 53 pre-existing webapp type errors (Ehsan chose to leave them).
+- The 49 pre-existing webapp type errors (Ehsan chose to leave them; four of
+  the original 53 were retired incidentally by the select wrappers).
+- Attachments in the per-organization export are written and read but have
+  never been exercised: the development machine has no object store running,
+  and the server had no attachment to carry. Worth testing once there is one.
+- The server is not always on the latest commit — `sudo ./update.sh` on it.
 - The ESLint check upstream added (`pnpm run lint:check`) reports ~900 problems
   across ~550 server files. They are upstream's, not this fork's; the workflow
   only gates `main`/`develop`, so `pashiz` is unaffected.
