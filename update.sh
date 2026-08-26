@@ -337,6 +337,15 @@ cmd_update() {
   # A newer .env.example may introduce settings the running .env lacks.
   report_new_env_keys
 
+  # This script has just replaced itself on disk, but bash is executing the
+  # version it parsed at startup. Anything the update changed *in here* takes
+  # effect on the next run, not this one — worth knowing when a fix seems not
+  # to have applied.
+  if ! git diff --quiet "$current" "$target" -- update.sh; then
+    warn "خودِ update.sh در این نسخه تغییر کرده است."
+    warn "تغییرهای آن از اجرای بعدی اثر می‌کنند."
+  fi
+
   cmd_rebuild
 }
 
