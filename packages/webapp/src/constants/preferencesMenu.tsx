@@ -74,6 +74,11 @@ export const PreferencesMenu: PreferencesMenuItem[] = [
     disabled: false,
     href: '/preferences/api-keys',
   },
+  {
+    text: intl.get('backup.title'),
+    disabled: false,
+    href: '/preferences/backup',
+  },
   // {
   //   text: <T id={'sms_integration.label'} />,
   //   disabled: false,

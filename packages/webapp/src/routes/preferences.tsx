@@ -14,6 +14,15 @@ export const getPreferenceRoutes = () => [
     exact: true,
   },
   {
+    path: `${BASE_URL}/backup`,
+    component: lazy(() =>
+      import('@/containers/Preferences/Backup/Backup').then((m) => ({
+        default: m.Backup,
+      })),
+    ),
+    exact: true,
+  },
+  {
     path: `${BASE_URL}/branding`,
     component: lazy(() =>
       import('../containers/Preferences/Branding/PreferencesBrandingPage').then(
