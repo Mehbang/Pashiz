@@ -1,7 +1,7 @@
 // import { IAccountType } from './Accounts.types';
 import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { AccountTypesUtils } from './utils/AccountType.utils';
+import { AccountTypesUtils } from '@/libs/accounts-utils/AccountTypesUtils';
 
 @Injectable()
 export class GetAccountTypesService {

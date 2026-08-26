@@ -6,7 +6,7 @@ import { ServiceError } from '../Items/ServiceError';
 import { ERRORS, MAX_ACCOUNTS_CHART_DEPTH } from './constants';
 import { Account } from './models/Account.model';
 import { AccountRepository } from './repositories/Account.repository';
-import { AccountTypesUtils } from './utils/AccountType.utils';
+import { AccountTypesUtils } from '@/libs/accounts-utils/AccountTypesUtils';
 import { CreateAccountDTO } from './CreateAccount.dto';
 import { EditAccountDTO } from './EditAccount.dto';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
