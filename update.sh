@@ -340,11 +340,21 @@ cmd_update() {
   cmd_rebuild
 }
 
+# The server container runs as uid 1001 and writes the portal's backups into
+# this directory. It has to exist and be owned by that uid before the container
+# starts, or the first backup fails with a permission error.
+ensure_backup_dir() {
+  mkdir -p backups/portal
+  chown -R 1001:1001 backups/portal 2>/dev/null || true
+  chmod 700 backups/portal 2>/dev/null || true
+}
+
 cmd_rebuild() {
   require_root
   require_env
 
   build_images
+  ensure_backup_dir
 
   step "راه‌اندازی دوباره"
   dc up -d

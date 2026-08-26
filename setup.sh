@@ -482,6 +482,15 @@ set_admin_password() {
 # the setup script mounted into it by upstream cannot run there. The same
 # steps are driven from here instead, against the v1.3.1 CLI, whose `key
 # create` and `bucket allow` take their subject as a positional argument.
+# The server container runs as uid 1001 and writes the portal's backups into
+# this directory. It has to exist and be owned by that uid before the container
+# starts, or the first backup fails with a permission error.
+ensure_backup_dir() {
+  mkdir -p backups/portal
+  chown -R 1001:1001 backups/portal 2>/dev/null || true
+  chmod 700 backups/portal 2>/dev/null || true
+}
+
 bootstrap_garage() {
   step "آماده‌سازی فضای ذخیره‌سازی پیوست‌ها"
 
@@ -657,6 +666,7 @@ main() {
   add_https_overlay_if_configured
   build_images --pull
   set_admin_password
+  ensure_backup_dir
   bootstrap_garage
   start_services
   finish
