@@ -113,11 +113,40 @@ export class AdminBackupService {
       this.state = {
         status: 'failed',
         finishedAt: new Date().toISOString(),
-        message: error?.message ?? 'unknown error',
+        message: this.explain(error),
       };
       this.logger.error(`Backup failed: ${error?.message}`);
     });
     return { started: true };
+  }
+
+  /**
+   * Turns what the client printed into something an operator can act on.
+   *
+   * `spawn mysql ENOENT` and a socket path nobody configured are precise and
+   * useless; both have one obvious cause and one obvious remedy.
+   */
+  private explain(error: any): string {
+    const message = String(error?.message ?? 'unknown error');
+
+    if (error?.code === 'ENOENT' || message.includes('ENOENT')) {
+      return (
+        'ابزار mysqldump روی این نصب پیدا نشد. ' +
+        'این ابزار در ایمیج رسمی پشیز هست؛ اگر سرور را دستی و بیرون از داکر ' +
+        'بالا آورده‌اید، بستهٔ mariadb-client را نصب کنید.'
+      );
+    }
+    if (message.includes('mysqld.sock') || message.includes("Can't connect")) {
+      return (
+        'اتصال به پایگاه‌داده برقرار نشد. ' +
+        'مقدار DB_HOST باید نام سرویس پایگاه‌داده باشد (mysql)، نه localhost. ' +
+        `پیام اصلی: ${message}`
+      );
+    }
+    if (message.includes('Access denied')) {
+      return `پایگاه‌داده اجازهٔ دسترسی نداد. کاربر یا رمز DB_USER/DB_PASSWORD را بررسی کنید. پیام اصلی: ${message}`;
+    }
+    return message;
   }
 
   private async run(): Promise<void> {

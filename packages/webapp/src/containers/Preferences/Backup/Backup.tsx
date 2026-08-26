@@ -10,8 +10,8 @@ import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashb
 import { compose } from '@/utils';
 import { localizedDigits } from '@/utils/locale';
 import { formatDateLocalized } from '@/utils/locale';
-import { useOrganizationBackup } from './useOrganizationBackup';
-import type { BackupSummary } from './useOrganizationBackup';
+import { isBundle, useOrganizationBackup } from './useOrganizationBackup';
+import type { BackupSummary, BundleContents } from './useOrganizationBackup';
 
 type BackupPreferencesProps = Pick<
   WithDashboardActionsProps,
@@ -36,6 +36,13 @@ function BackupPreferences({
   const [pending, setPending] = useState<{
     file: File;
     summary: BackupSummary;
+    entryIndex?: number;
+  } | null>(null);
+  // A user bundle holds several organizations; which one lands here is a
+  // decision only the reader can make, so it is asked before anything else.
+  const [bundle, setBundle] = useState<{
+    file: File;
+    contents: BundleContents;
   } | null>(null);
 
   useEffect(() => {
@@ -70,8 +77,33 @@ function BackupPreferences({
     if (!file) return;
 
     try {
-      const summary = await inspectBackup(file);
-      setPending({ file, summary });
+      const described = await inspectBackup(file);
+
+      if (isBundle(described)) {
+        setBundle({ file, contents: described });
+      } else {
+        setPending({ file, summary: described });
+      }
+    } catch {
+      AppToaster.show({
+        message: intl.get('backup.import.invalid_file'),
+        intent: Intent.DANGER,
+      });
+    }
+  };
+
+  // Describing the chosen entry moves it onto the same confirmation step a
+  // single-organization file goes through, so nothing is replaced without the
+  // reader seeing what it is first.
+  const handleChooseEntry = async (entryIndex: number) => {
+    if (!bundle) return;
+    try {
+      const summary = (await inspectBackup(
+        bundle.file,
+        entryIndex,
+      )) as BackupSummary;
+      setPending({ file: bundle.file, summary, entryIndex });
+      setBundle(null);
     } catch {
       AppToaster.show({
         message: intl.get('backup.import.invalid_file'),
@@ -84,7 +116,7 @@ function BackupPreferences({
     if (!pending) return;
     setImporting(true);
     try {
-      await importBackup(pending.file);
+      await importBackup(pending.file, pending.entryIndex);
       AppToaster.show({
         message: intl.get('backup.import.succeeded'),
         intent: Intent.SUCCESS,
@@ -133,7 +165,32 @@ function BackupPreferences({
               {intl.get('backup.import.warning')}
             </Callout>
 
-            {pending ? (
+            {bundle ? (
+              <Callout intent={Intent.PRIMARY}>
+                <SummaryTitle>
+                  {intl.get('backup.import.bundle.title', {
+                    email: bundle.contents.user_email ?? '',
+                  })}
+                </SummaryTitle>
+                <SummaryList>
+                  {bundle.contents.entries.map((entry) => (
+                    <li key={entry.index}>
+                      <Button
+                        minimal
+                        intent={Intent.PRIMARY}
+                        onClick={() => handleChooseEntry(entry.index)}
+                      >
+                        {entry.name ||
+                          intl.get('backup.import.unnamed_organization')}
+                      </Button>
+                    </li>
+                  ))}
+                </SummaryList>
+                <Button onClick={() => setBundle(null)}>
+                  {intl.get('cancel')}
+                </Button>
+              </Callout>
+            ) : pending ? (
               <Callout intent={Intent.PRIMARY}>
                 <SummaryTitle>
                   {pending.summary.organization_name ||
@@ -187,7 +244,7 @@ function BackupPreferences({
                 <HiddenFileInput
                   ref={fileInputRef}
                   type="file"
-                  accept=".pashiz,application/gzip"
+                  accept=".pashiz,.pashizbundle,application/gzip"
                   onChange={handleFileChosen}
                 />
               </>

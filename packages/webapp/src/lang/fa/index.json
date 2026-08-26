@@ -2938,5 +2938,6 @@
   "backup.import.summary.rows": "{rows} رکورد در {tables} جدول",
   "backup.import.summary.attachments": "{count} پیوست",
   "theme.switch_to_dark": "تم تاریک",
-  "theme.switch_to_light": "تم روشن"
+  "theme.switch_to_light": "تم روشن",
+  "backup.import.bundle.title": "این پرونده بستهٔ کاربر {email} است و چند سازمان دارد. کدام‌یک در این سازمان بالا بیاید؟"
 }

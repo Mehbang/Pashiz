@@ -2938,5 +2938,6 @@
   "backup.import.summary.rows": "{rows} records across {tables} tables",
   "backup.import.summary.attachments": "{count} attachments",
   "theme.switch_to_dark": "Dark theme",
-  "theme.switch_to_light": "Light theme"
+  "theme.switch_to_light": "Light theme",
+  "backup.import.bundle.title": "This file is a bundle for {email} and holds several organizations. Which one should be imported here?"
 }

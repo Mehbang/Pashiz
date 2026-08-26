@@ -11,6 +11,21 @@ export interface BackupSummary {
 }
 
 /**
+ * What comes back when the file is a user bundle rather than one
+ * organization's export: several organizations, one of which has to be chosen
+ * before anything can be described or imported.
+ */
+export interface BundleContents {
+  is_bundle: true;
+  user_email?: string;
+  entries: Array<{ index: number; name: string; organization_id: string }>;
+}
+
+export const isBundle = (
+  value: BackupSummary | BundleContents,
+): value is BundleContents => (value as BundleContents).is_bundle === true;
+
+/**
  * Export and import of the organization's own data.
  *
  * Not written as react-query hooks: neither call has a result worth caching —
@@ -51,10 +66,15 @@ export function useOrganizationBackup() {
    * Reads a file and reports what it holds, without changing anything.
    */
   const inspectBackup = React.useCallback(
-    async (file: File): Promise<BackupSummary> => {
+    async (
+      file: File,
+      entryIndex?: number,
+    ): Promise<BackupSummary | BundleContents> => {
       const form = new FormData();
       form.append('file', file);
-
+      if (entryIndex !== undefined) {
+        form.append('entryIndex', String(entryIndex));
+      }
       const response = await http.post(
         '/api/organization/backup/inspect',
         form,
@@ -68,10 +88,12 @@ export function useOrganizationBackup() {
    * Replaces the organization's data with the file's.
    */
   const importBackup = React.useCallback(
-    async (file: File): Promise<BackupSummary> => {
+    async (file: File, entryIndex?: number): Promise<BackupSummary> => {
       const form = new FormData();
       form.append('file', file);
-
+      if (entryIndex !== undefined) {
+        form.append('entryIndex', String(entryIndex));
+      }
       const response = await http.post('/api/organization/backup/import', form);
       return response.data;
     },

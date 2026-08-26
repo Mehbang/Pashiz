@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Post,
@@ -59,8 +60,18 @@ export class OrganizationBackupController {
     summary: 'Reads a backup file and reports what it holds, changing nothing.',
   })
   @UseInterceptors(FileInterceptor('file'))
-  async inspectBackup(@UploadedFile() file: Express.Multer.File) {
-    return this.importService.inspect(file.buffer);
+  async inspectBackup(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: { entryIndex?: string },
+  ) {
+    // A bundle holds several organizations and cannot be described as one, so
+    // its contents come back instead and the interface asks which to use.
+    const bundle = await this.importService.inspectBundle(file.buffer);
+    const index = this.parseIndex(body?.entryIndex);
+
+    if (bundle.isBundle && index === undefined) return bundle;
+
+    return this.importService.inspect(file.buffer, index);
   }
 
   @Post('import')
@@ -69,7 +80,20 @@ export class OrganizationBackupController {
     summary: "Replaces the organization's data with the uploaded backup.",
   })
   @UseInterceptors(FileInterceptor('file'))
-  async importBackup(@UploadedFile() file: Express.Multer.File) {
-    return this.importService.import(file.buffer);
+  async importBackup(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: { entryIndex?: string },
+  ) {
+    return this.importService.import(
+      file.buffer,
+      this.parseIndex(body?.entryIndex),
+    );
+  }
+
+  private parseIndex(raw?: string): number | undefined {
+    if (raw === undefined || raw === null || raw === '') return undefined;
+
+    const index = parseInt(String(raw), 10);
+    return Number.isNaN(index) ? undefined : index;
   }
 }

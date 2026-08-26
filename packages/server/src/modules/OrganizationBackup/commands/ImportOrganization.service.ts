@@ -37,8 +37,11 @@ export class ImportOrganizationService {
    * Reads a backup file without changing anything, so the interface can say
    * what is about to be imported before the user commits to it.
    */
-  public async inspect(file: Buffer): Promise<OrganizationBackupSummary> {
-    const backup = await this.parse(file);
+  public async inspect(
+    file: Buffer,
+    entryIndex?: number,
+  ): Promise<OrganizationBackupSummary> {
+    const backup = await this.parse(file, entryIndex);
 
     return {
       organizationName: backup.organization?.name,
@@ -64,9 +67,12 @@ export class ImportOrganizationService {
    * Only the tenant database is touched. The users of this installation, and
    * every other organization on it, are left exactly as they were.
    */
-  public async import(file: Buffer): Promise<OrganizationBackupSummary> {
-    const backup = await this.parse(file);
-    const summary = await this.inspect(file);
+  public async import(
+    file: Buffer,
+    entryIndex?: number,
+  ): Promise<OrganizationBackupSummary> {
+    const backup = await this.parse(file, entryIndex);
+    const summary = await this.inspect(file, entryIndex);
 
     const knex = this.tenantKnex();
     const tenant = await this.tenancyContext.getTenant(true);
@@ -255,19 +261,84 @@ export class ImportOrganizationService {
     return new Set(rows.map((row) => toCamelTableName(row.name)));
   }
 
-  private async parse(file: Buffer): Promise<OrganizationBackup> {
-    let backup: OrganizationBackup;
+  /**
+   * Reads either kind of file the application produces.
+   *
+   * A `.pashiz` holds one organization. A `.pashizbundle` — what the
+   * administration portal exports for a person — holds one entry per
+   * organization they belong to, each entry being a whole `.pashiz`. A bundle
+   * cannot be imported as it stands, because only a human can say which
+   * organization each entry should land in, so the caller picks one by index
+   * and this unwraps it.
+   */
+  private async parse(
+    file: Buffer,
+    entryIndex?: number,
+  ): Promise<OrganizationBackup> {
+    let parsed: any;
     try {
-      backup = JSON.parse((await gunzipAsync(file)).toString());
+      parsed = JSON.parse((await gunzipAsync(file)).toString());
     } catch {
       throw new ServiceError(ERRORS.INVALID_BACKUP_FILE);
     }
-    if (backup?.app !== 'pashiz' || !backup?.tables) {
+    if (parsed?.app !== 'pashiz') {
       throw new ServiceError(ERRORS.INVALID_BACKUP_FILE);
     }
-    if (backup.format > ORGANIZATION_BACKUP_FORMAT) {
+    if (parsed.kind === 'user-bundle') {
+      return this.unwrapBundle(parsed, entryIndex);
+    }
+    if (!parsed?.tables) {
+      throw new ServiceError(ERRORS.INVALID_BACKUP_FILE);
+    }
+    if (parsed.format > ORGANIZATION_BACKUP_FORMAT) {
       throw new ServiceError(ERRORS.UNSUPPORTED_BACKUP_FORMAT);
     }
-    return backup;
+    return parsed as OrganizationBackup;
+  }
+
+  private async unwrapBundle(
+    bundle: any,
+    entryIndex?: number,
+  ): Promise<OrganizationBackup> {
+    const entries = Array.isArray(bundle.organizations)
+      ? bundle.organizations
+      : [];
+
+    if (!entries.length) throw new ServiceError(ERRORS.EMPTY_BUNDLE);
+
+    const index = entryIndex ?? (entries.length === 1 ? 0 : -1);
+    if (index < 0 || index >= entries.length) {
+      throw new ServiceError(ERRORS.BUNDLE_ENTRY_NOT_CHOSEN);
+    }
+    return this.parse(Buffer.from(entries[index].backup, 'base64'));
+  }
+
+  /**
+   * What a bundle holds, so the interface can offer the choice.
+   */
+  public async inspectBundle(file: Buffer): Promise<{
+    isBundle: boolean;
+    userEmail?: string;
+    entries: Array<{ index: number; name: string; organizationId: string }>;
+  }> {
+    let parsed: any;
+    try {
+      parsed = JSON.parse((await gunzipAsync(file)).toString());
+    } catch {
+      throw new ServiceError(ERRORS.INVALID_BACKUP_FILE);
+    }
+    if (parsed?.kind !== 'user-bundle') return { isBundle: false, entries: [] };
+
+    return {
+      isBundle: true,
+      userEmail: parsed.user?.email,
+      entries: (parsed.organizations ?? []).map(
+        (entry: any, index: number) => ({
+          index,
+          name: entry.name || '',
+          organizationId: entry.organizationId,
+        }),
+      ),
+    };
   }
 }
