@@ -117,6 +117,19 @@ palette block is keyed on `html.bp4-dark, body.bp4-dark` rather than the bare
 class — `:root` carries the light palette at equal specificity, and the bare
 class would leave the winner to the order of the file.
 
+## Untranslated strings a grep will never find
+
+The server passes some labels through `i18n.t()` that are already English prose
+rather than keys — `ACCOUNT_TYPES[].label` was `'Cash'`. The lookup misses,
+nestjs-i18n returns the key, and the result reads as correct English and as
+untranslated Persian. Those labels are keys now (`account.type.*`,
+`account.root_type.*`, and the account normal reusing
+`account.field.normal.*`), with the English in `i18n/en/account.json`.
+
+Note that `ACCOUNT_TYPES` exists twice on the server: `constants/accounts.ts`
+feeds the row values, `modules/Accounts/Accounts.constants.ts` feeds the filter
+and import options. Both had to change.
+
 ## Traps that only a real Linux server or a live run exposed
 
 Each of these passed every local check and still broke:

@@ -78,8 +78,8 @@ export class Account extends TenantBaseModel {
 
   get accountNormalFormatted(): string {
     const paris = {
-      credit: 'Credit',
-      debit: 'Debit',
+      credit: 'account.field.normal.credit',
+      debit: 'account.field.normal.debit',
     };
     return paris[this.accountNormal] || '';
   }

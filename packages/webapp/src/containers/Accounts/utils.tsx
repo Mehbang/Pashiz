@@ -2,6 +2,7 @@ import { Intent, Tag, Classes } from '@blueprintjs/core';
 import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
+import { localizedCurrencyLabel } from '@/utils/locale';
 import { NormalCell, BalanceCell, BankBalanceCell } from './components';
 import type { AccountTableRow } from './components';
 import type { DataTableColumn } from '@/components/Datatable/types';
@@ -107,7 +108,9 @@ export const useAccountsTableColumns =
           {
             id: 'currency',
             Header: intl.get('currency'),
-            accessor: 'currencyCode',
+            // A Persian reader knows this unit as تومان, not as `IRT`.
+            accessor: (row: AccountTableRow) =>
+              localizedCurrencyLabel(row.currencyCode),
             className: clsx(Classes.TEXT_MUTED),
             width: 75,
             clickable: true,

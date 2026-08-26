@@ -457,7 +457,7 @@ export const ACCOUNT_NORMAL = {
 };
 export const ACCOUNT_TYPES = [
   {
-    label: 'Cash',
+    label: 'account.type.cash',
     key: ACCOUNT_TYPE.CASH,
     normal: ACCOUNT_NORMAL.DEBIT,
     parentType: ACCOUNT_PARENT_TYPE.CURRENT_ASSET,
@@ -467,7 +467,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Bank',
+    label: 'account.type.bank',
     key: ACCOUNT_TYPE.BANK,
     normal: ACCOUNT_NORMAL.DEBIT,
     parentType: ACCOUNT_PARENT_TYPE.CURRENT_ASSET,
@@ -477,7 +477,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Accounts Receivable',
+    label: 'account.type.accounts_receivable',
     key: ACCOUNT_TYPE.ACCOUNTS_RECEIVABLE,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -486,7 +486,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Inventory',
+    label: 'account.type.inventory',
     key: ACCOUNT_TYPE.INVENTORY,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -495,7 +495,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Other Current Asset',
+    label: 'account.type.other_current_asset',
     key: ACCOUNT_TYPE.OTHER_CURRENT_ASSET,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -504,7 +504,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Fixed Asset',
+    label: 'account.type.fixed_asset',
     key: ACCOUNT_TYPE.FIXED_ASSET,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -513,7 +513,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Non-Current Asset',
+    label: 'account.type.non_current_asset',
     key: ACCOUNT_TYPE.NON_CURRENT_ASSET,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.ASSET,
@@ -522,7 +522,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Accounts Payable',
+    label: 'account.type.accounts_payable',
     key: ACCOUNT_TYPE.ACCOUNTS_PAYABLE,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -531,7 +531,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Credit Card',
+    label: 'account.type.credit_card',
     key: ACCOUNT_TYPE.CREDIT_CARD,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -541,7 +541,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Tax Payable',
+    label: 'account.type.tax_payable',
     key: ACCOUNT_TYPE.TAX_PAYABLE,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -550,7 +550,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Other Current Liability',
+    label: 'account.type.other_current_liability',
     key: ACCOUNT_TYPE.OTHER_CURRENT_LIABILITY,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -559,7 +559,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: true,
   },
   {
-    label: 'Long Term Liability',
+    label: 'account.type.long_term_liability',
     key: ACCOUNT_TYPE.LOGN_TERM_LIABILITY,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -568,7 +568,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: true,
   },
   {
-    label: 'Non-Current Liability',
+    label: 'account.type.non_current_liability',
     key: ACCOUNT_TYPE.NON_CURRENT_LIABILITY,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.LIABILITY,
@@ -577,7 +577,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: true,
   },
   {
-    label: 'Equity',
+    label: 'account.type.equity',
     key: ACCOUNT_TYPE.EQUITY,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.EQUITY,
@@ -586,7 +586,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: false,
   },
   {
-    label: 'Income',
+    label: 'account.type.income',
     key: ACCOUNT_TYPE.INCOME,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.INCOME,
@@ -595,7 +595,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: true,
   },
   {
-    label: 'Other Income',
+    label: 'account.type.other_income',
     key: ACCOUNT_TYPE.OTHER_INCOME,
     normal: ACCOUNT_NORMAL.CREDIT,
     rootType: ACCOUNT_ROOT_TYPE.INCOME,
@@ -604,7 +604,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: true,
   },
   {
-    label: 'Cost of Goods Sold',
+    label: 'account.type.cost_of_goods_sold',
     key: ACCOUNT_TYPE.COST_OF_GOODS_SOLD,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.EXPENSE,
@@ -613,7 +613,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: true,
   },
   {
-    label: 'Expense',
+    label: 'account.type.expense',
     key: ACCOUNT_TYPE.EXPENSE,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.EXPENSE,
@@ -622,7 +622,7 @@ export const ACCOUNT_TYPES = [
     incomeSheet: true,
   },
   {
-    label: 'Other Expense',
+    label: 'account.type.other_expense',
     key: ACCOUNT_TYPE.OTHER_EXPENSE,
     normal: ACCOUNT_NORMAL.DEBIT,
     rootType: ACCOUNT_ROOT_TYPE.EXPENSE,
