@@ -60,6 +60,14 @@ RUN pnpm add -D -w husky && \
     # Remove build dependencies to reduce image size
     apk del python3 build-base
 
+# `mysqldump`, for the whole-installation backup the administration portal
+# takes. The client alone, not the server.
+RUN apk add --no-cache mariadb-client
+
+# The installer runs `scripts/hash-admin-password.js` inside this image, which
+# is the only node it can count on being present.
+COPY --chown=nodejs:nodejs packages/server/scripts ./packages/server/scripts
+
 # Copy built application from builder stage
 COPY --from=builder --chown=nodejs:nodejs /app/packages/server/dist ./packages/server/dist
 

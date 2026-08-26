@@ -44,9 +44,25 @@ export class ExportOrganizationService {
    */
   public async export(): Promise<{ filename: string; content: Buffer }> {
     const tenant = await this.tenancyContext.getTenant(true);
-    const metadata = (tenant.metadata ?? {}) as Record<string, any>;
 
-    const tables = await this.readTables();
+    return this.exportTenant(
+      this.tenantKnex(),
+      (tenant.metadata ?? {}) as Record<string, any>,
+    );
+  }
+
+  /**
+   * The same export for an organization other than the request's own.
+   *
+   * The administration portal works across the whole installation and has no
+   * organization in context, so it supplies the connection and the metadata
+   * rather than having them resolved from the request.
+   */
+  public async exportTenant(
+    knex: Knex,
+    metadata: Record<string, any>,
+  ): Promise<{ filename: string; content: Buffer }> {
+    const tables = await this.readTables(knex);
     const attachments = await this.readAttachments(tables);
 
     const backup: OrganizationBackup = {
@@ -91,10 +107,9 @@ export class ExportOrganizationService {
    * export is a copy of what is stored, without the virtual attributes and
    * formatting a model layers on top.
    */
-  private async readTables(): Promise<
-    Record<string, Array<Record<string, unknown>>>
-  > {
-    const knex = this.tenantKnex();
+  private async readTables(
+    knex: Knex,
+  ): Promise<Record<string, Array<Record<string, unknown>>>> {
     const database = (knex.client.config.connection as any).database;
 
     const result = await knex.raw(

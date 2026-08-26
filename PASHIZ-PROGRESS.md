@@ -117,6 +117,31 @@ palette block is keyed on `html.bp4-dark, body.bp4-dark` rather than the bare
 class — `:root` carries the light palette at equal specificity, and the bare
 class would leave the winner to the order of the file.
 
+## The administration portal
+
+`packages/server/src/modules/Admin/` — server-rendered, script-free, mounted at
+`/api/admin/:portalKey` and guarded by `AdminPortalGuard`. Credentials live in
+`.env` (scrypt), not the database, so restoring another installation's backup
+cannot hand over this one. Every refusal is a 404, so the portal cannot be
+told apart from an installation that has none.
+
+Signup and mail settings moved out of the environment into an
+`instance_settings` table read through `InstanceSettingsService`, which falls
+back to the environment for anything never set. `MailTransporter` builds its
+transport per message rather than once at boot, so a change takes effect
+without a restart.
+
+Two traps found while building it:
+
+- A handler using `@Res()` still hands its return value to the global
+  interceptors, and `ToJsonInterceptor` walks it recursively. Returning the
+  Express response — whose graph reaches the socket and the whole application
+  — exhausts the heap and kills the process. Write the response, return
+  nothing.
+- Something in the request pipeline camel-cases incoming body keys, so a
+  hidden field named `_csrf` arrives as `csrf`. Names that are already
+  camelCase survive.
+
 ## Untranslated strings a grep will never find
 
 The server passes some labels through `i18n.t()` that are already English prose

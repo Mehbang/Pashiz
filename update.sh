@@ -369,6 +369,67 @@ report_new_env_keys() {
   fi
 }
 
+# Sets or rotates the administration portal's credentials.
+#
+# Also the way to recover a portal whose password was lost: there is no reset
+# link and no account to email, by design — the only way in is from a shell on
+# the server, which is the same level of access the portal itself grants.
+cmd_admin() {
+  require_root
+  require_env
+
+  step "اعتبارنامهٔ صفحهٔ مدیریت"
+
+  local username password again
+  read -rp "    نام کاربری [$(get_env PASHIZ_ADMIN_USERNAME || echo admin)]: " username
+  username=${username:-$(get_env PASHIZ_ADMIN_USERNAME)}
+  username=${username:-admin}
+
+  while :; do
+    read -rsp "    گذرواژهٔ تازه (دست‌کم ۱۲ نویسه): " password; echo
+    if [ ${#password} -lt 12 ]; then
+      warn "کوتاه است. این صفحه به همهٔ داده‌های نصب دسترسی دارد."
+      continue
+    fi
+    read -rsp "    دوباره: " again; echo
+    [ "$password" = "$again" ] && break
+    warn "دو گذرواژه یکی نبودند."
+  done
+  unset again
+
+  local hash
+  hash=$(printf '%s' "$password" | docker run --rm -i \
+    pashiz/server:latest node packages/server/scripts/hash-admin-password.js) \
+    || die "درهم‌سازی گذرواژه ناموفق بود. آیا ایمیج ساخته شده است؟"
+  unset password
+
+  set_env PASHIZ_ADMIN_USERNAME "$username"
+  set_env PASHIZ_ADMIN_PASSWORD_HASH "$hash"
+
+  # A missing path or secret means the portal was never set up at all.
+  [ -n "$(get_env PASHIZ_ADMIN_PATH)" ] || set_env PASHIZ_ADMIN_PATH "$(openssl rand -hex 32)"
+  [ -n "$(get_env PASHIZ_ADMIN_SECRET)" ] || set_env PASHIZ_ADMIN_SECRET "$(openssl rand -hex 32)"
+
+  chmod 600 .env
+
+  step "راه‌اندازی دوباره سرور"
+  dc up -d server >/dev/null 2>&1
+
+  info "انجام شد. نشانی صفحهٔ مدیریت:"
+  info "  $(get_env BASE_URL)/api/admin/$(get_env PASHIZ_ADMIN_PATH)"
+  warn "همهٔ نشست‌های باز صفحهٔ مدیریت بسته شدند."
+}
+
+# Prints the portal address for an operator who has mislaid it.
+cmd_admin_url() {
+  require_env
+  local path
+  path=$(get_env PASHIZ_ADMIN_PATH)
+
+  [ -n "$path" ] || die "صفحهٔ مدیریت ساخته نشده است. «sudo ./update.sh admin» را بزنید."
+  info "$(get_env BASE_URL)/api/admin/${path}"
+}
+
 cmd_rollback() {
   require_root
   require_env
@@ -503,6 +564,8 @@ usage() {
 
   sudo ./update.sh              دریافت نسخهٔ تازه، پشتیبان‌گیری، ساخت و راه‌اندازی
   sudo ./update.sh rebuild      ساخت دوبارهٔ ایمیج‌ها بدون دریافت نسخهٔ تازه
+  sudo ./update.sh admin        ساخت یا تعویض گذرواژهٔ صفحهٔ مدیریت
+       ./update.sh admin-url    نشان‌دادن نشانی صفحهٔ مدیریت
   sudo ./update.sh rollback     بازگشت به نسخهٔ پیش از آخرین به‌روزرسانی
        ./update.sh backup       بایگانی کامل: پایگاه‌داده + پیوست‌ها + کلیدها
   sudo ./update.sh restore <بایگانی>  بالا آوردن یک بایگانی روی این نصب
@@ -522,6 +585,8 @@ EOF
 case "${1:-update}" in
   update)   cmd_update ;;
   rebuild)  cmd_rebuild ;;
+  admin)    cmd_admin ;;
+  admin-url) cmd_admin_url ;;
   rollback) cmd_rollback ;;
   backup)   cmd_backup ;;
   start)    cmd_start ;;

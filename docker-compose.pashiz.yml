@@ -25,6 +25,11 @@ services:
     build:
       context: .
       dockerfile: packages/server/Dockerfile
+    volumes:
+      # The same directory `./update.sh backup` writes to, so a backup taken
+      # from the administration portal and one taken from the shell land side
+      # by side and both show up in the portal's list.
+      - ./backups:/app/backups
 
   # Upstream builds a dedicated migration image `FROM bigcapitalhq/server` that
   # clones a wait-for-it helper from GitHub at build time. The migration is

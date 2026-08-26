@@ -82,6 +82,7 @@ import { RolesModule } from '../Roles/Roles.module';
 import { SubscriptionModule } from '../Subscription/Subscription.module';
 import { OrganizationModule } from '../Organization/Organization.module';
 import { OrganizationBackupModule } from '../OrganizationBackup/OrganizationBackup.module';
+import { AdminModule } from '../Admin/Admin.module';
 import { WorkspacesModule } from '../ee/Workspaces/Workspaces.module';
 import { TenantDBManagerModule } from '../TenantDBManager/TenantDBManager.module';
 import { PaymentServicesModule } from '../PaymentServices/PaymentServices.module';
@@ -247,6 +248,7 @@ import { AppThrottleModule } from './AppThrottle.module';
     SubscriptionModule,
     OrganizationModule,
     OrganizationBackupModule,
+    AdminModule,
     WorkspacesModule,
     TenantDBManagerModule,
     PaymentServicesModule,

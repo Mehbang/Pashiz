@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { events } from '@/common/events/events';
 import { ServiceError } from '@/modules/Items/ServiceError';
 import { SystemUser } from '@/modules/System/models/SystemUser';
+import { InstanceSettingsService } from '@/modules/Admin/InstanceSettings.service';
 import { TenantsManagerService } from '@/modules/TenantDBManager/TenantsManager';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -27,6 +28,7 @@ export class AuthSignupService {
    */
   constructor(
     private readonly configService: ConfigService,
+    private readonly instanceSettings: InstanceSettingsService,
     private readonly eventEmitter: EventEmitter2,
     private readonly tenantsManager: TenantsManagerService,
     private readonly clsService: ClsService,
@@ -109,7 +111,7 @@ export class AuthSignupService {
    * @param {string} email - Signup email address
    */
   private async validateSignupRestrictions(email: string) {
-    const signupRestrictions = this.configService.get('signupRestrictions');
+    const signupRestrictions = await this.instanceSettings.getSignupSettings();
 
     // Can't continue if the signup is not disabled.
     if (!signupRestrictions.disabled) return;

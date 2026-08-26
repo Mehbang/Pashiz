@@ -8,6 +8,7 @@ import { SystemModelsConnection } from './SystemModels.constants';
 import { SystemUser } from '../models/SystemUser';
 import { TenantMetadata } from '../models/TenantMetadataModel';
 import { UserTenant } from '../models/UserTenant.model';
+import { InstanceSetting } from '../models/InstanceSetting.model';
 import { TenantRepository } from '../repositories/Tenant.repository';
 
 const models = [
@@ -16,6 +17,7 @@ const models = [
   TenantModel,
   TenantMetadata,
   UserTenant,
+  InstanceSetting,
 ];
 
 const modelProviders = models.map((model) => {

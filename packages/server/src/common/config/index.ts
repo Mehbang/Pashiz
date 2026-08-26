@@ -12,6 +12,7 @@ import posthog from './posthog';
 import stripePayment from './stripe-payment';
 import signupConfirmation from './signup-confirmation';
 import signupRestrictions from './signup-restrictions';
+import admin from './admin';
 import jwt from './jwt';
 import mail from './mail';
 import loops from './loops';
@@ -38,6 +39,7 @@ export const config = [
   stripePayment,
   signupConfirmation,
   signupRestrictions,
+  admin,
   jwt,
   mail,
   loops,

@@ -273,6 +273,49 @@ EOF
   fi
 }
 
+# The administration portal has one account. It is asked for here, beside the
+# other questions, and hashed after the images are built — the hashing needs a
+# node binary, and the only one this script can count on is inside the image.
+#
+# The plaintext lives in a shell variable for the length of the install and is
+# never written to disk.
+ask_for_admin() {
+  [ -f .env ] && return 0
+
+  if [ ! -t 0 ]; then
+    info "بدون ترمینال، صفحهٔ مدیریت ساخته نمی‌شود."
+    info "بعداً با «sudo ./update.sh admin» بسازیدش."
+    PASHIZ_ADMIN_USERNAME=""
+    PASHIZ_ADMIN_PASSWORD=""
+    return 0
+  fi
+
+  step "صفحهٔ مدیریت"
+  cat <<'EOF'
+    یک صفحهٔ مدیریت روی نشانی‌ای تصادفی و حدس‌نزدنی ساخته می‌شود. از آنجا
+    می‌توانید کاربران و سازمان‌ها را ببینید، ثبت‌نام را باز و بسته کنید،
+    ایمیل را تنظیم کنید و پشتیبان بگیرید.
+
+    نشانی صفحه در پایان نصب یک بار نشان داده می‌شود. جایی یادداشتش کنید.
+
+EOF
+  read -rp "    نام کاربری مدیر [admin]: " PASHIZ_ADMIN_USERNAME
+  PASHIZ_ADMIN_USERNAME=${PASHIZ_ADMIN_USERNAME:-admin}
+
+  local again
+  while :; do
+    read -rsp "    گذرواژه (دست‌کم ۱۲ نویسه): " PASHIZ_ADMIN_PASSWORD; echo
+    if [ ${#PASHIZ_ADMIN_PASSWORD} -lt 12 ]; then
+      warn "کوتاه است. این صفحه به همهٔ داده‌های نصب دسترسی دارد."
+      continue
+    fi
+    read -rsp "    دوباره: " again; echo
+    [ "$PASHIZ_ADMIN_PASSWORD" = "$again" ] && break
+    warn "دو گذرواژه یکی نبودند."
+  done
+  unset again
+}
+
 # A certificate cannot be issued if the domain does not resolve here, and the
 # failure surfaces minutes later inside Caddy's log. Better to say so now.
 check_dns_points_here() {
@@ -331,6 +374,13 @@ create_env() {
   # Gotenberg reaches the API by its service name on the compose network.
   set_env GOTENBERG_URL "http://gotenberg:3000"
   set_env GOTENBERG_DOCS_URL "http://server:3000/public/"
+
+  # The portal's own URL segment and session key. Generated even when no
+  # administrator was asked for, so `update.sh admin` can finish the job later
+  # without rewriting either.
+  set_env PASHIZ_ADMIN_PATH "$(openssl rand -hex 32)"
+  set_env PASHIZ_ADMIN_SECRET "$(openssl rand -hex 32)"
+  set_env PASHIZ_ADMIN_USERNAME "${PASHIZ_ADMIN_USERNAME:-}"
 
   chmod 600 .env
   info "رمزهای پایگاه‌داده، JWT و Garage ساخته شد."
@@ -404,6 +454,26 @@ build_images() {
     dc build "$@" "$service" || build_failed "$service"
   done
   info "ایمیج‌های پشیز ساخته شد."
+}
+
+# Hashes the administrator password inside the freshly built image.
+#
+# The password reaches node on stdin, so it never appears in the process list
+# where any other user on the machine could read it, and only the hash is
+# written to .env.
+set_admin_password() {
+  [ -n "${PASHIZ_ADMIN_PASSWORD:-}" ] || return 0
+
+  step "ساخت اعتبارنامهٔ صفحهٔ مدیریت"
+  local hash
+  hash=$(printf '%s' "$PASHIZ_ADMIN_PASSWORD" | docker run --rm -i \
+    pashiz/server:latest node packages/server/scripts/hash-admin-password.js) || {
+    warn "ساخت درهم‌سازی گذرواژه ناموفق بود؛ صفحهٔ مدیریت غیرفعال می‌ماند."
+    return 0
+  }
+  set_env PASHIZ_ADMIN_PASSWORD_HASH "$hash"
+  unset PASHIZ_ADMIN_PASSWORD
+  info "گذرواژه درهم‌سازی و ذخیره شد؛ متن اصلی هیچ‌جا نوشته نشد."
 }
 
 # Prepares the object store the application keeps attachments and logos in.
@@ -512,6 +582,37 @@ start_services() {
   info "سرور بالا آمد ✅"
 }
 
+# Shown once, at the end of the install, and never again: the path is in .env
+# and nowhere else, so this is the operator's only chance to write it down
+# without going and reading the file.
+admin_portal_notice() {
+  local path url
+  path=$(get_env PASHIZ_ADMIN_PATH)
+  url=$(get_env BASE_URL)
+
+  [ -n "$path" ] || return 0
+  [ -n "$(get_env PASHIZ_ADMIN_PASSWORD_HASH)" ] || {
+    cat <<EOF
+$(bold "صفحهٔ مدیریت")
+
+    ساخته نشد، چون گذرواژه‌ای پرسیده نشد.
+    برای ساختنش:  cd ${PASHIZ_DIR} && sudo ./update.sh admin
+
+EOF
+    return 0
+  }
+
+  cat <<EOF
+$(bold "صفحهٔ مدیریت")
+
+    ${url}/api/admin/${path}
+
+    این نشانی را همین حالا یادداشت کنید؛ دوباره نشان داده نمی‌شود.
+    در ${PASHIZ_DIR}/.env هم هست (کلید PASHIZ_ADMIN_PATH).
+
+EOF
+}
+
 finish() {
   local url
   url=$(get_env BASE_URL)
@@ -528,7 +629,7 @@ $(bold "نصب کامل شد.")
     توقف         : cd ${PASHIZ_DIR} && ./update.sh stop
     به‌روزرسانی   : cd ${PASHIZ_DIR} && sudo ./update.sh
 
-$(bold "گام بعدی")
+$(admin_portal_notice)$(bold "گام بعدی")
 
     نشانی بالا را در مرورگر باز کنید و نخستین سازمان را بسازید.
     هنگام ساخت سازمان، زبان «فارسی» را انتخاب کنید تا تقویم شمسی،
@@ -551,9 +652,11 @@ main() {
   check_registry_reachable
   fetch_source
   ask_for_domain
+  ask_for_admin
   create_env
   add_https_overlay_if_configured
   build_images --pull
+  set_admin_password
   bootstrap_garage
   start_services
   finish
