@@ -67,12 +67,32 @@ export const ORGANIZATION_BACKUP_FORMAT = 1;
  * own migrations, and importing someone else's bookkeeping would convince it
  * that migrations it has never run are already applied.
  */
-export const EXCLUDED_TABLES = [
+const SCHEMA_TABLES = [
   'knexMigrations',
   'knexMigrationsLock',
   'bigcapitalSeeds',
   'bigcapitalSeedsLock',
 ];
+
+/**
+ * Tables that say who may use this installation, rather than what the
+ * organization has bought and sold.
+ *
+ * `users` here is the tenant's own mirror of the system users, keyed by
+ * `systemUserId` — an id that means something only on the installation that
+ * issued it. Carrying it across deletes the local owner's row and puts a
+ * stranger's in its place, and because that row is written once when the
+ * organization is first built and never again, nothing recreates it. Every
+ * authorized request then fails to resolve an ability, so the whole
+ * application stops loading rather than merely showing the wrong name.
+ *
+ * `roles` and `rolePermissions` travel with it: the local user rows that stay
+ * behind point at a role by id, and replacing the roles underneath them
+ * dangles that reference into the same failure.
+ */
+const IDENTITY_TABLES = ['users', 'roles', 'rolePermissions'];
+
+export const EXCLUDED_TABLES = [...SCHEMA_TABLES, ...IDENTITY_TABLES];
 
 /**
  * `ACCOUNTS_TRANSACTIONS` -> `accountsTransactions`.

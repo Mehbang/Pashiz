@@ -194,6 +194,18 @@ docker exec pashiz-server node packages/server/dist/cli.js tenants:translate-see
 **سرور بالا نمی‌آید** — بیشتر وقت‌ها مهاجرت پایگاه‌داده شکست خورده است:
 `./update.sh logs database_migration`
 
+**پس از درون‌ریزی پشتیبان، صفحه سفید/سیاه است و چیزی بالا نمی‌آید** — ردیف
+کاربر در پایگاه‌دادهٔ سازمان از بین رفته است. پرونده‌های پشتیبانِ ساخته‌شده
+پیش از نگارش کنونی جدول کاربران را با خود می‌بردند و هنگام درون‌ریزی کاربر
+محلی را پاک می‌کردند. برای ترمیم:
+
+```bash
+docker compose -f docker-compose.prod.yml -f docker-compose.pashiz.yml exec server node dist/cli.js tenants:repair-users
+```
+
+با `--prune` در انتها، ردیف‌های کاربرانی که به این نصب تعلق ندارند هم پاک
+می‌شوند.
+
 **ساخت در میانهٔ کار می‌میرد** یا پیام `failed to execute bake: signal: killed`
 می‌دهد — حافظهٔ سرور تمام شده است. با `free -h` ببینید swap فعال است؛ اگر
 نبود:

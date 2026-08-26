@@ -13,6 +13,7 @@ import { SystemSeedLatestCommand } from './commands/SystemSeedLatest.command';
 import { TenantsSeedLatestCommand } from './commands/TenantsSeedLatest.command';
 import { OpenApiExportCommand } from './commands/OpenApiExport.command';
 import { TenantsTranslateSeededDataCommand } from './commands/TenantsTranslateSeededData.command';
+import { TenantsRepairUsersCommand } from './commands/TenantsRepairUsers.command';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { TenantsTranslateSeededDataCommand } from './commands/TenantsTranslateSe
     TenantsSeedLatestCommand,
     OpenApiExportCommand,
     TenantsTranslateSeededDataCommand,
+    TenantsRepairUsersCommand,
   ],
 })
 export class CLIModule {}

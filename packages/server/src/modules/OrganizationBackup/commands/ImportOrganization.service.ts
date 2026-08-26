@@ -107,10 +107,46 @@ export class ImportOrganizationService {
       }
     });
 
+    await this.ensureTenantUser(knex, user);
     await this.applyOrganizationSettings(tenant.id, backup);
     await this.restoreAttachments(backup);
 
     return summary;
+  }
+
+  /**
+   * Makes sure the importing user still has a row in the tenant's own user
+   * table.
+   *
+   * Nothing in a current import touches that table — see `IDENTITY_TABLES`.
+   * This is here for the files taken before it was excluded: those carry the
+   * exporting installation's users, and importing one replaced the local
+   * owner's row with a stranger's, locking every local user out of the
+   * organization permanently. Restoring the row means the very file that broke
+   * an organization puts it right again.
+   */
+  private async ensureTenantUser(knex: Knex, systemUser: any): Promise<void> {
+    const existing = await knex('users')
+      .where('systemUserId', systemUser.id)
+      .first();
+
+    if (existing) return;
+
+    // Whoever can import an organization already administers it.
+    const role =
+      (await knex('roles').where('slug', 'admin').first()) ??
+      (await knex('roles').orderBy('id').first());
+
+    await knex('users').insert({
+      firstName: systemUser.firstName,
+      lastName: systemUser.lastName,
+      email: systemUser.email,
+      active: 1,
+      systemUserId: systemUser.id,
+      roleId: role?.id,
+      inviteAcceptedAt: new Date(),
+      createdAt: new Date(),
+    });
   }
 
   /**

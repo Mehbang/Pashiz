@@ -123,6 +123,14 @@ Each of these passed every local check and still broke:
   `Content-Disposition` filename needs RFC 5987.
 - zsh does not word-split unquoted expansions. A command that works inside
   `update.sh` (bash) can fail pasted into a mac terminal.
+- A tenant database keeps its **own** `users` table, mirroring the system
+  users by `systemUserId`. That row is written once, when the organization is
+  built, and never again — so an organization export that carried it replaced
+  the local owner with a stranger and locked everyone out permanently: the
+  authorization guard could not resolve an ability, every authorized endpoint
+  failed, and the application rendered a blank page. Importing an organization
+  into the *same* one it came from hides this completely, which is exactly how
+  it got shipped.
 - `docker compose build server webapp` hands both services to buildx bake,
   which builds them **concurrently**. Two pnpm installs and two bundlers at
   once exhaust a 3.8GB server; the kernel kills buildx and Docker reports only
