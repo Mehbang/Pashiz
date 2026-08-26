@@ -48,6 +48,27 @@ add_https_overlay_if_configured
 
 dc() { docker compose "${COMPOSE_FILES[@]}" --env-file .env "$@"; }
 
+# One temporary directory per run, removed however the script ends.
+#
+# Not `trap ... RETURN` inside the function that needs it: bash leaves such a
+# trap installed after that function returns, so it fires again when the next
+# function returns — by which point the `local` directory it names is gone and
+# `set -u` takes the whole script down with "work: unbound variable".
+TMP_WORK=""
+
+cleanup_tmp_work() {
+  if [ -n "$TMP_WORK" ]; then
+    rm -rf "$TMP_WORK"
+    TMP_WORK=""
+  fi
+}
+trap cleanup_tmp_work EXIT
+
+make_tmp_work() {
+  cleanup_tmp_work
+  TMP_WORK=$(mktemp -d)
+}
+
 # Building the webapp is the heaviest thing this software ever does: Vite and
 # rollup hold the whole application in memory at once. On a small server the
 # kernel kills the builder part-way through, and Docker reports only
@@ -169,8 +190,8 @@ cmd_backup() {
   local stamp work archive
   stamp=$(date +%Y%m%d-%H%M%S)
   archive="$(cd "$BACKUP_DIR" && pwd)/pashiz-$stamp.tar.gz"
-  work=$(mktemp -d)
-  trap 'rm -rf "$work"' RETURN
+  make_tmp_work
+  work="$TMP_WORK"
 
   # The application databases only. `--all-databases` would also carry the
   # server's MySQL grants, and restoring those onto another machine replaces
@@ -217,6 +238,10 @@ cmd_backup() {
 
   info "بایگانی: $archive  ($(du -h "$archive" | cut -f1))"
   info "شامل پایگاه‌داده‌ها، پیوست‌ها و کلیدهای پیوند‌دهنده است."
+
+  # An update calls this and then builds for several minutes; the dump and the
+  # storage tarball should not sit on the disk for all of it.
+  cleanup_tmp_work
 }
 
 # Brings a backup up on this installation. Intended for a machine that has
@@ -233,8 +258,8 @@ cmd_restore() {
   archive=$(cd "$(dirname "$archive")" && pwd)/$(basename "$archive")
 
   local work
-  work=$(mktemp -d)
-  trap 'rm -rf "$work"' RETURN
+  make_tmp_work
+  work="$TMP_WORK"
   tar xzf "$archive" -C "$work" || die "بایگانی خوانده نشد."
   [ -f "$work/databases.sql.gz" ] || die "این بایگانی پشتیبان پشیز نیست."
 
@@ -278,6 +303,7 @@ cmd_restore() {
   dc up -d --force-recreate >/dev/null 2>&1
   wait_for_migration
   info "بازیابی انجام شد ✅  نشانی: $(get_env BASE_URL)"
+  cleanup_tmp_work
 }
 
 cmd_update() {
