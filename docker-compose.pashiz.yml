@@ -25,6 +25,18 @@ services:
     build:
       context: .
       dockerfile: packages/server/Dockerfile
+    environment:
+      # `docker-compose.prod.yml` lists every variable the server receives, so
+      # a new key in `.env` reaches the container only if it is named here too.
+      # Without these the portal reads no credentials, decides it was never
+      # configured, and answers 404 to everything — which looks exactly like a
+      # portal that does not exist.
+      - PASHIZ_ADMIN_PATH=${PASHIZ_ADMIN_PATH:-}
+      - PASHIZ_ADMIN_USERNAME=${PASHIZ_ADMIN_USERNAME:-}
+      - PASHIZ_ADMIN_PASSWORD_HASH=${PASHIZ_ADMIN_PASSWORD_HASH:-}
+      - PASHIZ_ADMIN_SECRET=${PASHIZ_ADMIN_SECRET:-}
+      - PASHIZ_ADMIN_SESSION_TTL_MINUTES=${PASHIZ_ADMIN_SESSION_TTL_MINUTES:-120}
+
     volumes:
       # Only the portal's own subdirectory, never `./backups` itself.
       #

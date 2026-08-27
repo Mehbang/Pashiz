@@ -434,6 +434,18 @@ cmd_admin() {
   step "راه‌اندازی دوباره سرور"
   dc up -d server >/dev/null 2>&1
 
+  # Writing .env is not enough: the compose file names every variable the
+  # container receives, so a key that is not listed there never arrives and the
+  # portal answers 404 as though it had never been set up. Check rather than
+  # assume.
+  local seen
+  seen=$(docker exec pashiz-server sh -c 'echo "$PASHIZ_ADMIN_PASSWORD_HASH"' 2>/dev/null || true)
+  if [ -z "$seen" ]; then
+    warn "اعتبارنامه در .env نوشته شد ولی به کانتینر نرسید."
+    warn "«sudo ./update.sh rebuild» را بزنید و دوباره امتحان کنید."
+    return 1
+  fi
+
   info "انجام شد. نشانی صفحهٔ مدیریت:"
   info "  $(get_env BASE_URL)/api/admin/$(get_env PASHIZ_ADMIN_PATH)"
   warn "همهٔ نشست‌های باز صفحهٔ مدیریت بسته شدند."
