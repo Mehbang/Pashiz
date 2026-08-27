@@ -425,9 +425,14 @@ cmd_admin() {
   set_env PASHIZ_ADMIN_USERNAME "$username"
   set_env PASHIZ_ADMIN_PASSWORD_HASH "$hash"
 
-  # A missing path or secret means the portal was never set up at all.
+  # The address survives a password change — losing it would mean hunting
+  # through .env for no reason.
   [ -n "$(get_env PASHIZ_ADMIN_PATH)" ] || set_env PASHIZ_ADMIN_PATH "$(openssl rand -hex 32)"
-  [ -n "$(get_env PASHIZ_ADMIN_SECRET)" ] || set_env PASHIZ_ADMIN_SECRET "$(openssl rand -hex 32)"
+
+  # The signing key does not. Sessions are signed with it and nothing else, so
+  # replacing it is what actually ends every open session — which is the whole
+  # point of changing a password you think someone else has.
+  set_env PASHIZ_ADMIN_SECRET "$(openssl rand -hex 32)"
 
   chmod 600 .env
 
