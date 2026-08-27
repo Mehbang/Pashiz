@@ -445,9 +445,21 @@ cmd_admin() {
   # assume.
   local seen
   seen=$(docker exec pashiz-server sh -c 'echo "$PASHIZ_ADMIN_PASSWORD_HASH"' 2>/dev/null || true)
+
   if [ -z "$seen" ]; then
     warn "اعتبارنامه در .env نوشته شد ولی به کانتینر نرسید."
     warn "«sudo ./update.sh rebuild» را بزنید و دوباره امتحان کنید."
+    return 1
+  fi
+
+  # Not merely present — identical. Compose expands `$` in .env values, so a
+  # hash can arrive with pieces of itself replaced by empty strings: present,
+  # plausible, and impossible to sign in with. Comparing is what catches that.
+  if [ "$seen" != "$hash" ]; then
+    warn "آنچه به کانتینر رسید با آنچه در .env نوشته شد یکی نیست."
+    warn "در .env : $hash"
+    warn "در کانتینر: $seen"
+    warn "احتمالاً مقدار نویسه‌ای دارد که docker compose آن را تفسیر می‌کند."
     return 1
   fi
 

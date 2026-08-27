@@ -99,15 +99,20 @@ export class AdminAuthService {
   }
 
   /**
-   * `scrypt$N$r$p$salt$hash`, all base64url. Chosen over bcrypt because the
-   * installer has to produce one of these with nothing but the node binary
-   * already inside the image.
+   * `scrypt:N:r:p:salt:hash`. Chosen over bcrypt because the installer has to
+   * produce one with nothing but the node binary already inside the image.
+   *
+   * Colon-separated because this value travels through `.env`, where Docker
+   * Compose expands `$`. The `$`-separated form scrypt conventionally uses
+   * arrived at the container with pieces of itself replaced by empty strings.
+   * That older shape is still read, for an installation whose hash predates
+   * the change and happened not to be mangled.
    */
   public async verifyPassword(
     password: string,
     stored: string,
   ): Promise<boolean> {
-    const parts = stored.split('$');
+    const parts = stored.includes(':') ? stored.split(':') : stored.split('$');
 
     if (parts.length !== 6 || parts[0] !== 'scrypt') return false;
 
@@ -118,13 +123,14 @@ export class AdminAuthService {
 
     if (!N || !r || !p) return false;
 
+    // `base64url` decodes standard base64 too, so both shapes read back.
     let expected: Buffer;
     try {
-      expected = Buffer.from(hashRaw, 'base64');
+      expected = Buffer.from(hashRaw, 'base64url');
     } catch {
       return false;
     }
-    const salt = Buffer.from(saltRaw, 'base64');
+    const salt = Buffer.from(saltRaw, 'base64url');
 
     try {
       // scrypt needs roughly 128 * N * r bytes; the default cap rejects the

@@ -9,8 +9,13 @@
  *
  *   printf '%s' "$password" | node scripts/hash-admin-password.js
  *
- * Prints `scrypt$N$r$p$salt$hash`. `AdminAuthService.verifyPassword` reads the
- * same shape back.
+ * Prints `scrypt:N:r:p:salt:hash`, all base64url.
+ *
+ * Colons and base64url, not `$` and standard base64: this value lives in
+ * `.env`, and Docker Compose interpolates `$` there. A hash separated by `$`
+ * reached the container with `$JNuapk5…` eaten as an undefined variable, so it
+ * could never verify and every sign-in failed. `AdminAuthService` reads this
+ * shape back, and still accepts the old one.
  */
 const { randomBytes, scryptSync } = require('node:crypto');
 
@@ -39,8 +44,13 @@ process.stdin.on('end', () => {
   });
 
   process.stdout.write(
-    ['scrypt', N, R, P, salt.toString('base64'), hash.toString('base64')].join(
-      '$',
-    ),
+    [
+      'scrypt',
+      N,
+      R,
+      P,
+      salt.toString('base64url'),
+      hash.toString('base64url'),
+    ].join(':'),
   );
 });
