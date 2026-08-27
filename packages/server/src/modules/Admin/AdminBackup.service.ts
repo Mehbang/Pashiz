@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { spawn } from 'node:child_process';
-import { createWriteStream } from 'node:fs';
-import { mkdir, readdir, stat, rm } from 'node:fs/promises';
+import { createReadStream, createWriteStream } from 'node:fs';
+import { mkdir, readdir, stat, rm, writeFile } from 'node:fs/promises';
 import { join, basename } from 'node:path';
-import { createGzip } from 'node:zlib';
+import { createGunzip, createGzip } from 'node:zlib';
 
 export interface BackupFile {
   name: string;
@@ -52,9 +52,53 @@ export class AdminBackupService {
    */
   private isSafeName(name: string): boolean {
     return (
-      /^[A-Za-z0-9._-]+\.(tar\.gz|sql\.gz)$/.test(name) &&
+      /^[A-Za-z0-9._-]+\.(tar\.gz|sql\.gz|pashiz|pashizbundle)$/.test(name) &&
       basename(name) === name
     );
+  }
+
+  /**
+   * Keeps a copy of an organization or user export on the server.
+   *
+   * The browser gets the same bytes, but a backup that exists only in one
+   * person's downloads folder is a backup nobody else can find. Written with
+   * the same restrictive mode as the dumps beside it.
+   *
+   * The name is rebuilt here rather than trusted: it arrives from an
+   * organization's own title, which a person chose and which can contain
+   * anything at all.
+   */
+  public async save(preferredName: string, content: Buffer): Promise<string> {
+    await mkdir(this.directory, { recursive: true });
+
+    const extension = preferredName.endsWith('.pashizbundle')
+      ? 'pashizbundle'
+      : 'pashiz';
+    // Organization names are usually Persian, and the listing only ever shows
+    // names this service can match again, which is ASCII. A name that survives
+    // that filter as nothing but separators says less than the date does, so
+    // it gives way to a plain word.
+    const stem = basename(preferredName)
+      .replace(/\.(pashiz|pashizbundle)$/, '')
+      .replace(/[^A-Za-z0-9._-]+/g, '-')
+      .replace(/-{2,}/g, '-')
+      .replace(/^[-._]+|[-._]+$/g, '')
+      .slice(0, 60);
+    const readable = /[A-Za-z0-9]/.test(stem)
+      ? stem
+      : extension === 'pashizbundle'
+        ? 'user'
+        : 'organization';
+    const stamp = new Date()
+      .toISOString()
+      .replace(/[-:]/g, '')
+      .replace(/\..+$/, '');
+    const name = `${readable}-${stamp}.${extension}`;
+
+    await writeFile(join(this.directory, name), content, { mode: 0o600 });
+    this.logger.log(`Export kept on the server: ${name}`);
+
+    return name;
   }
 
   public async list(): Promise<BackupFile[]> {
@@ -147,6 +191,70 @@ export class AdminBackupService {
       return `پایگاه‌داده اجازهٔ دسترسی نداد. کاربر یا رمز DB_USER/DB_PASSWORD را بررسی کنید. پیام اصلی: ${message}`;
     }
     return message;
+  }
+
+  /**
+   * Puts a whole-installation dump back.
+   *
+   * Only a `.sql.gz` this service or `update.sh` wrote, and only one already
+   * sitting in the backup directory — nothing is restored from an upload,
+   * because a dump is arbitrary SQL and running it is indistinguishable from
+   * handing the database over.
+   *
+   * The process exits when it is done. Every connection this server holds now
+   * points at tables that were dropped and recreated underneath it, and the
+   * caches above them describe rows that no longer exist; a restart is the
+   * only honest way back. Compose is configured `restart: on-failure`, so the
+   * non-zero exit is what brings it back clean, a few seconds later.
+   */
+  public async restore(name: string): Promise<void> {
+    if (!this.isSafeName(name) || !name.endsWith('.sql.gz')) {
+      throw new Error('این پرونده یک پشتیبان کامل پایگاه‌داده نیست.');
+    }
+    const source = join(this.directory, name);
+    await stat(source);
+
+    const host = this.configService.get('systemDatabase.host');
+    const port = String(this.configService.get('systemDatabase.port') ?? 3306);
+    const user = this.configService.get('systemDatabase.user');
+    const password = this.configService.get('systemDatabase.password');
+
+    this.logger.warn(`Restoring the installation from ${name}.`);
+    await this.feedToMysql(source, host, port, user, password);
+    this.logger.warn(`Restored from ${name}; restarting to pick it up.`);
+
+    // Let the response reach the browser before the process goes away.
+    setTimeout(() => process.exit(1), 1500);
+  }
+
+  private feedToMysql(
+    source: string,
+    host: string,
+    port: string,
+    user: string,
+    password: string,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const child = spawn(
+        'mysql',
+        [`--host=${host}`, `--port=${port}`, `--user=${user}`],
+        { env: { ...process.env, MYSQL_PWD: password } },
+      );
+      const input = createReadStream(source);
+      const gunzipStream = createGunzip();
+
+      let err = '';
+      child.stderr.on('data', (chunk) => (err += chunk));
+      child.on('error', reject);
+      input.on('error', reject);
+      gunzipStream.on('error', reject);
+      child.on('close', (code) =>
+        code === 0
+          ? resolve()
+          : reject(new Error(err.trim() || `mysql exited ${code}`)),
+      );
+      input.pipe(gunzipStream).pipe(child.stdin);
+    });
   }
 
   private async run(): Promise<void> {

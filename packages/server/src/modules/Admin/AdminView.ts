@@ -22,6 +22,19 @@ export const esc = (value: unknown): string =>
     ? ''
     : String(value).replace(/[&<>"']/g, (char) => ENTITIES[char]);
 
+/**
+ * An email address, written so it survives the journey to the browser.
+ *
+ * Cloudflare rewrites anything that looks like an address into
+ * `[email protected]` plus a small script that puts the real one back. This
+ * page forbids scripts outright, so that script never runs and the reader is
+ * left looking at the placeholder instead of the address. The `email_off`
+ * comment pair is Cloudflare's own opt-out and is the one way to keep an
+ * address intact without turning the feature off for the whole domain.
+ */
+export const email = (value: unknown): string =>
+  value ? `<!--email_off-->${esc(value)}<!--/email_off-->` : '';
+
 export interface PageOptions {
   title: string;
   base: string;

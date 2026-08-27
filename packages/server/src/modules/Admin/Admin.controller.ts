@@ -323,6 +323,45 @@ export class AdminController {
     );
   }
 
+  /**
+   * Puts a whole-installation dump back.
+   *
+   * Guarded by more than the session: the operator has to type the archive's
+   * own name into a second field. Every other action here is reversible or
+   * additive; this one replaces every organization on the installation, and a
+   * misplaced click should not be able to reach it.
+   */
+  @Post('backups/restore')
+  async restoreBackup(
+    @Req() request: Request,
+    @Res() response: Response,
+    @Body() body: Record<string, string>,
+  ) {
+    if (!this.checkCsrf(request, body)) return this.deny(response);
+
+    const name = body.name ?? '';
+    const base = this.base(request);
+
+    if ((body.confirm ?? '').trim() !== name) {
+      return this.redirect(response, `${base}/backups?bad=confirm`);
+    }
+    try {
+      await this.backups.restore(name);
+    } catch (error: any) {
+      this.adminAuth.audit(
+        this.ip(request),
+        `Restore failed: ${error?.message}`,
+      );
+      return this.redirect(response, `${base}/backups?bad=restore`);
+    }
+    this.adminAuth.audit(
+      this.ip(request),
+      `Restored the installation from ${name}`,
+    );
+
+    return this.redirect(response, `${base}/backups?ok=restored`);
+  }
+
   @Get('backups/download')
   downloadBackup(
     @Req() request: Request,
@@ -351,7 +390,14 @@ export class AdminController {
     const { filename, content } = await this.data.exportOrganization(
       parseInt(tenantId, 10),
     );
-    this.adminAuth.audit(this.ip(request), `Exported organization ${tenantId}`);
+    // Kept on the server as well as handed to the browser: a backup that
+    // exists only in one person's downloads folder is one nobody else can
+    // find. A failure to keep it must not cost the operator the download.
+    const kept = await this.keep(filename, content);
+    this.adminAuth.audit(
+      this.ip(request),
+      `Exported organization ${tenantId}${kept ? ` (kept as ${kept})` : ''}`,
+    );
 
     return this.sendFile(response, filename, content);
   }
@@ -365,12 +411,36 @@ export class AdminController {
     const { filename, content } = await this.data.exportUser(
       parseInt(userId, 10),
     );
-    this.adminAuth.audit(this.ip(request), `Exported user ${userId}`);
+    const kept = await this.keep(filename, content);
+    this.adminAuth.audit(
+      this.ip(request),
+      `Exported user ${userId}${kept ? ` (kept as ${kept})` : ''}`,
+    );
 
     return this.sendFile(response, filename, content);
   }
 
   // ----------------------------------------------------------------- helpers -
+
+  /**
+   * Writes a copy of an export into the backup directory. Never lets a
+   * failure here — a full disk, a read-only mount — stop the download the
+   * operator actually asked for.
+   */
+  private async keep(
+    filename: string,
+    content: Buffer,
+  ): Promise<string | null> {
+    try {
+      return await this.backups.save(filename, content);
+    } catch (error: any) {
+      this.adminAuth.audit(
+        'server',
+        `Could not keep ${filename} on the server: ${error?.message}`,
+      );
+      return null;
+    }
+  }
 
   private base(request: Request): string {
     return `/api/admin/${encodeURIComponent(request.params.portalKey)}`;
@@ -472,6 +542,10 @@ export class AdminController {
 }
 
 const NOTICES: Record<string, string> = {
+  restored:
+    'بازگردانی انجام شد. سرور در حال راه‌اندازی دوباره است؛ چند ثانیه صبر کنید و صفحه را تازه کنید.',
+  confirm: 'نام پرونده را درست ننوشتید، پس چیزی بازگردانده نشد.',
+  restore: 'بازگردانی ناتمام ماند. گزارش سرور را ببینید.',
   saved: 'ذخیره شد.',
   sent: 'پیام آزمایشی فرستاده شد.',
   started: 'پشتیبان‌گیری آغاز شد؛ چند دقیقه طول می‌کشد.',
