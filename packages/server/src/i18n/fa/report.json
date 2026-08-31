@@ -43,5 +43,10 @@
   "column.total": "جمع",
   "column.transaction_type": "نوع تراکنش",
   "column.valuation": "ارزش‌گذاری",
-  "column.vendor_name": "نام تأمین‌کننده"
+  "column.vendor_name": "نام تأمین‌کننده",
+  "row.opening_balance": "مانده افتتاحیه",
+  "row.closing_balance": "مانده پایانی {account}",
+  "row.closing_balance_with_sub": "مانده پایانی {account} با حساب‌های زیرمجموعه",
+  "row.total": "جمع",
+  "column.aging_and_over": "{from} روز و بیشتر"
 }

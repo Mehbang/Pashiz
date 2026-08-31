@@ -203,12 +203,15 @@ export abstract class AgingSummaryTable extends R.pipe(
    */
   protected agingTableColumns = (): ITableColumn[] => {
     return this.agingPeriods.map((agingPeriod) => {
-      return {
-        label: `${agingPeriod.beforeDays} - ${
-          agingPeriod.toDays || 'And Over'
-        }`,
-        key: AGING_SUMMARY_COLUMN_KEYS.AGING_PERIOD,
-      };
+      // Both the range and the words in it belong to the reader's language:
+      // a Persian report headed `31 - 60` in Latin figures is the thing being
+      // complained about, and `And Over` beside it is worse.
+      const from = this.localizeDigits(String(agingPeriod.beforeDays));
+      const label = agingPeriod.toDays
+        ? `${from} - ${this.localizeDigits(String(agingPeriod.toDays))}`
+        : this.i18n.t('report.column.aging_and_over', { args: { from } });
+
+      return { label, key: AGING_SUMMARY_COLUMN_KEYS.AGING_PERIOD };
     });
   };
 

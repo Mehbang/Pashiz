@@ -5,6 +5,7 @@ import {
 } from '../types/Report.types';
 import { formatNumber } from '@/utils/format-number';
 import { CalendarSystem, formatDateIn } from '@/utils/jalali-date';
+import { toPersianDigits } from '@bigcapital/utils';
 import { IFinancialTableTotal } from '../types/Table.types';
 
 export class FinancialSheet {
@@ -161,6 +162,15 @@ export class FinancialSheet {
       formattedDate: formatDateIn(date, dateFormat, this.calendar),
       date: moment(date).toDate(),
     };
+  }
+
+  /**
+   * Digits in a label the number formatter never sees — a day count in a
+   * column heading, an index. Amounts go through `formatNumber`, which does
+   * this already.
+   */
+  protected localizeDigits(text: string): string {
+    return this.persianDigits ? toPersianDigits(text) : text;
   }
 
   protected getDateFormatted(date: moment.MomentInput, format?: string) {

@@ -70,7 +70,10 @@ export class SalesTaxLiabilitySummaryTable extends R.pipe(
    */
   private get taxRateTotalRowAccessors() {
     return [
-      { key: SALES_TAX_LIABILITY_COLUMN_KEYS.TAX_NAME, value: 'Total' },
+      {
+        key: SALES_TAX_LIABILITY_COLUMN_KEYS.TAX_NAME,
+        value: this.i18n.t('report.row.total'),
+      },
       { key: SALES_TAX_LIABILITY_COLUMN_KEYS.TAX_PERCENTAGE, value: '' },
       {
         key: SALES_TAX_LIABILITY_COLUMN_KEYS.TAXABLE_AMOUNT,

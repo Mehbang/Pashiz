@@ -109,7 +109,10 @@ export class GeneralLedgerTable extends R.compose(
    */
   private openingBalanceColumnsAccessors(): IColumnMapperMeta[] {
     return [
-      { key: GENERAL_LEDGER_COLUMN_KEYS.DATE, value: 'Opening Balance' },
+      {
+        key: GENERAL_LEDGER_COLUMN_KEYS.DATE,
+        value: this.i18n.t('report.row.opening_balance'),
+      },
       { key: GENERAL_LEDGER_COLUMN_KEYS.ACCOUNT_NAME, value: '' },
       { key: GENERAL_LEDGER_COLUMN_KEYS.REFERENCE_TYPE, accessor: '_empty_' },
       { key: GENERAL_LEDGER_COLUMN_KEYS.REFERENCE_NUMBER, accessor: '_empty_' },
@@ -138,7 +141,9 @@ export class GeneralLedgerTable extends R.compose(
     return [
       {
         key: GENERAL_LEDGER_COLUMN_KEYS.DATE,
-        value: `Closing balance for ${account.name}`,
+        value: this.i18n.t('report.row.closing_balance', {
+          args: { account: account.name },
+        }),
       },
       { key: GENERAL_LEDGER_COLUMN_KEYS.ACCOUNT_NAME, value: `` },
       { key: GENERAL_LEDGER_COLUMN_KEYS.REFERENCE_TYPE, accessor: '_empty_' },
@@ -168,7 +173,9 @@ export class GeneralLedgerTable extends R.compose(
     return [
       {
         key: GENERAL_LEDGER_COLUMN_KEYS.DATE,
-        value: `Closing Balance for ${account.name} with sub-accounts`,
+        value: this.i18n.t('report.row.closing_balance_with_sub', {
+          args: { account: account.name },
+        }),
       },
       {
         key: GENERAL_LEDGER_COLUMN_KEYS.ACCOUNT_NAME,
