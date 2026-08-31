@@ -16,6 +16,30 @@ $rtl-switch-padding: 38px; // switch indicator (28px) + spacing (10px)
   // ---------------------------------------------------------------
   // Checkbox, radio and switch
   // ---------------------------------------------------------------
+  // Blueprint centres the indicator against its label with
+  // `vertical-align: middle` and a `margin-top: -3px` nudge, both calibrated
+  // for the 16px line box its own font produces. Vazirmatn gives a 22px line
+  // box, so the nudge overshoots and the indicator sits about 1.7px high —
+  // visible against a short word like «غیرفعال».
+  //
+  // Centring with flex instead asks nothing of the font. The display mode is
+  // preserved rather than replaced: Blueprint's controls are block by default
+  // and `inline-block` when marked `bp4-inline`, and collapsing that
+  // distinction would drop every inline checkbox onto its own line.
+  .bp4-control {
+    display: flex;
+    align-items: center;
+
+    &.bp4-inline {
+      display: inline-flex;
+    }
+
+    .bp4-control-indicator {
+      margin-top: 0;
+      flex: none;
+    }
+  }
+
   // Blueprint mirrors these with padding on the label and a matching negative
   // margin on the indicator, and never floats it: the indicator is an
   // inline-block sitting on the text baseline, nudged by `margin-top: -3px`.
