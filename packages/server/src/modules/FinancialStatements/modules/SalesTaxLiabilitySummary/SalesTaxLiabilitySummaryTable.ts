@@ -13,6 +13,7 @@ import { ITableRow } from '../../types/Table.types';
 import { ITableColumn } from '../../types/Table.types';
 import { tableRowMapper } from '../../utils/Table.utils';
 import { SALES_TAX_LIABILITY_COLUMN_KEYS } from '../../common/constants/tableColumnKeys';
+import { I18nService } from 'nestjs-i18n';
 
 export class SalesTaxLiabilitySummaryTable extends R.pipe(
   FinancialTable,
@@ -26,11 +27,15 @@ export class SalesTaxLiabilitySummaryTable extends R.pipe(
    * @param {SalesTaxLiabilitySummaryReportData} data
    * @param {SalesTaxLiabilitySummaryQuery} query
    */
+  i18n: any;
+
   constructor(
     data: SalesTaxLiabilitySummaryReportData,
     query: SalesTaxLiabilitySummaryQuery,
+    i18n: I18nService,
   ) {
     super();
+    this.i18n = i18n;
 
     this.data = data;
     this.query = query;
@@ -153,23 +158,23 @@ export class SalesTaxLiabilitySummaryTable extends R.pipe(
   public tableColumns(): ITableColumn[] {
     return R.compose(this.tableColumnsCellIndexing)([
       {
-        label: 'Tax Name',
+        label: this.i18n.t('report.column.tax_name'),
         key: SALES_TAX_LIABILITY_COLUMN_KEYS.TAX_NAME,
       },
       {
-        label: 'Tax Percentage',
+        label: this.i18n.t('report.column.tax_percentage'),
         key: SALES_TAX_LIABILITY_COLUMN_KEYS.TAX_PERCENTAGE,
       },
       {
-        label: 'Taxable Amount',
+        label: this.i18n.t('report.column.taxable_amount'),
         key: SALES_TAX_LIABILITY_COLUMN_KEYS.TAXABLE_AMOUNT,
       },
       {
-        label: 'Collected Tax',
+        label: this.i18n.t('report.column.collected_tax'),
         key: SALES_TAX_LIABILITY_COLUMN_KEYS.COLLECTED_TAX,
       },
       {
-        label: 'Tax Amount',
+        label: this.i18n.t('report.column.tax_amount'),
         key: SALES_TAX_LIABILITY_COLUMN_KEYS.TAX_RATE,
       },
     ]);

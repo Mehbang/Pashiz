@@ -18,6 +18,7 @@ import {
 } from '../../types/Table.types';
 import { tableRowMapper } from '../../utils/Table.utils';
 import { GENERAL_LEDGER_COLUMN_KEYS } from '../../common/constants/tableColumnKeys';
+import { I18nService } from 'nestjs-i18n';
 
 export class GeneralLedgerTable extends R.compose(
   FinancialTable,
@@ -32,12 +33,16 @@ export class GeneralLedgerTable extends R.compose(
    * @param {IGeneralLedgerSheetData} data
    * @param {IGeneralLedgerSheetQuery} query
    */
+  i18n: any;
+
   constructor(
     data: IGeneralLedgerSheetData,
     query: IGeneralLedgerSheetQuery,
     meta: IGeneralLedgerMeta,
+    i18n: I18nService,
   ) {
     super();
+    this.i18n = i18n;
 
     this.data = data;
     this.query = query;
@@ -191,23 +196,41 @@ export class GeneralLedgerTable extends R.compose(
    */
   private commonColumns(): ITableColumn[] {
     return [
-      { key: GENERAL_LEDGER_COLUMN_KEYS.DATE, label: 'Date' },
-      { key: GENERAL_LEDGER_COLUMN_KEYS.ACCOUNT_NAME, label: 'Account Name' },
+      {
+        key: GENERAL_LEDGER_COLUMN_KEYS.DATE,
+        label: this.i18n.t('report.column.date'),
+      },
+      {
+        key: GENERAL_LEDGER_COLUMN_KEYS.ACCOUNT_NAME,
+        label: this.i18n.t('report.column.account_name'),
+      },
       {
         key: GENERAL_LEDGER_COLUMN_KEYS.REFERENCE_TYPE,
-        label: 'Transaction Type',
+        label: this.i18n.t('report.column.transaction_type'),
       },
       {
         key: GENERAL_LEDGER_COLUMN_KEYS.REFERENCE_NUMBER,
         label: 'Transaction #',
       },
-      { key: GENERAL_LEDGER_COLUMN_KEYS.DESCRIPTION, label: 'Description' },
-      { key: GENERAL_LEDGER_COLUMN_KEYS.CREDIT, label: 'Credit' },
-      { key: GENERAL_LEDGER_COLUMN_KEYS.DEBIT, label: 'Debit' },
-      { key: GENERAL_LEDGER_COLUMN_KEYS.AMOUNT, label: 'Amount' },
+      {
+        key: GENERAL_LEDGER_COLUMN_KEYS.DESCRIPTION,
+        label: this.i18n.t('report.column.description'),
+      },
+      {
+        key: GENERAL_LEDGER_COLUMN_KEYS.CREDIT,
+        label: this.i18n.t('report.column.credit'),
+      },
+      {
+        key: GENERAL_LEDGER_COLUMN_KEYS.DEBIT,
+        label: this.i18n.t('report.column.debit'),
+      },
+      {
+        key: GENERAL_LEDGER_COLUMN_KEYS.AMOUNT,
+        label: this.i18n.t('report.column.amount'),
+      },
       {
         key: GENERAL_LEDGER_COLUMN_KEYS.RUNNING_BALANCE,
-        label: 'Running Balance',
+        label: this.i18n.t('report.column.running_balance'),
       },
     ];
   }

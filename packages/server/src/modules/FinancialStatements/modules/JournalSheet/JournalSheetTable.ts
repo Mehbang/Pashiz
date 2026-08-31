@@ -130,14 +130,32 @@ export class JournalSheetTable extends R.pipe(
    */
   private commonColumns(): ITableColumn[] {
     return [
-      { key: JOURNAL_COLUMN_KEYS.DATE, label: 'Date' },
-      { key: JOURNAL_COLUMN_KEYS.TRANSACTION_TYPE, label: 'Transaction Type' },
+      {
+        key: JOURNAL_COLUMN_KEYS.DATE,
+        label: this.i18n.t('report.column.date'),
+      },
+      {
+        key: JOURNAL_COLUMN_KEYS.TRANSACTION_TYPE,
+        label: this.i18n.t('report.column.transaction_type'),
+      },
       { key: JOURNAL_COLUMN_KEYS.TRANSACTION_NUMBER, label: 'Num.' },
-      { key: JOURNAL_COLUMN_KEYS.DESCRIPTION, label: 'Description' },
+      {
+        key: JOURNAL_COLUMN_KEYS.DESCRIPTION,
+        label: this.i18n.t('report.column.description'),
+      },
       { key: JOURNAL_COLUMN_KEYS.ACCOUNT_CODE, label: 'Acc. Code' },
-      { key: JOURNAL_COLUMN_KEYS.ACCOUNT_NAME, label: 'Account' },
-      { key: JOURNAL_COLUMN_KEYS.DEBIT, label: 'Debit' },
-      { key: JOURNAL_COLUMN_KEYS.CREDIT, label: 'Credit' },
+      {
+        key: JOURNAL_COLUMN_KEYS.ACCOUNT_NAME,
+        label: this.i18n.t('report.column.account'),
+      },
+      {
+        key: JOURNAL_COLUMN_KEYS.DEBIT,
+        label: this.i18n.t('report.column.debit'),
+      },
+      {
+        key: JOURNAL_COLUMN_KEYS.CREDIT,
+        label: this.i18n.t('report.column.credit'),
+      },
     ];
   }
 

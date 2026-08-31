@@ -11,6 +11,7 @@ import { FinancialSheet } from '../../common/FinancialSheet';
 import { ITableColumn, ITableRow } from '../../types/Table.types';
 import { tableRowMapper } from '../../utils/Table.utils';
 import { SALES_BY_ITEMS_COLUMN_KEYS } from '../../common/constants/tableColumnKeys';
+import { I18nService } from 'nestjs-i18n';
 
 export class SalesByItemsTable extends R.pipe(
   FinancialTable,
@@ -22,9 +23,12 @@ export class SalesByItemsTable extends R.pipe(
    * Constructor method.
    * @param {ISalesByItemsSheetStatement} data
    */
-  constructor(data: ISalesByItemsSheetData) {
+  i18n: any;
+
+  constructor(data: ISalesByItemsSheetData, i18n: I18nService) {
     super();
     this.data = data;
+    this.i18n = i18n;
   }
 
   /**
@@ -103,10 +107,22 @@ export class SalesByItemsTable extends R.pipe(
    */
   public tableColumns(): ITableColumn[] {
     const columns = [
-      { key: SALES_BY_ITEMS_COLUMN_KEYS.ITEM_NAME, label: 'Item name' },
-      { key: SALES_BY_ITEMS_COLUMN_KEYS.SOLD_QUANTITY, label: 'Sold quantity' },
-      { key: SALES_BY_ITEMS_COLUMN_KEYS.SOLD_AMOUNT, label: 'Sold amount' },
-      { key: SALES_BY_ITEMS_COLUMN_KEYS.AVERAGE_PRICE, label: 'Average price' },
+      {
+        key: SALES_BY_ITEMS_COLUMN_KEYS.ITEM_NAME,
+        label: this.i18n.t('report.column.item_name'),
+      },
+      {
+        key: SALES_BY_ITEMS_COLUMN_KEYS.SOLD_QUANTITY,
+        label: this.i18n.t('report.column.sold_quantity'),
+      },
+      {
+        key: SALES_BY_ITEMS_COLUMN_KEYS.SOLD_AMOUNT,
+        label: this.i18n.t('report.column.sold_amount'),
+      },
+      {
+        key: SALES_BY_ITEMS_COLUMN_KEYS.AVERAGE_PRICE,
+        label: this.i18n.t('report.column.average_price'),
+      },
     ];
     return R.compose(this.tableColumnsCellIndexing)(columns);
   }

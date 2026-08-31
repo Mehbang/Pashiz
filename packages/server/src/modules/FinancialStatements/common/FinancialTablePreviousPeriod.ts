@@ -32,7 +32,7 @@ export const FinancialTablePreviousPeriod = <
       const PPDate = dateRange
         ? dateRange.toDate
         : this.getTotalPreviousPeriod();
-      const PPFormatted = moment(PPDate).format('YYYY-MM-DD');
+      const PPFormatted = this.getDateFormatted(PPDate);
 
       return {
         key: COMPARISON_COLUMN_KEYS.PREVIOUS_PERIOD,

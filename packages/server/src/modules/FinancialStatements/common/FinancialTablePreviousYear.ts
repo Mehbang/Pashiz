@@ -35,7 +35,7 @@ export const FinancialTablePreviousYear = <
       dateRange?: IDateRange,
     ): ITableColumn => {
       const PYDate = dateRange ? dateRange.toDate : this.getTotalPreviousYear();
-      const PYFormatted = moment(PYDate).format('YYYY-MM-DD');
+      const PYFormatted = this.getDateFormatted(PYDate);
 
       return {
         key: COMPARISON_COLUMN_KEYS.PREVIOUS_YEAR,

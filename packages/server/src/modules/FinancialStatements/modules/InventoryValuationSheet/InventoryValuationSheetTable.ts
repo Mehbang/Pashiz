@@ -15,6 +15,7 @@ import {
 } from '../../types/Table.types';
 import { tableRowMapper } from '../../utils/Table.utils';
 import { INVENTORY_VALUATION_COLUMN_KEYS } from '../../common/constants/tableColumnKeys';
+import { I18nService } from 'nestjs-i18n';
 
 export class InventoryValuationSheetTable extends R.pipe(
   FinancialTable,
@@ -26,9 +27,12 @@ export class InventoryValuationSheetTable extends R.pipe(
    * Constructor method.
    * @param {IInventoryValuationSheetData} data
    */
-  constructor(data: IInventoryValuationSheetData) {
+  i18n: any;
+
+  constructor(data: IInventoryValuationSheetData, i18n: I18nService) {
     super();
     this.data = data;
+    this.i18n = i18n;
   }
 
   /**
@@ -107,10 +111,22 @@ export class InventoryValuationSheetTable extends R.pipe(
    */
   public tableColumns(): ITableColumn[] {
     const columns = [
-      { key: INVENTORY_VALUATION_COLUMN_KEYS.ITEM_NAME, label: 'Item Name' },
-      { key: INVENTORY_VALUATION_COLUMN_KEYS.QUANTITY, label: 'Quantity' },
-      { key: INVENTORY_VALUATION_COLUMN_KEYS.VALUATION, label: 'Valuation' },
-      { key: INVENTORY_VALUATION_COLUMN_KEYS.AVERAGE, label: 'Average' },
+      {
+        key: INVENTORY_VALUATION_COLUMN_KEYS.ITEM_NAME,
+        label: this.i18n.t('report.column.item_name'),
+      },
+      {
+        key: INVENTORY_VALUATION_COLUMN_KEYS.QUANTITY,
+        label: this.i18n.t('report.column.quantity'),
+      },
+      {
+        key: INVENTORY_VALUATION_COLUMN_KEYS.VALUATION,
+        label: this.i18n.t('report.column.valuation'),
+      },
+      {
+        key: INVENTORY_VALUATION_COLUMN_KEYS.AVERAGE,
+        label: this.i18n.t('report.column.average'),
+      },
     ];
     return R.compose(this.tableColumnsCellIndexing)(columns);
   }

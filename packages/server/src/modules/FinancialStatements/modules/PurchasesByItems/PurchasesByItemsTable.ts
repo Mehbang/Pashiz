@@ -15,6 +15,7 @@ import { FinancialSheetStructure } from '../../common/FinancialSheetStructure';
 import { FinancialSheet } from '../../common/FinancialSheet';
 import { tableRowMapper } from '../../utils/Table.utils';
 import { PURCHASES_BY_ITEMS_COLUMN_KEYS } from '../../common/constants/tableColumnKeys';
+import { I18nService } from 'nestjs-i18n';
 
 export class PurchasesByItemsTable extends R.compose(
   FinancialTable,
@@ -26,9 +27,12 @@ export class PurchasesByItemsTable extends R.compose(
    * Constructor method.
    * @param data
    */
-  constructor(data: IPurchasesByItemsSheetData) {
+  i18n: any;
+
+  constructor(data: IPurchasesByItemsSheetData, i18n: I18nService) {
     super();
     this.data = data;
+    this.i18n = i18n;
   }
 
   /**
@@ -59,17 +63,20 @@ export class PurchasesByItemsTable extends R.compose(
    */
   private commonTableColumns(): ITableColumn[] {
     return [
-      { label: 'Item name', key: PURCHASES_BY_ITEMS_COLUMN_KEYS.ITEM_NAME },
       {
-        label: 'Quantity Purchased',
+        label: this.i18n.t('report.column.item_name'),
+        key: PURCHASES_BY_ITEMS_COLUMN_KEYS.ITEM_NAME,
+      },
+      {
+        label: this.i18n.t('report.column.quantity_purchased'),
         key: PURCHASES_BY_ITEMS_COLUMN_KEYS.QUANTITY_PURCHASES,
       },
       {
-        label: 'Purchase Amount',
+        label: this.i18n.t('report.column.purchase_amount'),
         key: PURCHASES_BY_ITEMS_COLUMN_KEYS.PURCHASE_AMOUNT,
       },
       {
-        label: 'Average Price',
+        label: this.i18n.t('report.column.average_price'),
         key: PURCHASES_BY_ITEMS_COLUMN_KEYS.AVERAGE_COST,
       },
     ];

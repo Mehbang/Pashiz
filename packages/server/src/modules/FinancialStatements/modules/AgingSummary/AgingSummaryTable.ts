@@ -217,7 +217,10 @@ export abstract class AgingSummaryTable extends R.pipe(
    * @returns {ITableColumn}
    */
   protected contactNameTableColumn = (): ITableColumn => {
-    return { label: 'Customer name', key: 'customer_name' };
+    return {
+      label: this.i18n.t('report.column.customer_name'),
+      key: 'customer_name',
+    };
   };
 
   /**
@@ -227,9 +230,9 @@ export abstract class AgingSummaryTable extends R.pipe(
   public tableColumns = (): ITableColumn[] => {
     return R.compose(this.tableColumnsCellIndexing)([
       this.contactNameTableColumn(),
-      { label: 'Current', key: 'current' },
+      { label: this.i18n.t('report.column.current'), key: 'current' },
       ...this.agingTableColumns(),
-      { label: 'Total', key: 'total' },
+      { label: this.i18n.t('report.column.total'), key: 'total' },
     ]);
   };
 }
