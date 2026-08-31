@@ -180,6 +180,37 @@ export class CommandItemDto {
   categoryId?: number;
 
   @IsOptional()
+  @IsInt()
+  @Min(1)
+  @ApiProperty({
+    description: 'Unit every stored quantity of this item is counted in',
+    required: false,
+    example: 3,
+  })
+  unitId?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @ApiProperty({
+    description: 'A second unit the same quantity may be read in',
+    required: false,
+    example: 4,
+  })
+  secondaryUnitId?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @ApiProperty({
+    description:
+      'How many secondary units make one primary unit — 1000 for gram against kilogram',
+    required: false,
+    example: 1000,
+  })
+  secondaryUnitFactor?: number;
+
+  @IsOptional()
   @IsString()
   @ApiProperty({
     description: 'Additional notes about the item',

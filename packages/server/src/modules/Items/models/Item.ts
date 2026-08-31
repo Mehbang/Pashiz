@@ -1,5 +1,6 @@
 import { Warehouse } from '@/modules/Warehouses/models/Warehouse.model';
 import { Account } from '@/modules/Accounts/models/Account.model';
+import { ItemUnit } from '@/modules/ItemUnits/models/ItemUnit.model';
 import { TenantBaseModel } from '@/modules/System/models/TenantBaseModel';
 import { Model } from 'objection';
 import { ExportableModel } from '@/modules/Export/decorators/ExportableModel.decorator';
@@ -37,6 +38,20 @@ export class Item extends TenantBaseModel {
   public readonly note: string;
   public readonly userId: number;
   public readonly sellTaxRateId: number;
+
+  /**
+   * The unit every stored quantity for this item is counted in.
+   */
+  public readonly unitId?: number;
+
+  /**
+   * An optional second way of reading the same quantity, and how many of it
+   * make one primary unit — 1000 for gram against kilogram, 0.2 for pallet
+   * against box. Nothing is stored in this unit; it is a conversion applied
+   * when a quantity is shown.
+   */
+  public readonly secondaryUnitId?: number;
+  public readonly secondaryUnitFactor?: number;
   public readonly purchaseTaxRateId: number;
 
   public readonly warehouse!: Warehouse;
@@ -46,6 +61,8 @@ export class Item extends TenantBaseModel {
   public readonly costAccount?: Account;
   public readonly inventoryAccount?: Account;
   public readonly sellAccount?: Account;
+  public readonly unit?: ItemUnit;
+  public readonly secondaryUnit?: ItemUnit;
 
   static get tableName() {
     return 'items';
@@ -131,6 +148,24 @@ export class Item extends TenantBaseModel {
       /**
        * Item may belongs to cost account.
        */
+      unit: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ItemUnit,
+        join: {
+          from: 'items.unitId',
+          to: 'item_units.id',
+        },
+      },
+
+      secondaryUnit: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: ItemUnit,
+        join: {
+          from: 'items.secondaryUnitId',
+          to: 'item_units.id',
+        },
+      },
+
       costAccount: {
         relation: Model.BelongsToOneRelation,
         modelClass: Account,

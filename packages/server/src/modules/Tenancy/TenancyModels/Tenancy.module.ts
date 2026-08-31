@@ -8,6 +8,7 @@ import { AccountTransaction } from '@/modules/Accounts/models/AccountTransaction
 import { Expense } from '@/modules/Expenses/models/Expense.model';
 import { ExpenseCategory } from '@/modules/Expenses/models/ExpenseCategory.model';
 import { ItemCategory } from '@/modules/ItemCategories/models/ItemCategory.model';
+import { ItemUnit } from '@/modules/ItemUnits/models/ItemUnit.model';
 import { TaxRateModel } from '@/modules/TaxRates/models/TaxRate.model';
 import { PdfTemplateModel } from '@/modules/PdfTemplate/models/PdfTemplate';
 import { Warehouse } from '@/modules/Warehouses/models/Warehouse.model';
@@ -49,6 +50,7 @@ const models = [
   Expense,
   ExpenseCategory,
   ItemCategory,
+  ItemUnit,
   TaxRateModel,
   PdfTemplateModel,
   Warehouse,

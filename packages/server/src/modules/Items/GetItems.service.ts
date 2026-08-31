@@ -59,6 +59,9 @@ export class GetItemsService {
         builder.withGraphFetched('sellAccount');
         builder.withGraphFetched('costAccount');
         builder.withGraphFetched('category');
+        // The transformer reads both units to say what a quantity means.
+        builder.withGraphFetched('unit');
+        builder.withGraphFetched('secondaryUnit');
 
         dynamicFilter.buildQuery()(builder);
       })

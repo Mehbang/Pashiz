@@ -30,6 +30,8 @@ export class GetItemService {
       .withGraphFetched('inventoryAccount')
       .withGraphFetched('category')
       .withGraphFetched('costAccount')
+      .withGraphFetched('unit')
+      .withGraphFetched('secondaryUnit')
       .withGraphFetched('itemWarehouses.warehouse')
       .withGraphFetched('sellTaxRate')
       .withGraphFetched('purchaseTaxRate')

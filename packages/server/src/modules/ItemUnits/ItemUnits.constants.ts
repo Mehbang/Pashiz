@@ -1,0 +1,4 @@
+export const ERRORS = {
+  UNIT_NAME_NOT_UNIQUE: 'UNIT_NAME_NOT_UNIQUE',
+  UNIT_IN_USE: 'UNIT_IN_USE',
+};
