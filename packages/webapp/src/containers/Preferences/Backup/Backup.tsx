@@ -11,7 +11,11 @@ import { compose } from '@/utils';
 import { localizedDigits } from '@/utils/locale';
 import { formatDateLocalized } from '@/utils/locale';
 import { isBundle, useOrganizationBackup } from './useOrganizationBackup';
-import type { BackupSummary, BundleContents } from './useOrganizationBackup';
+import type {
+  BackupSummary,
+  BundleContents,
+  OrganizationArchive,
+} from './useOrganizationBackup';
 
 type BackupPreferencesProps = Pick<
   WithDashboardActionsProps,
@@ -28,7 +32,14 @@ type BackupPreferencesProps = Pick<
 function BackupPreferences({
   changePreferencesPageTitle,
 }: BackupPreferencesProps) {
-  const { exportBackup, inspectBackup, importBackup } = useOrganizationBackup();
+  const {
+    exportBackup,
+    inspectBackup,
+    importBackup,
+    listArchives,
+    downloadArchive,
+    restoreArchive,
+  } = useOrganizationBackup();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExporting, setExporting] = useState(false);
@@ -45,9 +56,38 @@ function BackupPreferences({
     contents: BundleContents;
   } | null>(null);
 
+  const [archives, setArchives] = useState<OrganizationArchive[]>([]);
+  const [restoring, setRestoring] = useState<string | null>(null);
+
   useEffect(() => {
     changePreferencesPageTitle(intl.get('backup.title'));
   }, [changePreferencesPageTitle]);
+
+  // Best-effort: an installation that takes no automatic backups simply shows
+  // no list, and that is not an error worth a toast.
+  useEffect(() => {
+    listArchives()
+      .then(setArchives)
+      .catch(() => setArchives([]));
+  }, [listArchives]);
+
+  const handleRestoreArchive = async (name: string) => {
+    setRestoring(name);
+    try {
+      await restoreArchive(name);
+      AppToaster.show({
+        message: intl.get('backup.import.succeeded'),
+        intent: Intent.SUCCESS,
+      });
+      window.location.reload();
+    } catch {
+      AppToaster.show({
+        message: intl.get('backup.import.failed'),
+        intent: Intent.DANGER,
+      });
+      setRestoring(null);
+    }
+  };
 
   const handleExport = async () => {
     setExporting(true);
@@ -250,6 +290,54 @@ function BackupPreferences({
               </>
             )}
           </section>
+
+          <Divider />
+
+          <section>
+            <SectionTitle>{intl.get('backup.archives.title')}</SectionTitle>
+            <SectionDescription>
+              {intl.get('backup.archives.description')}
+            </SectionDescription>
+
+            {archives.length ? (
+              <ArchiveList>
+                {archives.map((archive) => (
+                  <li key={archive.name}>
+                    <ArchiveRow>
+                      <ArchiveWhen>
+                        {formatDateLocalized(
+                          archive.created_at,
+                          'DD MMMM YYYY — HH:mm',
+                        )}
+                      </ArchiveWhen>
+                      <Group spacing={8}>
+                        <Button
+                          minimal
+                          small
+                          onClick={() => downloadArchive(archive.name)}
+                        >
+                          {intl.get('backup.archives.download')}
+                        </Button>
+                        <Button
+                          minimal
+                          small
+                          intent={Intent.DANGER}
+                          loading={restoring === archive.name}
+                          onClick={() => handleRestoreArchive(archive.name)}
+                        >
+                          {intl.get('backup.archives.restore')}
+                        </Button>
+                      </Group>
+                    </ArchiveRow>
+                  </li>
+                ))}
+              </ArchiveList>
+            ) : (
+              <SectionDescription>
+                {intl.get('backup.archives.empty')}
+              </SectionDescription>
+            )}
+          </section>
         </Stack>
       </BackupCard>
     </div>
@@ -296,4 +384,27 @@ const SummaryList = styled.ul`
 
 const HiddenFileInput = styled.input`
   display: none;
+`;
+
+const ArchiveList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const ArchiveRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(17, 20, 24, 0.1);
+
+  .bp4-dark & {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const ArchiveWhen = styled.span`
+  font-variant-numeric: tabular-nums;
 `;

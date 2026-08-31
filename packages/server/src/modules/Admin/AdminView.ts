@@ -61,7 +61,16 @@ section { background:var(--panel); border:1px solid var(--line); border-radius:1
 h2 { margin:0 0 4px; font-size:16px; }
 p.hint { color:var(--muted); margin:0 0 16px; }
 table { width:100%; border-collapse:collapse; }
-th,td { text-align:right; padding:9px 10px; border-bottom:1px solid var(--line); }
+th,td { text-align:right; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+/* Long archive names must wrap rather than widen the table past the page. */
+td.name { word-break:break-all; }
+/* The actions column stacks, so a row stays one line tall until opened. */
+td.actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+td.actions form { margin:0; }
+details summary { cursor:pointer; user-select:none; }
+/* Opened, the restore controls stack instead of running off the edge. */
+.stack { display:flex; flex-direction:column; gap:6px; margin-top:8px; max-width:280px; }
+.stack input, .stack select { width:100%; box-sizing:border-box; }
 th { color:var(--muted); font-weight:600; font-size:13px; }
 label { display:block; margin-bottom:12px; }
 label span { display:block; color:var(--muted); font-size:13px; margin-bottom:4px; }

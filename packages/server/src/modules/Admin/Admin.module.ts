@@ -30,6 +30,6 @@ import { MailModule } from '@/modules/Mail/Mail.module';
     AdminPortalGuard,
     InstanceSettingsService,
   ],
-  exports: [InstanceSettingsService, AdminAuthService],
+  exports: [InstanceSettingsService, AdminAuthService, AdminBackupService],
 })
 export class AdminModule {}

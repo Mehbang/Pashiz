@@ -17,6 +17,14 @@ import { AdminDataService } from './AdminData.service';
  */
 export const AUTOMATIC_MARKER = 'auto';
 
+/**
+ * The stem every automatic per-organization archive starts with. An
+ * organization's settings page lists what begins with its own — an exact
+ * match on an id, never a guess from a filename.
+ */
+export const organizationArchivePrefix = (organizationId: string): string =>
+  `org-${organizationId}`;
+
 /** How many of each kind to keep. Twice a day, so a fortnight of history. */
 const KEEP_PER_KIND = 28;
 
@@ -112,7 +120,11 @@ export class AdminScheduleService {
   }
 
   private async runOrganizations(): Promise<void> {
-    let organizations: Array<{ id: number; name: string }> = [];
+    let organizations: Array<{
+      id: number;
+      name: string;
+      organizationId: string;
+    }> = [];
     try {
       organizations = (await this.data.getOrganizations()) as any;
     } catch (error: any) {
@@ -122,10 +134,16 @@ export class AdminScheduleService {
 
     for (const organization of organizations) {
       try {
-        const { filename, content } = await this.data.exportOrganization(
-          organization.id,
+        const { content } = await this.data.exportOrganization(organization.id);
+
+        // Named by the organization's own id rather than by its title, which
+        // is Persian and would not survive the filter. It is what lets that
+        // organization's own settings page find its archives and no others.
+        await this.backups.save(
+          `${organizationArchivePrefix(organization.organizationId)}.pashiz`,
+          content,
+          AUTOMATIC_MARKER,
         );
-        await this.backups.save(filename, content, AUTOMATIC_MARKER);
       } catch (error: any) {
         this.logger.error(
           `Scheduled backup of organization ${organization.id} failed: ${error?.message}`,

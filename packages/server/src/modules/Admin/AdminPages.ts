@@ -204,54 +204,63 @@ export function backupsView(
           : '';
 
   const rows = files
-    .map(
-      (file) => `<tr>
-        <td>${esc(file.name)}</td>
+    .map((file) => {
+      const isFullDump = file.name.endsWith('.sql.gz');
+      const url = `${esc(options.base)}/backups`;
+
+      // The restore controls are a select, two fields and a button; laid out
+      // in a table cell they pushed the row wider than the page and shoved the
+      // last column off the edge. Folded away behind a summary they cost the
+      // row nothing until someone opens one, and `details` needs no script.
+      const restore = isFullDump
+        ? `<form method="post" action="${url}/restore" class="stack">
+             ${csrfField(options.csrf)}
+             <input type="hidden" name="name" value="${esc(file.name)}">
+             <input name="confirm" placeholder="نام پرونده را بنویسید" required>
+             <button class="danger">بازگرداندن کل نصب</button>
+           </form>`
+        : // An organization export or a user bundle: the operator says which
+          // organization it goes into, because the file's own organization id
+          // belongs to wherever it came from.
+          `<form method="post" action="${url}/restore-organization" class="stack">
+             ${csrfField(options.csrf)}
+             <input type="hidden" name="name" value="${esc(file.name)}">
+             <select name="tenantId" required>
+               <option value="">سازمان مقصد…</option>
+               ${targets
+                 .map(
+                   (t) =>
+                     `<option value="${esc(t.id)}">${esc(t.name || t.organizationId)}</option>`,
+                 )
+                 .join('')}
+             </select>
+             ${
+               file.name.endsWith('.pashizbundle')
+                 ? '<input name="entryIndex" placeholder="شمارهٔ سازمان در بسته" value="0">'
+                 : ''
+             }
+             <input name="confirm" placeholder="نام پرونده را بنویسید" required>
+             <button class="danger">بازگرداندن</button>
+           </form>`;
+
+      return `<tr>
+        <td class="name">${esc(file.name)}</td>
         <td>${esc(bytes(file.sizeBytes))}</td>
         <td>${esc(date(file.createdAt))}</td>
-        <td><a class="dl" href="${esc(options.base)}/backups/download?name=${encodeURIComponent(file.name)}">دانلود</a></td>
-        <td>${
-          // Only a whole-installation dump can be put back from here. An
-          // organization export is restored from that organization's own
-          // settings, where the person doing it can see whose books they are
-          // about to replace.
-          file.name.endsWith('.sql.gz')
-            ? `<form method="post" action="${esc(options.base)}/backups/restore">
-                 ${csrfField(options.csrf)}
-                 <input type="hidden" name="name" value="${esc(file.name)}">
-                 <input name="confirm" placeholder="نام پرونده را بنویسید" size="22" required>
-                 <button class="danger">بازگرداندن</button>
-               </form>`
-            : // An organization export or a user bundle: the operator says
-              // which organization it goes into, because the file's own
-              // organization id belongs to wherever it came from.
-              `<form method="post" action="${esc(options.base)}/backups/restore-organization">
-                 ${csrfField(options.csrf)}
-                 <input type="hidden" name="name" value="${esc(file.name)}">
-                 <select name="tenantId" required>
-                   <option value="">سازمان مقصد…</option>
-                   ${targets
-                     .map(
-                       (t) =>
-                         `<option value="${esc(t.id)}">${esc(t.name || t.organizationId)}</option>`,
-                     )
-                     .join('')}
-                 </select>
-                 ${
-                   file.name.endsWith('.pashizbundle')
-                     ? '<input name="entryIndex" placeholder="شمارهٔ سازمان در بسته" size="8" value="0">'
-                     : ''
-                 }
-                 <input name="confirm" placeholder="نام پرونده را بنویسید" size="20" required>
-                 <button class="danger">بازگرداندن</button>
-               </form>`
-        }</td>
-        <td><form method="post" action="${esc(options.base)}/backups/delete">
-          ${csrfField(options.csrf)}
-          <input type="hidden" name="name" value="${esc(file.name)}">
-          <button class="quiet">پاک‌کردن</button></form></td>
-      </tr>`,
-    )
+        <td class="actions">
+          <a class="dl" href="${url}/download?name=${encodeURIComponent(file.name)}">دانلود</a>
+          <details>
+            <summary>بازگرداندن</summary>
+            ${restore}
+          </details>
+          <form method="post" action="${url}/delete">
+            ${csrfField(options.csrf)}
+            <input type="hidden" name="name" value="${esc(file.name)}">
+            <button class="quiet">پاک‌کردن</button>
+          </form>
+        </td>
+      </tr>`;
+    })
     .join('');
 
   return page(
@@ -285,8 +294,8 @@ export function backupsView(
       <p class="hint">پشتیبان‌هایی که از سازمان‌ها و کاربران می‌گیرید هم اینجا نگه داشته می‌شوند، نه فقط در دانلودهای شما.</p>
       <p class="muted">بازگرداندن یک پشتیبان کامل، <b>همهٔ</b> سازمان‌های این نصب را با محتوای آن جایگزین می‌کند. برای تأیید باید نام خود پرونده را بنویسید. سرور پس از آن چند ثانیه بالا می‌آید.</p>
       <table>
-        <tr><th>نام</th><th>حجم</th><th>تاریخ</th><th></th><th>بازگرداندن</th><th></th></tr>
-        ${rows || '<tr><td colspan="6">بایگانی‌ای نیست.</td></tr>'}
+        <tr><th>نام</th><th>حجم</th><th>تاریخ</th><th>کارها</th></tr>
+        ${rows || '<tr><td colspan="4">بایگانی‌ای نیست.</td></tr>'}
       </table>
     </section>`,
   );

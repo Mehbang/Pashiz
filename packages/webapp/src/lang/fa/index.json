@@ -2939,5 +2939,10 @@
   "backup.import.summary.attachments": "{count} پیوست",
   "theme.switch_to_dark": "تم تاریک",
   "theme.switch_to_light": "تم روشن",
-  "backup.import.bundle.title": "این پرونده بستهٔ کاربر {email} است و چند سازمان دارد. کدام‌یک در این سازمان بالا بیاید؟"
+  "backup.import.bundle.title": "این پرونده بستهٔ کاربر {email} است و چند سازمان دارد. کدام‌یک در این سازمان بالا بیاید؟",
+  "backup.archives.title": "پشتیبان‌های خودکار این سازمان",
+  "backup.archives.description": "سامانه هر روز ساعت ۱۲ ظهر و ۱۲ شب از این سازمان پشتیبان می‌گیرد. می‌توانید هرکدام را دانلود کنید یا سازمان را به آن لحظه بازگردانید.",
+  "backup.archives.empty": "هنوز پشتیبان خودکاری گرفته نشده است.",
+  "backup.archives.download": "دانلود",
+  "backup.archives.restore": "بازگرداندن به این نسخه"
 }

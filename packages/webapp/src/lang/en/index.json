@@ -2939,5 +2939,10 @@
   "backup.import.summary.attachments": "{count} attachments",
   "theme.switch_to_dark": "Dark theme",
   "theme.switch_to_light": "Light theme",
-  "backup.import.bundle.title": "This file is a bundle for {email} and holds several organizations. Which one should be imported here?"
+  "backup.import.bundle.title": "This file is a bundle for {email} and holds several organizations. Which one should be imported here?",
+  "backup.archives.title": "Automatic backups of this organization",
+  "backup.archives.description": "The system backs this organization up at noon and midnight each day. Download any of them, or put the organization back to that moment.",
+  "backup.archives.empty": "No automatic backup has been taken yet.",
+  "backup.archives.download": "Download",
+  "backup.archives.restore": "Restore to this one"
 }

@@ -21,6 +21,12 @@ export interface BundleContents {
   entries: Array<{ index: number; name: string; organization_id: string }>;
 }
 
+export interface OrganizationArchive {
+  name: string;
+  size_bytes: number;
+  created_at: string;
+}
+
 export const isBundle = (
   value: BackupSummary | BundleContents,
 ): value is BundleContents => (value as BundleContents).is_bundle === true;
@@ -100,5 +106,49 @@ export function useOrganizationBackup() {
     [http],
   );
 
-  return { exportBackup, inspectBackup, importBackup };
+  /**
+   * The automatic backups the installation has taken of this organization.
+   * Scoped server-side to whoever is asking — no organization can name
+   * another's archive.
+   */
+  const listArchives = React.useCallback(async (): Promise<
+    OrganizationArchive[]
+  > => {
+    const response = await http.get('/api/organization/backup/archives');
+    return response.data ?? [];
+  }, [http]);
+
+  const downloadArchive = React.useCallback(
+    async (name: string) => {
+      const response = await http.get(
+        `/api/organization/backup/archives/download?name=${encodeURIComponent(name)}`,
+        { responseType: 'blob' },
+      );
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = name;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    },
+    [http],
+  );
+
+  const restoreArchive = React.useCallback(
+    async (name: string) => {
+      await http.post('/api/organization/backup/archives/restore', { name });
+    },
+    [http],
+  );
+
+  return {
+    exportBackup,
+    inspectBackup,
+    importBackup,
+    listArchives,
+    downloadArchive,
+    restoreArchive,
+  };
 }
