@@ -16,12 +16,17 @@ $rtl-switch-padding: 38px; // switch indicator (28px) + spacing (10px)
   // ---------------------------------------------------------------
   // Checkbox, radio and switch
   // ---------------------------------------------------------------
+  // Blueprint mirrors these with padding on the label and a matching negative
+  // margin on the indicator, and never floats it: the indicator is an
+  // inline-block sitting on the text baseline, nudged by `margin-top: -3px`.
+  // Floating it here reproduced the horizontal mirror but took it out of the
+  // line box, so it rose to the top of the row and sat above its own label.
+  // The negative margin alone does the job.
   .bp4-control:not(.bp4-align-right) {
     padding-left: 0;
     padding-right: $rtl-control-padding;
 
     .bp4-control-indicator {
-      float: right;
       margin-left: 10px;
       margin-right: -$rtl-control-padding;
     }
@@ -32,7 +37,6 @@ $rtl-switch-padding: 38px; // switch indicator (28px) + spacing (10px)
     padding-right: 0;
 
     .bp4-control-indicator {
-      float: left;
       margin-left: -$rtl-control-padding;
       margin-right: 10px;
     }

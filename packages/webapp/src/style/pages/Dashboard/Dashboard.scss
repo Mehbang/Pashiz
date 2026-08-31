@@ -219,6 +219,14 @@ $dashboard-views-bar-height: 44px;
         margin-right: 0;
       }
 
+      // A checkbox or switch carries `margin-bottom: 10px`, which is right in
+      // a form and wrong in a 40px flex row: the extra space below it is
+      // centred along with the control, lifting it above everything beside it.
+      // The inactive switch on the list screens is where this shows.
+      .#{$ns}-control {
+        margin-bottom: 0;
+      }
+
       .#{$ns}-button {
         color: var(--color-dashboard-navbar-item-text);
         padding: 8px 12px;
