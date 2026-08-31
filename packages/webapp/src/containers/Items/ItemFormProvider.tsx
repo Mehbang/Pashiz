@@ -18,6 +18,8 @@ import {
   useAccounts,
 } from '@/hooks/query';
 import { useTaxRates } from '@/hooks/query/tax-rates';
+import { useItemUnitsList } from './useItemUnitsList';
+import type { ItemUnit } from '@/containers/Preferences/Units/useItemUnits';
 
 type ItemFormSubmitPayload = {
   redirect?: boolean;
@@ -33,6 +35,7 @@ type ItemFormContextValue = {
   accounts: AccountsList;
   item: Item | undefined;
   itemsCategories: ItemCategoriesListResponse;
+  itemUnits: ItemUnit[];
   taxRates: TaxRatesListResponse;
   submitPayload: ItemFormSubmitPayload;
   isNewMode: boolean;
@@ -66,6 +69,9 @@ function ItemFormProvider({ itemId, ...props }: ItemFormProviderProps) {
   const { isLoading: isItemsCategoriesLoading, data: itemsCategories } =
     useItemsCategories();
 
+  // The units this organization counts in, for the two unit fields.
+  const { isLoading: isItemUnitsLoading, data: itemUnits } = useItemUnitsList();
+
   const { data: taxRates, isLoading: isTaxRatesLoading } = useTaxRates();
 
   // Fetches the given item details.
@@ -95,6 +101,7 @@ function ItemFormProvider({ itemId, ...props }: ItemFormProviderProps) {
     isItemsSettingsLoading ||
     isAccountsLoading ||
     isItemsCategoriesLoading ||
+    isItemUnitsLoading ||
     isTaxRatesLoading ||
     isItemLoading;
 
@@ -104,6 +111,7 @@ function ItemFormProvider({ itemId, ...props }: ItemFormProviderProps) {
     accounts: accounts ?? [],
     item,
     itemsCategories: itemsCategories ?? [],
+    itemUnits: itemUnits ?? [],
     taxRates: taxRates ?? [],
     submitPayload,
     isNewMode,

@@ -68,6 +68,19 @@ export function ItemFormFormik({
     const { setSubmitting, resetForm, setErrors } = form;
     const formValues = { ...values };
 
+    // An untouched picker holds an empty string, which the API reads as
+    // neither a number nor an absent value. The unit fields are all optional,
+    // so an empty one is sent as null.
+    for (const field of [
+      'unitId',
+      'secondaryUnitId',
+      'secondaryUnitFactor',
+    ] as const) {
+      if (formValues[field] === '' || formValues[field] === undefined) {
+        (formValues as Record<string, unknown>)[field] = null;
+      }
+    }
+
     setSubmitting(true);
 
     // Handle response succes.

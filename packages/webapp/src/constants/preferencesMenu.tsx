@@ -75,6 +75,11 @@ export const PreferencesMenu: PreferencesMenuItem[] = [
     href: '/preferences/api-keys',
   },
   {
+    text: intl.get('units.title'),
+    disabled: false,
+    href: '/preferences/units',
+  },
+  {
     text: intl.get('backup.title'),
     disabled: false,
     href: '/preferences/backup',

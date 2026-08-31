@@ -180,6 +180,7 @@ export class CommandItemDto {
   categoryId?: number;
 
   @IsOptional()
+  @ValidateIf((_, value) => value !== null)
   @IsInt()
   @Min(1)
   @ApiProperty({
@@ -190,6 +191,7 @@ export class CommandItemDto {
   unitId?: number;
 
   @IsOptional()
+  @ValidateIf((_, value) => value !== null)
   @IsInt()
   @Min(1)
   @ApiProperty({
@@ -200,6 +202,7 @@ export class CommandItemDto {
   secondaryUnitId?: number;
 
   @IsOptional()
+  @ValidateIf((_, value) => value !== null)
   @IsNumber()
   @Min(0)
   @ApiProperty({

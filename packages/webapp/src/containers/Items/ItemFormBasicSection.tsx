@@ -16,7 +16,7 @@ import {
 } from '@/components';
 
 export function ItemFormBasicSection() {
-  const { isNewMode, item, itemsCategories } = useItemFormContext();
+  const { isNewMode, item, itemsCategories, itemUnits } = useItemFormContext();
   const nameFieldRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -123,6 +123,52 @@ export function ItemFormBasicSection() {
           popoverProps={{ minimal: true, captureDismiss: true }}
           fill
         />
+      </FFormGroup>
+
+      {/*----------- Primary unit ----------*/}
+      <FFormGroup
+        name={'unitId'}
+        label={<T id={'item.field.unit'} />}
+        inline={true}
+        helperText={intl.get('item.field.unit.hint')}
+      >
+        <FSelect
+          name={'unitId'}
+          items={itemUnits}
+          valueAccessor={'id'}
+          textAccessor={'name'}
+          placeholder={intl.get('units.field.name.placeholder')}
+          popoverProps={{ minimal: true, captureDismiss: true }}
+          fill
+        />
+      </FFormGroup>
+
+      {/*----------- Secondary unit ----------*/}
+      <FFormGroup
+        name={'secondaryUnitId'}
+        label={<T id={'item.field.secondary_unit'} />}
+        inline={true}
+        helperText={intl.get('item.field.secondary_unit.hint')}
+      >
+        <FSelect
+          name={'secondaryUnitId'}
+          items={itemUnits}
+          valueAccessor={'id'}
+          textAccessor={'name'}
+          placeholder={intl.get('units.field.symbol.placeholder')}
+          popoverProps={{ minimal: true, captureDismiss: true }}
+          fill
+        />
+      </FFormGroup>
+
+      {/*----------- Conversion factor ----------*/}
+      <FFormGroup
+        name={'secondaryUnitFactor'}
+        label={<T id={'item.field.secondary_unit_factor'} />}
+        inline={true}
+        helperText={intl.get('item.field.secondary_unit_factor.hint')}
+      >
+        <FInputGroup name={'secondaryUnitFactor'} fill />
       </FFormGroup>
 
       {/*----------- Active ----------*/}

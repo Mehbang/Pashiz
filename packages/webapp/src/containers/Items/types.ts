@@ -14,6 +14,11 @@ export interface ItemFormValues {
   sellTaxRateId: number | string;
   inventoryAccountId: number | string;
   categoryId: number | string;
+  /** The unit every quantity of this item is counted in. */
+  unitId: number | string | null;
+  /** A second unit the same quantity may be read in, and the factor between. */
+  secondaryUnitId: number | string | null;
+  secondaryUnitFactor: number | string | null;
   sellable: boolean;
   purchasable: boolean;
   sellDescription: string;

@@ -28,11 +28,15 @@ export type ItemTableRow = Item & {
   isPublished?: boolean;
   active?: boolean;
   quantityOnHand?: number;
+  secondaryQuantityOnHandFormatted?: string;
+  quantityOnHandFormatted?: string;
   category?: { id?: number; name?: string };
 };
 
 interface CellProps {
   cell: { value: unknown };
+  /** Present on cells that need a sibling field, not only their own value. */
+  row?: { original?: unknown };
 }
 
 interface ActionsMenuPayload {
@@ -84,10 +88,23 @@ export const ItemCodeAccessor = (row: ItemTableRow) =>
     ''
   );
 
-export const QuantityOnHandCell = ({ cell: { value } }: CellProps) => {
+/**
+ * Stock on hand, in the item's own unit.
+ *
+ * The row carries both the raw number and the server's formatted string; the
+ * number decides the colour and the string is what is read, so the figure
+ * follows the organization's digits and carries its unit — matching the
+ * secondary column beside it rather than sitting in Latin next to it.
+ */
+export const QuantityOnHandCell = ({ cell: { value }, row }: CellProps) => {
   const num = value as number;
+  const formatted = (row?.original as ItemTableRow | undefined)
+    ?.quantityOnHandFormatted;
+
   return isNumber(value) ? (
-    <span className={num < 0 ? 'quantity_on_hand' : undefined}>{value}</span>
+    <span className={num < 0 ? 'quantity_on_hand' : undefined}>
+      {formatted || value}
+    </span>
   ) : null;
 };
 
@@ -266,6 +283,16 @@ export const useItemsTableColumns = (): DataTableColumn<ItemTableRow>[] => {
           width: 140,
           clickable: true,
           money: true,
+        },
+        {
+          // The same stock read in the item's second unit. Blank for an item
+          // that has none, which is most of them until someone sets one.
+          id: 'secondary_quantity_on_hand',
+          Header: intl.get('item.field.quantity_secondary'),
+          accessor: 'secondaryQuantityOnHandFormatted',
+          align: 'right',
+          width: 160,
+          clickable: true,
         },
       ] as DataTableColumn<ItemTableRow>[],
     [],
