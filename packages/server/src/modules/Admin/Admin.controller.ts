@@ -16,6 +16,7 @@ import { ADMIN_SESSION_COOKIE, AdminAuthService } from './AdminAuth.service';
 import { AdminPortalGuard, readCookie } from './AdminPortal.guard';
 import { AdminDataService } from './AdminData.service';
 import { AdminBackupService } from './AdminBackup.service';
+import { AdminScheduleService } from './AdminSchedule.service';
 import { InstanceSettingsService } from './InstanceSettings.service';
 import { MailTransporter } from '@/modules/Mail/MailTransporter.service';
 import { AllowSignedOut, ADMIN_RESPONSE_HEADERS } from './Admin.constants';
@@ -49,6 +50,7 @@ export class AdminController {
     private readonly adminAuth: AdminAuthService,
     private readonly data: AdminDataService,
     private readonly backups: AdminBackupService,
+    private readonly schedule: AdminScheduleService,
     private readonly settings: InstanceSettingsService,
     private readonly mailTransporter: MailTransporter,
   ) {}
@@ -284,6 +286,11 @@ export class AdminController {
         csrf: this.csrf(request),
         files: await this.backups.list(),
         state: this.backups.getState(),
+        targets: (await this.data.getOrganizations()).map((org: any) => ({
+          id: org.id,
+          name: org.name,
+          organizationId: org.organizationId,
+        })),
         notice: this.notice(request),
       }),
     );
@@ -360,6 +367,79 @@ export class AdminController {
     );
 
     return this.redirect(response, `${base}/backups?ok=restored`);
+  }
+
+  /**
+   * Puts an organization export back into a chosen organization.
+   *
+   * Separate from the whole-installation restore above and deliberately
+   * narrower: this one replaces the books of exactly one organization and
+   * leaves the rest of the installation alone, so it needs no restart. The
+   * archive is one already on the server, and the operator names the target
+   * explicitly — nothing is inferred from the file, whose own organization id
+   * belongs to wherever it came from.
+   */
+  @Post('backups/restore-organization')
+  async restoreOrganization(
+    @Req() request: Request,
+    @Res() response: Response,
+    @Body() body: Record<string, string>,
+  ) {
+    if (!this.checkCsrf(request, body)) return this.deny(response);
+
+    const base = this.base(request);
+    const name = body.name ?? '';
+    const tenantId = parseInt(body.tenantId ?? '', 10);
+
+    if (!tenantId) return this.redirect(response, `${base}/backups?bad=target`);
+    if ((body.confirm ?? '').trim() !== name) {
+      return this.redirect(response, `${base}/backups?bad=confirm`);
+    }
+    try {
+      const content = await this.backups.read(name);
+      const entryIndex = body.entryIndex
+        ? parseInt(body.entryIndex, 10)
+        : undefined;
+
+      await this.data.importOrganization(tenantId, content, entryIndex);
+    } catch (error: any) {
+      this.adminAuth.audit(
+        this.ip(request),
+        `Organization restore failed: ${error?.message}`,
+      );
+      return this.redirect(response, `${base}/backups?bad=restore`);
+    }
+    this.adminAuth.audit(
+      this.ip(request),
+      `Restored organization ${tenantId} from ${name}`,
+    );
+
+    return this.redirect(response, `${base}/backups?ok=restored_org`);
+  }
+
+  /**
+   * Runs the scheduled job now.
+   *
+   * Twice a day is twice a day to find out it has been failing since it was
+   * set up, so the operator can make it happen on demand and read the result.
+   */
+  @Post('backups/run-scheduled')
+  async runScheduled(
+    @Req() request: Request,
+    @Res() response: Response,
+    @Body() body: Record<string, string>,
+  ) {
+    if (!this.checkCsrf(request, body)) return this.deny(response);
+
+    this.adminAuth.audit(this.ip(request), 'Ran the scheduled backup by hand');
+    // Not awaited: a full run covers every organization and outlasts a
+    // browser's patience. The list and the log say how it went.
+    void this.schedule.runAll();
+
+    return this.redirect(
+      response,
+      `${this.base(request)}/backups?ok=scheduled_started`,
+    );
   }
 
   @Get('backups/download')
@@ -542,6 +622,10 @@ export class AdminController {
 }
 
 const NOTICES: Record<string, string> = {
+  scheduled_started:
+    'پشتیبان‌گیری خودکار همین حالا شروع شد. چند لحظه بعد صفحه را تازه کنید.',
+  restored_org: 'داده‌های آن سازمان از روی بایگانی بازگردانده شد.',
+  target: 'سازمان مقصد را انتخاب نکردید.',
   restored:
     'بازگردانی انجام شد. سرور در حال راه‌اندازی دوباره است؛ چند ثانیه صبر کنید و صفحه را تازه کنید.',
   confirm: 'نام پرونده را درست ننوشتید، پس چیزی بازگردانده نشد.',

@@ -178,10 +178,20 @@ export function mailView(options: Common & { settings: MailSettings }) {
   );
 }
 
+export interface RestoreTarget {
+  id: number;
+  name: string;
+  organizationId: string;
+}
+
 export function backupsView(
-  options: Common & { files: BackupFile[]; state: BackupState },
+  options: Common & {
+    files: BackupFile[];
+    state: BackupState;
+    targets: RestoreTarget[];
+  },
 ) {
-  const { files, state } = options;
+  const { files, state, targets } = options;
 
   const status =
     state.status === 'running'
@@ -211,7 +221,29 @@ export function backupsView(
                  <input name="confirm" placeholder="نام پرونده را بنویسید" size="22" required>
                  <button class="danger">بازگرداندن</button>
                </form>`
-            : '<span class="muted">از تنظیمات سازمان</span>'
+            : // An organization export or a user bundle: the operator says
+              // which organization it goes into, because the file's own
+              // organization id belongs to wherever it came from.
+              `<form method="post" action="${esc(options.base)}/backups/restore-organization">
+                 ${csrfField(options.csrf)}
+                 <input type="hidden" name="name" value="${esc(file.name)}">
+                 <select name="tenantId" required>
+                   <option value="">سازمان مقصد…</option>
+                   ${targets
+                     .map(
+                       (t) =>
+                         `<option value="${esc(t.id)}">${esc(t.name || t.organizationId)}</option>`,
+                     )
+                     .join('')}
+                 </select>
+                 ${
+                   file.name.endsWith('.pashizbundle')
+                     ? '<input name="entryIndex" placeholder="شمارهٔ سازمان در بسته" size="8" value="0">'
+                     : ''
+                 }
+                 <input name="confirm" placeholder="نام پرونده را بنویسید" size="20" required>
+                 <button class="danger">بازگرداندن</button>
+               </form>`
         }</td>
         <td><form method="post" action="${esc(options.base)}/backups/delete">
           ${csrfField(options.csrf)}
@@ -231,6 +263,15 @@ export function backupsView(
       <form method="post" action="${esc(options.base)}/backups">
         ${csrfField(options.csrf)}
         <button${state.status === 'running' ? ' disabled' : ''}>گرفتن پشتیبان تازه</button>
+      </form>
+    </section>
+    <section>
+      <h2>پشتیبان‌گیری خودکار</h2>
+      <p class="hint">هر روز ساعت ۱۲ ظهر و ۱۲ شب به وقت تهران، یک پشتیبان کامل و یک پشتیبان جدا برای هر سازمان گرفته می‌شود.</p>
+      <p class="muted">نام این‌ها <code>auto</code> دارد و ۲۸ تای آخر از هر نوع نگه داشته می‌شود؛ بایگانی‌هایی که خودتان گرفته‌اید هرگز خودکار پاک نمی‌شوند.</p>
+      <form method="post" action="${esc(options.base)}/backups/run-scheduled">
+        ${csrfField(options.csrf)}
+        <button class="quiet">همین حالا اجرا کن</button>
       </form>
     </section>
     <section>

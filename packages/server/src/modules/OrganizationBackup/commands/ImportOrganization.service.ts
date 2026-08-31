@@ -74,10 +74,33 @@ export class ImportOrganizationService {
     const backup = await this.parse(file, entryIndex);
     const summary = await this.inspect(file, entryIndex);
 
-    const knex = this.tenantKnex();
     const tenant = await this.tenancyContext.getTenant(true);
     const user = await this.tenancyContext.getSystemUser();
 
+    await this.importInto(this.tenantKnex(), tenant.id, user, backup);
+
+    return summary;
+  }
+
+  /**
+   * The whole of an import, against a connection and an owner handed in.
+   *
+   * Separated from `import` above so the administration portal can restore
+   * into an organization nobody is signed in to — the same code, reached
+   * through a connection it opened itself, rather than a second copy that
+   * would drift from this one.
+   */
+  public async importInto(
+    knex: Knex,
+    tenantId: number,
+    owner: {
+      id: number;
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+    },
+    backup: OrganizationBackup,
+  ): Promise<void> {
     const importable = Object.keys(backup.tables).filter(
       (table) => !EXCLUDED_TABLES.includes(table),
     );
@@ -107,17 +130,26 @@ export class ImportOrganizationService {
             await trx(table).insert(rows.slice(i, i + 200));
           }
         }
-        await this.remapUserReferences(trx, present, user.id);
+        await this.remapUserReferences(trx, present, owner.id);
       } finally {
         await trx.raw('SET FOREIGN_KEY_CHECKS = 1');
       }
     });
 
-    await this.ensureTenantUser(knex, user);
-    await this.applyOrganizationSettings(tenant.id, backup);
+    await this.ensureTenantUser(knex, owner);
+    await this.applyOrganizationSettings(tenantId, backup);
     await this.restoreAttachments(backup);
+  }
 
-    return summary;
+  /**
+   * Reads a file the way `import` does, for a caller that has its own
+   * connection to import it through.
+   */
+  public parseBackup(
+    file: Buffer,
+    entryIndex?: number,
+  ): Promise<OrganizationBackup> {
+    return this.parse(file, entryIndex);
   }
 
   /**

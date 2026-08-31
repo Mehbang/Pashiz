@@ -2,7 +2,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { spawn } from 'node:child_process';
 import { createReadStream, createWriteStream } from 'node:fs';
-import { mkdir, readdir, stat, rm, writeFile } from 'node:fs/promises';
+import {
+  mkdir,
+  readdir,
+  readFile,
+  stat,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
 import { join, basename } from 'node:path';
 import { createGunzip, createGzip } from 'node:zlib';
 
@@ -68,7 +75,11 @@ export class AdminBackupService {
    * organization's own title, which a person chose and which can contain
    * anything at all.
    */
-  public async save(preferredName: string, content: Buffer): Promise<string> {
+  public async save(
+    preferredName: string,
+    content: Buffer,
+    marker?: string,
+  ): Promise<string> {
     await mkdir(this.directory, { recursive: true });
 
     const extension = preferredName.endsWith('.pashizbundle')
@@ -93,12 +104,22 @@ export class AdminBackupService {
       .toISOString()
       .replace(/[-:]/g, '')
       .replace(/\..+$/, '');
-    const name = `${readable}-${stamp}.${extension}`;
+    const name = `${readable}-${marker ? `${marker}-` : ''}${stamp}.${extension}`;
 
     await writeFile(join(this.directory, name), content, { mode: 0o600 });
     this.logger.log(`Export kept on the server: ${name}`);
 
     return name;
+  }
+
+  /**
+   * Reads one archive back off the disk, for restoring. Same name guard as the
+   * download route: only a plain filename this service could have written.
+   */
+  public async read(name: string): Promise<Buffer> {
+    if (!this.isSafeName(name)) throw new Error('نام پرونده معتبر نیست.');
+
+    return readFile(join(this.directory, name));
   }
 
   public async list(): Promise<BackupFile[]> {
@@ -257,14 +278,66 @@ export class AdminBackupService {
     });
   }
 
-  private async run(): Promise<void> {
+  /**
+   * Takes a dump and waits for it. `start` returns the moment it has spawned
+   * one, which suits a person clicking a button and not a scheduled run that
+   * has to know whether it worked.
+   */
+  public async runNow(marker?: string): Promise<string> {
+    if (this.state.status === 'running') {
+      throw new Error('a backup is already running');
+    }
+    this.state = { status: 'running', startedAt: new Date().toISOString() };
+
+    try {
+      const name = await this.run(marker);
+      return name;
+    } catch (error) {
+      this.state = {
+        status: 'failed',
+        finishedAt: new Date().toISOString(),
+        message: this.explain(error),
+      };
+      throw error;
+    }
+  }
+
+  /**
+   * Removes the oldest automatic archives, keeping `keep` of each kind.
+   * Anything without the marker was taken deliberately and is left alone.
+   */
+  public async pruneAutomatic(keep: number): Promise<number> {
+    const files = await this.list();
+    const groups = new Map<string, BackupFile[]>();
+
+    for (const file of files) {
+      if (!/-auto-\d{8}T\d{6}\./.test(file.name)) continue;
+
+      const kind = file.name.slice(file.name.indexOf('.') + 1);
+      groups.set(kind, [...(groups.get(kind) ?? []), file]);
+    }
+    let removed = 0;
+
+    for (const group of groups.values()) {
+      const doomed = group
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+        .slice(keep);
+
+      for (const file of doomed) {
+        if (await this.remove(file.name)) removed += 1;
+      }
+    }
+    return removed;
+  }
+
+  private async run(marker?: string): Promise<string> {
     await mkdir(this.directory, { recursive: true });
 
     const stamp = new Date()
       .toISOString()
       .replace(/[-:]/g, '')
       .replace(/\..+$/, '');
-    const name = `pashiz-portal-${stamp}.sql.gz`;
+    const name = `pashiz-portal-${marker ? `${marker}-` : ''}${stamp}.sql.gz`;
     const target = join(this.directory, name);
 
     const host = this.configService.get('systemDatabase.host');
@@ -283,6 +356,8 @@ export class AdminBackupService {
       name,
     };
     this.logger.log(`Backup written: ${name} (${databases.length} databases)`);
+
+    return name;
   }
 
   private listDatabases(

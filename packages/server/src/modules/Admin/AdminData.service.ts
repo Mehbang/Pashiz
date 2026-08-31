@@ -8,6 +8,7 @@ import { SystemUser } from '@/modules/System/models/SystemUser';
 import { TenantModel } from '@/modules/System/models/TenantModel';
 import { UserTenant } from '@/modules/System/models/UserTenant.model';
 import { ExportOrganizationService } from '@/modules/OrganizationBackup/commands/ExportOrganization.service';
+import { ImportOrganizationService } from '@/modules/OrganizationBackup/commands/ImportOrganization.service';
 
 const gzipAsync = promisify(gzip);
 
@@ -45,6 +46,7 @@ export class AdminDataService {
   constructor(
     private readonly configService: ConfigService,
     private readonly exportService: ExportOrganizationService,
+    private readonly importService: ImportOrganizationService,
 
     @Inject(SystemUser.name)
     private readonly systemUserModel: typeof SystemUser,
@@ -202,6 +204,47 @@ export class AdminDataService {
       filename: `pashiz-user-${slug}-${new Date().toISOString().slice(0, 10)}.pashizbundle`,
       content,
     };
+  }
+
+  /**
+   * Puts an organization export back into a chosen organization.
+   *
+   * The rows record who made them by an id that means nothing here, so they
+   * are repointed at the organization's own owner — the person who will be
+   * looking at them. Where an organization has no owner on this installation,
+   * the import is refused rather than left pointing at nobody.
+   */
+  public async importOrganization(
+    tenantId: number,
+    file: Buffer,
+    entryIndex?: number,
+  ): Promise<void> {
+    const tenant = await this.tenantModel
+      .query()
+      .findById(tenantId)
+      .throwIfNotFound();
+
+    const membership = await this.userTenantModel
+      .query()
+      .where('tenantId', tenantId)
+      .first();
+
+    if (!membership) {
+      throw new Error('این سازمان صاحبی روی این نصب ندارد.');
+    }
+    const owner = await this.systemUserModel
+      .query()
+      .findById((membership as any).userId)
+      .throwIfNotFound();
+
+    const backup = await this.importService.parseBackup(file, entryIndex);
+    const knex = this.connectTo((tenant as any).organizationId);
+
+    try {
+      await this.importService.importInto(knex, tenantId, owner as any, backup);
+    } finally {
+      await knex.destroy();
+    }
   }
 
   /**

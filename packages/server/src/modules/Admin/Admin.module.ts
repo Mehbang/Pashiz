@@ -2,6 +2,7 @@ import { Global, Module, forwardRef } from '@nestjs/common';
 import { AdminController } from './Admin.controller';
 import { AdminAuthService } from './AdminAuth.service';
 import { AdminBackupService } from './AdminBackup.service';
+import { AdminScheduleService } from './AdminSchedule.service';
 import { AdminDataService } from './AdminData.service';
 import { AdminPortalGuard } from './AdminPortal.guard';
 import { InstanceSettingsService } from './InstanceSettings.service';
@@ -24,6 +25,7 @@ import { MailModule } from '@/modules/Mail/Mail.module';
   providers: [
     AdminAuthService,
     AdminBackupService,
+    AdminScheduleService,
     AdminDataService,
     AdminPortalGuard,
     InstanceSettingsService,
