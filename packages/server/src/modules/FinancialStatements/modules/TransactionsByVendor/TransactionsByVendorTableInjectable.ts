@@ -4,6 +4,7 @@ import { TransactionsByVendorsInjectable } from './TransactionsByVendorInjectabl
 import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { TransactionsByVendorQueryDto } from './TransactionsByVendorQuery.dto';
+import { DEFAULT_REPORT_META } from '../../types/Report.types';
 
 @Injectable()
 export class TransactionsByVendorTableInjectable {
@@ -27,6 +28,9 @@ export class TransactionsByVendorTableInjectable {
       sheet.meta.dateFormat,
       sheet.meta.calendar,
     );
+    // Without this the table stays Gregorian and renders its figures in
+    // Latin digits, whatever the organization reads in.
+    table.calendar = sheet.meta?.calendar || DEFAULT_REPORT_META.calendar;
 
     return {
       table: {

@@ -138,12 +138,18 @@ export class JournalSheetTable extends R.pipe(
         key: JOURNAL_COLUMN_KEYS.TRANSACTION_TYPE,
         label: this.i18n.t('report.column.transaction_type'),
       },
-      { key: JOURNAL_COLUMN_KEYS.TRANSACTION_NUMBER, label: 'Num.' },
+      {
+        key: JOURNAL_COLUMN_KEYS.TRANSACTION_NUMBER,
+        label: this.i18n.t('report.column.number_short'),
+      },
       {
         key: JOURNAL_COLUMN_KEYS.DESCRIPTION,
         label: this.i18n.t('report.column.description'),
       },
-      { key: JOURNAL_COLUMN_KEYS.ACCOUNT_CODE, label: 'Acc. Code' },
+      {
+        key: JOURNAL_COLUMN_KEYS.ACCOUNT_CODE,
+        label: this.i18n.t('report.column.account_code'),
+      },
       {
         key: JOURNAL_COLUMN_KEYS.ACCOUNT_NAME,
         label: this.i18n.t('report.column.account'),

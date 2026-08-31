@@ -6,6 +6,7 @@ import { SalesTaxLiabilitySummaryTable } from './SalesTaxLiabilitySummaryTable';
 import { SalesTaxLiabilitySummaryService } from './SalesTaxLiabilitySummaryService';
 import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { DEFAULT_REPORT_META } from '../../types/Report.types';
 
 @Injectable()
 export class SalesTaxLiabilitySummaryTableInjectable {
@@ -29,6 +30,9 @@ export class SalesTaxLiabilitySummaryTableInjectable {
       query,
       this.i18nService,
     );
+    // Without this the table stays Gregorian and renders its figures in
+    // Latin digits, whatever the organization reads in.
+    table.calendar = report.meta?.calendar || DEFAULT_REPORT_META.calendar;
 
     return {
       table: {

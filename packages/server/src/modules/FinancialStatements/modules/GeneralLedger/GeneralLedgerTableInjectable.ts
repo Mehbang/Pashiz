@@ -6,6 +6,7 @@ import { GeneralLedgerService } from './GeneralLedgerService';
 import { GeneralLedgerTable } from './GeneralLedgerTable';
 import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { DEFAULT_REPORT_META } from '../../types/Report.types';
 
 @Injectable()
 export class GeneralLedgerTableInjectable {
@@ -34,6 +35,12 @@ export class GeneralLedgerTableInjectable {
       sheetMeta,
       this.i18nService,
     );
+
+    // Without this the table stays Gregorian and renders its figures in
+
+    // Latin digits, whatever the organization reads in.
+
+    table.calendar = sheetMeta?.calendar || DEFAULT_REPORT_META.calendar;
 
     return {
       table: {

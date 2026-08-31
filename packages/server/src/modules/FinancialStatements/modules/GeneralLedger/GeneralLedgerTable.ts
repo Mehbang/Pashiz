@@ -217,7 +217,7 @@ export class GeneralLedgerTable extends R.compose(
       },
       {
         key: GENERAL_LEDGER_COLUMN_KEYS.REFERENCE_NUMBER,
-        label: 'Transaction #',
+        label: this.i18n.t('report.column.transaction_number'),
       },
       {
         key: GENERAL_LEDGER_COLUMN_KEYS.DESCRIPTION,

@@ -48,5 +48,8 @@
   "row.closing_balance": "مانده پایانی {account}",
   "row.closing_balance_with_sub": "مانده پایانی {account} با حساب‌های زیرمجموعه",
   "row.total": "جمع",
-  "column.aging_and_over": "{from} روز و بیشتر"
+  "column.aging_and_over": "{from} روز و بیشتر",
+  "column.transaction_number": "شمارهٔ تراکنش",
+  "column.number_short": "شماره",
+  "column.account_code": "کد حساب"
 }

@@ -3,6 +3,7 @@ import { I18nService } from 'nestjs-i18n';
 import { JournalSheetService } from './JournalSheetService';
 import { IJournalReportQuery, IJournalTable } from './JournalSheet.types';
 import { JournalSheetTable } from './JournalSheetTable';
+import { DEFAULT_REPORT_META } from '../../types/Report.types';
 
 @Injectable()
 export class JournalSheetTableInjectable {
@@ -23,6 +24,9 @@ export class JournalSheetTableInjectable {
       journal.query,
       this.i18nService,
     );
+    // Without this the table stays Gregorian and renders its figures in
+    // Latin digits, whatever the organization reads in.
+    table.calendar = journal.meta?.calendar || DEFAULT_REPORT_META.calendar;
     return {
       table: {
         columns: table.tableColumns(),

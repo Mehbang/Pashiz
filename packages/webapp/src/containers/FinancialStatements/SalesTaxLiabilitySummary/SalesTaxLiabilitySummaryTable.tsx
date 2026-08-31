@@ -7,6 +7,7 @@ import { ReportDataTable, FinancialSheet } from '@/components';
 import { TableStyle } from '@/constants';
 import { useCurrentOrganizationName } from '@/hooks/query';
 import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
+import intl from 'react-intl-universal';
 
 function SalesTaxLiabilitySummaryTableRoot() {
   const organizationName = useCurrentOrganizationName();
@@ -27,7 +28,7 @@ function SalesTaxLiabilitySummaryTableRoot() {
   return (
     <FinancialSheet
       companyName={organizationName}
-      sheetType={'Sales Tax Liability Summary'}
+      sheetType={intl.get('sales_tax_liability_summary')}
       dateText={meta?.formattedDateRange}
     >
       <SalesTaxLiabilitySummaryDataTable

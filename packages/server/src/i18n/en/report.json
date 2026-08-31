@@ -48,5 +48,8 @@
   "row.closing_balance": "Closing balance for {account}",
   "row.closing_balance_with_sub": "Closing balance for {account} with sub-accounts",
   "row.total": "Total",
-  "column.aging_and_over": "{from} And Over"
+  "column.aging_and_over": "{from} And Over",
+  "column.transaction_number": "Transaction #",
+  "column.number_short": "Num.",
+  "column.account_code": "Acc. Code"
 }

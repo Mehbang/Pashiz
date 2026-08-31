@@ -6,6 +6,7 @@ import {
 import { TrialBalanceSheetTable } from './TrialBalanceSheetTable';
 import { TrialBalanceSheetService } from './TrialBalanceSheetInjectable';
 import { I18nService } from 'nestjs-i18n';
+import { DEFAULT_REPORT_META } from '../../types/Report.types';
 
 @Injectable()
 export class TrialBalanceSheetTableInjectable {
@@ -28,6 +29,10 @@ export class TrialBalanceSheetTableInjectable {
       query,
       this.i18n,
     );
+    // Without this the table stays Gregorian and renders its figures in
+    // Latin digits, whatever the organization reads in.
+    table.calendar =
+      trialBalance.meta?.calendar || DEFAULT_REPORT_META.calendar;
 
     return {
       table: {
