@@ -189,9 +189,10 @@ export function backupsView(
     files: BackupFile[];
     state: BackupState;
     targets: RestoreTarget[];
+    nextRuns: Array<{ name: string; at: string | null }>;
   },
 ) {
-  const { files, state, targets } = options;
+  const { files, state, targets, nextRuns } = options;
 
   const status =
     state.status === 'running'
@@ -269,6 +270,11 @@ export function backupsView(
       <h2>پشتیبان‌گیری خودکار</h2>
       <p class="hint">هر روز ساعت ۱۲ ظهر و ۱۲ شب به وقت تهران، یک پشتیبان کامل و یک پشتیبان جدا برای هر سازمان گرفته می‌شود.</p>
       <p class="muted">نام این‌ها <code>auto</code> دارد و ۲۸ تای آخر از هر نوع نگه داشته می‌شود؛ بایگانی‌هایی که خودتان گرفته‌اید هرگز خودکار پاک نمی‌شوند.</p>
+      <p class="muted">${
+        nextRuns.every((run) => run.at)
+          ? `اجرای بعدی: ${nextRuns.map((run) => esc(date(run.at as string))).join(' و ')}`
+          : 'هشدار: زمان‌بندی ثبت نشده است. گزارش سرور را ببینید.'
+      }</p>
       <form method="post" action="${esc(options.base)}/backups/run-scheduled">
         ${csrfField(options.csrf)}
         <button class="quiet">همین حالا اجرا کن</button>

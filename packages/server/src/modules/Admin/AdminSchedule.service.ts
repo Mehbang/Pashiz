@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { AdminBackupService } from './AdminBackup.service';
 import { AdminDataService } from './AdminData.service';
 
@@ -30,7 +30,32 @@ export class AdminScheduleService {
   constructor(
     private readonly backups: AdminBackupService,
     private readonly data: AdminDataService,
+    private readonly registry: SchedulerRegistry,
   ) {}
+
+  /**
+   * When each job fires next, read from the scheduler itself rather than
+   * recomputed here — so the page shows what is actually armed, and an
+   * expression that failed to register shows up as missing instead of as a
+   * time that will never arrive.
+   */
+  public nextRuns(): Array<{ name: string; at: string | null }> {
+    return ['pashiz-backup-noon', 'pashiz-backup-midnight'].map((name) => {
+      try {
+        const job = this.registry.getCronJob(name);
+        const next = job.nextDate();
+
+        return {
+          name,
+          at: next
+            ? new Date(next.toMillis?.() ?? (next as any)).toISOString()
+            : null,
+        };
+      } catch {
+        return { name, at: null };
+      }
+    });
+  }
 
   @Cron('0 0 12 * * *', { timeZone: TIME_ZONE, name: 'pashiz-backup-noon' })
   async atNoon() {
