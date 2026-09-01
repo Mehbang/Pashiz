@@ -266,7 +266,10 @@ export class InventoryValuationSheet extends FinancialSheet {
       valuation,
       quantity,
       valuationFormatted: this.formatTotalNumber(valuation),
-      quantityFormatted: this.formatTotalNumber(quantity, { money: false }),
+      quantityFormatted: this.formatTotalNumber(quantity, {
+        money: false,
+        trimTrailingZeros: true,
+      }),
     };
   }
 

@@ -169,6 +169,7 @@ export class SalesByItemsReport extends FinancialSheet {
       soldCost,
       quantitySoldFormatted: this.formatTotalNumber(quantitySold, {
         money: false,
+        trimTrailingZeros: true,
       }),
       soldCostFormatted: this.formatTotalNumber(soldCost),
       currencyCode: this.baseCurrency,

@@ -10,5 +10,6 @@
   "value": "Value",
   "profit_margin": "Profit Margin",
   "running_quantity": "Running quantity",
-  "running_value": "Running Value"
+  "running_value": "Running Value",
+  "secondary_quantity": "Quantity (secondary unit)"
 }

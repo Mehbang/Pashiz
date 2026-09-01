@@ -27,6 +27,7 @@ import { TInventoryTransactionDirection } from '@/modules/InventoryCost/types/In
 import { FinancialSheet } from '../../common/FinancialSheet';
 import { filterDeep } from '@/utils/deepdash';
 import { INodeTypes, MAP_CONFIG } from './constant';
+import { convertToSecondaryUnit } from '@/modules/Items/utils/item-units';
 
 export class InventoryDetails extends FinancialSheet {
   readonly repository: InventoryItemDetailsRepository;
@@ -184,6 +185,7 @@ export class InventoryDetails extends FinancialSheet {
    */
   public itemTransactionMapper = (
     transaction: ModelObject<InventoryTransaction>,
+    item?: ModelObject<Item>,
   ): IInventoryDetailsItemTransaction => {
     const total = this.getTransactionTotal(transaction);
     const amountMovement = this.adjustAmountMovement(transaction.direction);
@@ -214,6 +216,24 @@ export class InventoryDetails extends FinancialSheet {
       valueMovement: this.getNumberMeta(valueMovement),
 
       quantity: this.getNumberMeta(transaction.quantity),
+
+      // The same amounts read in the item's second unit. Empty where the item
+      // has none, so the column is simply blank on those rows rather than
+      // repeating the first reading.
+      secondaryQuantityMovement: {
+        formattedNumber: this.secondaryQuantityFormatted(
+          quantityMovement,
+          item,
+        ),
+        number: convertToSecondaryUnit(quantityMovement, item) ?? 0,
+      },
+      secondaryQuantity: {
+        formattedNumber: this.secondaryQuantityFormatted(
+          transaction.quantity,
+          item,
+        ),
+        number: convertToSecondaryUnit(transaction.quantity, item) ?? 0,
+      },
       total: this.getNumberMeta(total),
 
       rate: this.getNumberMeta(transaction.rate),
@@ -252,7 +272,9 @@ export class InventoryDetails extends FinancialSheet {
     const transactions = this.getInventoryTransactionsByItemId(item.id);
 
     return R.pipe(
-      R.map(this.itemTransactionMapper),
+      R.map((transaction: ModelObject<InventoryTransaction>) =>
+        this.itemTransactionMapper(transaction, item),
+      ),
       this.mapAccumTransactionsRunningValuation,
       this.mapAccumTransactionsRunningQuantity,
     )(transactions);

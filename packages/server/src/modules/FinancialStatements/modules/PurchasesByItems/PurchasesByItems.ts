@@ -185,6 +185,7 @@ export class PurchasesByItems extends FinancialSheet {
       purchaseCost,
       quantityPurchasedFormatted: this.formatTotalNumber(quantityPurchased, {
         money: false,
+        trimTrailingZeros: true,
       }),
       purchaseCostFormatted: this.formatTotalNumber(purchaseCost),
       currencyCode: this.baseCurrency,

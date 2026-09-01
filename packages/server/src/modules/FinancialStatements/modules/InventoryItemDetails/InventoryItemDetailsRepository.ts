@@ -148,6 +148,8 @@ export class InventoryItemDetailsRepository {
       .query()
       .onBuild((q) => {
         q.where('type', 'inventory');
+        // The report reads each movement in the item's own unit.
+        q.withGraphFetched('[unit, secondaryUnit]');
 
         if (!isEmpty(itemsIds)) {
           q.whereIn('id', itemsIds);

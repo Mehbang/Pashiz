@@ -57,6 +57,9 @@ export interface IInventoryDetailsItem {
 }
 
 export interface IInventoryDetailsItemTransaction {
+  /** The same amounts read in the item's second unit, blank where it has none. */
+  secondaryQuantityMovement?: IInventoryDetailsNumber;
+  secondaryQuantity?: IInventoryDetailsNumber;
   nodeType: string;
   date: IInventoryDetailsDate;
   transactionType: string;

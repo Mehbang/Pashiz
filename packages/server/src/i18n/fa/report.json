@@ -54,5 +54,6 @@
   "column.account_code": "کد حساب",
   "column.secondary_sold_quantity": "تعداد فروش‌رفته (واحد فرعی)",
   "column.secondary_quantity_purchased": "تعداد خریداری‌شده (واحد فرعی)",
-  "column.secondary_quantity": "تعداد (واحد فرعی)"
+  "column.secondary_quantity": "تعداد (واحد فرعی)",
+  "column.secondary_quantity_movement": "گردش مقدار (واحد فرعی)"
 }

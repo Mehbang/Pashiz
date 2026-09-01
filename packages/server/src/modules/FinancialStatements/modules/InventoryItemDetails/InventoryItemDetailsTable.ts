@@ -79,6 +79,10 @@ export class InventoryItemDetailsTable {
         accessor: 'quantityMovement.formattedNumber',
       },
       {
+        key: 'secondary_quantity_movement',
+        accessor: 'secondaryQuantityMovement.formattedNumber',
+      },
+      {
         key: INVENTORY_ITEM_DETAILS_COLUMN_KEYS.RATE,
         accessor: 'rate.formattedNumber',
       },
@@ -257,6 +261,10 @@ export class InventoryItemDetailsTable {
       {
         key: INVENTORY_ITEM_DETAILS_COLUMN_KEYS.QUANTITY,
         label: this.i18n.t('inventory_item_details.quantity'),
+      },
+      {
+        key: 'secondary_quantity_movement',
+        label: this.i18n.t('inventory_item_details.secondary_quantity'),
       },
       {
         key: INVENTORY_ITEM_DETAILS_COLUMN_KEYS.RATE,
