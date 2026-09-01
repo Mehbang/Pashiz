@@ -181,6 +181,16 @@ class GetInvoicePaymentLinkEntryMetaTransformer extends ItemEntryTransformer {
       'totalFormatted',
       'itemName',
       'description',
+      // This transformer excludes everything it does not name, so the unit
+      // readings inherited from `ItemEntryTransformer` have to be asked for
+      // explicitly or the page a customer opens shows a bare number where
+      // every other view shows kilograms.
+      'unitLabel',
+      'secondaryUnitLabel',
+      'quantityWithUnit',
+      'secondaryQuantity',
+      'secondaryQuantityFormatted',
+      'secondaryQuantityWithUnit',
     ];
   };
 

@@ -29,7 +29,10 @@ export function PaymentInvoicePreviewContent() {
             lines={sharableLinkMeta?.entries?.map((entry) => ({
               item: entry.itemName,
               description: entry.description,
-              quantity: entry.quantityFormatted,
+              // The same two readings the printed copy carries, so the page a
+              // customer opens agrees with the invoice they are sent.
+              quantity: entry.quantityWithUnit || entry.quantityFormatted,
+              secondaryQuantity: entry.secondaryQuantityWithUnit,
               rate: entry.rateFormatted,
               total: entry.totalFormatted,
             }))}

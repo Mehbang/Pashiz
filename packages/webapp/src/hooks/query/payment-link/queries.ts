@@ -12,7 +12,7 @@ import {
   useMutation,
   useQuery,
 } from '@tanstack/react-query';
-import { useApiFetcher } from '../../useRequest';
+import useApiRequest, { useApiFetcher } from '../../useRequest';
 import { paymentLinkKeys } from './query-keys';
 import type {
   GetInvoicePaymentLinkResponse,
@@ -121,11 +121,24 @@ export const useGeneratePaymentLinkInvoicePdf = (
     GeneratePaymentLinkInvoicePdfValues
   >,
 ): UseMutationResult<Blob, Error, GeneratePaymentLinkInvoicePdfValues> => {
-  const fetcher = useApiFetcher();
+  const { http } = useApiRequest();
 
   return useMutation<Blob, Error, GeneratePaymentLinkInvoicePdfValues>({
-    mutationFn: (values: GeneratePaymentLinkInvoicePdfValues) =>
-      fetchGetPaymentLinkInvoicePdf(fetcher, values.paymentLinkId),
+    // Asked for as a blob rather than through the typed fetcher, which reads
+    // every response as text. A PDF read as text is corrupted on the way in,
+    // and saving it produced a file that downloaded and opened blank — the
+    // bytes were never intact. The same request the rest of the application
+    // makes for a PDF.
+    mutationFn: async (values: GeneratePaymentLinkInvoicePdfValues) => {
+      const response = await http.get(
+        `/api/payment-links/${encodeURIComponent(values.paymentLinkId)}/invoice/pdf`,
+        {
+          responseType: 'blob',
+          headers: { accept: 'application/pdf' },
+        },
+      );
+      return new Blob([response.data], { type: 'application/pdf' });
+    },
     ...options,
   });
 };
