@@ -68,17 +68,21 @@ export function ItemFormFormik({
     const { setSubmitting, resetForm, setErrors } = form;
     const formValues = { ...values };
 
-    // An untouched picker holds an empty string, which the API reads as
-    // neither a number nor an absent value. The unit fields are all optional,
-    // so an empty one is sent as null.
+    // The unit fields are numbers to the API and strings in the form: an
+    // untouched picker holds an empty string, and a filled one holds the digits
+    // the reader typed. Sending `"1000"` where a number is expected is refused
+    // outright, so each is either a number or explicitly absent.
     for (const field of [
       'unitId',
       'secondaryUnitId',
       'secondaryUnitFactor',
     ] as const) {
-      if (formValues[field] === '' || formValues[field] === undefined) {
-        (formValues as Record<string, unknown>)[field] = null;
-      }
+      const value = formValues[field];
+      const isBlank = value === '' || value === null || value === undefined;
+
+      (formValues as Record<string, unknown>)[field] = isBlank
+        ? null
+        : Number(value);
     }
 
     setSubmitting(true);
@@ -110,6 +114,17 @@ export function ItemFormFormik({
           errors as { data: { errors: Array<{ type: string }> } },
         );
         setErrors({ ..._errors });
+
+        // `transformSubmitRequestErrors` only knows this application's own
+        // error shape. A rejection it cannot place — a field the server
+        // validated and the form did not — mapped to nothing at all, so the
+        // save button appeared to do nothing whatsoever. Say something.
+        if (!Object.keys(_errors).length) {
+          AppToaster.show({
+            message: intl.get('something_went_wrong'),
+            intent: Intent.DANGER,
+          });
+        }
       }
       safeInvoke(onSubmitError, errors, values, form, submitPayload);
     };
