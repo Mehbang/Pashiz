@@ -159,6 +159,7 @@ export type SalesByItemsColumnKey =
 export const PURCHASES_BY_ITEMS_COLUMN_KEYS = {
   ITEM_NAME: 'item_name',
   QUANTITY_PURCHASES: 'quantity_purchases',
+  SECONDARY_QUANTITY_PURCHASES: 'secondary_quantity_purchases',
   PURCHASE_AMOUNT: 'purchase_amount',
   AVERAGE_COST: 'average_cost',
 } as const;
@@ -172,6 +173,7 @@ export type PurchasesByItemsColumnKey =
 export const INVENTORY_VALUATION_COLUMN_KEYS = {
   ITEM_NAME: 'item_name',
   QUANTITY: 'quantity',
+  SECONDARY_QUANTITY: 'secondary_quantity',
   VALUATION: 'valuation',
   AVERAGE: 'average',
 } as const;

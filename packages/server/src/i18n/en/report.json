@@ -52,5 +52,7 @@
   "column.transaction_number": "Transaction #",
   "column.number_short": "Num.",
   "column.account_code": "Acc. Code",
-  "column.secondary_sold_quantity": "Sold quantity (secondary unit)"
+  "column.secondary_sold_quantity": "Sold quantity (secondary unit)",
+  "column.secondary_quantity_purchased": "Quantity purchased (secondary unit)",
+  "column.secondary_quantity": "Quantity (secondary unit)"
 }

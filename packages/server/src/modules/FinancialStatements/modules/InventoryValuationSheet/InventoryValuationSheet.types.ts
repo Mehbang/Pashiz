@@ -31,6 +31,7 @@ export interface IInventoryValuationItem {
   average: number;
   valuationFormatted: string;
   quantityFormatted: string;
+  secondaryQuantityFormatted?: string;
   averageFormatted: string;
   currencyCode: string;
 }

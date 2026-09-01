@@ -21,6 +21,12 @@ export function PaymentInvoicePreviewContent() {
             subtotal={sharableLinkMeta?.subtotalFormatted}
             balanceDue={sharableLinkMeta?.dueAmountFormatted}
             paymentMade={sharableLinkMeta?.paymentAmountFormatted}
+            discount={sharableLinkMeta?.discountAmountFormatted}
+            discountLabel={
+              sharableLinkMeta?.discountPercentageFormatted
+                ? `${intl.get('discount')} [${sharableLinkMeta.discountPercentageFormatted}]`
+                : undefined
+            }
             termsConditions={sharableLinkMeta?.termsConditions}
             statement={sharableLinkMeta?.invoiceMessage}
             companyName={sharableLinkMeta?.companyName}

@@ -138,7 +138,7 @@ export function InvoicePaperTemplate({
 
   // Entries
   lineItemLabel = intl.get('item'),
-  lineQuantityLabel = intl.get('qty_2'),
+  lineQuantityLabel = intl.get('entries.unit_quantity'),
   lineSecondaryQuantityLabel = intl.get('entries.secondary_unit_quantity'),
   lineRateLabel = intl.get('rate'),
   lineTotalLabel = intl.get('total'),
@@ -160,7 +160,7 @@ export function InvoicePaperTemplate({
 
   total = '$662.75',
   subtotal = '630.00',
-  discount = '0.00',
+  discount = '',
   paymentMade = '100.00',
   balanceDue = '$562.75',
 
@@ -279,7 +279,7 @@ export function InvoicePaperTemplate({
                 border={PaperTemplateTotalBorder.Gray}
               />
             )}
-            {showDiscount && (
+            {showDiscount && discount && (
               <PaperTemplate.TotalLine
                 label={discountLabel}
                 amount={discount}

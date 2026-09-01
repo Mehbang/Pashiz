@@ -52,5 +52,7 @@
   "column.transaction_number": "شمارهٔ تراکنش",
   "column.number_short": "شماره",
   "column.account_code": "کد حساب",
-  "column.secondary_sold_quantity": "تعداد فروش‌رفته (واحد فرعی)"
+  "column.secondary_sold_quantity": "تعداد فروش‌رفته (واحد فرعی)",
+  "column.secondary_quantity_purchased": "تعداد خریداری‌شده (واحد فرعی)",
+  "column.secondary_quantity": "تعداد (واحد فرعی)"
 }

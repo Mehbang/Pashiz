@@ -47,6 +47,10 @@ export class PurchasesByItemsTable extends R.compose(
         accessor: 'quantityPurchasedFormatted',
       },
       {
+        key: PURCHASES_BY_ITEMS_COLUMN_KEYS.SECONDARY_QUANTITY_PURCHASES,
+        accessor: 'secondaryQuantityPurchasedFormatted',
+      },
+      {
         key: PURCHASES_BY_ITEMS_COLUMN_KEYS.PURCHASE_AMOUNT,
         accessor: 'purchaseCostFormatted',
       },
@@ -70,6 +74,10 @@ export class PurchasesByItemsTable extends R.compose(
       {
         label: this.i18n.t('report.column.quantity_purchased'),
         key: PURCHASES_BY_ITEMS_COLUMN_KEYS.QUANTITY_PURCHASES,
+      },
+      {
+        label: this.i18n.t('report.column.secondary_quantity_purchased'),
+        key: PURCHASES_BY_ITEMS_COLUMN_KEYS.SECONDARY_QUANTITY_PURCHASES,
       },
       {
         label: this.i18n.t('report.column.purchase_amount'),

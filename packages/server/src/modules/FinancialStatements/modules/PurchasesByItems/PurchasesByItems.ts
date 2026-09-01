@@ -116,9 +116,17 @@ export class PurchasesByItems extends FinancialSheet {
       purchaseCost: meta.cost,
       averageCostPrice: meta.average,
 
-      quantityPurchasedFormatted: this.formatNumber(meta.quantity, {
-        money: false,
-      }),
+      quantityPurchasedFormatted: this.withUnit(
+        this.formatNumber(meta.quantity, {
+          money: false,
+          trimTrailingZeros: true,
+        }),
+        item.unit,
+      ),
+      secondaryQuantityPurchasedFormatted: this.secondaryQuantityFormatted(
+        meta.quantity,
+        item,
+      ),
       purchaseCostFormatted: this.formatNumber(meta.cost),
       averageCostPriceFormatted: this.formatNumber(meta.average),
 

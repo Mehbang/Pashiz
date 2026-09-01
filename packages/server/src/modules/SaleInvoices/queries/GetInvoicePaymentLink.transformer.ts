@@ -41,6 +41,10 @@ export class GetInvoicePaymentLinkMetaTransformer extends SaleInvoiceTransformer
       'termsConditions',
       'entries',
       'taxes',
+      // Without these the page fell back to the template's own placeholder,
+      // which is a Latin `0.00` under a Persian heading.
+      'discountAmountFormatted',
+      'discountPercentageFormatted',
       'organization',
       'isReceivable',
       'hasStripePaymentMethod',

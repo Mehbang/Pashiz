@@ -32,6 +32,7 @@ export interface IPurchasesByItemsItem {
 
   quantityPurchased: number;
   quantityPurchasedFormatted: string;
+  secondaryQuantityPurchasedFormatted?: string;
 
   currencyCode: string;
 }

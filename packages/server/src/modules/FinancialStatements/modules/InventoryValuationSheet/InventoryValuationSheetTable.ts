@@ -47,6 +47,10 @@ export class InventoryValuationSheetTable extends R.pipe(
         accessor: 'quantityFormatted',
       },
       {
+        key: INVENTORY_VALUATION_COLUMN_KEYS.SECONDARY_QUANTITY,
+        accessor: 'secondaryQuantityFormatted',
+      },
+      {
         key: INVENTORY_VALUATION_COLUMN_KEYS.VALUATION,
         accessor: 'valuationFormatted',
       },
@@ -118,6 +122,10 @@ export class InventoryValuationSheetTable extends R.pipe(
       {
         key: INVENTORY_VALUATION_COLUMN_KEYS.QUANTITY,
         label: this.i18n.t('report.column.quantity'),
+      },
+      {
+        key: INVENTORY_VALUATION_COLUMN_KEYS.SECONDARY_QUANTITY,
+        label: this.i18n.t('report.column.secondary_quantity'),
       },
       {
         key: INVENTORY_VALUATION_COLUMN_KEYS.VALUATION,
