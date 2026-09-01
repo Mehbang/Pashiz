@@ -27,7 +27,31 @@ export interface IFormatNumberSettings {
   symbol?: string;
   /** Render the digits as Persian (۱۲۳) and name the currency in its own script. */
   persianDigits?: boolean;
+
+  /**
+   * Show only the decimals the value actually has. For quantities, where a
+   * fixed scale prints `۳٫۰۰` for three of something.
+   */
+  trimTrailingZeros?: boolean;
 }
+
+/** Quantities are stored to three decimal places; none of them is worth more. */
+const MAX_QUANTITY_DECIMALS = 3;
+
+/**
+ * How many decimal places this value really needs, once trailing zeros are
+ * discounted — `5` needs none, `5.5` needs one, `5.125` needs three.
+ */
+const decimalsOf = (value: unknown, max: number): number => {
+  const amount = Number(value);
+
+  if (!Number.isFinite(amount)) return 0;
+
+  const rounded = Number(amount.toFixed(max));
+  const [, fraction = ''] = String(rounded).split('.');
+
+  return Math.min(fraction.replace(/0+$/, '').length, max);
+};
 
 export const formatNumber = (
   balance,
@@ -43,6 +67,7 @@ export const formatNumber = (
     currencyCode,
     symbol = '',
     persianDigits = false,
+    trimTrailingZeros = false,
   }: IFormatNumberSettings,
 ) => {
   const currency = currencyCode ? CURRENCIES[currencyCode] : undefined;
@@ -59,7 +84,18 @@ export const formatNumber = (
 
   // The rial and the toman are quoted in whole units; only fall back to two
   // decimal places when the currency is unknown.
-  const digits = precision ?? (money ? (currency?.decimal_digits ?? 2) : 2);
+  //
+  // A counted amount is not money and has no fixed scale: three kilograms are
+  // three, not three point zero zero. `trimTrailingZeros` asks for exactly the
+  // decimals the number turns out to have, so a half stays a half and a whole
+  // number reads as one.
+  const digits =
+    precision ??
+    (money
+      ? (currency?.decimal_digits ?? 2)
+      : trimTrailingZeros
+        ? decimalsOf(balance, MAX_QUANTITY_DECIMALS)
+        : 2);
 
   let formattedBalance = parseFloat(balance);
 

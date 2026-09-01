@@ -60,7 +60,7 @@ export class ItemEntryTransformer extends Transformer<
 
     return quantity === null
       ? ''
-      : this.formatNumber(quantity, { money: false });
+      : this.formatNumber(quantity, { money: false, trimTrailingZeros: true });
   };
 
   protected secondaryQuantityWithUnit = (entry: ItemEntry): string => {
@@ -81,7 +81,10 @@ export class ItemEntryTransformer extends Transformer<
    * @returns {string}
    */
   protected quantityFormatted = (entry: ItemEntry): string => {
-    return this.formatNumber(entry.quantity, { money: false });
+    return this.formatNumber(entry.quantity, {
+      money: false,
+      trimTrailingZeros: true,
+    });
   };
 
   /**

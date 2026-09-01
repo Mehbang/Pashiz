@@ -19,6 +19,8 @@ interface PapaerLine {
   item?: string;
   description?: string;
   quantity?: string;
+  /** The same amount read in the item's second unit, already carrying it. */
+  secondaryQuantity?: string;
   rate?: string;
   total?: string;
 }
@@ -62,6 +64,7 @@ export interface InvoicePaperTemplateProps extends PaperTemplateProps {
   // Entries
   lineItemLabel?: string;
   lineQuantityLabel?: string;
+  lineSecondaryQuantityLabel?: string;
   lineRateLabel?: string;
   lineTotalLabel?: string;
 
@@ -136,6 +139,7 @@ export function InvoicePaperTemplate({
   // Entries
   lineItemLabel = intl.get('item'),
   lineQuantityLabel = intl.get('qty_2'),
+  lineSecondaryQuantityLabel = intl.get('entries.secondary_unit_quantity'),
   lineRateLabel = intl.get('rate'),
   lineTotalLabel = intl.get('total'),
 
@@ -251,6 +255,17 @@ export function InvoicePaperTemplate({
                 ),
               },
               { label: lineQuantityLabel, accessor: 'quantity' },
+              {
+                // On screen as in print. Hidden where no line on this document
+                // has a second unit, rather than an empty column on every
+                // invoice that does not use them.
+                label: lineSecondaryQuantityLabel,
+                accessor: 'secondaryQuantity',
+                visible: (lines ?? []).some(
+                  (line: { secondaryQuantity?: string }) =>
+                    Boolean(line?.secondaryQuantity),
+                ),
+              },
               { label: lineRateLabel, accessor: 'rate', align: 'right' },
               { label: lineTotalLabel, accessor: 'total', align: 'right' },
             ]}

@@ -28,6 +28,8 @@ interface PaperTemplateTableProps {
   columns: Array<{
     accessor: string | ((data: Record<string, any>) => JSX.Element);
     label: string;
+    /** A column may exclude itself, as in the printed template. */
+    visible?: boolean;
     value?: JSX.Element;
     align?: 'left' | 'center' | 'right';
   }>;
@@ -55,11 +57,16 @@ PaperTemplate.Logo = ({ logoUri }: PaperTemplateLogoProps) => {
 };
 
 PaperTemplate.Table = ({ columns, data }: PaperTemplateTableProps) => {
+  // Matches the printed template, which has filtered on this for a while: a
+  // column that has nothing to say on this document leaves rather than
+  // printing a run of blanks.
+  const visibleColumns = columns.filter((col) => col.visible !== false);
+
   return (
     <table className={styles.table}>
       <thead>
         <tr>
-          {columns.map((col, index) => (
+          {visibleColumns.map((col, index) => (
             <th key={index} align={col.align}>
               {col.label}
             </th>
@@ -70,7 +77,7 @@ PaperTemplate.Table = ({ columns, data }: PaperTemplateTableProps) => {
       <tbody className={styles.tableBody}>
         {data.map((_data: any) => (
           <tr>
-            {columns.map((column, index) => (
+            {visibleColumns.map((column, index) => (
               <td align={column.align} key={index}>
                 {isFunction(column?.accessor)
                   ? column?.accessor(_data)

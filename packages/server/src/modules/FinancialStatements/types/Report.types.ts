@@ -8,6 +8,11 @@ export interface INumberFormatQuery {
 }
 
 export interface IFormatNumberSettings {
+  /**
+   * Show only the decimals the value actually has — for counted amounts,
+   * where a fixed scale prints `۳٫۰۰` for three of something.
+   */
+  trimTrailingZeros?: boolean;
   precision?: number;
   divideOn1000?: boolean;
   excerptZero?: boolean;

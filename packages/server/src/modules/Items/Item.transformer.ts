@@ -63,7 +63,10 @@ export class ItemTransformer extends Transformer {
   private formatQuantity(quantity: unknown, unitLabel: string): string {
     if (quantity === null || quantity === undefined) return '';
 
-    const formatted = this.formatNumber(Number(quantity), { money: false });
+    const formatted = this.formatNumber(Number(quantity), {
+      money: false,
+      trimTrailingZeros: true,
+    });
 
     return unitLabel ? `${formatted} ${unitLabel}` : formatted;
   }

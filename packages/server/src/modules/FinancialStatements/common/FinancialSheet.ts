@@ -205,7 +205,7 @@ export class FinancialSheet {
     if (converted === null) return '';
 
     return this.withUnit(
-      this.formatNumber(converted, { money: false }),
+      this.formatNumber(converted, { money: false, trimTrailingZeros: true }),
       item?.secondaryUnit,
     );
   }
