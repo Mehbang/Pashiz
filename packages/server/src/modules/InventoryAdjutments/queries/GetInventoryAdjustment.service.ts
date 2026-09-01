@@ -24,7 +24,7 @@ export class GetInventoryAdjustmentService {
     const inventoryAdjustment = await this.inventoryAdjustmentModel()
       .query()
       .findById(inventoryAdjustmentId)
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('adjustmentAccount')
       .throwIfNotFound();
 

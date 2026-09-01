@@ -33,7 +33,7 @@ export class GetSaleInvoice {
     const saleInvoice = await this.saleInvoiceModel()
       .query(trx)
       .findById(saleInvoiceId)
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('entries.tax')
       .withGraphFetched('customer')
       .withGraphFetched('branch')

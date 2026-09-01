@@ -23,7 +23,7 @@ export class GetSaleReceiptMailStateService {
     const saleReceipt = await this.saleReceiptModel()
       .query()
       .findById(saleReceiptId)
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('customer')
       .throwIfNotFound();
 

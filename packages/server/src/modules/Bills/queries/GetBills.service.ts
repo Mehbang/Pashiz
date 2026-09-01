@@ -45,7 +45,7 @@ export class GetBillsService {
       .query()
       .onBuild((builder) => {
         builder.withGraphFetched('vendor');
-        builder.withGraphFetched('entries.item');
+        builder.withGraphFetched('entries.item.[unit, secondaryUnit]');
         dynamicFilter.buildQuery()(builder);
 
         // Filter query.

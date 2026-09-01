@@ -116,11 +116,23 @@ export function useEditableItemsEntriesColumns() {
         width: 120,
       },
       {
-        Header: intl.get('quantity'),
+        Header: intl.get('entries.unit_quantity'),
         accessor: 'quantity',
         Cell: NumericInputCell,
         disableSortBy: true,
         width: 70,
+        align: Align.Right,
+      },
+      {
+        // The same amount in the item's second unit. Either column may be
+        // typed into; the other follows. Items without a second unit leave it
+        // empty rather than hiding the column, so the table does not change
+        // shape from one line to the next.
+        Header: intl.get('entries.secondary_unit_quantity'),
+        accessor: 'secondaryQuantity',
+        Cell: NumericInputCell,
+        disableSortBy: true,
+        width: 80,
         align: Align.Right,
       },
       {

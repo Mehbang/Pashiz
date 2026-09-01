@@ -52,7 +52,7 @@ export class GetWarehouseTransfers {
     const { results, pagination } = await this.warehouseTransferModel()
       .query()
       .onBuild((query) => {
-        query.withGraphFetched('entries.item');
+        query.withGraphFetched('entries.item.[unit, secondaryUnit]');
         query.withGraphFetched('fromWarehouse');
         query.withGraphFetched('toWarehouse');
 

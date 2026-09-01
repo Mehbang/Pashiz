@@ -47,7 +47,7 @@ export class GetSaleInvoicesService {
     const { results, pagination } = await this.saleInvoiceModel()
       .query()
       .onBuild((builder) => {
-        builder.withGraphFetched('entries.item');
+        builder.withGraphFetched('entries.item.[unit, secondaryUnit]');
         builder.withGraphFetched('customer');
 
         dynamicFilter.buildQuery()(builder);

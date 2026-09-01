@@ -26,7 +26,7 @@ export class GetSaleEstimateMailStateService {
       .query()
       .findById(saleEstimateId)
       .withGraphFetched('customer')
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('pdfTemplate')
       .throwIfNotFound();
 

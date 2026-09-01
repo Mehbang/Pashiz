@@ -16,6 +16,7 @@ import type { CreateItemBody, EditItemBody } from '@bigcapital/sdk-ts';
 import { AppToaster } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { safeInvoke } from '@/utils';
+import { toLatinDigits } from '@bigcapital/utils';
 
 type SubmitSuccessHandler = (
   values: ItemFormValues,
@@ -80,9 +81,13 @@ export function ItemFormFormik({
       const value = formValues[field];
       const isBlank = value === '' || value === null || value === undefined;
 
+      // `Number('۱۰۰۰')` is NaN. A reader typing on a Persian keyboard gets
+      // Persian figures, and the conversion factor is a plain text field, so
+      // without this the form sent NaN and the save was refused — which is
+      // exactly what a Persian keyboard produced before.
       (formValues as Record<string, unknown>)[field] = isBlank
         ? null
-        : Number(value);
+        : Number(toLatinDigits(String(value)));
     }
 
     setSubmitting(true);

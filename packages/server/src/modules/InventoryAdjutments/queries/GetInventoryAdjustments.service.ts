@@ -49,7 +49,7 @@ export class GetInventoryAdjustmentsService {
     const { results, pagination } = await this.inventoryAdjustmentModel()
       .query()
       .onBuild((query) => {
-        query.withGraphFetched('entries.item');
+        query.withGraphFetched('entries.item.[unit, secondaryUnit]');
         query.withGraphFetched('adjustmentAccount');
 
         dynamicFilter.buildQuery()(query);

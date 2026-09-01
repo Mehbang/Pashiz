@@ -13,6 +13,7 @@ const LABEL_KEYS: Record<string, string> = {
   billedToLabel: 'billed_to',
   lineItemLabel: 'line_item',
   lineQuantityLabel: 'line_quantity',
+  lineSecondaryQuantityLabel: 'line_secondary_quantity',
   lineRateLabel: 'line_rate',
   lineTotalLabel: 'line_total',
   lineDiscountLabel: 'discount',

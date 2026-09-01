@@ -4,7 +4,7 @@
   "invoice_number": "شماره فاکتور",
   "billed_to": "صورت‌حساب برای",
   "line_item": "کالا",
-  "line_quantity": "تعداد",
+  "line_quantity": "واحد",
   "line_rate": "نرخ",
   "line_total": "جمع",
   "total": "جمع کل",
@@ -30,5 +30,6 @@
   "title_receipt": "رسید فروش",
   "title_credit_note": "برگه بستانکار",
   "title_payment_received": "رسید دریافت",
-  "standard_template": "قالب استاندارد"
+  "standard_template": "قالب استاندارد",
+  "line_secondary_quantity": "واحد فرعی"
 }

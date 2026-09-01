@@ -2967,5 +2967,7 @@
   "item.field.secondary_unit.hint": "A second way of reading the same quantity. Optional.",
   "item.field.secondary_unit_factor": "Conversion factor",
   "item.field.secondary_unit_factor.hint": "How many secondary units make one primary unit? For kilogram and gram, 1000.",
-  "item.field.quantity_secondary": "Stock in secondary unit"
+  "item.field.quantity_secondary": "Stock in secondary unit",
+  "entries.unit_quantity": "Qty",
+  "entries.secondary_unit_quantity": "Secondary Qty"
 }

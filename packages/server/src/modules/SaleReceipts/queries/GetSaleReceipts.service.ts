@@ -50,7 +50,7 @@ export class GetSaleReceiptsService {
       .onBuild((builder) => {
         builder.withGraphFetched('depositAccount');
         builder.withGraphFetched('customer');
-        builder.withGraphFetched('entries.item');
+        builder.withGraphFetched('entries.item.[unit, secondaryUnit]');
 
         dynamicFilter.buildQuery()(builder);
         _filterDto?.filterQuery && _filterDto?.filterQuery(builder);

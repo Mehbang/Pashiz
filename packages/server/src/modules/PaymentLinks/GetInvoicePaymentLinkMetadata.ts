@@ -55,7 +55,7 @@ export class GetInvoicePaymentLinkMetadata {
     const invoice = await this.saleInvoiceModel()
       .query()
       .findById(paymentLink.resourceId)
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('customer')
       .withGraphFetched('taxes.taxRate')
       .withGraphFetched('paymentMethods.paymentIntegration')

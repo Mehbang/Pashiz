@@ -72,6 +72,8 @@ export interface ReceiptPaperTemplateProps extends PaperTemplateProps {
     description: string;
     rate: string;
     quantity: string;
+    /** The same amount read in the item's second unit, already carrying it. */
+    secondaryQuantity?: string;
     discount?: string;
     total: string;
   }>;
@@ -93,6 +95,7 @@ export interface ReceiptPaperTemplateProps extends PaperTemplateProps {
   // Entries
   lineItemLabel?: string;
   lineQuantityLabel?: string;
+  lineSecondaryQuantityLabel?: string;
   lineRateLabel?: string;
   lineTotalLabel?: string;
 }
@@ -170,6 +173,7 @@ export function ReceiptPaperTemplate({
   // Entries
   lineItemLabel = 'Item',
   lineQuantityLabel = 'Qty',
+  lineSecondaryQuantityLabel = 'Secondary Qty',
   lineRateLabel = 'Rate',
   lineTotalLabel = 'Total',
 
@@ -237,6 +241,14 @@ export function ReceiptPaperTemplate({
                 thStyle: { width: '60%' },
               },
               { label: lineQuantityLabel, accessor: 'quantity' },
+              {
+                // Only where an item on this document actually has a second
+                // unit; a column of blanks elsewhere would be worse than none.
+                label: lineSecondaryQuantityLabel,
+                accessor: 'secondaryQuantity',
+                align: 'right',
+                visible: lines.some((line) => Boolean(line.secondaryQuantity)),
+              },
               { label: lineRateLabel, accessor: 'rate', align: 'right' },
               {
                 label: lineDiscountLabel,

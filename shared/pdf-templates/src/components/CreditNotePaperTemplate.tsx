@@ -19,6 +19,8 @@ interface CreditNoteLine {
   item?: string;
   description?: string;
   quantity?: string;
+  /** The same amount read in the item's second unit, already carrying it. */
+  secondaryQuantity?: string;
   rate?: string;
   total?: string;
 }
@@ -56,6 +58,7 @@ export interface CreditNotePaperTemplateProps extends PaperTemplateProps {
   // Entries
   lineItemLabel?: string;
   lineQuantityLabel?: string;
+  lineSecondaryQuantityLabel?: string;
   lineRateLabel?: string;
   lineTotalLabel?: string;
 
@@ -116,6 +119,7 @@ export function CreditNotePaperTemplate({
   // Entries
   lineItemLabel = 'Item',
   lineQuantityLabel = 'Qty',
+  lineSecondaryQuantityLabel = 'Secondary Qty',
   lineRateLabel = 'Rate',
   lineTotalLabel = 'Total',
 
@@ -215,6 +219,14 @@ export function CreditNotePaperTemplate({
                 label: lineQuantityLabel,
                 accessor: 'quantity',
                 align: 'right',
+              },
+              {
+                // Only where an item on this document actually has a second
+                // unit; a column of blanks elsewhere would be worse than none.
+                label: lineSecondaryQuantityLabel,
+                accessor: 'secondaryQuantity',
+                align: 'right',
+                visible: lines.some((line) => Boolean(line.secondaryQuantity)),
               },
               { label: lineRateLabel, accessor: 'rate', align: 'right' },
               { label: lineTotalLabel, accessor: 'total', align: 'right' },

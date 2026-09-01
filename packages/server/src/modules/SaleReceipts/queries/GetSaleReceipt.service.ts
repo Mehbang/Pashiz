@@ -22,7 +22,7 @@ export class GetSaleReceipt {
     const saleReceipt = await this.saleReceiptModel()
       .query()
       .findById(saleReceiptId)
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('customer')
       .withGraphFetched('depositAccount')
       .withGraphFetched('branch')

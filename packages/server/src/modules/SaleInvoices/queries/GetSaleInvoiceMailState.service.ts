@@ -29,7 +29,7 @@ export class GetSaleInvoiceMailState {
       .query()
       .findById(saleInvoiceId)
       .withGraphFetched('customer')
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('pdfTemplate')
       .throwIfNotFound();
 

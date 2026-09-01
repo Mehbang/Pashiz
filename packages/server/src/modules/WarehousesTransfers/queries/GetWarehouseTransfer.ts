@@ -29,7 +29,7 @@ export class GetWarehouseTransfer {
     const warehouseTransfer = await this.warehouseTransferModel()
       .query()
       .findById(warehouseTransferId)
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('fromWarehouse')
       .withGraphFetched('toWarehouse')
       .throwIfNotFound();

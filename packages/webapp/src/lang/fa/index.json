@@ -2967,5 +2967,7 @@
   "item.field.secondary_unit.hint": "راه دومی برای خواندن همان مقدار. اختیاری است.",
   "item.field.secondary_unit_factor": "ضریب تبدیل",
   "item.field.secondary_unit_factor.hint": "هر ۱ واحد اصلی برابر چند واحد فرعی است؟ برای کیلوگرم و گرم، ۱۰۰۰.",
-  "item.field.quantity_secondary": "موجودی به واحد فرعی"
+  "item.field.quantity_secondary": "موجودی به واحد فرعی",
+  "entries.unit_quantity": "واحد",
+  "entries.secondary_unit_quantity": "واحد فرعی"
 }

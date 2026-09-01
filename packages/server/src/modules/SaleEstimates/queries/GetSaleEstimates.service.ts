@@ -49,7 +49,7 @@ export class GetSaleEstimatesService {
       .onBuild((builder) => {
         builder.withGraphFetched('customer');
         builder.withGraphFetched('entries');
-        builder.withGraphFetched('entries.item');
+        builder.withGraphFetched('entries.item.[unit, secondaryUnit]');
 
         dynamicFilter.buildQuery()(builder);
         _filterDto?.filterQuery && _filterDto?.filterQuery(builder);

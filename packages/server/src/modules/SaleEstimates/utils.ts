@@ -17,7 +17,8 @@ export const transformEstimateToPdfTemplate = (
       item: entry.item.name,
       description: entry.description,
       rate: entry.rateFormatted,
-      quantity: entry.quantityFormatted,
+      quantity: entry.quantityWithUnit || entry.quantityFormatted,
+      secondaryQuantity: entry.secondaryQuantityWithUnit,
       total: entry.totalFormatted,
     })),
     // `total` was reading the subtotal, so a discounted estimate printed its

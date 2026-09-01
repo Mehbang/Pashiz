@@ -27,7 +27,7 @@ export class GetSaleEstimate {
     const estimate = await this.saleEstimateModel()
       .query()
       .findById(estimateId)
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('customer')
       .withGraphFetched('branch')
       .withGraphFetched('attachments');

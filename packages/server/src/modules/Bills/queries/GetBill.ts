@@ -24,7 +24,7 @@ export class GetBill {
       .query()
       .findById(billId)
       .withGraphFetched('vendor')
-      .withGraphFetched('entries.item')
+      .withGraphFetched('entries.item.[unit, secondaryUnit]')
       .withGraphFetched('branch')
       .withGraphFetched('taxes.taxRate')
       .withGraphFetched('attachments');
