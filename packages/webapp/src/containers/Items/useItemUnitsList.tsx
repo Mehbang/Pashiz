@@ -15,6 +15,11 @@ export function useItemUnitsList() {
   return useQuery<ItemUnit[]>({
     queryKey: [ITEM_UNITS_QUERY_KEY],
     queryFn: () => http.get('/api/item-units').then((res) => res.data ?? []),
-    initialData: [],
+    // `placeholderData`, not `initialData`. The application sets a global
+    // `staleTime` of 30s, and `initialData` is written into the cache as
+    // though it had just been fetched — so an empty array counted as a fresh
+    // answer and the request was never made. The picker stayed empty for the
+    // first half minute of every visit, which is every visit.
+    placeholderData: [],
   });
 }
