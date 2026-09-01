@@ -4,7 +4,7 @@
   "date": "Date",
   "transaction_type": "Transaction type",
   "transaction_number": "Transaction #",
-  "quantity": "Quantity",
+  "quantity": "Unit",
   "rate": "Rate",
   "total": "Total",
   "value": "Value",

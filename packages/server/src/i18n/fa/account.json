@@ -39,5 +39,7 @@
   "root_type.liability": "بدهی",
   "root_type.equity": "حقوق صاحبان سهام",
   "root_type.income": "درآمد",
-  "root_type.expense": "هزینه"
+  "root_type.expense": "هزینه",
+  "accounts_receivable.currency": "حساب‌های دریافتنی ({currency})",
+  "accounts_payable.currency": "حساب‌های پرداختنی ({currency})"
 }

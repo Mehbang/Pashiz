@@ -82,7 +82,10 @@ export class SalesByItemsReport extends FinancialSheet {
       soldCost: meta.cost,
       averageSellPrice: meta.average,
       quantitySoldFormatted: this.withUnit(
-        this.formatNumber(meta.quantity, { money: false }),
+        this.formatNumber(meta.quantity, {
+          money: false,
+          trimTrailingZeros: true,
+        }),
         item.unit,
       ),
       // The same quantity read in the item's second unit, where it has one.

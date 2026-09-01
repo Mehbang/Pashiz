@@ -212,10 +212,14 @@ export class InventoryDetails extends FinancialSheet {
       transactionNumber: transaction?.meta?.transactionNumber,
       direction: transaction.direction,
 
-      quantityMovement: this.getNumberMeta(quantityMovement),
+      quantityMovement: this.getNumberMeta(quantityMovement, {
+        trimTrailingZeros: true,
+      }),
       valueMovement: this.getNumberMeta(valueMovement),
 
-      quantity: this.getNumberMeta(transaction.quantity),
+      quantity: this.getNumberMeta(transaction.quantity, {
+        trimTrailingZeros: true,
+      }),
 
       // The same amounts read in the item's second unit. Empty where the item
       // has none, so the column is simply blank on those rows rather than
@@ -342,7 +346,7 @@ export class InventoryDetails extends FinancialSheet {
     return {
       nodeType: INodeTypes.OPENING_ENTRY,
       date: this.getDateMeta(this.query.fromDate),
-      quantity: this.getTotalNumberMeta(quantity),
+      quantity: this.getTotalNumberMeta(quantity, { trimTrailingZeros: true }),
       value: this.getTotalNumberMeta(value),
     };
   }
@@ -367,7 +371,9 @@ export class InventoryDetails extends FinancialSheet {
     return {
       nodeType: INodeTypes.CLOSING_ENTRY,
       date: this.getDateMeta(this.query.toDate),
-      quantity: this.getTotalNumberMeta(closingQuantity),
+      quantity: this.getTotalNumberMeta(closingQuantity, {
+        trimTrailingZeros: true,
+      }),
       value: this.getTotalNumberMeta(closingValue),
       profitMargin: this.getTotalNumberMeta(profitMargin),
     };

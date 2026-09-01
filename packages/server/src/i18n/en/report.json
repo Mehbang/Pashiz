@@ -30,7 +30,7 @@
   "column.description": "Description",
   "column.item_name": "Item name",
   "column.purchase_amount": "Purchase Amount",
-  "column.quantity": "Quantity",
+  "column.quantity": "Unit",
   "column.quantity_purchased": "Quantity Purchased",
   "column.reference_type": "Reference Type",
   "column.running_balance": "Running Balance",

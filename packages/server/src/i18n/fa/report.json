@@ -30,7 +30,7 @@
   "column.description": "شرح",
   "column.item_name": "نام کالا",
   "column.purchase_amount": "مبلغ خرید",
-  "column.quantity": "تعداد",
+  "column.quantity": "واحد",
   "column.quantity_purchased": "تعداد خریداری‌شده",
   "column.reference_type": "نوع مرجع",
   "column.running_balance": "ماندهٔ جاری",

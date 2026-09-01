@@ -39,5 +39,7 @@
   "root_type.liability": "Liability",
   "root_type.equity": "Equity",
   "root_type.income": "Income",
-  "root_type.expense": "Expense"
+  "root_type.expense": "Expense",
+  "accounts_receivable.currency": "Accounts Receivable ({currency})",
+  "accounts_payable.currency": "Accounts Payable ({currency})"
 }

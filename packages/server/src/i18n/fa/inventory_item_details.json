@@ -4,7 +4,7 @@
   "date": "تاریخ",
   "transaction_type": "نوع تراکنش",
   "transaction_number": "شماره تراکنش",
-  "quantity": "تعداد",
+  "quantity": "واحد",
   "rate": "نرخ",
   "total": "جمع",
   "value": "ارزش",
