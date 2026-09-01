@@ -39,6 +39,15 @@ export const useReceiptReadonlyEntriesTableColumns = () => {
         disableSortBy: true,
       },
       {
+        // The same amount in the item's second unit, where the item
+        // has one. Blank otherwise, and it carries its own unit.
+        Header: intl.get('entries.secondary_unit_quantity'),
+        accessor: 'secondaryQuantityWithUnit',
+        align: 'right',
+        disableSortBy: true,
+        width: 110,
+      },
+      {
         Header: intl.get('rate'),
         accessor: 'rateFormatted',
         width: getColumnWidth(entries, 'rateFormatted', {

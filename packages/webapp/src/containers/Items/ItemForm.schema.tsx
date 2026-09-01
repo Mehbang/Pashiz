@@ -57,6 +57,26 @@ const Schema = Yup.object().shape({
     })
     .label(intl.get('inventory_account')),
   categoryId: Yup.number().positive().nullable(),
+
+  unitId: Yup.number().positive().nullable(),
+  secondaryUnitId: Yup.number().positive().nullable(),
+
+  // A second unit without a factor says nothing — the quantity cannot be read
+  // in it — and the form used to accept exactly that, leaving items whose
+  // second unit never appeared anywhere and no explanation why. Asked for
+  // together or not at all.
+  secondaryUnitFactor: Yup.number()
+    .transform((value, original) =>
+      original === '' || original === null ? undefined : value,
+    )
+    .positive()
+    .nullable()
+    .when('secondaryUnitId', {
+      is: (secondaryUnitId: number | null) => Boolean(secondaryUnitId),
+      then: Yup.number().positive().required(),
+      otherwise: Yup.number().nullable(),
+    })
+    .label(intl.get('item.field.secondary_unit_factor')),
   stock: Yup.string() || Yup.boolean(),
   sellable: Yup.boolean().required(),
   purchasable: Yup.boolean().required(),

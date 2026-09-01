@@ -51,5 +51,6 @@
   "column.aging_and_over": "{from} And Over",
   "column.transaction_number": "Transaction #",
   "column.number_short": "Num.",
-  "column.account_code": "Acc. Code"
+  "column.account_code": "Acc. Code",
+  "column.secondary_sold_quantity": "Sold quantity (secondary unit)"
 }

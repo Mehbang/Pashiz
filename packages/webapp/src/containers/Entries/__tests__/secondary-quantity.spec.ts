@@ -69,6 +69,18 @@ describe('syncSecondaryQuantity()', () => {
     ).toBe('');
   });
 
+  it('reads camelCase items, which is what the document forms hand it', () => {
+    const camel = [{ id: 9, secondaryUnitId: 2, secondaryUnitFactor: 1000 }];
+    expect(
+      syncSecondaryQuantity(
+        [{ itemId: 9, quantity: 5, secondaryQuantity: '' }],
+        0,
+        'quantity',
+        camel,
+      )[0].secondaryQuantity,
+    ).toBe(5000);
+  });
+
   it('leaves other columns alone', () => {
     const before = row({ quantity: 5 });
     expect(syncSecondaryQuantity(before, 0, 'rate', items)).toBe(before);

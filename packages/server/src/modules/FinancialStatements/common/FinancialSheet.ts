@@ -6,6 +6,7 @@ import {
 import { formatNumber } from '@/utils/format-number';
 import { CalendarSystem, formatDateIn } from '@/utils/jalali-date';
 import { toPersianDigits } from '@bigcapital/utils';
+import { convertToSecondaryUnit } from '@/modules/Items/utils/item-units';
 import { IFinancialTableTotal } from '../types/Table.types';
 
 export class FinancialSheet {
@@ -169,6 +170,46 @@ export class FinancialSheet {
    * column heading, an index. Amounts go through `formatNumber`, which does
    * this already.
    */
+  /**
+   * A quantity written with the unit the item is counted in, and the same
+   * amount read in its second unit where it has one.
+   *
+   * The conversion is the documents' own — there is one answer to how many
+   * grams a kilogram of this item is, and it lives in `item-units`.
+   */
+  protected withUnit(
+    formatted: string,
+    unit?: { symbol?: string | null; name?: string | null } | null,
+  ): string {
+    const label = unit?.symbol || unit?.name || '';
+
+    return label ? `${formatted} ${label}` : formatted;
+  }
+
+  protected secondaryQuantityFormatted(
+    quantity: unknown,
+    item:
+      | {
+          secondaryUnit?: {
+            symbol?: string | null;
+            name?: string | null;
+          } | null;
+          secondaryUnitId?: number | null;
+          secondaryUnitFactor?: number | string | null;
+        }
+      | null
+      | undefined,
+  ): string {
+    const converted = convertToSecondaryUnit(quantity, item);
+
+    if (converted === null) return '';
+
+    return this.withUnit(
+      this.formatNumber(converted, { money: false }),
+      item?.secondaryUnit,
+    );
+  }
+
   protected localizeDigits(text: string): string {
     return this.persianDigits ? toPersianDigits(text) : text;
   }

@@ -48,6 +48,8 @@ export class SalesByItemsReportService {
       .query()
       .onBuild((q) => {
         q.where('type', 'inventory');
+        // The report prints each quantity in the item's own unit.
+        q.withGraphFetched('[unit, secondaryUnit]');
 
         if (filter.itemsIds.length > 0) {
           q.whereIn('id', filter.itemsIds);

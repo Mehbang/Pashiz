@@ -43,6 +43,10 @@ export class SalesByItemsTable extends R.pipe(
         accessor: 'quantitySoldFormatted',
       },
       {
+        key: SALES_BY_ITEMS_COLUMN_KEYS.SECONDARY_SOLD_QUANTITY,
+        accessor: 'secondaryQuantitySoldFormatted',
+      },
+      {
         key: SALES_BY_ITEMS_COLUMN_KEYS.SOLD_AMOUNT,
         accessor: 'soldCostFormatted',
       },
@@ -114,6 +118,13 @@ export class SalesByItemsTable extends R.pipe(
       {
         key: SALES_BY_ITEMS_COLUMN_KEYS.SOLD_QUANTITY,
         label: this.i18n.t('report.column.sold_quantity'),
+      },
+      {
+        // Blank for items with no second unit, which is most of them on most
+        // installations — but a column that appears and disappears between
+        // runs of the same report is worse than one that is sometimes empty.
+        key: SALES_BY_ITEMS_COLUMN_KEYS.SECONDARY_SOLD_QUANTITY,
+        label: this.i18n.t('report.column.secondary_sold_quantity'),
       },
       {
         key: SALES_BY_ITEMS_COLUMN_KEYS.SOLD_AMOUNT,

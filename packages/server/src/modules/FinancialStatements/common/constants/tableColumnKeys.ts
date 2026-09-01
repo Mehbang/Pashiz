@@ -145,6 +145,7 @@ export type VendorsBalanceColumnKey =
 export const SALES_BY_ITEMS_COLUMN_KEYS = {
   ITEM_NAME: 'item_name',
   SOLD_QUANTITY: 'sold_quantity',
+  SECONDARY_SOLD_QUANTITY: 'secondary_sold_quantity',
   SOLD_AMOUNT: 'sold_amount',
   AVERAGE_PRICE: 'average_price',
 } as const;

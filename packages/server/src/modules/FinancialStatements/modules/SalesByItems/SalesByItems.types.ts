@@ -26,6 +26,7 @@ export interface ISalesByItemsItem {
   averageSellPrice: number;
 
   quantitySoldFormatted: string;
+  secondaryQuantitySoldFormatted?: string;
   soldCostFormatted: string;
   averageSellPriceFormatted: string;
   currencyCode: string;

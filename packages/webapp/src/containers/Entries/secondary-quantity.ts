@@ -11,8 +11,16 @@ import { toLatinDigits } from '@bigcapital/utils';
  * The factor comes from the item on the row, so changing the item recomputes
  * the pair rather than leaving the previous item's arithmetic behind.
  */
+/**
+ * Either casing. The document forms fetch items through a hook that
+ * camel-cases the response, while other callers hand over what the API sent —
+ * and a lookup that knows only one of the two silently finds nothing, which
+ * reads exactly like the feature not working.
+ */
 interface UnitItem {
   id: number;
+  secondaryUnitId?: number | null;
+  secondaryUnitFactor?: number | string | null;
   secondary_unit_id?: number | null;
   secondary_unit_factor?: number | string | null;
 }
@@ -20,10 +28,12 @@ interface UnitItem {
 const factorOf = (items: UnitItem[], itemId: unknown): number | null => {
   const item = items?.find((candidate) => candidate.id === Number(itemId));
 
-  if (!item?.secondary_unit_id) return null;
+  if (!item) return null;
 
-  const factor = Number(item.secondary_unit_factor);
+  const hasSecondUnit = item.secondaryUnitId ?? item.secondary_unit_id;
+  if (!hasSecondUnit) return null;
 
+  const factor = Number(item.secondaryUnitFactor ?? item.secondary_unit_factor);
   return Number.isFinite(factor) && factor > 0 ? factor : null;
 };
 
