@@ -31,6 +31,14 @@ becomes a value again. 98 call sites build API payloads with
 | Its settings tab | `packages/webapp/src/containers/Preferences/Backup/` |
 | Deployment | `setup.sh`, `update.sh`, `docker-compose.pashiz.yml`, `docker-compose.https.yml`, `DEPLOY.md` |
 
+### Units of measure
+
+- `packages/server/src/modules/ItemUnits/` — the units an organization defines
+- `packages/server/src/modules/Items/utils/item-units.ts` — the one conversion
+- `packages/webapp/src/containers/Preferences/Units/` — where they are defined
+- `packages/webapp/src/containers/Entries/secondary-quantity.ts` — the mirror
+  between the two quantity columns, with its own tests
+
 ## How a calendar is chosen
 
 - **Client** — the active locale. `AppIntlLoader` resolves it from `?lang=`, the
@@ -142,6 +150,37 @@ Two traps found while building it:
   hidden field named `_csrf` arrives as `csrf`. Names that are already
   camelCase survive.
 
+## Units of measure
+
+An organization defines its own units in Preferences → واحدهای اندازه‌گیری —
+kilogram, gram, metre — and each item takes a primary unit, an optional second
+one, and a factor saying how many of the second make one of the first.
+
+**Nothing about storage changed.** A quantity is still a quantity in the item's
+primary unit; the second unit is a way of reading it. Inventory, costing and
+the ledger are untouched. That was a deliberate choice with Ehsan: build the
+reading half first, add entry later — except the entry half turned out to be
+cheap, so document lines carry both columns and either may be typed into, with
+only the primary sent.
+
+One conversion, used everywhere: `modules/Items/utils/item-units.ts`. The
+editor calls it as you type; `ItemEntryTransformer`, `ItemTransformer` and
+`FinancialSheet` call it when a document or report is read. Two copies would
+become two answers to how many grams are in a kilogram of an item.
+
+Both readings appear on document lines, the six detail views, the printed
+copy, the shared payment link, and all four reports that count anything —
+sales by items, purchases by items, inventory valuation, inventory item
+details. Every Persian heading for the pair is "واحد" and "واحد فرعی".
+
+Quantities ask the formatter for `trimTrailingZeros`, because a count has no
+fixed scale: three of something is three, not three point zero zero. Money is
+untouched and still follows its currency.
+
+**Report totals deliberately carry no unit.** A total sums kilograms and metres
+across items; no single unit describes it, and printing one would look right
+and mean nothing.
+
 ## Untranslated strings a grep will never find
 
 The server passes some labels through `i18n.t()` that are already English prose
@@ -185,6 +224,13 @@ Each of these passed every local check and still broke:
   failed, and the application rendered a blank page. Importing an organization
   into the *same* one it came from hides this completely, which is exactly how
   it got shipped.
+- A relation the code reads but the query never fetched. `entries.item` was
+  loaded without `entries.item.[unit, secondaryUnit]`, so every unit label came
+  back empty; the reports each had the same omission. TypeScript sees nothing
+  wrong — the property is declared, it is simply undefined at runtime — and the
+  result is a blank column, not an error. This has come up four times in this
+  fork; when adding a field that reads through a relation, check every query
+  that feeds it before believing a green typecheck.
 - `docker compose build server webapp` hands both services to buildx bake,
   which builds them **concurrently**. Two pnpm installs and two bundlers at
   once exhaust a 3.8GB server; the kernel kills buildx and Docker reports only
@@ -228,6 +274,13 @@ Each of these passed every local check and still broke:
 - `packages/webapp/src/style/pages/fonts.scss` and the Noto/Segoe `.woff` files
   beside it are dead: nothing imports that file, and its Arabic faces list
   `local('Noto Sans')` first, which has no Arabic. Left in place; safe to delete.
+- Entering a quantity in the second unit works on document lines; nothing
+  elsewhere accepts one. Stock adjustments and warehouse transfers still take
+  the primary unit only.
+- Two payment-link routes answer 401 without a session, though the controller
+  calls them public metadata. A customer with no account may therefore see
+  nothing at the shared link. Left alone: opening a guarded endpoint is Ehsan's
+  decision, not a bug to fix in passing.
 - The bundled font is Vazirmatn (SIL OFL), chosen because that licence permits
   serving the files publicly. IRANSans was tried and reverted: it is commercial
   and would need a web-embedding licence.
