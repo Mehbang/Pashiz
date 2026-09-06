@@ -1,8 +1,6 @@
 import { PashizBrand } from '@/components/Icons/PashizBrand';
 import classNames from 'classnames';
 import React from 'react';
-import { Icon } from '@/components';
-import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 import '@/style/components/BigcapitalLoading.scss';
 
@@ -16,22 +14,14 @@ interface BigcapitalLoadingProps {
 export default function BigcapitalLoading({
   className,
 }: BigcapitalLoadingProps) {
-  const isDarkmode = useIsDarkMode();
-
+  // One lockup for both themes. The dark branch used to fall back to the
+  // original English wordmark, so anyone loading the app in dark mode was
+  // greeted by the upstream brand; the mark takes `currentColor` and the name
+  // is text, so a single element now serves both.
   return (
     <div className={classNames('bigcapital-loading', className)}>
       <div className="center">
-        {isDarkmode ? (
-          <Icon
-            icon="bigcapital-alt"
-            height={37}
-            width={228}
-            color="#fff"
-            className="bigcapital-logo"
-          />
-        ) : (
-          <PashizBrand height={34} />
-        )}
+        <PashizBrand height={34} />
       </div>
     </div>
   );

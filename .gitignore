@@ -17,3 +17,6 @@ e2e/.auth/
 # Pashiz deployment artefacts (created on the server by setup.sh / update.sh)
 backups/
 .pashiz-previous-version
+
+# macOS Finder metadata
+.DS_Store
