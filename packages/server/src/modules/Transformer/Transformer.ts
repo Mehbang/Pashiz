@@ -227,6 +227,23 @@ export class Transformer<T = {}, ExtraContext = {}> {
   }
 
   /**
+   * A rate written as a percentage in the digits and sign the organization
+   * reads.
+   *
+   * Persian has its own percent sign, and a Latin `10%` sitting beside Persian
+   * text reads as a foreign fragment. A rate is not money and has no fixed
+   * scale, so trailing zeros are dropped.
+   */
+  protected formatPercent(value: number | string) {
+    const formatted = this.formatNumber(value, {
+      money: false,
+      trimTrailingZeros: true,
+    });
+
+    return this.persianDigits() ? `${formatted}٪` : `${formatted}%`;
+  }
+
+  /**
    *
    * @param money
    * @param options

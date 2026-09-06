@@ -214,6 +214,16 @@ export class FinancialSheet {
     return this.persianDigits ? toPersianDigits(text) : text;
   }
 
+  /**
+   * A rate written as a percentage in the digits and sign the organization
+   * reads — the sheet-side counterpart of the transformer's `formatPercent()`.
+   */
+  protected formatPercent(value: number | string): string {
+    return this.persianDigits
+      ? `${toPersianDigits(String(value))}٪`
+      : `${value}%`;
+  }
+
   protected getDateFormatted(date: moment.MomentInput, format?: string) {
     const dateFormat = format || this.dateFormat || 'YYYY MMM DD';
     return formatDateIn(date, dateFormat, this.calendar);

@@ -30,7 +30,7 @@ export function VendorCreditDetailDrawerFooter() {
           <TotalLine
             title={
               vendorCredit.discountPercentageFormatted
-                ? `Discount [${vendorCredit.discountPercentageFormatted}]`
+                ? `${intl.get('discount_2')} [${vendorCredit.discountPercentageFormatted}]`
                 : intl.get('discount_2')
             }
             value={vendorCredit.discountAmountFormatted}

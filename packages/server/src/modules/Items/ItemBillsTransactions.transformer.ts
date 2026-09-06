@@ -8,6 +8,7 @@ export class ItemBillTransactionTransformer extends Transformer {
   public includeAttributes = (): string[] => {
     return [
       'formattedAmount',
+      'formattedQuantity',
       'formattedBillDate',
       'formattedRate',
       'formattedCost',
@@ -39,7 +40,10 @@ export class ItemBillTransactionTransformer extends Transformer {
    * @returns {string}
    */
   public formattedQuantity = (entry): string => {
-    return entry.quantity;
+    return this.formatNumber(entry.quantity, {
+      money: false,
+      trimTrailingZeros: true,
+    });
   };
 
   /**

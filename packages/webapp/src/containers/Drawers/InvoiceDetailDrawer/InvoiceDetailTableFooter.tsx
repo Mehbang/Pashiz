@@ -9,6 +9,7 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
+import { localizedPercent } from '@/utils/locale';
 
 /**
  * Invoice details footer.
@@ -31,7 +32,7 @@ export function InvoiceDetailTableFooter() {
         {(invoice.taxes ?? []).map((taxRate) => (
           <TotalLine
             key={taxRate.id}
-            title={`${taxRate.name} [${taxRate.taxRate}%]`}
+            title={`${taxRate.name} [${localizedPercent(taxRate.taxRate)}]`}
             value={taxRate.taxRateAmountFormatted}
             textStyle={TotalLineTextStyle.Regular}
           />
@@ -40,7 +41,7 @@ export function InvoiceDetailTableFooter() {
           <TotalLine
             title={
               invoice.discountPercentageFormatted
-                ? `Discount [${invoice.discountPercentageFormatted}]`
+                ? `${intl.get('discount_2')} [${invoice.discountPercentageFormatted}]`
                 : intl.get('discount_2')
             }
             value={invoice.discountAmountFormatted}

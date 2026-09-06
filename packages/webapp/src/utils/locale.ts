@@ -48,6 +48,23 @@ export const localizedDigits = (
 };
 
 /**
+ * A rate written as a percentage in the digits and sign of the active locale.
+ *
+ * Tax rates reach the interface as bare numbers and get pinned to a name —
+ * "معاف از مالیات [۰٪]". Persian has its own percent sign, and a Latin `0%`
+ * beside Persian text reads as a foreign fragment.
+ */
+export const localizedPercent = (
+  value: number | string | null | undefined,
+): string => {
+  if (value === null || value === undefined || value === '') return '';
+
+  return currentLocaleSettings().persianDigits
+    ? `${toPersianDigits(String(value))}٪`
+    : `${value}%`;
+};
+
+/**
  * A currency written the way the active locale names it.
  *
  * Currency codes are what the interface falls back to when there is no room

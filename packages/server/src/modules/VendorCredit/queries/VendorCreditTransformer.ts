@@ -111,7 +111,9 @@ export class VendorCreditTransformer extends Transformer {
    * @returns {string}
    */
   protected discountPercentageFormatted = (credit): string => {
-    return credit.discountPercentage ? `${credit.discountPercentage}%` : '';
+    return credit.discountPercentage
+      ? this.formatPercent(credit.discountPercentage)
+      : '';
   };
 
   /**

@@ -206,7 +206,9 @@ export class BillTransformer extends Transformer {
    * @returns {string}
    */
   protected discountPercentageFormatted = (bill: Bill): string => {
-    return bill.discountPercentage ? `${bill.discountPercentage}%` : '';
+    return bill.discountPercentage
+      ? this.formatPercent(bill.discountPercentage)
+      : '';
   };
 
   /**

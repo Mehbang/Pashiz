@@ -122,7 +122,9 @@ export class SaleEstimateTransfromer extends Transformer {
    * @returns {string}
    */
   protected discountPercentageFormatted = (estimate: SaleEstimate): string => {
-    return estimate.discountPercentage ? `${estimate.discountPercentage}%` : '';
+    return estimate.discountPercentage
+      ? this.formatPercent(estimate.discountPercentage)
+      : '';
   };
 
   /**

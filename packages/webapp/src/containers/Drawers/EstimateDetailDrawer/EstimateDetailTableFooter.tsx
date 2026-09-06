@@ -32,7 +32,7 @@ export function EstimateDetailTableFooter() {
           <TotalLine
             title={
               estimate.discountPercentageFormatted
-                ? `Discount [${estimate.discountPercentageFormatted}]`
+                ? `${intl.get('discount_2')} [${estimate.discountPercentageFormatted}]`
                 : intl.get('discount_2')
             }
             value={estimate.discountAmountFormatted}

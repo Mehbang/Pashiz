@@ -49,7 +49,7 @@ export function ItemDetailHeader() {
                   plus: (item?.quantityOnHand ?? 0) > 0,
                 })}
               >
-                {defaultTo(item?.quantityOnHand, '-')}
+                {item?.quantityOnHandFormatted || '-'}
               </span>
             </DetailItem>
           </If>

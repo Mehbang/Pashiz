@@ -8,6 +8,7 @@ export class ItemReceiptTransactionTransformer extends Transformer {
   public includeAttributes = (): string[] => {
     return [
       'formattedAmount',
+      'formattedQuantity',
       'formattedReceiptDate',
       'formattedRate',
       'formattedCost',
@@ -40,7 +41,10 @@ export class ItemReceiptTransactionTransformer extends Transformer {
    * @returns {string}
    */
   public formattedQuantity = (entry): string => {
-    return entry.quantity;
+    return this.formatNumber(entry.quantity, {
+      money: false,
+      trimTrailingZeros: true,
+    });
   };
 
   /**

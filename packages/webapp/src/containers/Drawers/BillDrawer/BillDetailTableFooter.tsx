@@ -8,6 +8,7 @@ import {
   TotalLines,
   TotalLine,
 } from '@/components';
+import { localizedPercent } from '@/utils/locale';
 
 /**
  * Bill read-only details table footer.
@@ -30,7 +31,7 @@ export function BillDetailTableFooter() {
         {(bill.taxes ?? []).map((taxRate) => (
           <TotalLine
             key={taxRate.id}
-            title={`${taxRate.name} [${taxRate.taxRate}%]`}
+            title={`${taxRate.name} [${localizedPercent(taxRate.taxRate)}]`}
             value={taxRate.taxRateAmountFormatted}
             textStyle={TotalLineTextStyle.Regular}
           />
@@ -39,7 +40,7 @@ export function BillDetailTableFooter() {
           <TotalLine
             title={
               bill.discountPercentageFormatted
-                ? `Discount [${bill.discountPercentageFormatted}]`
+                ? `${intl.get('discount_2')} [${bill.discountPercentageFormatted}]`
                 : intl.get('discount_2')
             }
             value={bill.discountAmountFormatted}

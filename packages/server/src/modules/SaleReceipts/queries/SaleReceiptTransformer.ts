@@ -126,7 +126,9 @@ export class SaleReceiptTransformer extends Transformer {
    * @returns {string}
    */
   protected discountPercentageFormatted = (receipt: SaleReceipt): string => {
-    return receipt.discountPercentage ? `${receipt.discountPercentage}%` : '';
+    return receipt.discountPercentage
+      ? this.formatPercent(receipt.discountPercentage)
+      : '';
   };
 
   /**

@@ -27,7 +27,7 @@ export function CreditNoteDetailTableFooter() {
           <TotalLine
             title={
               creditNote?.discountPercentageFormatted
-                ? `Discount [${creditNote.discountPercentageFormatted}]`
+                ? `${intl.get('discount_2')} [${creditNote.discountPercentageFormatted}]`
                 : intl.get('discount_2')
             }
             value={creditNote?.discountAmountFormatted}

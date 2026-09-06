@@ -16,6 +16,7 @@ import {
   formattedAmount,
   updateRemoveLineByIndex,
 } from '@/utils';
+import { localizedPercent } from '@/utils/locale';
 
 export const ITEM_TYPE = {
   SELLABLE: 'SELLABLE',
@@ -306,7 +307,7 @@ export const aggregateItemEntriesTaxRates = R.curry(
       return {
         taxRateId,
         taxRate: taxRate.rate,
-        label: `${taxRate.name} [${taxRate.rate}%]`,
+        label: `${taxRate.name} [${localizedPercent(taxRate.rate)}]`,
         taxAmount: totalTaxAmount,
         taxAmountFormatted,
       };

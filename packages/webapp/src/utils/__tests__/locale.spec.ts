@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import {
   localizedCurrencyLabel,
   localizedDigits,
+  localizedPercent,
   startOfPeriodLocalized,
 } from '../locale';
 
@@ -37,6 +38,30 @@ describe('localizedDigits()', () => {
     await useLocale('fa');
 
     expect(localizedDigits(1234)).toBe('۱۲۳۴');
+  });
+});
+
+describe('localizedPercent()', () => {
+  it('keeps the Latin sign and digits in English', async () => {
+    await useLocale('en');
+
+    expect(localizedPercent(0)).toBe('0%');
+    expect(localizedPercent(9.5)).toBe('9.5%');
+  });
+
+  it('uses the Persian sign and digits', async () => {
+    await useLocale('fa');
+
+    // The rate a tax category is named by — "معاف از مالیات [۰٪]".
+    expect(localizedPercent(0)).toBe('۰٪');
+    expect(localizedPercent(9.5)).toBe('۹.۵٪');
+  });
+
+  it('renders nothing for an absent rate', async () => {
+    await useLocale('fa');
+
+    expect(localizedPercent(null)).toBe('');
+    expect(localizedPercent(undefined)).toBe('');
   });
 });
 

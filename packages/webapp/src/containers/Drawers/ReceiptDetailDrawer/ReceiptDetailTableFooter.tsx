@@ -31,7 +31,7 @@ export function ReceiptDetailTableFooter() {
           <TotalLine
             title={
               receipt.discountPercentageFormatted
-                ? `Discount [${receipt.discountPercentageFormatted}]`
+                ? `${intl.get('discount_2')} [${receipt.discountPercentageFormatted}]`
                 : intl.get('discount_2')
             }
             value={receipt.discountAmountFormatted}

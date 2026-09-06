@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React, { useEffect } from 'react';
 import { Scrollbar } from 'react-scrollbars-custom';
 import { useObserveSidebarExpendedBodyclass } from './hooks';
+import { withDashboardSidebar } from './withDashboardSidebar';
 import { withDashboard } from '@/containers/Dashboard/withDashboard';
 import { compose } from '@/utils';
 
@@ -16,6 +17,9 @@ function SidebarContainerJSX({
 
   // #withDashboard
   sidebarExpended,
+
+  // #withDashboardSidebar
+  sidebarSubmenuOpen,
 }) {
   const sidebarScrollerRef = React.useRef();
 
@@ -45,6 +49,7 @@ function SidebarContainerJSX({
     <div
       className={classNames('sidebar', {
         'sidebar--mini-sidebar': !sidebarExpended,
+        'sidebar--submenu-open': sidebarSubmenuOpen,
       })}
       id="sidebar"
       onMouseLeave={handleSidebarMouseLeave}
@@ -64,5 +69,8 @@ function SidebarContainerJSX({
 export const SidebarContainer = compose(
   withDashboard(({ sidebarExpended }) => ({
     sidebarExpended,
+  })),
+  withDashboardSidebar(({ sidebarSubmenuOpen }) => ({
+    sidebarSubmenuOpen,
   })),
 )(SidebarContainerJSX);

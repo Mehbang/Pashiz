@@ -702,6 +702,12 @@ $app-bg: var(--color-dark-gray1);
 $sidebar-background: var(--color-sidebar-background);
 $sidebar-text-color: var(--sidebar-text-color);
 $sidebar-width: 100%;
+
+// The collapsed rail, and how wide it grows while the pointer is over it.
+// The split pane is sized to the collapsed width, so the difference between
+// these two is how far the submenu overlay has to clear the expanded rail.
+$sidebar-mini-width: 50px;
+$sidebar-mini-hover-width: 190px;
 $sidebar-menu-item-color: var(--color-sidebar-menu-item-color);
 $sidebar-menu-item-color-active: var(--color-sidebar-menu-item-active-color);
 $sidebar-popover-submenu-bg: rgb(1, 20, 62);

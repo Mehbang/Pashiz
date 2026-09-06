@@ -1754,6 +1754,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/item-units": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves the organization's units of measure. */
+        get: operations["ItemUnitsController_getUnits"];
+        put?: never;
+        /** Creates a unit of measure. */
+        post: operations["ItemUnitsController_createUnit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/item-units/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves the given unit of measure. */
+        get: operations["ItemUnitsController_getUnit"];
+        /** Edits the given unit of measure. */
+        put: operations["ItemUnitsController_editUnit"];
+        post?: never;
+        /** Deletes the given unit of measure. */
+        delete: operations["ItemUnitsController_deleteUnit"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/expenses/validate-bulk-delete": {
         parameters: {
             query?: never;
@@ -4374,6 +4411,108 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/organization/backup/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Downloads the organization's data as one file. */
+        get: operations["OrganizationBackupController_exportOrganization"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organization/backup/inspect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reads a backup file and reports what it holds, changing nothing. */
+        post: operations["OrganizationBackupController_inspectBackup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organization/backup/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Replaces the organization's data with the uploaded backup. */
+        post: operations["OrganizationBackupController_importBackup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organization/backup/archives": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists this organization's automatic backups. */
+        get: operations["OrganizationBackupController_listArchives"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organization/backup/archives/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Downloads one of this organization's backups. */
+        get: operations["OrganizationBackupController_downloadArchive"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organization/backup/archives/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restores this organization from one of its backups. */
+        post: operations["OrganizationBackupController_restoreArchive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/workspaces": {
         parameters: {
             query?: never;
@@ -5564,6 +5703,46 @@ export interface components {
              */
             quantityOnHand?: number;
             /**
+             * @description The ID of the unit the item is counted in
+             * @example 1
+             */
+            unitId?: number;
+            /**
+             * @description The ID of the second unit the item can also be read in
+             * @example 2
+             */
+            secondaryUnitId?: number;
+            /**
+             * @description How many secondary units make one primary unit
+             * @example 1000
+             */
+            secondaryUnitFactor?: number;
+            /**
+             * @description What is written beside a quantity of this item
+             * @example kg
+             */
+            unitLabel: string;
+            /**
+             * @description What is written beside a quantity in the item's second unit
+             * @example g
+             */
+            secondaryUnitLabel: string;
+            /**
+             * @description The stock on hand, formatted and carrying its unit
+             * @example 50 kg
+             */
+            quantityOnHandFormatted: string;
+            /**
+             * @description The same stock read in the second unit, or null where the item has none
+             * @example 50000
+             */
+            secondaryQuantityOnHand?: number | null;
+            /**
+             * @description The stock in the second unit, formatted and carrying that unit
+             * @example 50,000 g
+             */
+            secondaryQuantityOnHandFormatted: string;
+            /**
              * @description Additional notes about the item
              * @example Available in black, gray, and navy colors. 5-year warranty included.
              */
@@ -5680,6 +5859,21 @@ export interface components {
              */
             categoryId?: number;
             /**
+             * @description Unit every stored quantity of this item is counted in
+             * @example 3
+             */
+            unitId?: number;
+            /**
+             * @description A second unit the same quantity may be read in
+             * @example 4
+             */
+            secondaryUnitId?: number;
+            /**
+             * @description How many secondary units make one primary unit — 1000 for gram against kilogram
+             * @example 1000
+             */
+            secondaryUnitFactor?: number;
+            /**
              * @description Additional notes about the item
              * @example Available in black, gray, and navy colors. 5-year warranty included.
              */
@@ -5793,6 +5987,21 @@ export interface components {
              * @example 5
              */
             categoryId?: number;
+            /**
+             * @description Unit every stored quantity of this item is counted in
+             * @example 3
+             */
+            unitId?: number;
+            /**
+             * @description A second unit the same quantity may be read in
+             * @example 4
+             */
+            secondaryUnitId?: number;
+            /**
+             * @description How many secondary units make one primary unit — 1000 for gram against kilogram
+             * @example 1000
+             */
+            secondaryUnitFactor?: number;
             /**
              * @description Additional notes about the item
              * @example Available in black, gray, and navy colors. 5-year warranty included.
@@ -8661,6 +8870,40 @@ export interface components {
              * @default false
              */
             skipUndeletable: boolean;
+        };
+        CreateItemUnitDto: {
+            /**
+             * @description Unit name
+             * @example Kilogram
+             */
+            name: string;
+            /**
+             * @description Short form written beside a quantity
+             * @example kg
+             */
+            symbol?: string;
+            /**
+             * @description Whether the unit may be chosen
+             * @default true
+             */
+            active: boolean;
+        };
+        EditItemUnitDto: {
+            /**
+             * @description Unit name
+             * @example Kilogram
+             */
+            name: string;
+            /**
+             * @description Short form written beside a quantity
+             * @example kg
+             */
+            symbol?: string;
+            /**
+             * @description Whether the unit may be chosen
+             * @default true
+             */
+            active: boolean;
         };
         ExpenseCategoryResponseDto: {
             /**
@@ -14314,6 +14557,8 @@ export interface components {
             rowTypes: string[];
             /** @description Row identifier */
             id: Record<string, never>;
+            /** @description Row-level metadata (e.g. transaction reference link) */
+            meta?: Record<string, never>;
             /** @description Child rows */
             children?: components["schemas"]["FinancialTableRowDto"][];
         };
@@ -14390,7 +14635,7 @@ export interface components {
              * @description Column key
              * @enum {string}
              */
-            key: "item_name" | "quantity_purchases" | "purchase_amount" | "average_cost";
+            key: "item_name" | "quantity_purchases" | "secondary_quantity_purchases" | "purchase_amount" | "average_cost";
             /** @description Column header label */
             label: string;
             /** @description Cell position index */
@@ -14631,7 +14876,7 @@ export interface components {
              * @description Column key
              * @enum {string}
              */
-            key: "item_name" | "sold_quantity" | "sold_amount" | "average_price";
+            key: "item_name" | "sold_quantity" | "secondary_sold_quantity" | "sold_amount" | "average_price";
             /** @description Column header label */
             label: string;
             /** @description Cell position index */
@@ -15479,7 +15724,7 @@ export interface components {
              * @description Column key
              * @enum {string}
              */
-            key: "item_name" | "quantity" | "valuation" | "average";
+            key: "item_name" | "quantity" | "secondary_quantity" | "valuation" | "average";
             /** @description Column header label */
             label: string;
             /** @description Cell position index */
@@ -20933,6 +21178,131 @@ export interface operations {
         responses: {
             /** @description The item categories have been successfully deleted. */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ItemUnitsController_getUnits: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The units have been retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ItemUnitsController_createUnit: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateItemUnitDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ItemUnitsController_getUnit: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ItemUnitsController_editUnit: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EditItemUnitDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ItemUnitsController_deleteUnit: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31368,6 +31738,140 @@ export interface operations {
         responses: {
             /** @description Organization information has been updated successfully */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OrganizationBackupController_exportOrganization: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OrganizationBackupController_inspectBackup: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OrganizationBackupController_importBackup: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OrganizationBackupController_listArchives: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OrganizationBackupController_downloadArchive: {
+        parameters: {
+            query: {
+                name: string;
+            };
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OrganizationBackupController_restoreArchive: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };

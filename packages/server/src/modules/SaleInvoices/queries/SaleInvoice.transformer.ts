@@ -205,7 +205,7 @@ export class SaleInvoiceTransformer extends Transformer {
    */
   protected discountPercentageFormatted = (invoice: SaleInvoice): string => {
     return invoice.discountType === DiscountType.Percentage
-      ? `${invoice.discount}%`
+      ? this.formatPercent(invoice.discount)
       : '';
   };
 

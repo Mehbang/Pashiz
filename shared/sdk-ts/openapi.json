@@ -6577,6 +6577,219 @@
         ]
       }
     },
+    "/api/item-units": {
+      "get": {
+        "operationId": "ItemUnitsController_getUnits",
+        "summary": "Retrieves the organization's units of measure.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The units have been retrieved."
+          }
+        },
+        "tags": [
+          "Item Units"
+        ]
+      },
+      "post": {
+        "operationId": "ItemUnitsController_createUnit",
+        "summary": "Creates a unit of measure.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateItemUnitDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Item Units"
+        ]
+      }
+    },
+    "/api/item-units/{id}": {
+      "get": {
+        "operationId": "ItemUnitsController_getUnit",
+        "summary": "Retrieves the given unit of measure.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Item Units"
+        ]
+      },
+      "put": {
+        "operationId": "ItemUnitsController_editUnit",
+        "summary": "Edits the given unit of measure.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditItemUnitDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Item Units"
+        ]
+      },
+      "delete": {
+        "operationId": "ItemUnitsController_deleteUnit",
+        "summary": "Deletes the given unit of measure.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Item Units"
+        ]
+      }
+    },
     "/api/expenses/validate-bulk-delete": {
       "post": {
         "operationId": "ExpensesController_validateBulkDeleteExpenses",
@@ -22639,6 +22852,224 @@
         ]
       }
     },
+    "/api/organization/backup/export": {
+      "get": {
+        "operationId": "OrganizationBackupController_exportOrganization",
+        "summary": "Downloads the organization's data as one file.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Organization backup"
+        ]
+      }
+    },
+    "/api/organization/backup/inspect": {
+      "post": {
+        "operationId": "OrganizationBackupController_inspectBackup",
+        "summary": "Reads a backup file and reports what it holds, changing nothing.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Organization backup"
+        ]
+      }
+    },
+    "/api/organization/backup/import": {
+      "post": {
+        "operationId": "OrganizationBackupController_importBackup",
+        "summary": "Replaces the organization's data with the uploaded backup.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Organization backup"
+        ]
+      }
+    },
+    "/api/organization/backup/archives": {
+      "get": {
+        "operationId": "OrganizationBackupController_listArchives",
+        "summary": "Lists this organization's automatic backups.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Organization backup"
+        ]
+      }
+    },
+    "/api/organization/backup/archives/download": {
+      "get": {
+        "operationId": "OrganizationBackupController_downloadArchive",
+        "summary": "Downloads one of this organization's backups.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Organization backup"
+        ]
+      }
+    },
+    "/api/organization/backup/archives/restore": {
+      "post": {
+        "operationId": "OrganizationBackupController_restoreArchive",
+        "summary": "Restores this organization from one of its backups.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Organization backup"
+        ]
+      }
+    },
     "/api/workspaces": {
       "get": {
         "operationId": "WorkspacesController_listWorkspaces",
@@ -25237,6 +25668,47 @@
             "description": "The quantity of the item in stock (for inventory items)",
             "example": 50
           },
+          "unitId": {
+            "type": "number",
+            "description": "The ID of the unit the item is counted in",
+            "example": 1
+          },
+          "secondaryUnitId": {
+            "type": "number",
+            "description": "The ID of the second unit the item can also be read in",
+            "example": 2
+          },
+          "secondaryUnitFactor": {
+            "type": "number",
+            "description": "How many secondary units make one primary unit",
+            "example": 1000
+          },
+          "unitLabel": {
+            "type": "string",
+            "description": "What is written beside a quantity of this item",
+            "example": "kg"
+          },
+          "secondaryUnitLabel": {
+            "type": "string",
+            "description": "What is written beside a quantity in the item's second unit",
+            "example": "g"
+          },
+          "quantityOnHandFormatted": {
+            "type": "string",
+            "description": "The stock on hand, formatted and carrying its unit",
+            "example": "50 kg"
+          },
+          "secondaryQuantityOnHand": {
+            "type": "number",
+            "description": "The same stock read in the second unit, or null where the item has none",
+            "example": 50000,
+            "nullable": true
+          },
+          "secondaryQuantityOnHandFormatted": {
+            "type": "string",
+            "description": "The stock in the second unit, formatted and carrying that unit",
+            "example": "50,000 g"
+          },
           "note": {
             "type": "string",
             "description": "Additional notes about the item",
@@ -25290,6 +25762,10 @@
           "sellable",
           "purchasable",
           "currencyCode",
+          "unitLabel",
+          "secondaryUnitLabel",
+          "quantityOnHandFormatted",
+          "secondaryQuantityOnHandFormatted",
           "active",
           "createdAt",
           "updatedAt"
@@ -25383,6 +25859,21 @@
             "description": "ID of the item category",
             "minimum": 0,
             "example": 5
+          },
+          "unitId": {
+            "type": "number",
+            "description": "Unit every stored quantity of this item is counted in",
+            "example": 3
+          },
+          "secondaryUnitId": {
+            "type": "number",
+            "description": "A second unit the same quantity may be read in",
+            "example": 4
+          },
+          "secondaryUnitFactor": {
+            "type": "number",
+            "description": "How many secondary units make one primary unit — 1000 for gram against kilogram",
+            "example": 1000
           },
           "note": {
             "type": "string",
@@ -25526,6 +26017,21 @@
             "description": "ID of the item category",
             "minimum": 0,
             "example": 5
+          },
+          "unitId": {
+            "type": "number",
+            "description": "Unit every stored quantity of this item is counted in",
+            "example": 3
+          },
+          "secondaryUnitId": {
+            "type": "number",
+            "description": "A second unit the same quantity may be read in",
+            "example": 4
+          },
+          "secondaryUnitFactor": {
+            "type": "number",
+            "description": "How many secondary units make one primary unit — 1000 for gram against kilogram",
+            "example": 1000
           },
           "note": {
             "type": "string",
@@ -29830,6 +30336,54 @@
         },
         "required": [
           "ids"
+        ]
+      },
+      "CreateItemUnitDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unit name",
+            "example": "Kilogram"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "Short form written beside a quantity",
+            "example": "kg"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the unit may be chosen",
+            "default": true
+          }
+        },
+        "required": [
+          "name",
+          "active"
+        ]
+      },
+      "EditItemUnitDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unit name",
+            "example": "Kilogram"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "Short form written beside a quantity",
+            "example": "kg"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the unit may be chosen",
+            "default": true
+          }
+        },
+        "required": [
+          "name",
+          "active"
         ]
       },
       "ExpenseCategoryResponseDto": {
@@ -38130,6 +38684,10 @@
             "type": "object",
             "description": "Row identifier"
           },
+          "meta": {
+            "type": "object",
+            "description": "Row-level metadata (e.g. transaction reference link)"
+          },
           "children": {
             "description": "Child rows",
             "type": "array",
@@ -38377,6 +38935,7 @@
             "enum": [
               "item_name",
               "quantity_purchases",
+              "secondary_quantity_purchases",
               "purchase_amount",
               "average_cost"
             ]
@@ -39163,6 +39722,7 @@
             "enum": [
               "item_name",
               "sold_quantity",
+              "secondary_sold_quantity",
               "sold_amount",
               "average_price"
             ]
@@ -41814,6 +42374,7 @@
             "enum": [
               "item_name",
               "quantity",
+              "secondary_quantity",
               "valuation",
               "average"
             ]

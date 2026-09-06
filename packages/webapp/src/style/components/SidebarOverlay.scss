@@ -1,3 +1,5 @@
+@import '../_base.scss';
+
 .sidebar-overlay {
   background: var(--color-sidebar-overlay-background);
   height: 100%;
@@ -5,6 +7,20 @@
   outline: 0;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
   z-index: 15;
+
+  // The overlay is portalled into the content pane, so it opens at whatever
+  // the split pane's divider is — which is flush against the sidebar while the
+  // sidebar is expanded.
+  //
+  // Some pages shrink the sidebar to its rail instead (application preferences
+  // does it on mount). The divider then sits at $sidebar-mini-width, but the
+  // rail grows to $sidebar-mini-hover-width once it opens and paints over the
+  // overlay, which has the lower z-index of the two. The submenu is left
+  // buried under the sidebar, reachable only past the rail's edge. Start it
+  // clear of the opened rail instead.
+  body.has-mini-sidebar & {
+    margin-inline-start: $sidebar-mini-hover-width - $sidebar-mini-width;
+  }
 
   &__scroll-wrapper {
     height: 100%

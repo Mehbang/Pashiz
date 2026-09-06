@@ -167,6 +167,61 @@ export class ItemResponseDto {
   quantityOnHand?: number;
 
   @ApiProperty({
+    description: 'The ID of the unit the item is counted in',
+    example: 1,
+    required: false,
+  })
+  unitId?: number;
+
+  @ApiProperty({
+    description: 'The ID of the second unit the item can also be read in',
+    example: 2,
+    required: false,
+  })
+  secondaryUnitId?: number;
+
+  @ApiProperty({
+    description: 'How many secondary units make one primary unit',
+    example: 1000,
+    required: false,
+  })
+  secondaryUnitFactor?: number;
+
+  @ApiProperty({
+    description: 'What is written beside a quantity of this item',
+    example: 'kg',
+  })
+  unitLabel: string;
+
+  @ApiProperty({
+    description: "What is written beside a quantity in the item's second unit",
+    example: 'g',
+  })
+  secondaryUnitLabel: string;
+
+  @ApiProperty({
+    description: 'The stock on hand, formatted and carrying its unit',
+    example: '50 kg',
+  })
+  quantityOnHandFormatted: string;
+
+  @ApiProperty({
+    description:
+      'The same stock read in the second unit, or null where the item has none',
+    example: 50000,
+    required: false,
+    nullable: true,
+  })
+  secondaryQuantityOnHand?: number | null;
+
+  @ApiProperty({
+    description:
+      'The stock in the second unit, formatted and carrying that unit',
+    example: '50,000 g',
+  })
+  secondaryQuantityOnHandFormatted: string;
+
+  @ApiProperty({
     description: 'Additional notes about the item',
     example:
       'Available in black, gray, and navy colors. 5-year warranty included.',

@@ -69,7 +69,7 @@ export class SalesTaxLiabilitySummary extends FinancialSheet {
 
     return {
       id: taxRate.id,
-      taxName: `${taxRate.name} (${taxRate.rate}%)`,
+      taxName: `${taxRate.name} (${this.formatPercent(taxRate.rate)})`,
       taxableAmount: this.getAmountMeta(salesTaxAmount),
       taxAmount: this.getAmountMeta(payableTaxAmount),
       taxPercentage: this.getPercentageTotalAmountMeta(taxPercentage),

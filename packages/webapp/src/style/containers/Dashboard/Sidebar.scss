@@ -1,5 +1,26 @@
 @import 'src/style/_base.scss';
 
+// What the collapsed rail looks like once it opens — under the pointer, or
+// while a submenu overlay is showing.
+@mixin sidebar-rail-expanded {
+  min-width: $sidebar-mini-hover-width;
+
+  .sidebar__head-logo {
+    opacity: 0;
+    transition-delay: 0s;
+  }
+
+  .sidebar__head-organization,
+  .sidebar__menu,
+  .sidebar__version {
+    opacity: 1;
+  }
+
+  .ScrollbarsCustom-Scroller {
+    overflow: scroll !important;
+  }
+}
+
 .sidebar {
   background: var(--color-sidebar-background);
   width: 100%;
@@ -245,7 +266,7 @@
   &--mini-sidebar {
     position: fixed;
     white-space: nowrap;
-    width: 50px;
+    width: $sidebar-mini-width;
 
     .sidebar__head {
       .sidebar__head-logo {
@@ -273,29 +294,21 @@
     .sidebar__scroll-wrapper {
       background: $sidebar-background;
       transition: min-width 0.15s ease-in-out;
-      min-width: 50px;
+      min-width: $sidebar-mini-width;
 
       .ScrollbarsCustom-Scroller {
         overflow: hidden !important;
       }
       &:hover {
-        min-width: 190px;
-
-        .sidebar__head-logo {
-          opacity: 0;
-          transition-delay: 0s;
-        }
-
-        .sidebar__head-organization,
-        .sidebar__menu,
-        .sidebar__version {
-          opacity: 1;
-        }
-
-        .ScrollbarsCustom-Scroller {
-          overflow: scroll !important;
-        }
+        @include sidebar-rail-expanded;
       }
+    }
+
+    // The rail also stays open for as long as a submenu is showing. Without
+    // this it snaps back to its 50px the moment the pointer leaves it for the
+    // overlay, and the overlay is left floating away from the sidebar.
+    &.sidebar--submenu-open .sidebar__scroll-wrapper {
+      @include sidebar-rail-expanded;
     }
   }
 
