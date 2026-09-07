@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ItemsController } from './Item.controller';
 import { CreateItemService } from './CreateItem.service';
+import { SyncItemFieldValuesService } from './commands/SyncItemFieldValues.service';
 import { TenancyDatabaseModule } from '../Tenancy/TenancyDB/TenancyDB.module';
 import { ItemsValidators } from './ItemValidator.service';
 import { DeleteItemService } from './DeleteItem.service';
@@ -31,6 +32,7 @@ import { ValidateBulkDeleteItemsService } from './ValidateBulkDeleteItems.servic
   providers: [
     ItemsValidators,
     CreateItemService,
+    SyncItemFieldValuesService,
     EditItemService,
     InactivateItem,
     ActivateItemService,

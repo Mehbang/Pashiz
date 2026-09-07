@@ -9,9 +9,26 @@ import {
   MaxLength,
   Min,
   IsNotEmpty,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, ToNumber } from '@/common/decorators/Validators';
+
+/**
+ * One value an item carries for a field its category defines.
+ */
+export class ItemFieldValueDto {
+  @ToNumber()
+  @IsNumber()
+  @ApiProperty({ example: 1, description: 'The category field being answered' })
+  categoryFieldId: number;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ example: 'محمود دولت‌آبادی', description: 'The value' })
+  value?: string;
+}
 
 export class CommandItemDto {
   @IsString()
@@ -243,6 +260,17 @@ export class CommandItemDto {
     example: [1, 2, 3],
   })
   mediaIds?: number[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ItemFieldValueDto)
+  @IsOptional()
+  @ApiProperty({
+    type: [ItemFieldValueDto],
+    description: "Values for the fields this item's category defines",
+    required: false,
+  })
+  fieldValues?: ItemFieldValueDto[];
 }
 
 export class CreateItemDto extends CommandItemDto {}

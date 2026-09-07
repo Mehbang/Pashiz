@@ -62,6 +62,7 @@ export class GetItemsService {
         // The transformer reads both units to say what a quantity means.
         builder.withGraphFetched('unit');
         builder.withGraphFetched('secondaryUnit');
+        builder.withGraphFetched('fieldValues.categoryField');
 
         dynamicFilter.buildQuery()(builder);
       })

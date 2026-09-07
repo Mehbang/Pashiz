@@ -37,8 +37,22 @@ export class ItemCategory extends TenantBaseModel {
    */
   static get relationMappings() {
     const { Item } = require('../../Items/models/Item');
+    const { ItemCategoryField } = require('./ItemCategoryField.model');
 
     return {
+      /**
+       * The extra fields this category asks its items to fill in.
+       */
+      fields: {
+        relation: Model.HasManyRelation,
+        modelClass: ItemCategoryField,
+        join: {
+          from: 'items_categories.id',
+          to: 'item_category_fields.categoryId',
+        },
+        modify: (query) => query.orderBy('index', 'asc').orderBy('id', 'asc'),
+      },
+
       /**
        * Item category may has many items.
        */

@@ -1,6 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Item } from '../models/Item';
 
+/** One answer an item gives to a field its category defines. */
+export class ItemFieldValueResponseDto {
+  @ApiProperty({ example: 1, description: 'The value ID' })
+  id: number;
+
+  @ApiProperty({ example: 1, description: 'The category field being answered' })
+  categoryFieldId: number;
+
+  @ApiProperty({ example: 'محمود دولت‌آبادی', description: 'The value' })
+  value: string;
+
+  @ApiProperty({
+    description: 'The field definition, so the value can be labelled',
+    required: false,
+  })
+  categoryField?: { id: number; name: string; categoryId: number };
+}
+
 export class ItemResponseDto {
   @ApiProperty({
     description: 'The unique identifier of the item',
@@ -165,6 +183,13 @@ export class ItemResponseDto {
     required: false,
   })
   quantityOnHand?: number;
+
+  @ApiProperty({
+    type: [ItemFieldValueResponseDto],
+    description: "Values this item carries for its category's fields",
+    required: false,
+  })
+  fieldValues?: ItemFieldValueResponseDto[];
 
   @ApiProperty({
     description: 'The ID of the unit the item is counted in',

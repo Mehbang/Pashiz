@@ -21,6 +21,7 @@ export class GetItemCategoryService {
     const itemCategory = await this.itemCategoryModel()
       .query()
       .findById(itemCategoryId)
+      .withGraphFetched('fields')
       .throwIfNotFound();
 
     return itemCategory;

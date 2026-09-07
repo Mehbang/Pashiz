@@ -7,6 +7,7 @@ import { CommandItemCategoryValidatorService } from './CommandItemCategoryValida
 import { ItemCategory } from '../models/ItemCategory.model';
 import { UnitOfWork } from '@/modules/Tenancy/TenancyDB/UnitOfWork.service';
 import { CreateItemCategoryDto } from '../dtos/ItemCategory.dto';
+import { SyncItemCategoryFieldsService } from './SyncItemCategoryFields.service';
 
 @Injectable()
 export class CreateItemCategoryService {
@@ -20,6 +21,7 @@ export class CreateItemCategoryService {
     private readonly uow: UnitOfWork,
     private readonly validator: CommandItemCategoryValidatorService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly syncFields: SyncItemCategoryFieldsService,
 
     @Inject(ItemCategory.name)
     private readonly itemCategoryModel: () => typeof ItemCategory,
@@ -33,8 +35,12 @@ export class CreateItemCategoryService {
   private transformOTDToObject(
     itemCategoryOTD: CreateItemCategoryDto,
   ): Partial<ItemCategory> {
+    // `fields` is a list of definitions, not a column; it is written through
+    // its own table once the category has an id.
+    const { fields, ...attributes } = itemCategoryOTD;
+
     return {
-      ...itemCategoryOTD,
+      ...attributes,
       // userId: authorizedUser.id
     };
   }
@@ -72,6 +78,8 @@ export class CreateItemCategoryService {
         .insert({
           ...itemCategoryObj,
         });
+      await this.syncFields.sync(itemCategory.id, itemCategoryOTD.fields, trx);
+
       // Triggers `onItemCategoryCreated` event.
       await this.eventEmitter.emitAsync(events.itemCategory.onCreated, {
         itemCategory,

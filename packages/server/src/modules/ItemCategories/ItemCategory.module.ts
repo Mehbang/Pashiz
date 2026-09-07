@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TenancyDatabaseModule } from '../Tenancy/TenancyDB/TenancyDB.module';
 import { CreateItemCategoryService } from './commands/CreateItemCategory.service';
+import { SyncItemCategoryFieldsService } from './commands/SyncItemCategoryFields.service';
 import { DeleteItemCategoryService } from './commands/DeleteItemCategory.service';
 import { EditItemCategoryService } from './commands/EditItemCategory.service';
 import { GetItemCategoryService } from './queries/GetItemCategory.service';
@@ -20,6 +21,7 @@ import { ValidateBulkDeleteItemCategoriesService } from './ValidateBulkDeleteIte
   controllers: [ItemCategoryController],
   providers: [
     CreateItemCategoryService,
+    SyncItemCategoryFieldsService,
     EditItemCategoryService,
     GetItemCategoryService,
     GetItemCategoriesService,

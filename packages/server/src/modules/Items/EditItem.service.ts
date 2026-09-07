@@ -8,6 +8,7 @@ import { Item } from './models/Item';
 import { UnitOfWork } from '../Tenancy/TenancyDB/UnitOfWork.service';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
 import { EditItemDto } from './dtos/Item.dto';
+import { SyncItemFieldValuesService } from './commands/SyncItemFieldValues.service';
 
 @Injectable()
 export class EditItemService {
@@ -20,6 +21,7 @@ export class EditItemService {
    */
   constructor(
     private readonly eventEmitter: EventEmitter2,
+    private readonly syncFieldValues: SyncItemFieldValuesService,
     private readonly uow: UnitOfWork,
     private readonly validators: ItemsValidators,
 
@@ -90,8 +92,11 @@ export class EditItemService {
     itemDTO: EditItemDto,
     oldItem: Item,
   ): Partial<Item> {
+    // `fieldValues` are rows in their own table, not columns on the item.
+    const { fieldValues, ...attributes } = itemDTO;
+
     return {
-      ...itemDTO,
+      ...attributes,
       ...(itemDTO.type === 'inventory' && oldItem.type !== 'inventory'
         ? {
             quantityOnHand: 0,
@@ -129,6 +134,8 @@ export class EditItemService {
       const newItem = await this.itemModel()
         .query(trx)
         .patchAndFetchById(itemId, itemModel);
+
+      await this.syncFieldValues.sync(itemId, itemDTO.fieldValues, trx);
 
       // Edit event payload.
       const eventPayload: IItemEventEditedPayload = {

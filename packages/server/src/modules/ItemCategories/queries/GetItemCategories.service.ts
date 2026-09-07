@@ -57,6 +57,7 @@ export class GetItemCategoriesService {
           '*',
           this.itemCategoryModel().relatedQuery('items').count().as('count'),
         );
+        query.withGraphFetched('fields');
         dynamicList.buildQuery()(query);
       });
     return data;

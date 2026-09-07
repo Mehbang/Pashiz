@@ -13,6 +13,7 @@ import { ItemCategory } from '../models/ItemCategory.model';
 import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
 import { EditItemCategoryDto } from '../dtos/ItemCategory.dto';
+import { SyncItemCategoryFieldsService } from './SyncItemCategoryFields.service';
 
 @Injectable()
 export class EditItemCategoryService {
@@ -28,6 +29,7 @@ export class EditItemCategoryService {
     private readonly validator: CommandItemCategoryValidatorService,
     private readonly eventEmitter: EventEmitter2,
     private readonly tenancyContext: TenancyContext,
+    private readonly syncFields: SyncItemCategoryFieldsService,
 
     @Inject(ItemCategory.name)
     private readonly itemCategoryModel: TenantModelProxy<typeof ItemCategory>,
@@ -78,6 +80,8 @@ export class EditItemCategoryService {
         .query(trx)
         .patchAndFetchById(itemCategoryId, { ...itemCategoryObj });
 
+      await this.syncFields.sync(itemCategoryId, itemCategoryOTD.fields, trx);
+
       // Triggers `onItemCategoryEdited` event.
       await this.eventEmitter.emitAsync(events.itemCategory.onEdited, {
         oldItemCategory,
@@ -97,6 +101,10 @@ export class EditItemCategoryService {
     itemCategoryOTD: EditItemCategoryDto,
     authorizedUser: SystemUser,
   ) {
-    return { ...itemCategoryOTD, userId: authorizedUser.id };
+    // `fields` is a list of definitions, not a column; it is written through
+    // its own table.
+    const { fields, ...attributes } = itemCategoryOTD;
+
+    return { ...attributes, userId: authorizedUser.id };
   }
 }

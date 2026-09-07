@@ -1,5 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+/** One field the category asks its items to fill in. */
+export class ItemCategoryFieldResponseDto {
+  @ApiProperty({ example: 1, description: 'The field ID' })
+  id: number;
+
+  @ApiProperty({ example: 1, description: 'The category that defines it' })
+  categoryId: number;
+
+  @ApiProperty({ example: 'نویسنده', description: 'The field label' })
+  name: string;
+
+  @ApiProperty({ example: 0, description: 'The order it is shown in' })
+  index: number;
+}
+
 export class ItemCategoryResponseDto {
   @ApiProperty({
     example: 1,
@@ -47,6 +62,13 @@ export class ItemCategoryResponseDto {
     required: false,
   })
   costMethod?: string;
+
+  @ApiProperty({
+    type: [ItemCategoryFieldResponseDto],
+    description: 'The extra fields items in this category fill in',
+    required: false,
+  })
+  fields?: ItemCategoryFieldResponseDto[];
 
   @ApiProperty({
     example: 1,

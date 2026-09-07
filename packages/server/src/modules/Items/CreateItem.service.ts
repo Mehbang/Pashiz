@@ -9,6 +9,7 @@ import { Item } from './models/Item';
 import { UnitOfWork } from '../Tenancy/TenancyDB/UnitOfWork.service';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
 import { CreateItemDto } from './dtos/Item.dto';
+import { SyncItemFieldValuesService } from './commands/SyncItemFieldValues.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class CreateItemService {
@@ -21,6 +22,7 @@ export class CreateItemService {
    */
   constructor(
     private readonly eventEmitter: EventEmitter2,
+    private readonly syncFieldValues: SyncItemFieldValuesService,
     private readonly uow: UnitOfWork,
     private readonly validators: ItemsValidators,
 
@@ -81,8 +83,11 @@ export class CreateItemService {
    * @return {IItem}
    */
   private transformNewItemDTOToModel(itemDTO: CreateItemDto) {
+    // `fieldValues` are rows in their own table, not columns on the item.
+    const { fieldValues, ...attributes } = itemDTO;
+
     return {
-      ...itemDTO,
+      ...attributes,
       active: Boolean(defaultTo(itemDTO.active, true)),
       quantityOnHand: itemDTO.type === 'inventory' ? 0 : null,
     };
@@ -110,6 +115,8 @@ export class CreateItemService {
         .insertAndFetch({
           ...itemInsert,
         });
+      await this.syncFieldValues.sync(item.id, itemDTO.fieldValues, trx);
+
       // Triggers `onItemCreated` event.
       await this.eventEmitter.emitAsync(events.item.onCreated, {
         item,

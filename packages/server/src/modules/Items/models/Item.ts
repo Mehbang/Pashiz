@@ -115,6 +115,7 @@ export class Item extends TenantBaseModel {
    * Relationship mapping.
    */
   static get relationMappings() {
+    const { ItemFieldValue } = require('./ItemFieldValue.model');
     // const { Media } = require('../../Media/models/Media.model');
     const { Account } = require('../../Accounts/models/Account.model');
     const {
@@ -133,6 +134,19 @@ export class Item extends TenantBaseModel {
     const { TaxRateModel } = require('../../TaxRates/models/TaxRate.model');
 
     return {
+      /**
+       * What this item has filled in for its category's fields. Values for a
+       * category the item has since left are kept but not shown.
+       */
+      fieldValues: {
+        relation: Model.HasManyRelation,
+        modelClass: ItemFieldValue,
+        join: {
+          from: 'items.id',
+          to: 'item_field_values.itemId',
+        },
+      },
+
       /**
        * Item may belongs to cateogory model.
        */
