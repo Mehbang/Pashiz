@@ -8,7 +8,7 @@ import type {
   FormikItemRenderer,
   SelectOptionProps,
 } from '@blueprintjs-formik/select';
-import { localizedDigits } from '@/utils/locale';
+import { warehouseCodeAccessor } from './accessors';
 
 export interface WarehouseSelectModel
   extends Partial<Warehouse>,
@@ -46,7 +46,7 @@ const warehouseItemRenderer: FormikItemRenderer<WarehouseSelectModel> = (
       disabled={modifiers.disabled}
       icon={isSelected ? 'tick' : 'blank'}
       text={warehouse.name}
-      label={localizedDigits(warehouse.code)}
+      label={warehouseCodeAccessor(warehouse)}
       key={warehouse.id}
       onClick={handleClick}
     />
@@ -65,7 +65,7 @@ export function WarehouseMultiSelect({
       itemPredicate={warehouseItemPredicate}
       itemRenderer={warehouseItemRenderer}
       valueAccessor={'id'}
-      labelAccessor={(warehouse: any) => localizedDigits(warehouse.code)}
+      labelAccessor={warehouseCodeAccessor}
       tagAccessor={'name'}
       {...rest}
     />

@@ -52,7 +52,7 @@ const branchSelectProps = {
   itemPredicate: branchItemPredicate,
   itemRenderer: branchItemRenderer,
   valueAccessor: (item) => item.id,
-  labelAccessor: (item) => localizedDigits(item.code),
+  labelAccessor: (item) => localizedDigits(item?.code),
   tagRenderer: (item) => item.name,
 };
 

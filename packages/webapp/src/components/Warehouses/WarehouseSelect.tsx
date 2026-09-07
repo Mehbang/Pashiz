@@ -1,7 +1,7 @@
 import React from 'react';
 import { FSelect } from '../Forms';
 import type { Warehouse } from '@bigcapital/sdk-ts';
-import { localizedDigits } from '@/utils/locale';
+import { warehouseCodeAccessor } from './accessors';
 
 type FSelectProps = React.ComponentProps<typeof FSelect>;
 
@@ -16,7 +16,7 @@ export function WarehouseSelect({
   return (
     <FSelect<Warehouse>
       valueAccessor={'id'}
-      labelAccessor={(warehouse: any) => localizedDigits(warehouse.code)}
+      labelAccessor={warehouseCodeAccessor}
       textAccessor={'name'}
       popoverProps={{ minimal: true, usePortal: true, inline: false }}
       {...rest}
