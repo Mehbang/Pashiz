@@ -56,6 +56,7 @@ export function ItemFormFormik({
     editItemMutate,
     submitPayload,
     isNewMode,
+    itemsCategories,
   } = useItemFormContext();
 
   // Initial values in create and edit mode.
@@ -67,7 +68,28 @@ export function ItemFormFormik({
     form: FormikHelpers<ItemFormValues>,
   ) => {
     const { setSubmitting, resetForm, setErrors } = form;
-    const formValues = { ...values };
+    const { fieldValues, ...rest } = values;
+    const formValues: Record<string, unknown> = { ...rest };
+
+    // The form holds the category's answers as a map keyed by field id; the API
+    // takes a list. Only fields the chosen category still defines are sent, so
+    // a stale entry left behind by switching category is not written back.
+    const visibleFieldIds = new Set(
+      (
+        (itemsCategories ?? []) as Array<{
+          id: number;
+          fields?: Array<{ id: number }>;
+        }>
+      )
+        .find((category) => category.id === Number(values.categoryId))
+        ?.fields?.map((field) => field.id) ?? [],
+    );
+    formValues.fieldValues = Object.entries(fieldValues ?? {})
+      .filter(([id]) => visibleFieldIds.has(Number(id)))
+      .map(([id, value]) => ({
+        categoryFieldId: Number(id),
+        value: value ?? '',
+      }));
 
     // The unit fields are numbers to the API and strings in the form: an
     // untouched picker holds an empty string, and a filled one holds the digits

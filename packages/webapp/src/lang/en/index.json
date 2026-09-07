@@ -2977,5 +2977,13 @@
   "payment_page.sample_organization": "Sample Company",
   "payment_page.sample_customer": "Sample Customer",
   "show_password": "Show password",
-  "hide_password": "Hide password"
+  "hide_password": "Hide password",
+  "item_category.fields.label": "Category fields",
+  "item_category.fields.hint": "Items in this category will be asked to fill these in — an author for books, a size for clothes.",
+  "item_category.fields.placeholder": "Field name",
+  "item_category.fields.add": "Add a field",
+  "item_category.fields.remove": "Remove this field",
+  "item_category.fields.duplicate": "Two fields cannot share a name.",
+  "item.category_fields.label": "Category fields",
+  "item.category_fields.empty": "This category defines no extra fields."
 }

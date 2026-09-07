@@ -34,6 +34,24 @@ const createNewItemFromQuery = (name: string): Partial<ItemSuggestModel> => ({
   name,
 });
 
+/**
+ * Everything about an item a typed query is allowed to match.
+ *
+ * The name and the code, and whatever the item's category asked it to fill in
+ * — so a book is found by its author and a shirt by its colour, without those
+ * having to be part of the item's name.
+ */
+const searchableText = (item: ItemSuggestModel): string => {
+  const values = (
+    (item as { fieldValues?: Array<{ value?: string | null }> }).fieldValues ??
+    []
+  )
+    .map((row) => row.value ?? '')
+    .join(' ');
+
+  return `${item.name ?? ''} ${item.code ?? ''} ${values}`.toLowerCase();
+};
+
 // Filters items.
 const filterItemsPredicater: ItemItemPredicate = (
   query: string,
@@ -41,13 +59,12 @@ const filterItemsPredicater: ItemItemPredicate = (
   _index?: number,
   exactMatch?: boolean,
 ): boolean => {
-  const normalizedTitle = (item.name ?? '').toLowerCase();
   const normalizedQuery = query.toLowerCase();
 
   if (exactMatch) {
-    return normalizedTitle === normalizedQuery;
+    return (item.name ?? '').toLowerCase() === normalizedQuery;
   }
-  return `${normalizedTitle} ${item.code ?? ''}`.indexOf(normalizedQuery) >= 0;
+  return searchableText(item).indexOf(normalizedQuery) >= 0;
 };
 
 // Item renderer.

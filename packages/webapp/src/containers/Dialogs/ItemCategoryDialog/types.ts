@@ -4,9 +4,20 @@ import type {
   ItemCategory,
 } from '@bigcapital/sdk-ts';
 
+/**
+ * One extra field the category asks its items to fill in. A row that already
+ * exists carries its id, so renaming it keeps the values items hold for it;
+ * a row without one is new.
+ */
+export interface ItemCategoryFieldValue {
+  id?: number;
+  name: string;
+}
+
 export interface ItemCategoryFormValues {
   name: string;
   description: string;
+  fields: ItemCategoryFieldValue[];
   // The SDK body requires these but the form has no UI for them — kept as
   // empty defaults to satisfy the type. The transformFormToRequest helper
   // coerces them to the SDK body shape at submit time.

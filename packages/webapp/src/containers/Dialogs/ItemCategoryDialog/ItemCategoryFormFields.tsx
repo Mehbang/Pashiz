@@ -8,6 +8,7 @@ import {
   FTextArea,
 } from '@/components';
 import { useAutofocus } from '@/hooks';
+import { ItemCategoryFieldsEditor } from './ItemCategoryFieldsEditor';
 
 export function ItemCategoryFormFields(): React.ReactElement {
   const categoryNameFieldRef = useAutofocus<HTMLInputElement>();
@@ -45,6 +46,8 @@ export function ItemCategoryFormFields(): React.ReactElement {
           fastField
         />
       </FFormGroup>
+
+      <ItemCategoryFieldsEditor />
     </div>
   );
 }

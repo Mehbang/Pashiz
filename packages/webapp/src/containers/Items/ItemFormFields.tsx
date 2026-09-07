@@ -1,6 +1,7 @@
 import { Divider } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { ItemFormBasicSection } from './ItemFormBasicSection';
+import { ItemFormCategoryFieldsSection } from './ItemFormCategoryFieldsSection';
 import { ItemFormInventorySection } from './ItemFormInventorySection';
 import { ItemFormPurchasingSection } from './ItemFormPurchasingSection';
 import { ItemFormSellingSection } from './ItemFormSellingSection';
@@ -23,6 +24,8 @@ export function ItemFormSections() {
       <Divider className={itemFormSectionDividerClass} />
 
       <ItemFormInventorySection />
+
+      <ItemFormCategoryFieldsSection />
     </Box>
   );
 }

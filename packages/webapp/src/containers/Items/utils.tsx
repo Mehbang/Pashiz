@@ -51,6 +51,7 @@ const defaultInitialValues: ItemFormValues = {
   sellDescription: '',
   purchaseDescription: '',
   purchaseTaxRateId: '',
+  fieldValues: {},
 };
 
 type ItemsSettings = {
@@ -88,6 +89,17 @@ export const useItemFormInitialValues = (
         transformItemFormData(item, defaultInitialValues),
         defaultInitialValues,
       ) as Partial<ItemFormValues>),
+      // Carried across explicitly: the API returns a list of rows, the form
+      // wants a map, and `transformToForm` would only flatten by key.
+      fieldValues: Object.fromEntries(
+        (
+          (
+            item as {
+              fieldValues?: Array<{ categoryFieldId: number; value: string }>;
+            }
+          )?.fieldValues ?? []
+        ).map((row) => [String(row.categoryFieldId), row.value ?? '']),
+      ),
       ...(initialValues ?? {}),
     }),
     [item, itemsSettings, initialValues],

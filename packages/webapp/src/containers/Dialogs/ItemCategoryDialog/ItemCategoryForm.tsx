@@ -21,6 +21,7 @@ import { compose, transformToForm } from '@/utils';
 const defaultInitialValues: ItemCategoryFormValues = {
   name: '',
   description: '',
+  fields: [],
   costAccountId: '',
   sellAccountId: '',
   inventoryAccountId: '',
@@ -47,6 +48,14 @@ const transformFormToCreateBody = (
     sellAccountId: toAccountId(values.sellAccountId),
     inventoryAccountId: toAccountId(values.inventoryAccountId),
     costMethod: values.costMethod,
+    // The list is the whole truth on the server: a row dropped here is a field
+    // deleted there. Blank rows are the ones the user added and never named.
+    fields: (values.fields ?? [])
+      .filter((field) => field.name.trim().length > 0)
+      .map((field) => ({
+        ...(field.id ? { id: field.id } : {}),
+        name: field.name.trim(),
+      })),
   }) as CreateItemCategoryBody;
 
 const transformFormToEditBody = (
@@ -75,6 +84,12 @@ function ItemCategoryFormInner({
     () => ({
       ...defaultInitialValues,
       ...transformToForm(itemCategory, defaultInitialValues),
+      // Carried across explicitly: `transformToForm` flattens by key against
+      // the defaults, and an empty default array would drop the rows.
+      fields: (
+        (itemCategory as { fields?: Array<{ id: number; name: string }> })
+          ?.fields ?? []
+      ).map((field) => ({ id: field.id, name: field.name })),
     }),
     [itemCategory],
   );

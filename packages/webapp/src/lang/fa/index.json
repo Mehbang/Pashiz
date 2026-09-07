@@ -2977,5 +2977,13 @@
   "payment_page.sample_organization": "شرکت نمونه",
   "payment_page.sample_customer": "مشتری نمونه",
   "show_password": "نمایش گذرواژه",
-  "hide_password": "پنهان کردن گذرواژه"
+  "hide_password": "پنهان کردن گذرواژه",
+  "item_category.fields.label": "فیلدهای دسته‌بندی",
+  "item_category.fields.hint": "کالاهای این دسته این فیلدها را پر می‌کنند — نویسنده برای کتاب، سایز برای لباس.",
+  "item_category.fields.placeholder": "نام فیلد",
+  "item_category.fields.add": "افزودن فیلد",
+  "item_category.fields.remove": "حذف این فیلد",
+  "item_category.fields.duplicate": "دو فیلد نمی‌توانند یک نام داشته باشند.",
+  "item.category_fields.label": "فیلدهای دسته‌بندی",
+  "item.category_fields.empty": "این دسته‌بندی فیلد اضافه‌ای ندارد."
 }

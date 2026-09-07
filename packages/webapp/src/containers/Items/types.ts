@@ -24,6 +24,12 @@ export interface ItemFormValues {
   sellDescription: string;
   purchaseDescription: string;
   purchaseTaxRateId: number | string;
+  /**
+   * What this item has filled in for its category's fields, keyed by the
+   * field's id. Keyed by id rather than name so renaming a field on the
+   * category keeps whatever items had typed under it.
+   */
+  fieldValues: Record<string, string>;
 }
 
 export type ItemFormType = 'service' | 'non-inventory' | 'inventory';
