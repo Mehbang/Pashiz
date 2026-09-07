@@ -10,13 +10,19 @@
       .cell-inner {
         display: flex;
         align-items: center;
+        justify-content: center;
       }
 
-      // Auto margins rather than `justify-content` alone: they split whatever
-      // space is left equally, so the button lands in the middle of the cell
-      // even if something upstream pads one side more than the other.
-      .bp4-button {
-        margin-inline: auto;
+      // Blueprint puts the button inside a popover wrapper of its own. That
+      // wrapper is the flex item here, not the button — which is why centring
+      // the button, or giving it auto margins, did nothing at all. Centring has
+      // to reach through it.
+      .bp4-popover-wrapper,
+      .bp4-popover-target {
+        display: flex;
+        flex: 0 0 auto;
+        width: auto;
+        justify-content: center;
       }
     }
   }
