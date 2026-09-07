@@ -122,7 +122,7 @@ export const ExpenseMeta = {
       printable: false,
     },
     branch: {
-      name: 'Branch',
+      name: 'resource.branch',
       type: 'text',
       accessor: 'branch.name',
       features: [Features.BRANCHES],

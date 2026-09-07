@@ -1,7 +1,7 @@
 export const BranchMeta = {
   fields2: {
     name: {
-      name: 'Name',
+      name: 'resource.name',
       fieldType: 'text',
       required: true,
     },

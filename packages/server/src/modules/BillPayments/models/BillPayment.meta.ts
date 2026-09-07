@@ -93,11 +93,11 @@ export const BillPaymentMeta = {
       type: 'text',
     },
     amount: {
-      name: 'Amount',
+      name: 'resource.amount',
       accessor: 'formattedAmount',
     },
     currencyCode: {
-      name: 'Currency Code',
+      name: 'resource.currency_code',
       type: 'text',
       printable: false,
     },
@@ -116,35 +116,35 @@ export const BillPaymentMeta = {
       type: 'text',
     },
     entries: {
-      name: 'Entries',
+      name: 'resource.entries',
       accessor: 'entries',
       type: 'collection',
       collectionOf: 'object',
       columns: {
         date: {
-          name: 'Bill date',
+          name: 'resource.bill_date',
           accessor: 'bill.formattedBillDate',
         },
         billNo: {
-          name: 'Bill No.',
+          name: 'resource.bill_no',
           accessor: 'bill.billNo',
         },
         billRefNo: {
-          name: 'Bill Reference No.',
+          name: 'resource.bill_reference_no',
           accessor: 'bill.referenceNo',
         },
         billAmount: {
-          name: 'Bill Amount',
+          name: 'resource.bill_amount',
           accessor: 'bill.totalFormatted',
         },
         paidAmount: {
-          name: 'Paid Amount',
+          name: 'resource.paid_amount',
           accessor: 'paymentAmountFormatted',
         },
       },
     },
     branch: {
-      name: 'Branch',
+      name: 'resource.branch',
       type: 'text',
       accessor: 'branch.name',
       features: [Features.BRANCHES],

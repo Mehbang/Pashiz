@@ -93,70 +93,70 @@ export const CreditNoteMeta = {
   },
   columns: {
     customer: {
-      name: 'Customer',
+      name: 'resource.customer',
       accessor: 'customer.displayName',
     },
     exchangeRate: {
-      name: 'Exchange Rate',
+      name: 'resource.exchange_rate',
       printable: false,
     },
     creditNoteDate: {
-      name: 'Credit Note Date',
+      name: 'resource.credit_note_date',
       accessor: 'formattedCreditNoteDate',
     },
     referenceNo: {
-      name: 'Reference No.',
+      name: 'resource.reference_no',
     },
     note: {
-      name: 'Note',
+      name: 'resource.note',
     },
     termsConditions: {
-      name: 'Terms & Conditions',
+      name: 'resource.terms_conditions',
       printable: false,
     },
     creditNoteNumber: {
-      name: 'Credit Note Number',
+      name: 'resource.credit_note_number',
       printable: false,
     },
     open: {
-      name: 'Open',
+      name: 'resource.open',
       type: 'boolean',
       printable: false,
     },
     entries: {
-      name: 'Entries',
+      name: 'resource.entries',
       type: 'collection',
       collectionOf: 'object',
       columns: {
         itemName: {
-          name: 'Item Name',
+          name: 'resource.item_name',
           accessor: 'item.name',
         },
         rate: {
-          name: 'Item Rate',
+          name: 'resource.item_rate',
           accessor: 'rateFormatted',
         },
         quantity: {
-          name: 'Item Quantity',
+          name: 'resource.item_quantity',
           accessor: 'quantityFormatted',
         },
         description: {
-          name: 'Item Description',
+          name: 'resource.item_description',
         },
         amount: {
-          name: 'Item Amount',
+          name: 'resource.item_amount',
           accessor: 'totalFormatted',
         },
       },
     },
     branch: {
-      name: 'Branch',
+      name: 'resource.branch',
       type: 'text',
       accessor: 'branch.name',
       features: [Features.BRANCHES],
     },
     warehouse: {
-      name: 'Warehouse',
+      name: 'resource.warehouse',
       type: 'text',
       accessor: 'warehouse.name',
       features: [Features.BRANCHES],

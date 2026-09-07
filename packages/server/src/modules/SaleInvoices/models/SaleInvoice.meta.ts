@@ -136,11 +136,11 @@ export const SaleInvoiceMeta = {
       printable: false,
     },
     paidAmount: {
-      name: 'Paid Amount',
+      name: 'resource.paid_amount',
       accessor: 'paymentAmountFormatted',
     },
     dueAmount: {
-      name: 'Due Amount',
+      name: 'resource.due_amount',
       accessor: 'dueAmountFormatted',
     },
     invoiceMessage: {
@@ -160,41 +160,41 @@ export const SaleInvoiceMeta = {
       accessor: 'isDelivered',
     },
     entries: {
-      name: 'Entries',
+      name: 'resource.entries',
       accessor: 'entries',
       type: 'collection',
       collectionOf: 'object',
       columns: {
         itemName: {
-          name: 'Item Name',
+          name: 'resource.item_name',
           accessor: 'item.name',
         },
         rate: {
-          name: 'Item Rate',
+          name: 'resource.item_rate',
           accessor: 'rateFormatted',
         },
         quantity: {
-          name: 'Item Quantity',
+          name: 'resource.item_quantity',
           accessor: 'quantityFormatted',
         },
         description: {
-          name: 'Item Description',
+          name: 'resource.item_description',
           printable: false,
         },
         amount: {
-          name: 'Item Amount',
+          name: 'resource.item_amount',
           accessor: 'totalFormatted',
         },
       },
     },
     branch: {
-      name: 'Branch',
+      name: 'resource.branch',
       type: 'text',
       accessor: 'branch.name',
       features: [Features.BRANCHES],
     },
     warehouse: {
-      name: 'Warehouse',
+      name: 'resource.warehouse',
       type: 'text',
       accessor: 'warehouse.name',
       features: [Features.BRANCHES],

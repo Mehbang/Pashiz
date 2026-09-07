@@ -99,29 +99,29 @@ export const PaymentReceivedMeta = {
       printable: false,
     },
     entries: {
-      name: 'Entries',
+      name: 'resource.entries',
       accessor: 'entries',
       type: 'collection',
       collectionOf: 'object',
       columns: {
         date: {
-          name: 'Invoice date',
+          name: 'resource.invoice_date',
           accessor: 'invoice.invoiceDateFormatted',
         },
         invoiceNo: {
-          name: 'Invoice No.',
+          name: 'resource.invoice_no',
           accessor: 'invoice.invoiceNo',
         },
         invoiceRefNo: {
-          name: 'Invoice Reference No.',
+          name: 'resource.invoice_reference_no',
           accessor: 'invoice.referenceNo',
         },
         invoiceAmount: {
-          name: 'Invoice Amount',
+          name: 'resource.invoice_amount',
           accessor: 'invoice.totalFormatted',
         },
         paidAmount: {
-          name: 'Paid Amount',
+          name: 'resource.paid_amount',
           accessor: 'paymentAmountFormatted',
         },
       },
@@ -132,7 +132,7 @@ export const PaymentReceivedMeta = {
       printable: false,
     },
     branch: {
-      name: 'Branch',
+      name: 'resource.branch',
       type: 'text',
       accessor: 'branch.name',
       features: [Features.BRANCHES],

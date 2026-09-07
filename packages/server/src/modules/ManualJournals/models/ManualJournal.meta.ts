@@ -83,7 +83,7 @@ export const ManualJournalMeta = {
       type: 'text',
     },
     amount: {
-      name: 'Amount',
+      name: 'resource.amount',
       accessor: 'formattedAmount',
     },
     currencyCode: {
@@ -101,42 +101,42 @@ export const ManualJournalMeta = {
       type: 'text',
     },
     entries: {
-      name: 'Entries',
+      name: 'resource.entries',
       type: 'collection',
       collectionOf: 'object',
       columns: {
         credit: {
-          name: 'Credit',
+          name: 'resource.credit',
           type: 'text',
         },
         debit: {
-          name: 'Debit',
+          name: 'resource.debit',
           type: 'text',
         },
         account: {
-          name: 'Account',
+          name: 'resource.account',
           accessor: 'account.name',
         },
         contact: {
-          name: 'Contact',
+          name: 'resource.contact',
           accessor: 'contact.displayName',
         },
         note: {
-          name: 'Note',
+          name: 'resource.note',
         },
       },
       publish: {
-        name: 'Publish',
+        name: 'resource.publish',
         type: 'boolean',
         printable: false,
       },
       publishedAt: {
-        name: 'Published At',
+        name: 'resource.published_at',
         printable: false,
       },
     },
     createdAt: {
-      name: 'Created At',
+      name: 'resource.created_at',
       accessor: 'formattedCreatedAt',
       printable: false,
     },
@@ -173,43 +173,43 @@ export const ManualJournalMeta = {
       fieldType: 'text',
     },
     entries: {
-      name: 'Entries',
+      name: 'resource.entries',
       fieldType: 'collection',
       collectionOf: 'object',
       collectionMinLength: 2,
       required: true,
       fields: {
         credit: {
-          name: 'Credit',
+          name: 'resource.credit',
           fieldType: 'number',
           required: true,
         },
         debit: {
-          name: 'Debit',
+          name: 'resource.debit',
           fieldType: 'number',
           required: true,
         },
         accountId: {
-          name: 'Account',
+          name: 'resource.account',
           fieldType: 'relation',
           relationModel: 'Account',
           relationImportMatch: ['name', 'code'],
           required: true,
         },
         contact: {
-          name: 'Contact',
+          name: 'resource.contact',
           fieldType: 'relation',
           relationModel: 'Contact',
           relationImportMatch: 'displayName',
         },
         note: {
-          name: 'Note',
+          name: 'resource.note',
           fieldType: 'text',
         },
       },
     },
     publish: {
-      name: 'Publish',
+      name: 'resource.publish',
       fieldType: 'boolean',
     },
   },

@@ -89,94 +89,94 @@ export const BillMeta = {
   },
   columns: {
     billDate: {
-      name: 'Date',
+      name: 'resource.date',
       accessor: 'formattedBillDate',
     },
     billNumber: {
-      name: 'Bill No.',
+      name: 'resource.bill_no',
       type: 'text',
     },
     referenceNo: {
-      name: 'Reference No.',
+      name: 'resource.reference_no',
       type: 'text',
     },
     dueDate: {
-      name: 'Due Date',
+      name: 'resource.due_date',
       type: 'date',
       accessor: 'formattedDueDate',
     },
     vendorId: {
-      name: 'Vendor',
+      name: 'resource.vendor',
       accessor: 'vendor.displayName',
       type: 'text',
     },
     amount: {
-      name: 'Amount',
+      name: 'resource.amount',
       accessor: 'formattedAmount',
     },
     exchangeRate: {
-      name: 'Exchange Rate',
+      name: 'resource.exchange_rate',
       type: 'number',
       printable: false,
     },
     currencyCode: {
-      name: 'Currency Code',
+      name: 'resource.currency_code',
       type: 'text',
       printable: false,
     },
     dueAmount: {
-      name: 'Due Amount',
+      name: 'resource.due_amount',
       accessor: 'formattedDueAmount',
     },
     paidAmount: {
-      name: 'Paid Amount',
+      name: 'resource.paid_amount',
       accessor: 'formattedPaymentAmount',
     },
     note: {
-      name: 'Note',
+      name: 'resource.note',
       type: 'text',
       printable: false,
     },
     open: {
-      name: 'Open',
+      name: 'resource.open',
       type: 'boolean',
       printable: false,
     },
     entries: {
-      name: 'Entries',
+      name: 'resource.entries',
       accessor: 'entries',
       type: 'collection',
       collectionOf: 'object',
       columns: {
         itemName: {
-          name: 'Item Name',
+          name: 'resource.item_name',
           accessor: 'item.name',
         },
         rate: {
-          name: 'Item Rate',
+          name: 'resource.item_rate',
           accessor: 'rateFormatted',
         },
         quantity: {
-          name: 'Item Quantity',
+          name: 'resource.item_quantity',
           accessor: 'quantityFormatted',
         },
         description: {
-          name: 'Item Description',
+          name: 'resource.item_description',
         },
         amount: {
-          name: 'Item Amount',
+          name: 'resource.item_amount',
           accessor: 'totalFormatted',
         },
       },
     },
     branch: {
-      name: 'Branch',
+      name: 'resource.branch',
       type: 'text',
       accessor: 'branch.name',
       features: [Features.BRANCHES],
     },
     warehouse: {
-      name: 'Warehouse',
+      name: 'resource.warehouse',
       type: 'text',
       accessor: 'warehouse.name',
       features: [Features.BRANCHES],
