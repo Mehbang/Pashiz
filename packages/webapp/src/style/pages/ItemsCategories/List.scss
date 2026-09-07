@@ -1,1 +1,11 @@
-
+.dashboard__insider--items-categories-list {
+  .bigcapital-datatable {
+    .table .tbody .tr .td.actions {
+      // The three-dot button sat flush against the edge of the table. Logical
+      // padding so it pulls inward in both directions — the actions column is
+      // the last one, which is the left edge of a right-to-left table.
+      padding-inline-end: 14px;
+      justify-content: flex-end;
+    }
+  }
+}
