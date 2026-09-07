@@ -10,6 +10,10 @@ import { ImportableModel } from '@/modules/Import/decorators/Import.decorator';
 import { PreventMutateBaseCurrency } from '@/common/decorators/LockMutateBaseCurrency.decorator';
 import { InjectModelDefaultViews } from '@/modules/Views/decorators/InjectModelDefaultViews.decorator';
 import { ItemDefaultViews } from '../Items.constants';
+import {
+  categoryFieldFilterQuery,
+  parseCategoryFieldKey,
+} from '../utils/category-field-filter';
 
 @ExportableModel()
 @ImportableModel()
@@ -114,6 +118,28 @@ export class Item extends TenantBaseModel {
   /**
    * Relationship mapping.
    */
+  /**
+   * Resolves a filter field, including the ones a category invented.
+   *
+   * Fields defined on a category are not columns and are not known when this
+   * file is written, so they cannot live in the static meta. A filter naming
+   * one arrives as `categoryField_<id>` and is answered here with an ordinary
+   * text field that carries its own query.
+   */
+  static getField(key: string, attribute?: string): any {
+    const fieldId = parseCategoryFieldKey(key);
+
+    if (fieldId !== null) {
+      const field = {
+        name: key,
+        fieldType: 'text',
+        filterCustomQuery: categoryFieldFilterQuery(fieldId),
+      };
+      return attribute ? field[attribute] : field;
+    }
+    return super.getField(key, attribute);
+  }
+
   static get relationMappings() {
     const { ItemFieldValue } = require('./ItemFieldValue.model');
     // const { Media } = require('../../Media/models/Media.model');

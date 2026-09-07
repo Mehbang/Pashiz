@@ -86,9 +86,14 @@ export const transformItemFormData = (
   item: Partial<Item> | undefined,
   defaultValue: ItemFormValues,
 ): ItemFormValues => {
+  // The API returns the category answers as a list of rows; the form holds them
+  // as a map keyed by field id, built separately in `useItemFormInitialValues`.
+  // Spreading the list over the map here would put the wrong shape in the form.
+  const { fieldValues, ...itemAttributes } = item ?? {};
+
   return {
     ...defaultValue,
-    ...item,
+    ...itemAttributes,
     sellable: !!defaultTo(item?.sellable, defaultValue.sellable),
     purchasable: !!defaultTo(item?.purchasable, defaultValue.purchasable),
     active: !!defaultTo(item?.active, defaultValue.active),

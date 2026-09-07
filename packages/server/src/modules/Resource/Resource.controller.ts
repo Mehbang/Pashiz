@@ -31,13 +31,23 @@ export class ResourceController {
       $ref: getSchemaPath(ResourceMetaResponseDto),
     },
   })
-  getResourceMeta(
+  async getResourceMeta(
     @Param('resourceModel') resourceModel: string,
-  ): ResourceMetaResponseDto {
+  ): Promise<ResourceMetaResponseDto> {
     const resourceMeta = this.resourcesService.getResourceMeta(resourceModel);
+    const localized = this.resourcesService.localizeResourceMeta(resourceMeta);
 
-    return this.resourcesService.localizeResourceMeta(
-      resourceMeta,
-    ) as ResourceMetaResponseDto;
+    // Items carry whatever fields their categories invented; every other
+    // resource's field list is fully known from its meta.
+    if (resourceModel.toLowerCase() !== 'items') {
+      return localized as ResourceMetaResponseDto;
+    }
+    const categoryFields =
+      await this.resourcesService.getCategoryFilterFields();
+
+    return {
+      ...localized,
+      fields: { ...localized.fields, ...categoryFields },
+    } as ResourceMetaResponseDto;
   }
 }

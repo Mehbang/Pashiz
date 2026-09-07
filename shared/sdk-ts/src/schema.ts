@@ -5597,6 +5597,25 @@ export interface components {
             /** @description Pagination metadata */
             pagination: components["schemas"]["Pagination"];
         };
+        ItemFieldValueResponseDto: {
+            /**
+             * @description The value ID
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The category field being answered
+             * @example 1
+             */
+            categoryFieldId: number;
+            /**
+             * @description The value
+             * @example محمود دولت‌آبادی
+             */
+            value: string;
+            /** @description The field definition, so the value can be labelled */
+            categoryField?: Record<string, never>;
+        };
         ItemResponseDto: {
             /**
              * @description The unique identifier of the item
@@ -5702,6 +5721,8 @@ export interface components {
              * @example 50
              */
             quantityOnHand?: number;
+            /** @description Values this item carries for its category's fields */
+            fieldValues?: components["schemas"]["ItemFieldValueResponseDto"][];
             /**
              * @description The ID of the unit the item is counted in
              * @example 1
@@ -5780,6 +5801,18 @@ export interface components {
              * @example 2024-03-20T10:00:00Z
              */
             updatedAt: string;
+        };
+        ItemFieldValueDto: {
+            /**
+             * @description The category field being answered
+             * @example 1
+             */
+            categoryFieldId: number;
+            /**
+             * @description The value
+             * @example محمود دولت‌آبادی
+             */
+            value: string;
         };
         EditItemDto: {
             /**
@@ -5893,6 +5926,8 @@ export interface components {
              *     ]
              */
             mediaIds?: number[];
+            /** @description Values for the fields this item's category defines */
+            fieldValues?: components["schemas"]["ItemFieldValueDto"][];
         };
         BulkDeleteItemsDto: {
             /**
@@ -6022,6 +6057,8 @@ export interface components {
              *     ]
              */
             mediaIds?: number[];
+            /** @description Values for the fields this item's category defines */
+            fieldValues?: components["schemas"]["ItemFieldValueDto"][];
         };
         ItemLinkDto: {
             /**
@@ -8732,6 +8769,28 @@ export interface components {
              */
             nonDeletableIds: number[];
         };
+        ItemCategoryFieldResponseDto: {
+            /**
+             * @description The field ID
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The category that defines it
+             * @example 1
+             */
+            categoryId: number;
+            /**
+             * @description The field label
+             * @example نویسنده
+             */
+            name: string;
+            /**
+             * @description The order it is shown in
+             * @example 0
+             */
+            index: number;
+        };
         ItemCategoryResponseDto: {
             /**
              * @description The unique identifier of the item category
@@ -8768,6 +8827,8 @@ export interface components {
              * @example FIFO
              */
             costMethod?: string;
+            /** @description The extra fields items in this category fill in */
+            fields?: components["schemas"]["ItemCategoryFieldResponseDto"][];
             /**
              * @description The user ID who created the category
              * @example 1
@@ -8790,6 +8851,18 @@ export interface components {
              * @example 5
              */
             count: number;
+        };
+        ItemCategoryFieldDto: {
+            /**
+             * @description The field ID, when it already exists
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The field label
+             * @example نویسنده
+             */
+            name: string;
         };
         CreateItemCategoryDto: {
             /**
@@ -8822,6 +8895,8 @@ export interface components {
              * @example FIFO
              */
             costMethod: string;
+            /** @description The extra fields items in this category fill in */
+            fields?: components["schemas"]["ItemCategoryFieldDto"][];
         };
         EditItemCategoryDto: {
             /**
@@ -8854,6 +8929,8 @@ export interface components {
              * @example FIFO
              */
             costMethod: string;
+            /** @description The extra fields items in this category fill in */
+            fields?: components["schemas"]["ItemCategoryFieldDto"][];
         };
         BulkDeleteItemCategoriesDto: {
             /**

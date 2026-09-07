@@ -2,7 +2,7 @@ import { ModuleRef } from '@nestjs/core';
 import { pickBy, mapValues } from 'lodash';
 import { I18nService } from 'nestjs-i18n';
 import { WarehousesSettings } from '../Warehouses/WarehousesSettings';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { BranchesSettingsService } from '../Branches/BranchesSettings';
 import { ServiceError } from '../Items/ServiceError';
 import { IModelMetaColumn, IModelMetaField2 } from '@/interfaces/Model';
@@ -10,6 +10,9 @@ import { IModelMeta } from '@/interfaces/Model';
 import { IModelMetaField } from '@/interfaces/Model';
 import { Features } from '@/common/types/Features';
 import { resourceToModelName } from './_utils';
+import { ItemCategoryField } from '@/modules/ItemCategories/models/ItemCategoryField.model';
+import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
+import { categoryFieldKey } from '@/modules/Items/utils/category-field-filter';
 
 const ERRORS = {
   RESOURCE_MODEL_NOT_FOUND: 'RESOURCE_MODEL_NOT_FOUND',
@@ -22,6 +25,11 @@ export class ResourceService {
     private readonly warehousesSettings: WarehousesSettings,
     private readonly moduleRef: ModuleRef,
     private readonly i18nService: I18nService,
+
+    @Inject(ItemCategoryField.name)
+    private readonly itemCategoryFieldModel: TenantModelProxy<
+      typeof ItemCategoryField
+    >,
   ) {}
 
   /**
@@ -185,6 +193,34 @@ export class ResourceService {
    * @param {IModelMeta} meta - The resource meta to localize.
    * @returns {IModelMeta} - The localized resource meta.
    */
+  /**
+   * The filter fields an organization invented on its categories.
+   *
+   * They belong to no column and are not known until the database is read, so
+   * they are appended to the item resource's meta rather than declared in it.
+   * Two categories may both define "رنگ"; the name is shown once per category
+   * field, since they are separate fields that happen to share a label.
+   */
+  public async getCategoryFilterFields(): Promise<Record<string, any>> {
+    const fields = await this.itemCategoryFieldModel()
+      .query()
+      .withGraphFetched('category')
+      .orderBy('index', 'asc');
+
+    return fields.reduce(
+      (acc, field) => {
+        const category = (field as any).category?.name;
+
+        acc[categoryFieldKey(field.id)] = {
+          name: category ? `${field.name} — ${category}` : field.name,
+          fieldType: 'text',
+        };
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+  }
+
   public localizeResourceMeta(meta: IModelMeta): IModelMeta {
     return {
       ...meta,

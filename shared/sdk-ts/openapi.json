@@ -25549,6 +25549,35 @@
           "pagination"
         ]
       },
+      "ItemFieldValueResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "The value ID"
+          },
+          "categoryFieldId": {
+            "type": "number",
+            "example": 1,
+            "description": "The category field being answered"
+          },
+          "value": {
+            "type": "string",
+            "example": "محمود دولت‌آبادی",
+            "description": "The value"
+          },
+          "categoryField": {
+            "type": "object",
+            "description": "The field definition, so the value can be labelled"
+          }
+        },
+        "required": [
+          "id",
+          "categoryFieldId",
+          "value"
+        ]
+      },
       "ItemResponseDto": {
         "type": "object",
         "properties": {
@@ -25668,6 +25697,13 @@
             "description": "The quantity of the item in stock (for inventory items)",
             "example": 50
           },
+          "fieldValues": {
+            "description": "Values this item carries for its category's fields",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemFieldValueResponseDto"
+            }
+          },
           "unitId": {
             "type": "number",
             "description": "The ID of the unit the item is counted in",
@@ -25769,6 +25805,25 @@
           "active",
           "createdAt",
           "updatedAt"
+        ]
+      },
+      "ItemFieldValueDto": {
+        "type": "object",
+        "properties": {
+          "categoryFieldId": {
+            "type": "number",
+            "example": 1,
+            "description": "The category field being answered"
+          },
+          "value": {
+            "type": "string",
+            "example": "محمود دولت‌آبادی",
+            "description": "The value"
+          }
+        },
+        "required": [
+          "categoryFieldId",
+          "value"
         ]
       },
       "EditItemDto": {
@@ -25896,6 +25951,13 @@
             "type": "array",
             "items": {
               "type": "number"
+            }
+          },
+          "fieldValues": {
+            "description": "Values for the fields this item's category defines",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemFieldValueDto"
             }
           }
         },
@@ -26054,6 +26116,13 @@
             "type": "array",
             "items": {
               "type": "number"
+            }
+          },
+          "fieldValues": {
+            "description": "Values for the fields this item's category defines",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemFieldValueDto"
             }
           }
         },
@@ -30157,6 +30226,37 @@
           "nonDeletableIds"
         ]
       },
+      "ItemCategoryFieldResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "The field ID"
+          },
+          "categoryId": {
+            "type": "number",
+            "example": 1,
+            "description": "The category that defines it"
+          },
+          "name": {
+            "type": "string",
+            "example": "نویسنده",
+            "description": "The field label"
+          },
+          "index": {
+            "type": "number",
+            "example": 0,
+            "description": "The order it is shown in"
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "name",
+          "index"
+        ]
+      },
       "ItemCategoryResponseDto": {
         "type": "object",
         "properties": {
@@ -30195,6 +30295,13 @@
             "example": "FIFO",
             "description": "The cost method"
           },
+          "fields": {
+            "description": "The extra fields items in this category fill in",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemCategoryFieldResponseDto"
+            }
+          },
           "userId": {
             "type": "number",
             "example": 1,
@@ -30225,6 +30332,25 @@
           "createdAt",
           "updatedAt",
           "count"
+        ]
+      },
+      "ItemCategoryFieldDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "The field ID, when it already exists"
+          },
+          "name": {
+            "type": "string",
+            "example": "نویسنده",
+            "description": "The field label"
+          }
+        },
+        "required": [
+          "id",
+          "name"
         ]
       },
       "CreateItemCategoryDto": {
@@ -30259,6 +30385,13 @@
             "type": "string",
             "example": "FIFO",
             "description": "The cost method"
+          },
+          "fields": {
+            "description": "The extra fields items in this category fill in",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemCategoryFieldDto"
+            }
           }
         },
         "required": [
@@ -30302,6 +30435,13 @@
             "type": "string",
             "example": "FIFO",
             "description": "The cost method"
+          },
+          "fields": {
+            "description": "The extra fields items in this category fill in",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemCategoryFieldDto"
+            }
           }
         },
         "required": [
