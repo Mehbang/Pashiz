@@ -10,6 +10,12 @@ describe('category field filter keys', () => {
     expect(parseCategoryFieldKey('categoryField_12')).toBe(12);
   });
 
+  it('also accepts the snake-cased spelling the interface sends back', () => {
+    // The meta endpoint snake-cases its keys on the way out, so the filter
+    // arrives as `category_field_1` even though it is minted camel-cased.
+    expect(parseCategoryFieldKey('category_field_12')).toBe(12);
+  });
+
   it('leaves ordinary field keys alone', () => {
     // The item model falls back to its static meta for anything that is not
     // one of these, so an ordinary key must not be claimed here.
@@ -23,26 +29,31 @@ describe('category field filter keys', () => {
 describe('categoryFieldFilterQuery()', () => {
   /** A builder that records which existence form was asked for. */
   const spyBuilder = () => {
-    const calls: Array<{ kind: string; conditions: any[] }> = [];
+    const calls: Array<{ kind: string; conditions: any[]; raws: string[] }> =
+      [];
 
     const inner = () => {
       const conditions: any[] = [];
+      const raws: string[] = [];
       const qb: any = {
         select: () => qb,
         from: () => qb,
-        whereRaw: () => qb,
+        whereRaw: (sql: string) => {
+          raws.push(sql);
+          return qb;
+        },
         where: (...args: any[]) => {
           conditions.push(args);
           return qb;
         },
       };
-      return { qb, conditions };
+      return { qb, conditions, raws };
     };
 
     const record = (kind: string) => (fn: (qb: any) => void) => {
-      const { qb, conditions } = inner();
+      const { qb, conditions, raws } = inner();
       fn(qb);
-      calls.push({ kind, conditions });
+      calls.push({ kind, conditions, raws });
     };
 
     return {
@@ -88,6 +99,22 @@ describe('categoryFieldFilterQuery()', () => {
       'item_field_values.value',
       'LIKE',
       '%x%',
+    ]);
+  });
+
+  it('correlates the subquery in the casing the mapper produces', () => {
+    const builder = spyBuilder();
+
+    categoryFieldFilterQuery(1)(builder, {
+      comparator: 'contains',
+      value: 'x',
+    });
+
+    // Raw SQL escapes the snake-case mapper that upper-cases every other
+    // identifier, so a lower-case correlation compiles fine and then fails at
+    // the database with "Unknown column".
+    expect(builder.calls[0].raws).toEqual([
+      '`ITEM_FIELD_VALUES`.`ITEM_ID` = `ITEMS`.`ID`',
     ]);
   });
 

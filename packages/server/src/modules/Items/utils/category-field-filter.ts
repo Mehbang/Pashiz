@@ -12,9 +12,16 @@
 export const categoryFieldKey = (fieldId: number): string =>
   `categoryField_${fieldId}`;
 
-/** The field id behind such a key, or null if the key is an ordinary one. */
+/**
+ * The field id behind such a key, or null if the key is an ordinary one.
+ *
+ * Both spellings are accepted. The meta endpoint snake-cases its keys on the
+ * way out, so the interface reads `category_field_1` and sends that straight
+ * back — while the key is minted here as `categoryField_1`. Matching only the
+ * minted form means every filter the interface actually builds is rejected.
+ */
 export const parseCategoryFieldKey = (key: string): number | null => {
-  const match = /^categoryField_(\d+)$/.exec(key);
+  const match = /^category_?[Ff]ield_(\d+)$/.exec(key);
 
   return match ? Number(match[1]) : null;
 };
@@ -66,7 +73,10 @@ export const categoryFieldFilterQuery =
     const exists = (qb) => {
       qb.select('*')
         .from('item_field_values')
-        .whereRaw('item_field_values.item_id = items.id')
+        // Raw, so it escapes the snake-case mapper that upper-cases every
+        // other identifier in the query. Written the way the mapper would
+        // write it, or MySQL cannot find the column.
+        .whereRaw('`ITEM_FIELD_VALUES`.`ITEM_ID` = `ITEMS`.`ID`')
         .where('item_field_values.category_field_id', fieldId);
 
       applyComparator(qb, comparator, value);
