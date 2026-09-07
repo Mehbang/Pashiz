@@ -2,7 +2,7 @@ import { Intent, Tag, Classes } from '@blueprintjs/core';
 import clsx from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { localizedCurrencyLabel } from '@/utils/locale';
+import { localizedCurrencyLabel, localizedDigits } from '@/utils/locale';
 import { NormalCell, BalanceCell, BankBalanceCell } from './components';
 import type { AccountTableRow } from './components';
 import type { DataTableColumn } from '@/components/Datatable/types';
@@ -55,10 +55,12 @@ export const handleDeleteErrors = (errors: DeleteError[]) => {
   }
 };
 
+// The code is stored as plain digits — it has to stay sortable, searchable and
+// importable — so the Persian reading is applied here, at the point it is shown.
 export const AccountCodeAccessor = (row: AccountTableRow) =>
   !isBlank(row.code) ? (
     <Tag minimal round intent={Intent.NONE}>
-      {row.code}
+      {localizedDigits(row.code)}
     </Tag>
   ) : null;
 

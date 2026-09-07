@@ -197,15 +197,17 @@ export function PaymentPortal() {
                 loading={isStripeCheckoutLoading}
                 onClick={handlePayButtonClick}
               >
-                Pay {sharableLinkMeta?.totalFormatted}
+                {intl.get('pay_total', {
+                  total: sharableLinkMeta?.totalFormatted,
+                })}
               </Button>
             )}
         </Stack>
 
         <Text className={clsx(Classes.TEXT_MUTED, styles.buyNote)}>
-          {intl.get(
-            'by_confirming_your_payment_you_allow_bigcapital_technology_i',
-          )}
+          {intl.get('payment_page.consent_note', {
+            organization: sharableLinkMeta?.organization?.name,
+          })}
         </Text>
       </Stack>
 
@@ -217,7 +219,9 @@ export function PaymentPortal() {
         ></Box>
 
         <Stack spacing={0} className={styles.footerText}>
-          © 2024 Bigcapital Technology, Inc.
+          {`© ${new Date().getFullYear()} ${
+            sharableLinkMeta?.organization?.name ?? ''
+          }`}
           <br />
           {intl.get('all_rights_reserved_2')}
         </Stack>

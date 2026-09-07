@@ -1,0 +1,9 @@
+{
+  "field.date": "تاریخ",
+  "field.payee": "دریافت‌کننده",
+  "field.description": "شرح",
+  "field.reference_no": "شمارهٔ پیگیری",
+  "field.amount": "مبلغ",
+  "field.account": "حساب",
+  "field.created_at": "تاریخ ایجاد"
+}

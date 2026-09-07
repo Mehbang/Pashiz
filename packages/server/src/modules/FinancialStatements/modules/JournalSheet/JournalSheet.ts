@@ -67,7 +67,8 @@ export class JournalSheet extends FinancialSheet {
       contactType: get(contact, 'contactService'),
 
       accountName: account.name,
-      accountCode: account.code,
+      // Stored as plain digits; the sheet is what a person reads.
+      accountCode: this.localizeDigits(String(account.code ?? '')),
       transactionNumber: entry.transactionNumber,
 
       currencyCode: this.baseCurrency,

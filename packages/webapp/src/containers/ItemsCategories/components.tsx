@@ -13,6 +13,7 @@ import type { DataTableColumn } from '@/components/Datatable/types';
 import type { ItemCategory } from '@bigcapital/sdk-ts';
 import { Icon } from '@/components';
 import { safeCallback } from '@/utils';
+import { localizedDigits } from '@/utils/locale';
 
 // `count` is returned by the server at runtime but not declared on the SDK type.
 export type ItemCategoryTableRow = ItemCategory & { count?: number };
@@ -82,7 +83,9 @@ export function useItemsCategoriesTableColumns(): DataTableColumn<ItemCategoryTa
         {
           id: 'count',
           Header: intl.get('count'),
-          accessor: 'count',
+          // A bare number straight from the API, so it arrives in Latin digits
+          // whatever the locale.
+          accessor: (row: ItemCategoryTableRow) => localizedDigits(row.count),
           className: 'count',
           width: 180,
         },

@@ -11,6 +11,7 @@ import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { useMarkWarehouseAsPrimary } from '@/hooks/query';
 import { compose } from '@/utils';
+import { localizedDigits } from '@/utils/locale';
 
 interface WarehouseGridItemProps
   extends WithAlertActionsProps,
@@ -57,7 +58,7 @@ function WarehouseGridItem({
     >
       <WarehousesGridItemBox
         title={warehouse.name}
-        code={warehouse.code}
+        code={localizedDigits(warehouse.code)}
         city={warehouse.city}
         country={warehouse.country}
         primary={warehouse.primary}

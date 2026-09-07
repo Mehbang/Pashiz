@@ -207,7 +207,6 @@
   "expense_account": "Expense Account",
   "bulk_update": "Bulk Update",
   "all_accounts": "All accounts",
-  "go_to_bigcapital_com": "← Go to bigcapital.ly",
   "currency": "Currency",
   "new_conditional": "+ New Conditional",
   "chart_of_accounts": "Chart of Accounts",
@@ -2883,7 +2882,6 @@
   "once_you_delete_this_tax_rate_you_won_t_be_able_to_restore_t": "Once you delete this tax rate, you won't be able to restore the item later.",
   "are_you_sure_you_want_to_delete_if_you_re_not_sure_you_can_i": "Are you sure you want to delete ? If you're not sure, you can inactivate it instead.",
   "setup_the_organization_taxes_to_start_tracking_taxes_on_sale": "Setup the organization taxes to start tracking taxes on sales transactions.",
-  "by_confirming_your_payment_you_allow_bigcapital_technology_i": "By confirming your payment, you allow Bigcapital Technology, Inc. to charge you for this payment and save your payment information in accordance with their terms.",
   "download_a_sample_file_and_compare_it_with_your_import_file_": "Download a sample file and compare it with your import file to ensure it is properly formatted. It's not necessary for the columns to be in the same order, you can map them later.",
   "make_sure_to_check_that_the_item_rates_match_the_current_exc": "Make sure to check that the item rates match the current exchange rate of the newly selected currency before saving the transaction.",
   "select_an_expiration_date_and_generate_the_link_to_share_it_": "Select an expiration date and generate the link to share it with your customer. Remember that anyone who has access to this link can view, print or download it.",
@@ -2969,5 +2967,15 @@
   "item.field.secondary_unit_factor.hint": "How many secondary units make one primary unit? For kilogram and gram, 1000.",
   "item.field.quantity_secondary": "Stock in secondary unit",
   "entries.unit_quantity": "Qty",
-  "entries.secondary_unit_quantity": "Secondary Qty"
+  "entries.secondary_unit_quantity": "Secondary Qty",
+  "payment_page.consent_note": "By confirming your payment, you allow {organization} to charge you for this payment and save your payment information in accordance with their terms.",
+  "pdf_sample.terms": "All services provided are non-refundable. For any disputes, please contact us within 7 days of receiving this invoice.",
+  "pdf_sample.statement": "Thank you for your business. We look forward to working with you again!",
+  "pdf_sample.item_description": "Website development with content and SEO optimization",
+  "pdf_sample.address_billed_to": "Bigcapital Technology, Inc.<br />131 Continental Dr,<br />Suite 305,<br />Newark, Delaware 19713,<br />United States,<br />+1 762-339-5634",
+  "pdf_sample.address_billed_from": "131 Continental Dr Suite 305 Newark,<br />Delaware 19713,<br />United States,<br />+1 762-339-5634,<br />hello@example.com",
+  "payment_page.sample_organization": "Sample Company",
+  "payment_page.sample_customer": "Sample Customer",
+  "show_password": "Show password",
+  "hide_password": "Hide password"
 }

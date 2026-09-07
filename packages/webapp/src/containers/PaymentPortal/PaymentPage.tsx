@@ -114,14 +114,14 @@ export function InvoicePaymentPage({
   payInvoiceButtonProps,
 
   // # Buy note
-  buyNote = intl.get(
-    'by_confirming_your_payment_you_allow_bigcapital_technology_i',
-  ),
+  buyNote = intl.get('payment_page.consent_note', {
+    organization: organizationName,
+  }),
 
   // # Copyright
-  copyrightText = `© 2024 Bigcapital Technology, Inc. <br /> ${intl.get(
-    'all_rights_reserved_2',
-  )}`,
+  copyrightText = `© ${new Date().getFullYear()} ${
+    organizationName ?? ''
+  } <br /> ${intl.get('all_rights_reserved_2')}`,
   classNames,
 }: PaymentPageProps) {
   return (

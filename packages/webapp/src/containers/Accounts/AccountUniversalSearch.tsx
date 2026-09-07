@@ -5,6 +5,7 @@ import { AbilitySubject, AccountAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { localizedDigits } from '@/utils/locale';
 
 interface AccountUniversalSearchItemSelectProps extends WithDrawerActionsProps {
   resourceType: string;
@@ -32,7 +33,7 @@ export const AccountUniversalSearchItemSelect = withDrawerActions(
 
 const accountToSearch = (account: Account) => ({
   id: account.id,
-  text: `${account.name} - ${account.code}`,
+  text: `${account.name} - ${localizedDigits(account.code)}`,
   label: account.formattedAmount,
   reference: account,
 });

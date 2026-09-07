@@ -59,7 +59,7 @@ export class TransactionsByReference extends FinancialSheet {
       formattedContactType: transaction.contactType || '',
 
       accountName: transaction.account?.name || '',
-      accountCode: transaction.account?.code || '',
+      accountCode: this.localizeDigits(transaction.account?.code || ''),
       accountId: transaction.accountId,
     };
   };

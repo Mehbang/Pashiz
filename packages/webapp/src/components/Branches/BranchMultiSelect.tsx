@@ -3,6 +3,7 @@ import { MenuItem } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { FMultiSelect } from '../Forms';
+import { localizedDigits } from '@/utils/locale';
 
 /**
  *
@@ -51,7 +52,7 @@ const branchSelectProps = {
   itemPredicate: branchItemPredicate,
   itemRenderer: branchItemRenderer,
   valueAccessor: (item) => item.id,
-  labelAccessor: (item) => item.code,
+  labelAccessor: (item) => localizedDigits(item.code),
   tagRenderer: (item) => item.name,
 };
 

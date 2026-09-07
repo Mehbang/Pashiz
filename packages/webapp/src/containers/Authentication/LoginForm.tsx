@@ -19,7 +19,7 @@ export function LoginForm({ isSubmitting }: { isSubmitting: boolean }) {
 
   const lockButton = (
     <Tooltip2
-      content={`${showPassword ? intl.get('hide') : intl.get('show')} Password`}
+      content={intl.get(showPassword ? 'hide_password' : 'show_password')}
     >
       <Button
         icon={showPassword ? 'unlock' : 'lock'}

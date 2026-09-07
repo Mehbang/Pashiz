@@ -1,0 +1,9 @@
+{
+  "field.date": "Date",
+  "field.payee": "Payee",
+  "field.description": "Description",
+  "field.reference_no": "Reference No.",
+  "field.amount": "Amount",
+  "field.account": "Account",
+  "field.created_at": "Created At"
+}

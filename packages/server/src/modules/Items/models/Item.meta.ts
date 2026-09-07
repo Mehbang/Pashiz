@@ -83,12 +83,12 @@ export const ItemMeta = {
       relationEntityKey: 'slug',
     },
     sell_description: {
-      name: 'Sell description',
+      name: 'item.field.sell_description',
       column: 'sell_description',
       fieldType: 'text',
     },
     purchase_description: {
-      name: 'Purchase description',
+      name: 'item.field.purchase_description',
       column: 'purchase_description',
       fieldType: 'text',
     },
@@ -185,13 +185,13 @@ export const ItemMeta = {
       exportable: true,
     },
     sellDescription: {
-      name: 'Sell description',
+      name: 'item.field.sell_description',
       type: 'text',
       exportable: true,
       printable: false,
     },
     purchaseDescription: {
-      name: 'Purchase description',
+      name: 'item.field.purchase_description',
       type: 'text',
       exportable: true,
       printable: false,
