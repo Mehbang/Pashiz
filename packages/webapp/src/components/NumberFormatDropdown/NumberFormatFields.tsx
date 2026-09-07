@@ -4,21 +4,34 @@ import intl from 'react-intl-universal';
 import { FSelect, FFormGroup, FSwitch } from '@/components';
 import {
   moneyFormat,
-  negativeFormat,
-  decimalPlaces,
+  getNegativeFormats,
+  getDecimalPlaces,
 } from '@/constants/numberFormatsOptions';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 /**
  *  Number Formats Fields.
  */
 export default function NumberFormatFields() {
+  // The samples in these menus are amounts, so they are written in whatever the
+  // books are kept in rather than in dollars.
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+  const negativeFormats = React.useMemo(
+    () => getNegativeFormats(baseCurrency),
+    [baseCurrency],
+  );
+  const decimalPlaces = React.useMemo(
+    () => getDecimalPlaces(baseCurrency),
+    [baseCurrency],
+  );
+
   return (
     <div className={'number-format-dropdown__content'}>
       {/*------------ Negative formats -----------*/}
       <FFormGroup name={'negativeFormat'} label={intl.get('negative_format')}>
         <FSelect
           name={'negativeFormat'}
-          items={negativeFormat}
+          items={negativeFormats}
           valueAccessor={'key'}
           textAccessor={'text'}
           popoverProps={{ minimal: true, captureDismiss: true }}

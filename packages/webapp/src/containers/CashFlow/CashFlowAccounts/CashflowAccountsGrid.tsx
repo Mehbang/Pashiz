@@ -28,6 +28,7 @@ import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { safeCallback } from '@/utils';
 import { compose } from '@/utils';
+import { localizedDigits } from '@/utils/locale';
 
 const CASHFLOW_SKELETON_N = 4;
 
@@ -146,7 +147,7 @@ function CashflowBankAccount({
       >
         <BankAccount
           title={account.name}
-          code={account.code}
+          code={localizedDigits(account.code)}
           balance={account.amount != null ? account.formattedAmount : '-'}
           type={account.accountType}
           updatedBeforeText={

@@ -4,6 +4,7 @@ import intl from 'react-intl-universal';
 import type { Branch } from '@bigcapital/sdk-ts';
 import { Icon, If } from '@/components';
 import { safeCallback } from '@/utils';
+import { localizedDigits } from '@/utils/locale';
 
 export interface ActionsMenuPayload {
   onEdit?: (branch: Branch) => void;
@@ -82,7 +83,7 @@ export function useBranchesTableColumns() {
       {
         id: 'code',
         Header: intl.get('branches.column.code'),
-        accessor: 'code',
+        accessor: (row: any) => localizedDigits(row.code),
         width: '100',
         disableSortBy: true,
         textOverview: true,
