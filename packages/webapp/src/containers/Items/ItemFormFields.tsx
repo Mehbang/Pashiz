@@ -1,30 +1,27 @@
-import { Divider } from '@blueprintjs/core';
-import { css } from '@emotion/css';
 import { ItemFormBasicSection } from './ItemFormBasicSection';
 import { ItemFormCategoryFieldsSection } from './ItemFormCategoryFieldsSection';
 import { ItemFormInventorySection } from './ItemFormInventorySection';
 import { ItemFormPurchasingSection } from './ItemFormPurchasingSection';
+import { ItemFormSectionDivider } from './ItemFormSectionDivider';
 import { ItemFormSellingSection } from './ItemFormSellingSection';
 import { Box } from '@/components';
-
-const itemFormSectionDividerClass = css`
-  margin: 20px 0;
-`;
 
 export function ItemFormSections() {
   return (
     <Box>
       <ItemFormBasicSection />
-      <Divider className={itemFormSectionDividerClass} />
+      <ItemFormSectionDivider />
 
       <ItemFormSellingSection />
-      <Divider className={itemFormSectionDividerClass} />
+      <ItemFormSectionDivider />
 
       <ItemFormPurchasingSection />
-      <Divider className={itemFormSectionDividerClass} />
+      <ItemFormSectionDivider />
 
       <ItemFormInventorySection />
 
+      {/* Carries its own divider: the section vanishes when the chosen
+          category defines no fields, and the rule has to vanish with it. */}
       <ItemFormCategoryFieldsSection />
     </Box>
   );

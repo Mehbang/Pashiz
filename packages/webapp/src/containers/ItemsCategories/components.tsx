@@ -55,6 +55,10 @@ export function ActionMenuList({
 
 /**
  * Table actions cell.
+ *
+ * The same menu the row's context menu shows. It was written but never given a
+ * column, which left editing a category reachable only by right-clicking it —
+ * every other list in the application shows this button.
  */
 export function TableActionsCell(props: ActionMenuListProps) {
   return (
@@ -95,6 +99,14 @@ export function useItemsCategoriesTableColumns(): DataTableColumn<ItemCategoryTa
           accessor: 'description',
           className: 'description',
           width: 220,
+        },
+        {
+          id: 'actions',
+          Header: '',
+          Cell: TableActionsCell,
+          className: 'actions',
+          width: 50,
+          disableResizing: true,
         },
       ] as DataTableColumn<ItemCategoryTableRow>[],
     [],

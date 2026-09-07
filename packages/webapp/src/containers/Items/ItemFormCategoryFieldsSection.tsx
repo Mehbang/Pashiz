@@ -1,6 +1,7 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
+import { ItemFormSectionDivider } from './ItemFormSectionDivider';
 import { ItemFormSectionTitle } from './ItemFormSectionTitle';
 import { useItemFormContext } from './ItemFormProvider';
 import type { ItemFormValues } from './types';
@@ -42,6 +43,8 @@ export function ItemFormCategoryFieldsSection(): React.ReactElement | null {
 
   return (
     <div>
+      <ItemFormSectionDivider />
+
       <ItemFormSectionTitle>
         {intl.get('item.category_fields.label')}
       </ItemFormSectionTitle>
