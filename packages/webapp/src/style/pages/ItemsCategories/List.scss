@@ -1,11 +1,21 @@
 .dashboard__insider--items-categories-list {
   .bigcapital-datatable {
     .table .tbody .tr .td.actions {
-      // The three-dot button sat flush against the edge of the table. Logical
-      // padding so it pulls inward in both directions — the actions column is
-      // the last one, which is the left edge of a right-to-left table.
-      padding-inline-end: 14px;
-      justify-content: flex-end;
+      // Centred in its own column rather than pushed toward one edge. Nudging
+      // it with directional padding only moved it off one edge and onto the
+      // neighbouring column; giving the column real width and centring inside
+      // it leaves clear air on both sides, in either reading direction.
+      align-items: center;
+      justify-content: center;
+
+      // The cell wraps its content in `.cell-inner`, which grows to fill the
+      // width — so centring the cell alone would leave the button pinned to
+      // the start of that wrapper.
+      .cell-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 }

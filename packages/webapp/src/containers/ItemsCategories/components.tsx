@@ -98,14 +98,17 @@ export function useItemsCategoriesTableColumns(): DataTableColumn<ItemCategoryTa
           Header: intl.get('description'),
           accessor: 'description',
           className: 'description',
-          width: 220,
+          width: 180,
         },
         {
+          // Wide enough for the button to sit centred with clear air on both
+          // sides. At 50px it had no room of its own and the description ran
+          // underneath it.
           id: 'actions',
           Header: '',
           Cell: TableActionsCell,
           className: 'actions',
-          width: 50,
+          width: 72,
           disableResizing: true,
         },
       ] as DataTableColumn<ItemCategoryTableRow>[],
