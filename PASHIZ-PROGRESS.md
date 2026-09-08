@@ -79,7 +79,7 @@ export PATH="$HOME/.claude-tools/node18/bin:$PATH"
 P="$HOME/.claude-tools/bin/pnpm"
 $P -C shared/bigcapital-utils exec vitest run   # 53 tests
 $P -C packages/webapp        exec vitest run    # 131 tests
-$P -C packages/server        exec jest          # 152 tests, ~3½ minutes
+$P -C packages/server        exec jest          # 160 tests, ~1–3 minutes
 $P -C packages/server        exec tsc --noEmit  # 0 errors
 $P -C packages/webapp        exec tsc --noEmit  # 49 — pre-existing baseline
 ```
@@ -263,11 +263,21 @@ list has to change its name on the way — hence the separate `fieldNames` cell
 feeding `fields`. And the item's flat `categoryField_<id>` keys must be gone by
 the time the Yup schema runs, since the item itself has no such attribute.
 
-One thing to know before blaming the fields: an **enumeration column is matched
-on its translated label**. A Persian sheet must say «خدمت», not `service`, or
-the row fails as "نوع کالا is a required field" — which names the type column
-and says nothing about the real cause. That is upstream behaviour, not this
-fork's, and it applies to every enumeration in every import.
+Exercising this shook out two things about imports generally, both now fixed.
+
+**Validation messages were Yup's English around a translated field name** —
+"نوع کالا is a required field". They are built per field now and translated
+(`i18n/*/import.json`), the field name passed in rather than left to Yup's
+`${path}`: Yup interpolates with `${}` and nestjs-i18n with `{}`, and the two
+syntaxes overlap badly. Even the separator between listed options belongs to
+the translation — Persian joins a list with «،», English with a comma.
+
+**An enumeration was matched only on its translated label**, so a Persian sheet
+had to say «خدمت» and `service` was refused. Both are read now. And a word
+matching neither is passed on as written instead of being dropped to undefined:
+dropping it made the row fail as a *missing required field*, an error that names
+the column and hides the cause. It now says «نوع کالا» باید یکی از این‌ها باشد:
+انبارگردانی‌شده، خدمت، بدون انبارگردانی — which is the whole answer.
 
 ## Untranslated strings a grep will never find
 
