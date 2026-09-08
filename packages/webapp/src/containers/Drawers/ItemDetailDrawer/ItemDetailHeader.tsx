@@ -3,6 +3,7 @@ import { defaultTo } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useItemDetailDrawerContext } from './ItemDetailDrawerProvider';
+import { itemCategoryFieldValues } from './category-fields';
 import { If, DetailsMenu, DetailItem, Card } from '@/components';
 
 /**
@@ -10,6 +11,12 @@ import { If, DetailsMenu, DetailItem, Card } from '@/components';
  */
 export function ItemDetailHeader() {
   const { item } = useItemDetailDrawerContext();
+
+  // What the item answered for the fields its category defines.
+  const categoryFields = React.useMemo(
+    () => itemCategoryFieldValues(item),
+    [item],
+  );
 
   return (
     <Card>
@@ -87,6 +94,10 @@ export function ItemDetailHeader() {
             label={intl.get('item.purchase_description')}
             children={defaultTo(item?.purchaseDescription, '-')}
           />
+
+          {categoryFields.map(({ id, label, value }) => (
+            <DetailItem key={id} label={label} children={value} />
+          ))}
         </DetailsMenu>
       </div>
     </Card>
