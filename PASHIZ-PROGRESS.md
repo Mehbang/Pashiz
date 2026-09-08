@@ -78,16 +78,17 @@ measure** (a primary and secondary unit per item) and **category fields**
 export PATH="$HOME/.claude-tools/node18/bin:$PATH"
 P="$HOME/.claude-tools/bin/pnpm"
 $P -C shared/bigcapital-utils exec vitest run   # 53 tests
-$P -C packages/webapp        exec vitest run    # 131 tests
+$P -C packages/webapp        exec vitest run    # 143 tests
 $P -C packages/server        exec jest          # 160 tests, ~1–3 minutes
 $P -C packages/server        exec tsc --noEmit  # 0 errors
-$P -C packages/webapp        exec tsc --noEmit  # 49 — pre-existing baseline
+$P -C packages/webapp        exec tsc --noEmit  # 0 errors
 ```
 
-The webapp's 49 type errors were present before this work and are untouched by
-choice; they sit mostly in the financial reports' `dynamicColumns.tsx`. The
-server's full suite is slow because the financial-statement controller specs
-dominate it; `exec jest src/utils` alone is 41 tests in seconds.
+The webapp's type-error baseline was 49 for most of this fork's life, left
+untouched by choice. Upstream's September TypeScript cleanup retired them, so
+the baseline is now zero and a new error is a real one. The server's full suite
+is slow because the financial-statement controller specs dominate it;
+`exec jest src/utils` alone is 41 tests in seconds.
 
 ## Keeping up with upstream
 
@@ -117,8 +118,32 @@ will not catch:
   `formatDateIn` on the server, or it will render Gregorian inside a Persian
   organisation.
 
-Merged so far: `2bbd98cba` (2026-08-25), which brought the password-length
-policy, the ESLint workflow, Garage object storage, and the e2e test overhaul.
+Merged so far: `6839a25b1` (2026-09-08), 143 commits. Before that,
+`2bbd98cba` (2026-08-25) — the password-length policy, the ESLint workflow,
+Garage object storage, and the e2e test overhaul.
+
+The September merge taught three things worth carrying forward.
+
+**The dangerous conflict shape is a rename inside a translated line.** Upstream
+moved API fields from snake_case to camelCase in the very lines this fork had
+localized. Resolving with `--ours` leaves a column reading a key the API no
+longer returns, blank and silent; `--theirs` throws away the Persian. Neither
+side is the answer — it is always ours' localization on their names.
+
+**Check for silent losses; a clean merge is not a safe one.** Two checks are
+worth running every time. First, the files only this fork touched must come
+back byte-identical: `comm -23` the two name lists and diff them against the
+branch. Second, count every marker of fork work per file — `intl.get`,
+`<T id>`, `localizedDigits`, `formatDateLocalized` — before and after; a file
+that lost one had its block rewritten upstream and needs a look. That check
+found the expense drawer's description row, gone with no conflict attached.
+
+**Before accepting an upstream deletion, ask whether it was live here.** The
+projects feature was removed and was safe to lose — 128 files of interface over
+an API that never existed, `/api/projects` answering 404 against 401 mapped
+routes. The setup wizard's subscription step was removed in the same batch and
+was not safe: its API is mapped and LemonSqueezy is configured. Same kind of
+change, opposite answer, and only running the server told them apart.
 
 ## Deployment
 
