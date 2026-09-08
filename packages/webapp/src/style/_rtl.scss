@@ -184,8 +184,11 @@ $rtl-switch-padding: 38px; // switch indicator (28px) + spacing (10px)
   // ---------------------------------------------------------------
   // Buttons — icon spacing sits on the wrong side
   // ---------------------------------------------------------------
-  .bp4-button:not([class*='bp4-icon-']) > .bp4-icon:first-child:last-child,
-  .bp4-button > :first-child {
+  // Only where something actually sits beside the icon. An icon that is the
+  // button's only child needs no spacing at all — Blueprint centres it with a
+  // symmetric negative margin, and overriding that with a margin on one side
+  // left the glyph 7px off centre on every icon-only button in the interface.
+  .bp4-button > :first-child:not(:last-child) {
     margin-left: 7px;
     margin-right: 0;
   }
