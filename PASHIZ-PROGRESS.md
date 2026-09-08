@@ -11,6 +11,10 @@ applied only where a date becomes text for a person, and undone the moment text
 becomes a value again. 98 call sites build API payloads with
 `moment(...).format('YYYY-MM-DD')` — those must never see Jalali or Persian digits.
 
+Beyond the calendar, the fork adds two features of its own: **units of
+measure** (a primary and secondary unit per item) and **category fields**
+(fields a category invents for its items). Both are described below.
+
 ## Where things live
 
 | Concern | Location |
@@ -38,6 +42,19 @@ becomes a value again. 98 call sites build API payloads with
 - `packages/webapp/src/containers/Preferences/Units/` — where they are defined
 - `packages/webapp/src/containers/Entries/secondary-quantity.ts` — the mirror
   between the two quantity columns, with its own tests
+
+### Category fields
+
+- `packages/server/src/modules/ItemCategories/models/ItemCategoryField.model.ts`
+  — what a category asks its items to fill in
+- `packages/server/src/modules/Items/models/ItemFieldValue.model.ts` — what one
+  item answered
+- `packages/server/src/modules/Items/utils/category-field-filter.ts` — the
+  synthetic filter key and its subquery, with its own tests
+- `packages/webapp/src/containers/Dialogs/ItemCategoryDialog/ItemCategoryFieldsEditor.tsx`
+  — where the fields are defined
+- `packages/webapp/src/containers/Items/ItemFormCategoryFieldsSection.tsx` —
+  where they are filled in
 
 ## How a calendar is chosen
 
@@ -181,6 +198,39 @@ untouched and still follows its currency.
 across items; no single unit describes it, and printing one would look right
 and mean nothing.
 
+## Category fields
+
+A category defines fields its items fill in — a category of books asks for an
+author and a translator, one of clothes for a size and a colour. Any number of
+them, all free text for now.
+
+The values live in their own table rather than as JSON on the item, because
+they have to be searchable and filterable: finding a book by its author is a
+join, not a scan through serialized text.
+
+**Values are keyed by the field's id, never its name.** Renaming a field keeps
+everything items had typed under it. And a value survives its item leaving the
+category that defines it — it stops being shown, but putting the item back
+restores what was typed, so a mis-click on the category picker costs nothing.
+A blank value deletes the row rather than storing an empty string, so "never
+filled in" and "cleared" look identical to everything downstream.
+
+The filter list is the one place the resource meta is not fully known from the
+model: `categoryField_<id>` keys are minted from the database and merged into
+the items meta. Two things about that are easy to get wrong and are now pinned
+by tests. The subquery correlates in raw SQL, which escapes the snake-case
+mapper that upper-cases every other identifier — write it the way the mapper
+would. And the meta endpoint snake-cases its keys on the way out, so the
+interface reads `category_field_1` and posts that back; both spellings must
+parse or every filter the interface can build is refused.
+
+Both are invisible to the type checker and to unit tests. They were found by
+running the thing against a real database, which is the only way this class of
+fault shows up.
+
+Not shown in invoices or reports, by design — Ehsan asked for the fields to
+reach item search and filtering, nothing further.
+
 ## Untranslated strings a grep will never find
 
 The server passes some labels through `i18n.t()` that are already English prose
@@ -269,8 +319,17 @@ Each of these passed every local check and still broke:
   only gates `main`/`develop`, so `pashiz` is unaffected.
 - Organisations built before a seeder fix keep their old seeded data; only newly
   created ones pick it up.
-- `Bigcapital Technology, Inc.` is left as-is in the payment authorisation — it
-  names the legal entity charging the customer, not the UI brand.
+- Category fields are never rendered in the item drawer's overview, only on the
+  item form. Nobody has asked for it; worth knowing it is a gap rather than a
+  decision.
+- The 198 raw English labels in resource metadata were keyed, but nothing
+  exercises the import screens in Persian — the wording there has been read,
+  not used.
+- The payment page used to name `Bigcapital Technology, Inc.` as the party
+  charging the customer. That was simply wrong — the money goes to the
+  organization, which configures its own payment details — and the consent note
+  and footer now name the organization. The copyright on source files and the
+  package author are untouched; those are attribution, not branding.
 - `packages/webapp/src/style/pages/fonts.scss` and the Noto/Segoe `.woff` files
   beside it are dead: nothing imports that file, and its Arabic faces list
   `local('Noto Sans')` first, which has no Arabic. Left in place; safe to delete.
