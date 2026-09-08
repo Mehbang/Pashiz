@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 import { ImportInsertError, ResourceMetaFieldsMap } from './interfaces';
 import { ERRORS, convertFieldsToYupValidation } from './_utils';
 import { IModelMeta } from '@/interfaces/Model';
@@ -6,6 +7,18 @@ import { ServiceError } from '../Items/ServiceError';
 
 @Injectable()
 export class ImportFileDataValidator {
+  constructor(private readonly i18n: I18nService) {}
+
+  /**
+   * A validation message in the reader's language.
+   *
+   * Rows are validated inside a bluebird map inside a transaction, far enough
+   * from the request that the ambient language context may already be gone.
+   * The language is read defensively and the fallback locale answers when it
+   * is: an English message beats a thrown one.
+   */
+  private translate = (key: string, args: Record<string, any> = {}): string =>
+    this.i18n.t(key, { lang: I18nContext.current()?.lang, args });
   /**
    * Validates the given resource is importable.
    * @param {IModelMeta} resourceMeta
@@ -27,7 +40,10 @@ export class ImportFileDataValidator {
     importableFields: ResourceMetaFieldsMap,
     data: Record<string, any>,
   ): Promise<void | ImportInsertError[]> {
-    const YupSchema = convertFieldsToYupValidation(importableFields);
+    const YupSchema = convertFieldsToYupValidation(
+      importableFields,
+      this.translate,
+    );
     const _data = { ...data };
 
     try {

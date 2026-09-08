@@ -54,53 +54,129 @@ export function trimObject(obj: Record<string, string | number>) {
 }
 
 /**
+ * Puts a validation message in the reader's language.
+ *
+ * The message is built per field rather than left to Yup's own `${path}`
+ * placeholders: those are interpolated by Yup, the translations are
+ * interpolated by nestjs-i18n, and the two syntaxes overlap badly. By the time
+ * a message is built the field's own name is already localized, so it is
+ * simply passed in.
+ */
+export type ImportMessages = (
+  key: string,
+  args?: Record<string, string | number>,
+) => string;
+
+/**
+ * What the messages say when nobody has supplied a translator — the wording
+ * this function had before it could be translated at all.
+ */
+const englishMessages: ImportMessages = (key, args = {}) => {
+  const field = args.field ?? 'field';
+
+  switch (key) {
+    case 'import.validation.required':
+      return `${field} is a required field`;
+    case 'import.validation.min_length':
+      return `Minimum length of ${field} is ${args.min} characters`;
+    case 'import.validation.max_length':
+      return `Maximum length of ${field} is ${args.max} characters`;
+    case 'import.validation.min':
+      return `${field} must be greater than or equal to ${args.min}`;
+    case 'import.validation.max':
+      return `${field} must be less than or equal to ${args.max}`;
+    case 'import.validation.one_of':
+      return `${field} must be one of: ${args.options}`;
+    case 'import.validation.date':
+      return `${field} is not a valid date. Use the YYYY-MM-DD format.`;
+    case 'import.validation.url':
+      return `${field} must be a valid URL`;
+    case 'import.validation.list_separator':
+      return ', ';
+    default:
+      return key;
+  }
+};
+
+/**
  * Generates the Yup validation schema based on the given resource fields.
  * @param {ResourceMetaFieldsMap} fields
+ * @param {ImportMessages} t - Puts the messages in the reader's language.
  * @returns {Yup}
  */
-export const convertFieldsToYupValidation = (fields: ResourceMetaFieldsMap) => {
+export const convertFieldsToYupValidation = (
+  fields: ResourceMetaFieldsMap,
+  t: ImportMessages = englishMessages,
+) => {
   const yupSchema = {};
 
   Object.keys(fields).forEach((fieldName: string) => {
     const field = fields[fieldName] as IModelMetaField;
+    const name = field.name;
     let fieldSchema;
-    fieldSchema = Yup.string().label(field.name);
+    fieldSchema = Yup.string().label(name);
 
     if (field.fieldType === 'text') {
       if (!isUndefined(field.minLength)) {
         fieldSchema = fieldSchema.min(
           field.minLength,
-          `Minimum length is ${field.minLength} characters`,
+          t('import.validation.min_length', {
+            field: name,
+            min: field.minLength,
+          }),
         );
       }
       if (!isUndefined(field.maxLength)) {
         fieldSchema = fieldSchema.max(
           field.maxLength,
-          `Maximum length is ${field.maxLength} characters`,
+          t('import.validation.max_length', {
+            field: name,
+            max: field.maxLength,
+          }),
         );
       }
     } else if (field.fieldType === 'number') {
-      fieldSchema = Yup.number().label(field.name);
+      fieldSchema = Yup.number().label(name);
 
       if (!isUndefined(field.max)) {
-        fieldSchema = fieldSchema.max(field.max);
+        fieldSchema = fieldSchema.max(
+          field.max,
+          t('import.validation.max', { field: name, max: field.max }),
+        );
       }
       if (!isUndefined(field.min)) {
-        fieldSchema = fieldSchema.min(field.min);
+        fieldSchema = fieldSchema.min(
+          field.min,
+          t('import.validation.min', { field: name, min: field.min }),
+        );
       }
     } else if (field.fieldType === 'boolean') {
-      fieldSchema = Yup.boolean().label(field.name);
+      fieldSchema = Yup.boolean().label(name);
     } else if (field.fieldType === 'enumeration') {
       const options = field.options.reduce((acc, option) => {
         acc[option.key] = option.label;
         return acc;
       }, {});
-      fieldSchema = Yup.string().oneOf(Object.keys(options)).label(field.name);
+      fieldSchema = Yup.string()
+        .oneOf(
+          Object.keys(options),
+          // The sheet is written with the labels, not the keys, so the message
+          // has to name the labels or it lists words nobody typed.
+          t('import.validation.one_of', {
+            field: name,
+            // Persian separates a list with «،», English with a comma; which
+            // one to use is part of the translation, not of this code.
+            options: Object.values(options).join(
+              t('import.validation.list_separator'),
+            ),
+          }),
+        )
+        .label(name);
       // Validate date field type.
     } else if (field.fieldType === 'date') {
       fieldSchema = fieldSchema.test(
         'date validation',
-        'Invalid date or format. The string should be a valid YYYY-MM-DD format.',
+        t('import.validation.date', { field: name }),
         (val) => {
           if (!val) {
             return true;
@@ -109,11 +185,13 @@ export const convertFieldsToYupValidation = (fields: ResourceMetaFieldsMap) => {
         },
       );
     } else if (field.fieldType === 'url') {
-      fieldSchema = fieldSchema.url();
+      fieldSchema = fieldSchema.url(
+        t('import.validation.url', { field: name }),
+      );
     } else if (field.fieldType === 'collection') {
       // @ts-expect-error
-      const nestedFieldShema = convertFieldsToYupValidation(field.fields);
-      fieldSchema = Yup.array().label(field.name);
+      const nestedFieldShema = convertFieldsToYupValidation(field.fields, t);
+      fieldSchema = Yup.array().label(name);
 
       if (!isUndefined(field.collectionMaxLength)) {
         fieldSchema = fieldSchema.max(field.collectionMaxLength);
@@ -124,7 +202,9 @@ export const convertFieldsToYupValidation = (fields: ResourceMetaFieldsMap) => {
       fieldSchema = fieldSchema.of(nestedFieldShema);
     }
     if (field.required) {
-      fieldSchema = fieldSchema.required();
+      fieldSchema = fieldSchema.required(
+        t('import.validation.required', { field: name }),
+      );
     }
     const _fieldName = parseFieldName(fieldName, field);
 
@@ -305,10 +385,27 @@ export const valueParser =
 
       // Parses the enumeration value.
     } else if (field.fieldType === 'enumeration') {
-      const option = get(field, 'options', []).find(
-        (option) => option.label?.toLowerCase() === value?.toLowerCase(),
-      );
-      _value = get(option, 'key');
+      // The label is what the sheet is expected to carry, since that is what
+      // an export writes and what the mapping screen shows. The key is
+      // accepted too: a sheet written against the English build, or by hand
+      // from the API, says `service` where the Persian one says «خدمت», and
+      // there is no reason to refuse it. A key that matches nothing leaves the
+      // value undefined, which reads downstream as a missing required field —
+      // an error that names the column and hides the cause.
+      const written = String(value ?? '')
+        .trim()
+        .toLowerCase();
+      const options = get(field, 'options', []);
+      const option =
+        options.find((option) => option.label?.toLowerCase() === written) ??
+        options.find((option) => option.key?.toLowerCase() === written);
+
+      // A word matching nothing is handed on as written so that validation can
+      // say what the column accepts. Dropping it to undefined instead made the
+      // row fail as a missing required field — an error naming the column and
+      // hiding the cause — or, for an optional column, pass silently with the
+      // value thrown away.
+      _value = option ? option.key : written ? value : undefined;
       // Parses the numeric value.
     } else if (field.fieldType === 'number') {
       _value = multiNumberParse(value);

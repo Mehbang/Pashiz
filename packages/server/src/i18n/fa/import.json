@@ -1,0 +1,11 @@
+{
+  "validation.required": "«{field}» الزامی است",
+  "validation.min_length": "«{field}» دست‌کم باید {min} نویسه باشد",
+  "validation.max_length": "«{field}» بیش از {max} نویسه نباید باشد",
+  "validation.min": "«{field}» نباید کمتر از {min} باشد",
+  "validation.max": "«{field}» نباید بیشتر از {max} باشد",
+  "validation.one_of": "«{field}» باید یکی از این‌ها باشد: {options}",
+  "validation.date": "«{field}» تاریخ معتبری نیست. قالب درست YYYY-MM-DD است.",
+  "validation.url": "«{field}» نشانی اینترنتی معتبری نیست",
+  "validation.list_separator": "، "
+}
