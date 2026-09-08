@@ -1,7 +1,7 @@
 // @ts-nocheck
 import intl from 'react-intl-universal';
 import { Button, Classes, NavbarGroup } from '@blueprintjs/core';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import { Can, DashboardActionsBar, Icon } from '@/components';
 import { AbilitySubject, BankRuleAction } from '@/constants/abilityOption';
 import { DialogsName } from '@/constants/dialogs';
@@ -31,6 +31,7 @@ function RulesListActionsBarRoot({
   );
 }
 
-export const RulesListActionsBar = R.compose(withDialogActions)(
+export const RulesListActionsBar = FF.pipe(
   RulesListActionsBarRoot,
+  withDialogActions,
 );

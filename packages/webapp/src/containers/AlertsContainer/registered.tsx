@@ -1,9 +1,9 @@
-import type { ComponentType } from 'react';
 import { BankRulesAlerts } from '../Banking/Rules/RulesList/BankRulesAlerts';
 import { BrandingTemplatesAlerts } from '../BrandingTemplates/alerts/BrandingTemplatesAlerts';
 import { CashflowAlerts } from '../CashFlow/CashflowAlerts';
 import { PaymentMethodsAlerts } from '../Preferences/PaymentMethods/alerts/PaymentMethodsAlerts';
 import { SubscriptionAlerts } from '../Subscriptions/alerts/alerts';
+import type { ComponentType } from 'react';
 import { ManualJournalsAlerts } from '@/containers/Accounting/JournalsLanding/ManualJournalsAlerts';
 import { AccountsAlerts } from '@/containers/Accounts/AccountsAlerts';
 import { AccountTransactionsAlerts } from '@/containers/CashFlow/AccountTransactions/AccountTransactionsAlerts';
@@ -18,7 +18,6 @@ import { CurrenciesAlerts } from '@/containers/Preferences/Currencies/Currencies
 import { RolesAlerts } from '@/containers/Preferences/Users/Roles/RolesAlerts';
 import { UsersAlerts } from '@/containers/Preferences/Users/UsersAlerts';
 import { WarehousesAlerts } from '@/containers/Preferences/Warehouses/WarehousesAlerts';
-import { ProjectAlerts } from '@/containers/Projects/containers/ProjectAlerts';
 import { BillsAlerts } from '@/containers/Purchases/Bills/BillsLanding/BillsAlerts';
 import { VendorCreditNotesAlerts } from '@/containers/Purchases/CreditNotes/VendorCreditNotesAlerts';
 import { PaymentsMadeAlerts } from '@/containers/Purchases/PaymentsMade/PaymentsMadeAlerts';
@@ -72,7 +71,6 @@ export const registered: RegisteredEntry[] = [
   ...WarehousesAlerts,
   ...WarehousesTransfersAlerts,
   ...BranchesAlerts,
-  ...ProjectAlerts,
   ...TaxRatesAlerts,
   ...CashflowAlerts,
   ...BankRulesAlerts,

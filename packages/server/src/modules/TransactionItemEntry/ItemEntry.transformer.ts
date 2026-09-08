@@ -7,7 +7,7 @@ interface ItemEntryTransformerContext {
 }
 
 export class ItemEntryTransformer extends Transformer<
-  {},
+  object,
   ItemEntryTransformerContext
 > {
   /**

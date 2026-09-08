@@ -1,7 +1,7 @@
 import intl from 'react-intl-universal';
 import { Button, Classes, Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import { DialogsName } from '@/constants/dialogs';
 import {
   withDialogActions,
@@ -41,6 +41,7 @@ function TaxRateFormDialogFormFooterRoot({
   );
 }
 
-export const TaxRateFormDialogFormFooter = R.compose(withDialogActions)(
+export const TaxRateFormDialogFormFooter = FF.pipe(
   TaxRateFormDialogFormFooterRoot,
+  withDialogActions,
 );

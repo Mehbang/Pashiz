@@ -1,14 +1,22 @@
-// @ts-nocheck
 import { MenuItem, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
+import type { SaleInvoice } from '@bigcapital/sdk-ts';
 import { T, Choose, Icon, TextStatus } from '@/components';
 import { AbilitySubject, SaleInvoiceAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import { highlightText } from '@/utils';
 import { localizedDigits } from '@/utils/locale';
+
+interface InvoiceUniversalSearchSelectProps extends WithDrawerActionsProps {
+  resourceType: string;
+  resourceId: number;
+}
 
 /**
  * Universal search invoice item select action.
@@ -20,7 +28,7 @@ function InvoiceUniversalSearchSelectComponent({
 
   // #withDrawerActions
   openDrawer,
-}) {
+}: InvoiceUniversalSearchSelectProps) {
   if (resourceType === RESOURCES_TYPES.INVOICE) {
     openDrawer(DRAWERS.INVOICE_DETAILS, { invoiceId: resourceId });
   }
@@ -34,28 +42,32 @@ export const InvoiceUniversalSearchSelect = withDrawerActions(
 /**
  * Invoice status.
  */
-function InvoiceStatus({ customer }) {
+interface InvoiceStatusProps {
+  customer: SaleInvoice;
+}
+
+function InvoiceStatus({ customer }: InvoiceStatusProps) {
   return (
     <Choose>
-      <Choose.When condition={customer.is_fully_paid && customer.is_delivered}>
+      <Choose.When condition={customer.isFullyPaid && customer.isDelivered}>
         <TextStatus intent={Intent.SUCCESS}>
           <T id={'paid'} />
         </TextStatus>
       </Choose.When>
 
-      <Choose.When condition={customer.is_delivered}>
+      <Choose.When condition={customer.isDelivered}>
         <Choose>
-          <Choose.When condition={customer.is_overdue}>
+          <Choose.When condition={customer.isOverdue}>
             <TextStatus intent={Intent.DANGER}>
               {intl.get('overdue_by', {
-                overdue: localizedDigits(customer.overdue_days),
+                overdue: localizedDigits(customer.overdueDays),
               })}
             </TextStatus>
           </Choose.When>
           <Choose.Otherwise>
             <TextStatus intent={Intent.WARNING}>
               {intl.get('due_in', {
-                due: localizedDigits(customer.remaining_days),
+                due: localizedDigits(customer.remainingDays),
               })}
             </TextStatus>
           </Choose.Otherwise>
@@ -73,9 +85,22 @@ function InvoiceStatus({ customer }) {
 /**
  * Universal search invoice item.
  */
+interface InvoiceUniversalSearchItemData {
+  id: number;
+  text: string;
+  label: string;
+  reference: SaleInvoice;
+}
+
+interface InvoiceUniversalSearchItemActions {
+  handleClick: () => void;
+  modifiers: { active: boolean };
+  query: string;
+}
+
 export function InvoiceUniversalSearchItem(
-  item,
-  { handleClick, modifiers, query },
+  item: InvoiceUniversalSearchItemData,
+  { handleClick, modifiers, query }: InvoiceUniversalSearchItemActions,
 ) {
   return (
     <MenuItem
@@ -83,16 +108,16 @@ export function InvoiceUniversalSearchItem(
       text={
         <div>
           <div>{highlightText(item.text, query)}</div>
-          <span class="bp4-text-muted">
-            {highlightText(item.reference.invoice_no, query)}{' '}
+          <span className="bp4-text-muted">
+            {highlightText(item.reference.invoiceNo, query)}{' '}
             <Icon icon={'caret-right-16'} iconSize={16} />
-            {item.reference.invoice_date_formatted}
+            {item.reference.invoiceDateFormatted}
           </span>
         </div>
       }
-      label={
+      labelElement={
         <>
-          <div class="amount">{item.reference.total_formatted}</div>
+          <div className="amount">{item.reference.totalFormatted}</div>
           <InvoiceStatus customer={item.reference} />
         </>
       }
@@ -106,10 +131,10 @@ export function InvoiceUniversalSearchItem(
  * @param {*} invoice
  * @returns
  */
-const transformInvoicesToSearch = (invoice) => ({
+const transformInvoicesToSearch = (invoice: SaleInvoice) => ({
   id: invoice.id,
-  text: invoice.customer.display_name,
-  label: invoice.formatted_balance,
+  text: invoice.customer?.displayName ?? '',
+  label: invoice.totalFormatted ?? '',
   reference: invoice,
 });
 

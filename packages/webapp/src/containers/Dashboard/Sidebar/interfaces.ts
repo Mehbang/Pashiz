@@ -71,7 +71,6 @@ export enum ISidebarMenuOverlayIds {
   Contacts = intl.get('contacts'),
   Cashflow = 'Cashflow',
   Expenses = intl.get('expenses'),
-  Projects = 'Projects',
 }
 
 export enum ISidebarSubscriptionAbility {

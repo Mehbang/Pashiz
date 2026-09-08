@@ -2,6 +2,7 @@ import { Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import React, { useRef } from 'react';
 import intl from 'react-intl-universal';
+import { useEstimateFormContext } from './EstimateFormProvider';
 import { useEstimateIsForeignCustomer, useEstimateSubtotal } from './utils';
 import type { EstimateFormValues } from './utils';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
@@ -17,7 +18,6 @@ import { useUpdateEffect } from '@/hooks';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { compose } from '@/utils';
 import { transactionNumber } from '@/utils';
-import { useEstimateFormContext } from './EstimateFormProvider';
 
 type EstimateExchangeRateInputFieldRootProps = Omit<
   React.ComponentProps<typeof ExchangeRateInputGroup>,
@@ -60,18 +60,6 @@ export const EstimateExchangeRateInputField = compose(
   withExchangeRateFetchingLoading,
   withExchangeRateItemEntriesPriceRecalc,
 )(EstimateExchangeRateInputFieldRoot);
-
-type EstimateProjectSelectButtonProps = { label?: string };
-
-/**
- * Estimate project select.
- * @returns {JSX.Element}
- */
-export function EstimateProjectSelectButton({
-  label,
-}: EstimateProjectSelectButtonProps) {
-  return <Button text={label ?? intl.get('select_project')} />;
-}
 
 type EstimateIncrementSyncSettingsToFormProps = Record<string, never>;
 

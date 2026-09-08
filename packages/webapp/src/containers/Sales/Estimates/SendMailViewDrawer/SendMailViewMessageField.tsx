@@ -1,4 +1,3 @@
-// @ts-nocheck
 import intl from 'react-intl-universal';
 import { Button, Icon, Position } from '@blueprintjs/core';
 import { FormGroupProps, TextAreaProps } from '@blueprintjs-formik/core';
@@ -85,7 +84,7 @@ export function SendMailViewMessageField({
             input={() => (
               <Button
                 minimal
-                rightIcon={<Icon icon={'caret-down-16'} color={'#8F99A8'} />}
+                rightIcon={<Icon icon={'caret-down'} color={'#8F99A8'} />}
               >
                 {intl.get('insert_variable')}
               </Button>

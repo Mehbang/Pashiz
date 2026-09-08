@@ -1,9 +1,9 @@
 import { Alert, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { AppToaster, FormattedMessage as T } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { useInactivateUser } from '@/hooks/query';
 import { compose } from '@/utils';
@@ -20,6 +20,10 @@ interface UserInactivateAlertProps extends WithAlertActionsProps {
 
 interface UserInactivateError {
   type: string;
+}
+
+interface UserInactivateErrorResponse {
+  data: { errors?: UserInactivateError[] };
 }
 
 /**
@@ -42,21 +46,15 @@ function UserInactivateAlertInner({
           intent: Intent.SUCCESS,
         });
       })
-      .catch(
-        ({ data: { errors } }: { data: { errors: UserInactivateError[] } }) => {
-          if (
-            errors.find(
-              (e) => e.type === 'CANNOT.TOGGLE.ACTIVATE.AUTHORIZED.USER',
-            )
-          ) {
-            AppToaster.show({
-              message:
-                'You could not activate/inactivate the same authorized user.',
-              intent: Intent.DANGER,
-            });
-          }
-        },
-      )
+      .catch((error: UserInactivateErrorResponse) => {
+        const errors = error?.data?.errors ?? [];
+        if (errors.find((e) => e.type === 'USER_SAME_THE_AUTHORIZED_USER')) {
+          AppToaster.show({
+            message: intl.get('cannot_toggle_authorized_user'),
+            intent: Intent.DANGER,
+          });
+        }
+      })
       .finally(() => {
         closeAlert(name);
       });

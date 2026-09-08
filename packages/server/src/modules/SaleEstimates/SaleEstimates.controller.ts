@@ -36,7 +36,6 @@ import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { SaleEstiamteStateResponseDto } from './dtos/SaleEstimateStateResponse.dto';
 import { SaleEstimateHtmlContentResponseDto } from './dtos/SaleEstimateHtmlResponse.dto';
 import { SaleEstimateMailStateResponseDto } from './dtos/SaleEstimateMailStateResponse.dto';
-import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
@@ -46,6 +45,7 @@ import { PermissionGuard } from '@/modules/Roles/Permission.guard';
 import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
 import { AbilitySubject } from '@/modules/Roles/Roles.types';
 import { SaleEstimateAction } from './types/SaleEstimates.types';
+import { SmsNotificationsFeatureGuard } from '../SMS/SmsNotificationsFeatureGuard';
 
 @Controller('sale-estimates')
 @ApiTags('Sale Estimates')
@@ -255,6 +255,7 @@ export class SaleEstimatesController {
   }
 
   @Post(':id/notify-sms')
+  @UseGuards(SmsNotificationsFeatureGuard)
   @RequirePermission(
     SaleEstimateAction.NotifyBySms,
     AbilitySubject.SaleEstimate,
@@ -275,6 +276,7 @@ export class SaleEstimatesController {
   }
 
   @Get(':id/sms-details')
+  @UseGuards(SmsNotificationsFeatureGuard)
   @RequirePermission(SaleEstimateAction.View, AbilitySubject.SaleEstimate)
   @ApiOperation({ summary: 'Retrieves the sale estimate SMS details.' })
   public getSaleEstimateSmsDetails(

@@ -1,6 +1,8 @@
 import { isEmpty } from 'lodash';
 import React, { createContext } from 'react';
 import type { PaymentMadeTableRow } from './components';
+import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
+import type { SettingsGroup } from '@bigcapital/sdk-ts';
 import { DashboardInsider } from '@/components/Dashboard';
 import {
   useResourceViews,
@@ -9,8 +11,6 @@ import {
   useSettingsBillPayments,
 } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
-import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
-import type { SettingsGroup } from '@bigcapital/sdk-ts';
 
 interface PaymentMadesListProviderProps {
   query?: any;
@@ -62,7 +62,7 @@ function PaymentMadesListProvider({
     | {
         data?: PaymentMadeTableRow[];
         pagination?: { total?: number; [key: string]: any };
-        filter_meta?: any;
+        filterMeta?: any;
       }
     | undefined;
 
@@ -74,7 +74,7 @@ function PaymentMadesListProvider({
   const provider: PaymentMadesListContextValue = {
     paymentMades: listData?.data,
     pagination: listData?.pagination,
-    filterMeta: listData?.filter_meta,
+    filterMeta: listData?.filterMeta,
     paymentMadesViews,
 
     fields: resourceMeta?.fields

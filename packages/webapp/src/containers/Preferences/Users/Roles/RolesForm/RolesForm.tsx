@@ -4,27 +4,25 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-
 import '@/style/pages/Preferences/Roles/Form.scss';
-
 import { handleDeleteErrors } from '../utils';
 import { CreateRolesFormSchema, EditRolesFormSchema } from './RolesForm.schema';
 import { RolesFormContent } from './RolesFormContent';
 import { useRolesFormContext } from './RolesFormProvider';
-import type { RolesFormValues } from './types';
 import {
   getNewRoleInitialValues,
   transformToArray,
   transformToObject,
 } from './utils';
+import type { RolesFormValues } from './types';
+import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
 import { AppToaster, FormattedMessage as T } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
 import { compose, transformToForm } from '@/utils';
 
 const defaultValues: RolesFormValues = {
-  role_name: '',
-  role_description: '',
+  roleName: '',
+  roleDescription: '',
   permissions: {},
   serviceFullAccess: {},
 };
@@ -79,9 +77,10 @@ function RolesFormInner({
     values: RolesFormValues,
     { setSubmitting }: FormikHelpers<RolesFormValues>,
   ) => {
-    const permission = transformToArray(values);
+    const permission = transformToArray(values, role);
     const form = {
-      ...values,
+      roleName: values.roleName,
+      roleDescription: values.roleDescription,
       permissions: permission,
     };
     setSubmitting(true);

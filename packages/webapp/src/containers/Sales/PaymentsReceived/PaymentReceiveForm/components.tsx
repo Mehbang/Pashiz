@@ -2,6 +2,7 @@ import { Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import React, { useLayoutEffect } from 'react';
 import intl from 'react-intl-universal';
+import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
 import {
   useEstimateIsForeignCustomer,
   type PaymentReceiveEntry,
@@ -10,7 +11,6 @@ import {
 import { Money, ExchangeRateInputGroup, MoneyFieldCell } from '@/components';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { transactionNumber } from '@/utils';
-import { usePaymentReceiveFormContext } from './PaymentReceiveFormProvider';
 import { formatDateLocalized } from '@/utils/locale';
 
 type InvoiceDateCellProps = {
@@ -120,19 +120,6 @@ export function PaymentReceiveExchangeRateInputField({
       {...props}
     />
   );
-}
-
-type ProjectSelectButtonProps = {
-  label?: string;
-};
-
-/**
- * payment receive project select.
- */
-export function PaymentReceiveProjectSelectButton({
-  label,
-}: ProjectSelectButtonProps) {
-  return <Button text={label ?? intl.get('select_project')} />;
 }
 
 type SyncIncrementSettingsProps = Record<string, never>;

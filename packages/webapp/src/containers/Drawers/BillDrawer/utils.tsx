@@ -32,6 +32,7 @@ interface BillMenuItemPayload {
 
 interface BillMenuItemProps {
   payload: BillMenuItemPayload;
+  isLandedCostEnabled?: boolean;
 }
 
 /**
@@ -155,7 +156,10 @@ export function BillDetailsStatus({ bill }: BillDetailsStatusProps) {
   );
 }
 
-export const BillMenuItem = ({ payload }: BillMenuItemProps) => {
+export const BillMenuItem = ({
+  payload,
+  isLandedCostEnabled = false,
+}: BillMenuItemProps) => {
   return (
     <Popover
       minimal={true}
@@ -166,10 +170,12 @@ export const BillMenuItem = ({ payload }: BillMenuItemProps) => {
       }}
       content={
         <Menu>
-          <MenuItem
-            onClick={payload.onAllocateLandedCost}
-            text={<T id={'bill.allocate_landed_coast'} />}
-          />
+          {isLandedCostEnabled && (
+            <MenuItem
+              onClick={payload.onAllocateLandedCost}
+              text={<T id={'bill.allocate_landed_coast'} />}
+            />
+          )}
           <MenuItem
             onClick={payload.onConvert}
             text={<T id={'bill.convert_to_credit_note'} />}

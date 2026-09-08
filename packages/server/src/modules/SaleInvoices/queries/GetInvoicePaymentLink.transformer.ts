@@ -61,7 +61,7 @@ export class GetInvoicePaymentLinkMetaTransformer extends SaleInvoiceTransformer
    * Retrieves the organization metadata for the payment link.
    * @returns
    */
-  public organization(invoice) {
+  public organization(_invoice) {
     return this.item(
       this.context.organization,
       new GetPaymentLinkOrganizationMetaTransformer(),

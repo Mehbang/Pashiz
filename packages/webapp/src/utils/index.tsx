@@ -6,7 +6,6 @@ import jsCookie from 'js-cookie';
 import _ from 'lodash';
 import { isEqual, castArray, isEmpty, includes, pickBy } from 'lodash';
 import moment from 'moment';
-import * as R from 'ramda';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 import { toPersianDigits } from '@bigcapital/utils';
 import { CURRENCIES as Currencies } from '@bigcapital/utils';
@@ -662,7 +661,7 @@ export function safeSumBy(entries, getter) {
 export const fullAmountPaymentEntries = (entries) => {
   return entries.map((item) => ({
     ...item,
-    payment_amount: item.due_amount,
+    paymentAmount: item.dueAmount,
   }));
 };
 
@@ -670,12 +669,12 @@ export const amountPaymentEntries = (amount, entries) => {
   let total = amount;
 
   return entries.map((item) => {
-    const diff = Math.min(item.due_amount, total);
+    const diff = Math.min(item.dueAmount, total);
     total -= Math.max(diff, 0);
 
     return {
       ...item,
-      payment_amount: diff,
+      paymentAmount: diff,
     };
   });
 };
@@ -778,14 +777,13 @@ export const defaultFastFieldShouldUpdate = (props, prevProps) => {
   );
 };
 
-export const ensureEntriesHasEmptyLine = R.curry(
-  (minLinesNumber, defaultEntry, entries) => {
+export const ensureEntriesHasEmptyLine =
+  (minLinesNumber, defaultEntry) => (entries) => {
     if (entries.length >= minLinesNumber) {
       return [...entries, defaultEntry];
     }
     return entries;
-  },
-);
+  };
 
 export const transfromViewsToTabs = (views) => {
   return views.map((view) => ({ ..._.pick(view, ['slug', 'name']) }));
@@ -854,6 +852,11 @@ function escapeRegExpChars(text) {
 }
 
 export function highlightText(text, query) {
+  if (text == null) {
+    return [];
+  }
+  text = String(text);
+  query = query == null ? '' : String(query);
   let lastIndex = 0;
   const words = query
     .split(/\s+/)

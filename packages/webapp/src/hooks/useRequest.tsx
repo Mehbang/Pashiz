@@ -11,6 +11,100 @@ import {
 import { useApiFetcherOnError } from './useApiFetcherOnError';
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 
+/**
+ * Returns an ApiFetcher configured with baseUrl and auth headers for use with sdk-ts fetch functions.
+ * Use this in query hooks that call fetchAccounts, fetchCreditNotes, etc.
+ *
+ * @param options - Optional configuration
+ * @param options.enableCamelCaseTransform - If true, automatically transforms response data from snake_case to camelCase
+ */
+export function useApiFetcher(options?: {
+  enableCamelCaseTransform?: boolean;
+}) {
+  const token = useAuthToken();
+  const organizationId = useAuthOrganizationId();
+  const currentLocale = getCookie('locale');
+  const onError = useApiFetcherOnError();
+
+  return React.useMemo(() => {
+    const headers: Record<string, string> = {
+      accept: 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    if (organizationId) {
+      headers['organization-id'] = organizationId;
+    }
+    if (currentLocale) {
+      headers['Accept-Language'] = currentLocale;
+    }
+
+    return createApiFetcher({
+      baseUrl: '',
+      init: { headers },
+      disableCamelCaseTransform: !options?.enableCamelCaseTransform,
+      onError,
+    });
+  }, [
+    token,
+    organizationId,
+    currentLocale,
+    options?.enableCamelCaseTransform,
+    onError,
+  ]);
+}
+
+/**
+ * Returns an unauthenticated ApiFetcher for auth flows (signin, signup, reset password, etc.).
+ */
+export function useAuthApiFetcher() {
+  return React.useMemo(() => createApiFetcher({ baseUrl: '' }), []);
+}
+
+export function useAuthApiRequest() {
+  const http = React.useMemo(() => {
+    // Axios instance.
+    return axios.create();
+  }, []);
+
+  return React.useMemo(
+    () => ({
+      http,
+      get(resource: string, params?: AxiosRequestConfig) {
+        return http.get(`/api/${normalizeApiPath(resource)}`, params);
+      },
+      post(resource: string, params?: unknown, config?: AxiosRequestConfig) {
+        return http.post(`/api/${normalizeApiPath(resource)}`, params, config);
+      },
+      update(resource: string, slug: string, params?: unknown) {
+        return http.put(`/api/${normalizeApiPath(resource)}/${slug}`, params);
+      },
+      put(resource: string, params?: unknown) {
+        return http.put(`/api/${normalizeApiPath(resource)}`, params);
+      },
+      patch(resource: string, params?: unknown, config?: AxiosRequestConfig) {
+        return http.patch(`/api/${normalizeApiPath(resource)}`, params, config);
+      },
+      delete(resource: string, params?: AxiosRequestConfig) {
+        return http.delete(`/api/${normalizeApiPath(resource)}`, params);
+      },
+    }),
+    [http],
+  );
+}
+
+/**
+ * The authenticated axios client, kept for the endpoints sdk-ts does not
+ * describe.
+ *
+ * Upstream deleted this once every one of their callers had moved to
+ * `useApiFetcher`. This fork still has callers that cannot: units of measure
+ * and organization backup are its own endpoints, absent from the OpenAPI
+ * schema the fetcher is generated from, and the payment-link PDF needs a raw
+ * blob response. Migrating them belongs in its own change, where those screens
+ * can be exercised — not in a merge whose job is to lose nothing.
+ */
 export default function useApiRequest() {
   const setGlobalErrors = useSetGlobalErrors();
   const { setLogout } = useAuthActions();
@@ -125,89 +219,6 @@ export default function useApiRequest() {
         return http.patch(`/api/${normalizeApiPath(resource)}`, params, config);
       },
 
-      delete(resource: string, params?: AxiosRequestConfig) {
-        return http.delete(`/api/${normalizeApiPath(resource)}`, params);
-      },
-    }),
-    [http],
-  );
-}
-
-/**
- * Returns an ApiFetcher configured with baseUrl and auth headers for use with sdk-ts fetch functions.
- * Use this in query hooks that call fetchAccounts, fetchCreditNotes, etc.
- *
- * @param options - Optional configuration
- * @param options.enableCamelCaseTransform - If true, automatically transforms response data from snake_case to camelCase
- */
-export function useApiFetcher(options?: {
-  enableCamelCaseTransform?: boolean;
-}) {
-  const token = useAuthToken();
-  const organizationId = useAuthOrganizationId();
-  const currentLocale = getCookie('locale');
-  const onError = useApiFetcherOnError();
-
-  return React.useMemo(() => {
-    const headers: Record<string, string> = {
-      accept: 'application/json',
-    };
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-    if (organizationId) {
-      headers['organization-id'] = organizationId;
-    }
-    if (currentLocale) {
-      headers['Accept-Language'] = currentLocale;
-    }
-
-    return createApiFetcher({
-      baseUrl: '',
-      init: { headers },
-      disableCamelCaseTransform: !options?.enableCamelCaseTransform,
-      // onError,
-    });
-  }, [
-    token,
-    organizationId,
-    currentLocale,
-    options?.enableCamelCaseTransform,
-    onError,
-  ]);
-}
-
-/**
- * Returns an unauthenticated ApiFetcher for auth flows (signin, signup, reset password, etc.).
- */
-export function useAuthApiFetcher() {
-  return React.useMemo(() => createApiFetcher({ baseUrl: '' }), []);
-}
-
-export function useAuthApiRequest() {
-  const http = React.useMemo(() => {
-    // Axios instance.
-    return axios.create();
-  }, []);
-
-  return React.useMemo(
-    () => ({
-      http,
-      get(resource: string, params?: AxiosRequestConfig) {
-        return http.get(`/api/${normalizeApiPath(resource)}`, params);
-      },
-      post(resource: string, params?: unknown, config?: AxiosRequestConfig) {
-        return http.post(`/api/${normalizeApiPath(resource)}`, params, config);
-      },
-      update(resource: string, slug: string, params?: unknown) {
-        return http.put(`/api/${normalizeApiPath(resource)}/${slug}`, params);
-      },
-      put(resource: string, params?: unknown) {
-        return http.put(`/api/${normalizeApiPath(resource)}`, params);
-      },
-      patch(resource: string, params?: unknown, config?: AxiosRequestConfig) {
-        return http.patch(`/api/${normalizeApiPath(resource)}`, params, config);
-      },
       delete(resource: string, params?: AxiosRequestConfig) {
         return http.delete(`/api/${normalizeApiPath(resource)}`, params);
       },

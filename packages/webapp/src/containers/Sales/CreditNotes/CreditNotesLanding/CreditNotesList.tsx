@@ -1,5 +1,4 @@
 import React from 'react';
-
 import '@/style/pages/CreditNote/List.scss';
 import { CreditNotesActionsBar } from './CreditNotesActionsBar';
 import { CreditNotesDataTable } from './CreditNotesDataTable';
@@ -9,13 +8,9 @@ import { CreditNotesListProvider } from './CreditNotesListProvider';
 import { withCreditNotes } from './withCreditNotes';
 import { withCreditNotesActions } from './withCreditNotesActions';
 import type { WithCreditNotesProps } from './withCreditNotes';
+import type { WithCreditNotesActionsProps } from './withCreditNotesActions';
 import { DashboardPageContent } from '@/components';
 import { transformTableStateToQuery, compose } from '@/utils';
-
-interface WithCreditNotesActionsProps {
-  resetCreditNotesTableState: () => void;
-  resetCreditNotesSelectedRows: () => void;
-}
 
 interface CreditNotesListProps
   extends Pick<

@@ -5,9 +5,7 @@ import { castArray, includes } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
 import '@/style/pages/NotifyConactViaSMS/NotifyConactViaSMSDialog.scss';
-
 import { CreateNotifyViaSMSFormSchema } from './NotifyViaSMSForm.schema';
 import { NotifyViaSMSFormFields } from './NotifyViaSMSFormFields';
 import { NotifyViaSMSFormFloatingActions } from './NotifyViaSMSFormFloatingActions';
@@ -16,10 +14,10 @@ import { FormObserver, SMSMessagePreview } from '@/components';
 import { transformToForm, safeInvoke } from '@/utils';
 
 const defaultInitialValues = {
-  notification_key: '',
-  customer_name: '',
-  customer_phone_number: '',
-  sms_message: '',
+  notificationKey: '',
+  customerName: '',
+  customerPhoneNumber: '',
+  smsMessage: '',
 };
 
 /**
@@ -27,15 +25,15 @@ const defaultInitialValues = {
  */
 function SMSMessagePreviewSection() {
   const {
-    values: { sms_message },
+    values: { smsMessage },
   } = useFormikContext();
 
   // Calculates the SMS units of message.
-  const messagesUnits = getSMSUnits(sms_message);
+  const messagesUnits = getSMSUnits(smsMessage);
 
   return (
     <SMSPreviewSectionRoot>
-      <SMSMessagePreview message={sms_message} />
+      <SMSMessagePreview message={smsMessage} />
       <SMSPreviewSectionNote>
         {intl.formatHTMLMessage(
           { id: 'notiify_via_sms.dialog.sms_note' },
@@ -145,6 +143,10 @@ const SMSPreviewSectionRoot = styled.div`
   padding-left: 25px;
   margin-left: 25px;
   border-left: 1px solid #dcdcdd;
+
+  .bp4-dark & {
+    border-left-color: var(--color-dark-gray5);
+  }
 `;
 
 const SMSPreviewSectionNote = styled.div`

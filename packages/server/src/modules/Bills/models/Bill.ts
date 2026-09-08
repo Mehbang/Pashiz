@@ -1,5 +1,4 @@
 import * as moment from 'moment';
-import * as R from 'ramda';
 import type { Knex } from 'knex';
 import { Model, raw } from 'objection';
 import { castArray, difference, defaultTo } from 'lodash';
@@ -183,12 +182,11 @@ export class Bill extends TenantBaseModel {
    */
   get total(): number {
     const adjustmentAmount = defaultTo(this.adjustment, 0);
+    const totalTax = this.isInclusiveTax
+      ? 0
+      : defaultTo(this.taxAmountWithheld, 0);
 
-    return R.compose(
-      R.add(adjustmentAmount),
-      R.subtract(R.__, this.discountAmount),
-      R.when(R.always(this.isInclusiveTax), R.add(this.taxAmountWithheld)),
-    )(this.subtotal);
+    return this.subtotal - this.discountAmount + adjustmentAmount + totalTax;
   }
 
   /**
@@ -491,7 +489,9 @@ export class Bill extends TenantBaseModel {
     } = require('../../BillLandedCosts/models/BillLandedCost');
     const { Branch } = require('../../Branches/models/Branch.model');
     const { Warehouse } = require('../../Warehouses/models/Warehouse.model');
-    const { TaxRateModel } = require('../../TaxRates/models/TaxRate.model');
+    const {
+      TaxRateModel: _TaxRateModel,
+    } = require('../../TaxRates/models/TaxRate.model');
     const {
       TaxRateTransaction,
     } = require('../../TaxRates/models/TaxRateTransaction.model');

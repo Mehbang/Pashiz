@@ -4,7 +4,7 @@ import { Intent, Tag } from '@blueprintjs/core';
 import { useMemo } from 'react';
 
 const applyToTypeAccessor = (rule) => {
-  return rule.apply_if_transaction_type === 'deposit' ? (
+  return rule.applyIfTransactionType === 'deposit' ? (
     <Tag round intent={Intent.SUCCESS}>
       {intl.get('deposits')}
     </Tag>
@@ -16,12 +16,12 @@ const applyToTypeAccessor = (rule) => {
 };
 
 const conditionsAccessor = (rule) => (
-  <span style={{ fontSize: 12 }}>{rule.conditions_formatted}</span>
+  <span style={{ fontSize: 12 }}>{rule.conditionsFormatted}</span>
 );
 
 const applyToAccessor = (rule) => (
   <Tag intent={Intent.NONE} minimal>
-    {rule.assign_account_name}
+    {rule.assignAccountName}
   </Tag>
 );
 
@@ -38,7 +38,7 @@ export const useBankRulesTableColumns = () => {
       },
       {
         Header: intl.get('categorize_as'),
-        accessor: 'assign_category_formatted',
+        accessor: 'assignCategoryFormatted',
       },
       {
         Header: intl.get('apply_to'),

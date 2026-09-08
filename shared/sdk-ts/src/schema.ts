@@ -1005,6 +1005,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/sale-invoices/{id}/notify-by-sms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Notify the given sale invoice by SMS. */
+        post: operations["SaleInvoicesController_notifySaleInvoiceBySms"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sale-invoices/{id}/sms-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves the sale invoice SMS details. */
+        get: operations["SaleInvoicesController_getSaleInvoiceSmsDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/sale-invoices/{id}/generate-link": {
         parameters: {
             query?: never;
@@ -1379,6 +1413,40 @@ export interface paths {
         };
         /** Retrieves the payment received invoices. */
         get: operations["PaymentReceivesController_getPaymentReceiveInvoices"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments-received/{id}/notify-by-sms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Notify the given payment received by SMS. */
+        post: operations["PaymentReceivesController_notifyPaymentReceiveBySms"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments-received/{id}/sms-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves the payment received SMS details. */
+        get: operations["PaymentReceivesController_getPaymentReceiveSmsDetails"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2396,6 +2464,40 @@ export interface paths {
         };
         /** Retrieves the sale receipt state. */
         get: operations["SaleReceiptsController_getSaleReceiptState"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sale-receipts/{id}/notify-by-sms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Notify the given sale receipt by SMS. */
+        post: operations["SaleReceiptsController_notifySaleReceiptBySms"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sale-receipts/{id}/sms-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves the sale receipt SMS details. */
+        get: operations["SaleReceiptsController_getSaleReceiptSmsDetails"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3533,6 +3635,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/banking/recognized/{recognizedTransactionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get recognized transaction */
+        get: operations["BankingRecognizedTransactionsController_getRecognizedTransaction"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/banking/recognized": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of recognized transactions */
+        get: operations["BankingRecognizedTransactionsController_getRecognizedTransactions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/banking/rules": {
         parameters: {
             query?: never;
@@ -3565,40 +3701,6 @@ export interface paths {
         post?: never;
         /** Delete the given bank rule. */
         delete: operations["BankRulesController_deleteBankRule"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/banking/recognized/{recognizedTransactionId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get recognized transaction */
-        get: operations["BankingRecognizedTransactionsController_getRecognizedTransaction"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/banking/recognized": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a list of recognized transactions */
-        get: operations["BankingRecognizedTransactionsController_getRecognizedTransactions"];
-        put?: never;
-        post?: never;
-        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -3822,6 +3924,57 @@ export interface paths {
         /** Save the given settings. */
         put: operations["SettingsController_saveSettings"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/settings/sms-notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves SMS notifications settings. */
+        get: operations["SettingsController_getSmsNotifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/settings/sms-notification/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves a single SMS notification setting. */
+        get: operations["SettingsController_getSmsNotification"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/settings/sms-notification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Edits a single SMS notification setting. */
+        post: operations["SettingsController_editSmsNotification"];
         delete?: never;
         options?: never;
         head?: never;
@@ -6904,6 +7057,23 @@ export interface components {
             /** @description List of item costs */
             costs: components["schemas"]["InventoryItemCostDto"][];
         };
+        SmsNotificationDetailsResponseDto: {
+            /**
+             * @description The display name of the customer.
+             * @example Acme Corp
+             */
+            customerName: string;
+            /**
+             * @description The personal phone number of the customer.
+             * @example +1 555 123 4567
+             */
+            customerPhoneNumber: string;
+            /**
+             * @description The formatted SMS message.
+             * @example Your receipt #R-00001 has been received.
+             */
+            smsMessage: string;
+        };
         SaleInvoiceHtmlContentResponseDto: {
             /**
              * @description The HTML content of the sale invoice
@@ -7753,6 +7923,20 @@ export interface components {
              *     ]
              */
             attachments: string[];
+        };
+        NotifySaleInvoiceBySmsDto: {
+            /**
+             * @description The notification key to determine the SMS template. Defaults to `details`.
+             * @default details
+             * @enum {string}
+             */
+            notificationKey: "details" | "reminder";
+            /**
+             * @deprecated
+             * @description Deprecated alias of `notificationKey`.
+             * @enum {string}
+             */
+            notification_key?: "details" | "reminder";
         };
         CreatePdfTemplateDto: Record<string, never>;
         EditPdfTemplateDto: Record<string, never>;
@@ -13474,6 +13658,11 @@ export interface components {
              */
             formattedAmount: string;
             /**
+             * @description The uncategorized transactions count of the account
+             * @example 0
+             */
+            uncategorizedTransactionsCount: number;
+            /**
              * @description The Plaid item ID
              * @example plaid-item-123
              */
@@ -13928,6 +14117,123 @@ export interface components {
             /** @description Formatted withdrawal amount */
             formattedWithdrawalAmount: string;
         };
+        GetRecognizedTransactionResponseDto: {
+            /**
+             * @description The unique identifier of the uncategorized transaction
+             * @example 123
+             */
+            uncategorizedTransactionId: number;
+            /**
+             * @description The reference number of the transaction
+             * @example TRX-2024-001
+             */
+            referenceNo: string;
+            /**
+             * @description The description of the transaction
+             * @example Payment for invoice #123
+             */
+            description: string;
+            /**
+             * @description The payee of the transaction
+             * @example John Doe
+             */
+            payee: string;
+            /**
+             * @description The amount of the transaction
+             * @example 1500.75
+             */
+            amount: number;
+            /**
+             * @description The formatted amount of the transaction
+             * @example $1,500.75
+             */
+            formattedAmount: string;
+            /**
+             * @description The date of the transaction
+             * @example 2024-04-01
+             */
+            date: string;
+            /**
+             * @description The formatted date of the transaction
+             * @example Apr 1, 2024
+             */
+            formattedDate: string;
+            /**
+             * @description The assigned account ID
+             * @example 10
+             */
+            assignedAccountId: number;
+            /**
+             * @description The assigned account name
+             * @example Bank Account
+             */
+            assignedAccountName: string;
+            /**
+             * @description The assigned account code
+             * @example 1001
+             */
+            assignedAccountCode: string;
+            /**
+             * @description The assigned payee
+             * @example Jane Smith
+             */
+            assignedPayee: string;
+            /**
+             * @description The assigned memo
+             * @example Office supplies
+             */
+            assignedMemo: string;
+            /**
+             * @description The assigned category
+             * @example Office Expenses
+             */
+            assignedCategory: string;
+            /**
+             * @description The formatted assigned category
+             * @example Other Income
+             */
+            assignedCategoryFormatted: string;
+            /**
+             * @description The withdrawal amount
+             * @example 500
+             */
+            withdrawal: number;
+            /**
+             * @description The deposit amount
+             * @example 1000
+             */
+            deposit: number;
+            /**
+             * @description Whether this is a deposit transaction
+             * @example true
+             */
+            isDepositTransaction: boolean;
+            /**
+             * @description Whether this is a withdrawal transaction
+             * @example false
+             */
+            isWithdrawalTransaction: boolean;
+            /**
+             * @description The formatted deposit amount
+             * @example $1,000.00
+             */
+            formattedDepositAmount: string;
+            /**
+             * @description The formatted withdrawal amount
+             * @example $500.00
+             */
+            formattedWithdrawalAmount: string;
+            /**
+             * @description The bank rule ID
+             * @example BR-001
+             */
+            bankRuleId: string;
+            /**
+             * @description The bank rule name
+             * @example Salary Rule
+             */
+            bankRuleName: string;
+        };
         BankRuleConditionResponseDto: {
             /**
              * @description The unique identifier of the bank rule condition
@@ -14145,123 +14451,6 @@ export interface components {
              */
             assignMemo: string;
         };
-        GetRecognizedTransactionResponseDto: {
-            /**
-             * @description The unique identifier of the uncategorized transaction
-             * @example 123
-             */
-            uncategorizedTransactionId: number;
-            /**
-             * @description The reference number of the transaction
-             * @example TRX-2024-001
-             */
-            referenceNo: string;
-            /**
-             * @description The description of the transaction
-             * @example Payment for invoice #123
-             */
-            description: string;
-            /**
-             * @description The payee of the transaction
-             * @example John Doe
-             */
-            payee: string;
-            /**
-             * @description The amount of the transaction
-             * @example 1500.75
-             */
-            amount: number;
-            /**
-             * @description The formatted amount of the transaction
-             * @example $1,500.75
-             */
-            formattedAmount: string;
-            /**
-             * @description The date of the transaction
-             * @example 2024-04-01
-             */
-            date: string;
-            /**
-             * @description The formatted date of the transaction
-             * @example Apr 1, 2024
-             */
-            formattedDate: string;
-            /**
-             * @description The assigned account ID
-             * @example 10
-             */
-            assignedAccountId: number;
-            /**
-             * @description The assigned account name
-             * @example Bank Account
-             */
-            assignedAccountName: string;
-            /**
-             * @description The assigned account code
-             * @example 1001
-             */
-            assignedAccountCode: string;
-            /**
-             * @description The assigned payee
-             * @example Jane Smith
-             */
-            assignedPayee: string;
-            /**
-             * @description The assigned memo
-             * @example Office supplies
-             */
-            assignedMemo: string;
-            /**
-             * @description The assigned category
-             * @example Office Expenses
-             */
-            assignedCategory: string;
-            /**
-             * @description The formatted assigned category
-             * @example Other Income
-             */
-            assignedCategoryFormatted: string;
-            /**
-             * @description The withdrawal amount
-             * @example 500
-             */
-            withdrawal: number;
-            /**
-             * @description The deposit amount
-             * @example 1000
-             */
-            deposit: number;
-            /**
-             * @description Whether this is a deposit transaction
-             * @example true
-             */
-            isDepositTransaction: boolean;
-            /**
-             * @description Whether this is a withdrawal transaction
-             * @example false
-             */
-            isWithdrawalTransaction: boolean;
-            /**
-             * @description The formatted deposit amount
-             * @example $1,000.00
-             */
-            formattedDepositAmount: string;
-            /**
-             * @description The formatted withdrawal amount
-             * @example $500.00
-             */
-            formattedWithdrawalAmount: string;
-            /**
-             * @description The bank rule ID
-             * @example BR-001
-             */
-            bankRuleId: string;
-            /**
-             * @description The bank rule name
-             * @example Salary Rule
-             */
-            bankRuleName: string;
-        };
         GetExcludedBankTransactionResponseDto: {
             /** @description Transaction amount (positive for deposit, negative for withdrawal) */
             amount: number;
@@ -14471,6 +14660,90 @@ export interface components {
              * @example sale_invoices
              */
             group: string;
+        };
+        SmsNotificationAllowedVariableDto: {
+            /**
+             * @description The template variable name without braces.
+             * @example CustomerName
+             */
+            variable: string;
+            /**
+             * @description The template variable description.
+             * @example Customer name
+             */
+            description: string;
+        };
+        SmsNotificationSettingResponseDto: {
+            /**
+             * @description The SMS notification key.
+             * @example sale-invoice-details
+             */
+            key: string;
+            /**
+             * @description The notification label.
+             * @example Sale Invoice Details
+             */
+            notificationLabel: string;
+            /**
+             * @description The notification description.
+             * @example Sent to the customer when a sale invoice is created.
+             */
+            notificationDescription: string;
+            /**
+             * @description The module the notification belongs to.
+             * @example Sales Invoices
+             */
+            module: string;
+            /**
+             * @description The formatted module name.
+             * @example Invoice
+             */
+            moduleFormatted: string;
+            /**
+             * @description The default SMS message template.
+             * @example Hi {CustomerName}, invoice {InvoiceNumber} is due on {DueDate}. Amount due: {DueAmount}. - {CompanyName}
+             */
+            defaultSmsMessage: string;
+            /** @description The variables allowed in the SMS message template. */
+            allowedVariables: components["schemas"]["SmsNotificationAllowedVariableDto"][];
+            /**
+             * @description The current SMS message template.
+             * @example Hi {CustomerName}, invoice {InvoiceNumber} is due on {DueDate}. Amount due: {DueAmount}. - {CompanyName}
+             */
+            smsMessage: string;
+            /**
+             * @description Whether the auto SMS notification is enabled.
+             * @example false
+             */
+            isNotificationEnabled: boolean;
+        };
+        EditSmsNotificationBodyDto: {
+            /**
+             * @description The SMS message template.
+             * @example Hi {CustomerName}, invoice {InvoiceNumber} is due. - {CompanyName}
+             */
+            messageText?: string;
+            /**
+             * @deprecated
+             * @description Deprecated alias of `messageText`.
+             */
+            smsMessage?: string;
+            /**
+             * @description Whether the auto SMS notification is enabled.
+             * @example true
+             */
+            isNotificationEnabled?: boolean;
+            /** @deprecated */
+            message_text?: string;
+            /** @deprecated */
+            sms_message?: string;
+            /** @deprecated */
+            is_notification_enabled?: boolean;
+            /**
+             * @description The SMS notification key.
+             * @example sale-invoice-details
+             */
+            key: string;
         };
         BalanceSheetQueryResponseDto: {
             /**
@@ -16328,6 +16601,11 @@ export interface components {
             isBigcapitalCloud: boolean;
         };
         RolePermissionResponseDto: {
+            /**
+             * @description The permission ID
+             * @example 1
+             */
+            id: number;
             /**
              * @description The action/ability of the permission
              * @example read
@@ -19691,6 +19969,68 @@ export interface operations {
             };
         };
     };
+    SaleInvoicesController_notifySaleInvoiceBySms: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The sale invoice id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        /** @description The sale invoice SMS notification options. */
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["NotifySaleInvoiceBySmsDto"];
+            };
+        };
+        responses: {
+            /** @description The sale invoice has been notified by SMS. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SaleInvoicesController_getSaleInvoiceSmsDetails: {
+        parameters: {
+            query?: {
+                /** @description The SMS notification key. Defaults to `details`. */
+                notificationKey?: string;
+            };
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The sale invoice id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The sale invoice SMS details have been retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsNotificationDetailsResponseDto"];
+                };
+            };
+        };
+    };
     SaleInvoicesController_generateSaleInvoiceSharableLink: {
         parameters: {
             query?: never;
@@ -19952,8 +20292,8 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized - File upload failed */
-            401: {
+            /** @description Bad request - no file was provided in the upload */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20634,6 +20974,60 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    PaymentReceivesController_notifyPaymentReceiveBySms: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The payment received id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The payment received has been notified by SMS. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PaymentReceivesController_getPaymentReceiveSmsDetails: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The payment received id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The payment received SMS details have been retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsNotificationDetailsResponseDto"];
+                };
             };
         };
     };
@@ -22845,6 +23239,60 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SaleReceiptStateResponseDto"];
+                };
+            };
+        };
+    };
+    SaleReceiptsController_notifySaleReceiptBySms: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The sale receipt id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The sale receipt has been notified by SMS. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SaleReceiptsController_getSaleReceiptSmsDetails: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The sale receipt id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The sale receipt SMS details have been retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsNotificationDetailsResponseDto"];
                 };
             };
         };
@@ -25499,6 +25947,71 @@ export interface operations {
             };
         };
     };
+    BankingRecognizedTransactionsController_getRecognizedTransaction: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The ID of the recognized transaction */
+                recognizedTransactionId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the recognized transaction details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetRecognizedTransactionResponseDto"];
+                };
+            };
+            /** @description Recognized transaction not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BankingRecognizedTransactionsController_getRecognizedTransactions: {
+        parameters: {
+            query?: {
+                /** @description Query parameters for filtering recognized transactions */
+                query?: unknown;
+            };
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns a list of recognized transactions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponseDto"] & {
+                        data?: components["schemas"]["GetRecognizedTransactionResponseDto"][];
+                    };
+                };
+            };
+        };
+    };
     BankRulesController_getBankRules: {
         parameters: {
             query?: never;
@@ -25630,71 +26143,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    BankingRecognizedTransactionsController_getRecognizedTransaction: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
-                Authorization: string;
-                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
-                "organization-id": string;
-            };
-            path: {
-                /** @description The ID of the recognized transaction */
-                recognizedTransactionId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Returns the recognized transaction details */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetRecognizedTransactionResponseDto"];
-                };
-            };
-            /** @description Recognized transaction not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    BankingRecognizedTransactionsController_getRecognizedTransactions: {
-        parameters: {
-            query?: {
-                /** @description Query parameters for filtering recognized transactions */
-                query?: unknown;
-            };
-            header: {
-                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
-                Authorization: string;
-                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
-                "organization-id": string;
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Returns a list of recognized transactions */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedResponseDto"] & {
-                        data?: components["schemas"]["GetRecognizedTransactionResponseDto"][];
-                    };
-                };
             };
         };
     };
@@ -26124,6 +26572,73 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    SettingsController_getSmsNotifications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The SMS notifications settings list. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsNotificationSettingResponseDto"][];
+                };
+            };
+        };
+    };
+    SettingsController_getSmsNotification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The SMS notification key. */
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The SMS notification setting. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsNotificationSettingResponseDto"];
+                };
+            };
+        };
+    };
+    SettingsController_editSmsNotification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EditSmsNotificationBodyDto"];
+            };
+        };
+        responses: {
+            /** @description The SMS notification setting. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SmsNotificationSettingResponseDto"];
+                };
             };
         };
     };

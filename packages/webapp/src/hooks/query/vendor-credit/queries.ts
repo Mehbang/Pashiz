@@ -195,7 +195,7 @@ export function useVendorCredit(
     ...props,
     queryKey: vendorCreditsKeys.detail(id),
     queryFn: () => fetchVendorCredit(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -251,13 +251,13 @@ export function useRefundVendorCredit(
   props?: Omit<UseQueryOptions<VendorCreditRefund[]>, 'queryKey' | 'queryFn'>,
   _requestProps?: unknown,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...props,
     queryKey: vendorCreditsKeys.refund(id),
     queryFn: () => fetchVendorCreditRefunds(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -308,7 +308,7 @@ export function useReconcileVendorCredit(
     ...props,
     queryKey: vendorCreditsKeys.reconcile(id),
     queryFn: () => fetchVendorCreditToApplyBills(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -320,13 +320,13 @@ export function useReconcileVendorCredits(
   >,
   _requestProps?: unknown,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...props,
     queryKey: vendorCreditsKeys.reconciles(id),
     queryFn: () => fetchAppliedBillsToVendorCredit(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -349,12 +349,12 @@ export function useRefundVendorCreditTransaction(
   props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>,
   _requestProps?: unknown,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...props,
     queryKey: vendorCreditsKeys.refundTransaction(id),
     queryFn: () => fetchRefundVendorCreditTransaction(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }

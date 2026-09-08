@@ -1,6 +1,5 @@
 import { Knex } from 'knex';
 import { Bill } from '@/modules/Bills/models/Bill';
-import { ModelObject } from 'objection';
 import { Expense } from '@/modules/Expenses/models/Expense.model';
 
 export interface ILandedCostItemDTO {
@@ -78,11 +77,6 @@ export interface ILandedCostTransactionDOJO extends ILandedCostTransaction {
   formattedAllocatedCostAmount: string;
 }
 
-interface ILandedCostEntry {
-  id: number;
-  landedCost?: boolean;
-}
-
 export interface IBillLandedCostTransaction {
   id: number;
   fromTransactionId: number;
@@ -126,7 +120,7 @@ export interface IAllocatedLandedCostCreatedPayload {
   trx: Knex.Transaction;
 }
 
-export interface IBillAssociatedLandedCostTransactions {}
+export type IBillAssociatedLandedCostTransactions = object;
 
 interface ICommonEntry {
   id?: number;

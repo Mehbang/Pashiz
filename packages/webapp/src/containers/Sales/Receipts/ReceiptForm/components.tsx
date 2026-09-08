@@ -2,6 +2,7 @@ import { Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import React, { useRef } from 'react';
 import intl from 'react-intl-universal';
+import { useReceiptFormContext } from './ReceiptFormProvider';
 import { useReceiptIsForeignCustomer, useReceiptTotal } from './utils';
 import type { ReceiptFormValues } from './utils';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
@@ -17,7 +18,6 @@ import { useUpdateEffect } from '@/hooks';
 import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { transactionNumber } from '@/utils';
 import { compose } from '@/utils';
-import { useReceiptFormContext } from './ReceiptFormProvider';
 
 type ReceiptExchangeRateInputFieldRootProps = React.ComponentProps<
   typeof ExchangeRateInputGroup
@@ -54,14 +54,6 @@ export const ReceiptExchangeRateInputField = compose(
   withExchangeRateFetchingLoading,
   withExchangeRateItemEntriesPriceRecalc,
 )(ReceiptExchangeRateInputFieldRoot);
-
-/**
- * Receipt project select.
- * @returns {JSX.Element}
- */
-export function ReceiptProjectSelectButton({ label }: { label?: string }) {
-  return <Button text={label ?? intl.get('select_project')} />;
-}
 
 type ReceiptSyncIncrementSettingsToFormProps = Record<string, never>;
 

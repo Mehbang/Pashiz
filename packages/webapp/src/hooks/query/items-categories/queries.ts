@@ -156,11 +156,11 @@ export function useItemCategory(
   id: number | null | undefined,
   props?: Omit<UseQueryOptions<ItemCategory>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: itemsCategoriesKeys.detail(id),
     queryFn: () => fetchItemCategory(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }

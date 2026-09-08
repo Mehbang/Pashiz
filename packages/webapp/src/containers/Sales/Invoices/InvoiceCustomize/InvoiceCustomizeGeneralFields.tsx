@@ -1,4 +1,3 @@
-// @ts-nocheck
 import intl from 'react-intl-universal';
 import { Classes, Text } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';

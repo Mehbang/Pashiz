@@ -1,7 +1,4 @@
 import React from 'react';
-import { DashboardPageContent } from '@/components';
-
-import '@/style/pages/SaleEstimate/List.scss';
 import { EstimatesActionsBar } from './EstimatesActionsBar';
 import { EstimatesDataTable } from './EstimatesDataTable';
 import { EstimatesListDialogs } from './EstimatesListDialogs';
@@ -10,12 +7,10 @@ import { EstimatesListProvider } from './EstimatesListProvider';
 import { withEstimates } from './withEstimates';
 import { withEstimatesActions } from './withEstimatesActions';
 import type { WithEstimatesProps } from './withEstimates';
+import type { WithEstimatesActionsProps } from './withEstimatesActions';
+import { DashboardPageContent } from '@/components';
+import '@/style/pages/SaleEstimate/List.scss';
 import { compose, transformTableStateToQuery } from '@/utils';
-
-interface WithEstimatesActionsProps {
-  resetEstimatesTableState: () => void;
-  resetEstimatesSelectedRows: () => void;
-}
 
 interface EstimatesListProps
   extends Pick<

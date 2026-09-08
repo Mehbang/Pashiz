@@ -1,13 +1,13 @@
 import intl from 'react-intl-universal';
 import { Classes, Intent, ProgressBar } from '@blueprintjs/core';
-import type { ComponentType } from 'react';
+import clsx from 'classnames';
+import { debounce } from 'lodash';
 import React, { Suspense } from 'react';
 import styled from 'styled-components';
-import { debounce } from 'lodash';
-import clsx from 'classnames';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { ComponentType } from 'react';
 import { AppToaster } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { compose } from '@/utils';
 

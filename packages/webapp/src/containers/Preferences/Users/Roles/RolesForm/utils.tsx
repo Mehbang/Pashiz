@@ -1,6 +1,5 @@
 import { DepGraph } from 'dependency-graph';
 import { chain, isEmpty, castArray, memoize } from 'lodash';
-import * as R from 'ramda';
 import type { RolesFormPermission } from './types';
 import {
   getPermissionsSchema,
@@ -36,7 +35,7 @@ interface PermissionModule {
 interface PermissionSchemaItem {
   subject: string;
   abilities?: PermissionItem[];
-  extra_abilities?: PermissionItem[];
+  extraAbilities?: PermissionItem[];
 }
 
 interface FormLike {
@@ -56,18 +55,28 @@ export const FULL_ACCESS_CHECKBOX_STATE = {
 /**
  * Transformes the permissions object to array.
  */
-export const transformToArray = ({
-  permissions,
-}: {
-  permissions: Record<string, boolean>;
-}): RolesFormPermission[] => {
+export const transformToArray = (
+  { permissions }: { permissions: Record<string, boolean> },
+  role?: {
+    permissions: Array<{
+      id: number;
+      subject: string;
+      ability: string;
+      value: boolean;
+    }>;
+  },
+): RolesFormPermission[] => {
   return Object.keys(permissions).map((index) => {
-    const [value, key] = index.split('/');
+    const [subject, ability] = index.split('/');
+    const existingPerm = role?.permissions.find(
+      (p) => p.subject === subject && p.ability === ability,
+    );
 
     return {
-      subject: value,
-      ability: key,
+      subject,
+      ability,
       value: permissions[index],
+      ...(existingPerm ? { permissionId: existingPerm.id } : {}),
     };
   });
 };
@@ -108,8 +117,8 @@ export const transformToObject = (role: {
   const serviceFullAccess = getInitialServicesFullAccess(permissions);
 
   return {
-    role_name: role.name,
-    role_description: role.description,
+    roleName: role.name,
+    roleDescription: role.description,
     permissions,
     serviceFullAccess,
   };
@@ -122,7 +131,7 @@ export const getDefaultValuesFromSchema = (
     .map((item) => {
       const abilities = [
         ...(item.abilities || []),
-        ...(item.extra_abilities || []),
+        ...(item.extraAbilities || []),
       ];
       return abilities
         .filter((ability) => ability.default)
@@ -234,13 +243,11 @@ export function isServiceFullUnchecked(
 /**
  * Handles permission checkbox change.
  */
-export const handleCheckboxPermissionChange = R.curry(
-  (
-    form: FormLike,
-    permission: PermissionItem,
-    service: PermissionService,
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+export const handleCheckboxPermissionChange =
+  (form: FormLike) =>
+  (permission: PermissionItem) =>
+  (service: PermissionService) =>
+  (event: React.ChangeEvent<HTMLInputElement>) => {
     const { subject } = service;
     const isChecked = event.currentTarget.checked;
     const permKey = `${subject}/${permission.key}`;
@@ -271,8 +278,7 @@ export const handleCheckboxPermissionChange = R.curry(
     dependencies.forEach((depKey: string) => {
       form.setFieldValue(`permissions.${depKey}`, isChecked);
     });
-  },
-);
+  };
 
 /**
  * Detarmines the permission checkbox state.
@@ -302,12 +308,10 @@ export function getServiceAllPermissionsPaths(subject: string): string[] {
 /**
  * Handle full access service checkbox change.
  */
-export const handleCheckboxFullAccessChange = R.curry(
-  (
-    service: PermissionService,
-    form: FormLike,
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+export const handleCheckboxFullAccessChange =
+  (service: PermissionService) =>
+  (form: FormLike) =>
+  (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.currentTarget.checked;
     const permsPaths = getServiceAllPermissionsPaths(service.subject);
 
@@ -321,8 +325,7 @@ export const handleCheckboxFullAccessChange = R.curry(
           : FULL_ACCESS_CHECKBOX_STATE.OFF,
       );
     });
-  },
-);
+  };
 
 /**
  * Retrieves all flatten modules permissions.

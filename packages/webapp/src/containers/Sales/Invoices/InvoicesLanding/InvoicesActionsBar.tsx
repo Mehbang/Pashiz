@@ -19,6 +19,7 @@ import { useBulkDeleteInvoicesDialog } from '../hooks/use-bulk-delete-accounts-d
 import { useInvoicesListContext } from './InvoicesListProvider';
 import { withInvoiceActions } from './withInvoiceActions';
 import { withInvoices } from './withInvoices';
+import type { WithInvoiceActionsProps } from './withInvoiceActions';
 import type { WithInvoicesProps } from './withInvoices';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
@@ -36,14 +37,10 @@ import { DialogsName } from '@/constants/dialogs';
 import { DRAWERS } from '@/constants/drawers';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useSaveSettings } from '@/hooks/query';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
 import { useRefreshInvoices } from '@/hooks/query/invoices';
-import { useSaveSettings } from '@/hooks/query';
 import { compose } from '@/utils';
-
-interface WithInvoiceActionsProps {
-  setInvoicesTableState: (state: Record<string, any>) => void;
-}
 
 interface InvoiceActionsBarProps
   extends Pick<WithInvoicesProps, 'invoicesSelectedRows'>,

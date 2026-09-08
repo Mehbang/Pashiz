@@ -1,9 +1,9 @@
 import { Alert, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { AppToaster, FormattedMessage as T } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { useActivateUser } from '@/hooks/query';
 import { compose } from '@/utils';
@@ -16,6 +16,14 @@ interface UserActivateAlertProps extends WithAlertActionsProps {
   name: string;
   isOpen: boolean;
   payload: UserActivateAlertPayload;
+}
+
+interface UserActivateError {
+  type: string;
+}
+
+interface UserActivateErrorResponse {
+  data: { errors?: UserActivateError[] };
 }
 
 /**
@@ -38,12 +46,14 @@ function UserActivateAlertInner({
           intent: Intent.SUCCESS,
         });
       })
-      .catch((error: Error) => {
-        // Bugfix: original @ts-nocheck silently closed the alert on error without surfacing the failure.
-        AppToaster.show({
-          message: error.message,
-          intent: Intent.DANGER,
-        });
+      .catch((error: UserActivateErrorResponse) => {
+        const errors = error?.data?.errors ?? [];
+        if (errors.find((e) => e.type === 'USER_SAME_THE_AUTHORIZED_USER')) {
+          AppToaster.show({
+            message: intl.get('cannot_toggle_authorized_user'),
+            intent: Intent.DANGER,
+          });
+        }
       })
       .finally(() => {
         closeAlert(name);

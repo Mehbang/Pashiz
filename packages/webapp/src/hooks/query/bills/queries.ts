@@ -162,7 +162,7 @@ export function useBill(
     ...props,
     queryKey: billsKeys.detail(id),
     queryFn: () => fetchBill(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -170,7 +170,7 @@ export function useDueBills(
   vendorId: number | null | undefined,
   props?: Omit<UseQueryOptions<unknown[]>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: billsKeys.due(vendorId),
@@ -201,6 +201,6 @@ export function useBillPaymentTransactions(
     ...props,
     queryKey: billsKeys.paymentTransactions(id),
     queryFn: () => fetchBillPaymentTransactions(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }

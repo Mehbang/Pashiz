@@ -173,7 +173,8 @@ export const useInventoryAdjustmentsColumns = () => {
       {
         id: 'date',
         Header: intl.get('date'),
-        accessor: (r) => formatDateLocalized(r.date, 'YYYY MMM DD'),
+        accessor: (r: InventoryAdjustment) =>
+          formatDateLocalized(r.date, 'YYYY MMM DD'),
         width: 115,
         className: 'date',
         clickable: true,
@@ -213,7 +214,8 @@ export const useInventoryAdjustmentsColumns = () => {
       {
         id: 'created_at',
         Header: intl.get('created_at'),
-        accessor: (r) => formatDateLocalized(r.createdAt, 'YYYY MMM DD'),
+        accessor: (r: InventoryAdjustment) =>
+          formatDateLocalized(r.createdAt, 'YYYY MMM DD'),
         width: 125,
         className: 'created_at',
         clickable: true,

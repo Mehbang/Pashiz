@@ -2,8 +2,8 @@
 import intl from 'react-intl-universal';
 import { Button, Card, Classes, Intent, Text } from '@blueprintjs/core';
 import clsx from 'classnames';
+import * as FF from 'fp-ts/function';
 import { includes } from 'lodash';
-import * as R from 'ramda';
 import { withAlertActions } from '../Alert/withAlertActions';
 import { withDrawerActions } from '../Drawer/withDrawerActions';
 import { getSubscriptionStatusText } from './_utils';
@@ -146,10 +146,11 @@ function SubscriptionRoot({ openAlert, openDrawer }) {
   );
 }
 
-export const Subscription = R.compose(
-  withAlertActions,
+export const Subscription = FF.pipe(
+  SubscriptionRoot,
   withDrawerActions,
-)(SubscriptionRoot);
+  withAlertActions,
+);
 
 function SubscriptionStatusText({ subscription }) {
   const text = getSubscriptionStatusText(subscription);

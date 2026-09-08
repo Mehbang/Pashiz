@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Item } from '../models/Item';
 
 /** One answer an item gives to a field its category defines. */
 export class ItemFieldValueResponseDto {

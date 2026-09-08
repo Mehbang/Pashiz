@@ -121,7 +121,7 @@ export function useCashflowTransaction(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery<
     BankingTransactionResponse,
@@ -131,7 +131,7 @@ export function useCashflowTransaction(
     ...props,
     queryKey: cashflowAccountsKeys.transaction(id),
     queryFn: () => fetchCashflowTransaction(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -188,6 +188,7 @@ export function useAccountTransactionsInfinity(
     queryFn: ({ pageParam }) =>
       fetchAccountTransactionsInfinity(fetcher, accountId, {
         ...query,
+        accountId,
         page: pageParam,
       }),
     initialPageParam: 1,
@@ -270,7 +271,7 @@ export function useUncategorizedTransaction(
     ...props,
     queryKey: cashflowAccountsKeys.uncategorizedTransaction(id),
     queryFn: () => fetchUncategorizedTransaction(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 

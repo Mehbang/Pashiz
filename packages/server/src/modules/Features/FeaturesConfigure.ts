@@ -26,6 +26,14 @@ export class FeaturesConfigure {
         name: Features.BankSyncing,
         defaultValue: this.configService.get('bankfeed.enabled') ?? false,
       },
+      {
+        name: Features.LANDED_COST,
+        defaultValue: false,
+      },
+      {
+        name: Features.SMS_NOTIFICATIONS,
+        defaultValue: false,
+      },
     ];
   }
 }

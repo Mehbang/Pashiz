@@ -102,7 +102,7 @@ export function useWarehousesTransfers(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: warehousesTransfersKeys.list(query ?? undefined),
@@ -129,7 +129,7 @@ export function useWarehouseTransfer(
     ...props,
     queryKey: warehousesTransfersKeys.detail(id),
     queryFn: () => fetchWarehouseTransfer(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 

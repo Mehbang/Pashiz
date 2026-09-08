@@ -7,9 +7,9 @@ import {
   useSMSIntegrationContext,
   type SMSNotification,
 } from './SMSIntegrationProvider';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { DataTable, AppToaster, TableSkeletonRows } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { useSettingEditSMSNotification } from '@/hooks/query';
 import { compose } from '@/utils';
 
@@ -32,7 +32,7 @@ function SMSMessagesDataTableInner({
   const toggleSmsNotification = (notificationKey: string, value: boolean) => {
     editSMSNotificationMutate({
       key: notificationKey,
-      values: { is_notification_enabled: value },
+      values: { isNotificationEnabled: value },
     }).then(() => {
       AppToaster.show({
         message: intl.get(

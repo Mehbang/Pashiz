@@ -15,6 +15,9 @@ import {
   fetchSaleInvoiceState,
   fetchInvoicePayments,
   fetchSaleInvoiceHtml,
+  fetchSaleInvoicePdf,
+  notifySaleInvoiceBySms,
+  fetchSaleInvoiceSmsDetails,
 } from '@bigcapital/sdk-ts';
 import {
   useQueryClient,
@@ -25,10 +28,8 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
-import { useRequestQuery } from '../../useQueryRequest';
 import { useApiFetcher } from '../../useRequest';
-import useApiRequest from '../../useRequest';
-import { useRequestPdf } from '../../useRequestPdf';
+import { usePdfDocument } from '../../useRequestPdf';
 import { accountsKeys } from '../accounts/query-keys';
 import { creditNotesKeys } from '../credit-note/query-keys';
 import { customersKeys } from '../customers/query-keys';
@@ -48,8 +49,8 @@ import type {
   SaleInvoiceStateResponse,
   InvoicePaymentTransactionsResponse,
   SaleInvoiceHtmlContentResponse,
+  SaleInvoiceSmsDetailsResponse,
 } from '@bigcapital/sdk-ts';
-import { transformToCamelCase } from '@/utils';
 
 function commonInvalidateQueries(
   queryClient: ReturnType<typeof useQueryClient>,
@@ -209,7 +210,7 @@ export function useInvoice(
     ...props,
     queryKey: invoicesKeys.detail(invoiceId),
     queryFn: () => fetchSaleInvoice(fetcher, invoiceId as number),
-    enabled: invoiceId != null,
+    enabled: invoiceId != null && (props?.enabled ?? true),
   });
 }
 
@@ -217,9 +218,8 @@ export function useInvoice(
  * Retrieve the invoice pdf document data.
  */
 export function usePdfInvoice(invoiceId: number) {
-  return useRequestPdf({
-    url: `sale-invoices/${invoiceId}`,
-  });
+  const fetcher = useApiFetcher();
+  return usePdfDocument(() => fetchSaleInvoicePdf(fetcher, invoiceId));
 }
 
 export function useInvoiceHtml(
@@ -238,7 +238,7 @@ export function useDueInvoices(
   customerId: number | string | null | undefined,
   props?: UseQueryOptions<unknown, Error>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: invoicesKeys.due(customerId),
@@ -294,17 +294,18 @@ export function useCancelBadDebt(
   });
 }
 
-// Not in OpenAPI schema for sale-invoices; keep using apiRequest.
+export type InvoiceSmsNotificationKey = 'details' | 'reminder';
+
 export function useCreateNotifyInvoiceBySMS(
-  props?: UseMutationOptions<unknown, Error, [number, Record<string, unknown>]>,
+  props?: UseMutationOptions<void, Error, [number, InvoiceSmsNotificationKey]>,
 ) {
   const queryClient = useQueryClient();
-  const apiRequest = useApiRequest();
+  const fetcher = useApiFetcher();
 
   return useMutation({
     ...props,
-    mutationFn: ([id, values]: [number, Record<string, unknown>]) =>
-      apiRequest.post(`sale-invoices/${id}/notify-by-sms`, values, {}),
+    mutationFn: ([id, notificationKey]: [number, InvoiceSmsNotificationKey]) =>
+      notifySaleInvoiceBySms(fetcher, id, notificationKey),
     onSuccess: (_data, [id]) => {
       queryClient.invalidateQueries({ queryKey: invoicesKeys.notifyBySms(id) });
       commonInvalidateQueries(queryClient);
@@ -312,25 +313,23 @@ export function useCreateNotifyInvoiceBySMS(
   });
 }
 
-// Not in OpenAPI schema for sale-invoices; keep using useRequestQuery.
 export function useInvoiceSMSDetail(
-  invoiceId: number,
-  query?: Record<string, unknown>,
-  props?: Record<string, unknown>,
+  invoiceId: number | null | undefined,
+  notificationKey: InvoiceSmsNotificationKey = 'details',
+  props?: Omit<
+    UseQueryOptions<SaleInvoiceSmsDetailsResponse, Error>,
+    'queryKey' | 'queryFn'
+  >,
 ) {
-  return useRequestQuery(
-    [...invoicesKeys.smsDetail(invoiceId), query],
-    {
-      method: 'get',
-      url: `sale-invoices/${invoiceId}/sms-details`,
-      params: query,
-    } as { method: string; url: string; params?: Record<string, unknown> },
-    {
-      select: (res: { data: unknown }) => res.data,
-      defaultData: {},
-      ...props,
-    },
-  );
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
+
+  return useQuery({
+    ...props,
+    queryKey: [...invoicesKeys.smsDetail(invoiceId), notificationKey],
+    queryFn: () =>
+      fetchSaleInvoiceSmsDetails(fetcher, invoiceId!, notificationKey),
+    enabled: invoiceId != null && (props?.enabled ?? true),
+  });
 }
 
 export function useInvoicePaymentTransactions(
@@ -345,7 +344,7 @@ export function useInvoicePaymentTransactions(
     ...props,
     queryKey: invoicesKeys.paymentTransactions(invoiceId),
     queryFn: () => fetchInvoicePayments(fetcher, invoiceId!),
-    enabled: invoiceId != null,
+    enabled: invoiceId != null && (props?.enabled ?? true),
   });
 }
 
@@ -459,74 +458,5 @@ export function useGetSaleInvoiceState(
         (data: GetSaleInvoiceStateResponse & { data?: unknown }) =>
           (data?.data ?? data) as GetSaleInvoiceStateResponse,
       ),
-  });
-}
-
-// # Get sale invoice branding template — not in OpenAPI schema; keep apiRequest.
-export interface GetSaleInvoiceBrandingTemplateResponse {
-  id: number;
-  default: number;
-  predefined: number;
-  resource: string;
-  resourceFormatted: string;
-  templateName: string;
-  updatedAt: string;
-  createdAt: string;
-  createdAtFormatted: string;
-  attributes: {
-    billedToLabel?: string;
-    companyLogoKey?: string | null;
-    companyLogoUri?: string;
-    dateIssueLabel?: string;
-    discountLabel?: string;
-    dueAmountLabel?: string;
-    dueDateLabel?: string;
-    invoiceNumberLabel?: string;
-    itemDescriptionLabel?: string;
-    itemNameLabel?: string;
-    itemRateLabel?: string;
-    itemTotalLabel?: string;
-    paymentMadeLabel?: string;
-    primaryColor?: string;
-    secondaryColor?: string;
-    showCompanyAddress?: boolean;
-    showCompanyLogo?: boolean;
-    showCustomerAddress?: boolean;
-    showDateIssue?: boolean;
-    showDiscount?: boolean;
-    showDueAmount?: boolean;
-    showDueDate?: boolean;
-    showInvoiceNumber?: boolean;
-    showPaymentMade?: boolean;
-    showStatement?: boolean;
-    showSubtotal?: boolean;
-    showTaxes?: boolean;
-    showTermsConditions?: boolean;
-    showTotal?: boolean;
-    statementLabel?: string;
-    subtotalLabel?: string;
-    termsConditionsLabel?: string;
-    totalLabel?: string;
-  };
-}
-
-export function useGetSaleInvoiceBrandingTemplate(
-  invoiceId: number,
-  options?: UseQueryOptions<GetSaleInvoiceBrandingTemplateResponse, Error>,
-): UseQueryResult<GetSaleInvoiceBrandingTemplateResponse, Error> {
-  const apiRequest = useApiRequest();
-
-  return useQuery({
-    ...options,
-    queryKey: invoicesKeys.brandingTemplate(invoiceId),
-    queryFn: () =>
-      apiRequest
-        .get(`/sale-invoices/${invoiceId}/template`, {})
-        .then(
-          (res: { data?: { data?: unknown } }) =>
-            transformToCamelCase(
-              res.data?.data,
-            ) as GetSaleInvoiceBrandingTemplateResponse,
-        ),
   });
 }

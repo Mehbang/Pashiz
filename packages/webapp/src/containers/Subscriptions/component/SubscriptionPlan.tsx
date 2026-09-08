@@ -1,7 +1,7 @@
 // @ts-nocheck
 import intl from 'react-intl-universal';
 import { ButtonProps } from '@blueprintjs/core';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import { PricingPlan } from '@/components/PricingPlan/PricingPlan';
 import {
   WithPlansProps,
@@ -86,6 +86,7 @@ function SubscriptionPlanRoot({
   );
 }
 
-export const SubscriptionPlan = R.compose(
+export const SubscriptionPlan = FF.pipe(
+  SubscriptionPlanRoot,
   withPlans(({ plansPeriod }) => ({ plansPeriod })),
-)(SubscriptionPlanRoot);
+);

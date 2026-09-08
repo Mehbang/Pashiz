@@ -2,6 +2,7 @@ import intl from 'react-intl-universal';
 import React from 'react';
 import type { PreferencesMenuItem } from './types';
 import { FormattedMessage as T } from '@/components';
+import { Features } from '@/constants/features';
 
 export const PreferencesMenu: PreferencesMenuItem[] = [
   {
@@ -60,6 +61,11 @@ export const PreferencesMenu: PreferencesMenuItem[] = [
     href: '/preferences/accountant',
   },
   {
+    text: <T id={'features.label'} />,
+    disabled: false,
+    href: '/preferences/features',
+  },
+  {
     text: <T id={'items'} />,
     disabled: false,
     href: '/preferences/items',
@@ -84,9 +90,10 @@ export const PreferencesMenu: PreferencesMenuItem[] = [
     disabled: false,
     href: '/preferences/backup',
   },
-  // {
-  //   text: <T id={'sms_integration.label'} />,
-  //   disabled: false,
-  //   href: '/preferences/sms-message',
-  // },
+  {
+    text: <T id={'sms_integration.label'} />,
+    disabled: false,
+    href: '/preferences/sms-message',
+    feature: Features.SmsNotifications,
+  },
 ];

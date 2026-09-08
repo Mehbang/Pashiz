@@ -1,5 +1,4 @@
-// @ts-nocheck
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers } from '@/containers/Drawer/withDrawers';
@@ -10,6 +9,12 @@ const ReceiptCustomizeDrawerBody = React.lazy(() =>
   })),
 );
 
+interface ReceiptCustomizeDrawerProps {
+  name: string;
+  isOpen?: boolean;
+  payload?: Record<string, any>;
+}
+
 /**
  * Receipt customize drawer.
  * @returns {React.ReactNode}
@@ -19,7 +24,7 @@ function ReceiptCustomizeDrawerRoot({
   // #withDrawer
   isOpen,
   payload,
-}) {
+}: ReceiptCustomizeDrawerProps) {
   return (
     <Drawer
       isOpen={isOpen}
@@ -34,6 +39,7 @@ function ReceiptCustomizeDrawerRoot({
   );
 }
 
-export const ReceiptCustomizeDrawer = R.compose(withDrawers())(
+export const ReceiptCustomizeDrawer = FF.pipe(
   ReceiptCustomizeDrawerRoot,
+  withDrawers(),
 );

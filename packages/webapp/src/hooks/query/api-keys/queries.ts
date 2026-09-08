@@ -8,7 +8,11 @@ import {
 } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
 import { apiKeysKeys } from './query-keys';
-import type { ApiKeysList, GenerateApiKeyBody } from '@bigcapital/sdk-ts';
+import type {
+  ApiKeysList,
+  GenerateApiKeyBody,
+  GenerateApiKeyResponse,
+} from '@bigcapital/sdk-ts';
 
 const commonInvalidateQueries = (
   queryClient: ReturnType<typeof useQueryClient>,
@@ -19,7 +23,7 @@ const commonInvalidateQueries = (
 export function useApiKeys(
   props?: Omit<UseQueryOptions<ApiKeysList>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: apiKeysKeys.list(),
@@ -28,7 +32,7 @@ export function useApiKeys(
 }
 
 export function useGenerateApiKey(
-  props?: UseMutationOptions<void, Error, GenerateApiKeyBody>,
+  props?: UseMutationOptions<GenerateApiKeyResponse, Error, GenerateApiKeyBody>,
 ) {
   const client = useQueryClient();
   const fetcher = useApiFetcher();

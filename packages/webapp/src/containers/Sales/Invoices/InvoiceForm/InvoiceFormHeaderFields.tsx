@@ -1,15 +1,11 @@
-import { Position, Classes } from '@blueprintjs/core';
+import { Position } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { Theme, useTheme } from '@emotion/react';
-import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import {
-  InvoiceExchangeRateInputField,
-  InvoiceProjectSelectButton,
-} from './components';
+import { InvoiceExchangeRateInputField } from './components';
 import { InvoiceFormInvoiceNumberField } from './InvoiceFormInvoiceNumberField';
 import { useInvoiceFormContext } from './InvoiceFormProvider';
 import { customerNameFieldShouldUpdate } from './utils';
@@ -19,19 +15,13 @@ import {
   FormattedMessage as T,
   CustomerDrawerLink,
   FieldRequiredHint,
-  FeatureCan,
   CustomersSelect,
   Stack,
   FInputGroup,
   Icon,
   FDateInput,
 } from '@/components';
-import { Features } from '@/constants';
 import { useCustomerUpdateExRate } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
-import {
-  ProjectsSelect,
-  ProjectBillableEntriesLink,
-} from '@/containers/Projects/components';
 import { useDateInputFormatter } from '@/hooks';
 
 const getInvoiceFieldsStyle = (theme: Theme & { bpPrefix?: string }) => css`
@@ -56,8 +46,6 @@ const getInvoiceFieldsStyle = (theme: Theme & { bpPrefix?: string }) => css`
  */
 export function InvoiceFormHeaderFields() {
   const theme = useTheme();
-  const { projects } = useInvoiceFormContext();
-  const { values } = useFormikContext<InvoiceFormValues>();
   const invoiceFieldsClassName = getInvoiceFieldsStyle(theme);
   const dateInputFormatter = useDateInputFormatter();
 
@@ -128,30 +116,6 @@ export function InvoiceFormHeaderFields() {
           data-testId="invoice-reference-input"
         />
       </FFormGroup>
-
-      {/*------------ Project name -----------*/}
-      <FeatureCan feature={Features.Projects}>
-        <FFormGroup
-          name={'projectId'}
-          label={intl.get('invoice.project_name.label')}
-          inline={true}
-          className={classNames('form-group--select-list', Classes.FILL)}
-        >
-          <>
-            <ProjectsSelect
-              name={'projectId'}
-              projects={projects}
-              input={InvoiceProjectSelectButton}
-              popoverFill={true}
-            />
-            {values?.projectId && (
-              <ProjectBillableEntriesLink projectId={values?.projectId}>
-                <T id={'add_billable_entries'} />
-              </ProjectBillableEntriesLink>
-            )}
-          </>
-        </FFormGroup>
-      </FeatureCan>
     </Stack>
   );
 }
@@ -167,14 +131,11 @@ function InvoiceFormCustomerSelect() {
   const updateEntries = useCustomerUpdateExRate();
 
   // Handles the customer item change.
-  const handleItemChange = (customer: {
-    id: number;
-    currency_code: string;
-  }) => {
+  const handleItemChange = (customer: { id: number; currencyCode: string }) => {
     // If the customer id has changed change the customer id and currency code.
     if (values.customerId !== customer.id) {
       setFieldValue('customerId', customer.id);
-      setFieldValue('currencyCode', customer.currency_code);
+      setFieldValue('currencyCode', customer.currencyCode);
     }
     updateEntries(customer);
   };

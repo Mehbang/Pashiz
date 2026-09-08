@@ -1,7 +1,7 @@
 import intl from 'react-intl-universal';
 import { Button, Classes, Intent } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import * as Yup from 'yup';
 import { usePaymentReceiveFormContext } from '../../PaymentReceiveFormProvider';
 import { usePaymentReceivedTotalExceededAmount } from '../../utils';
@@ -64,8 +64,9 @@ export function ExcessPaymentDialogContentRoot({
   );
 }
 
-export const ExcessPaymentDialogContent = R.compose(withDialogActions)(
+export const ExcessPaymentDialogContent = FF.pipe(
   ExcessPaymentDialogContentRoot,
+  withDialogActions,
 );
 
 type ExcessPaymentDialogContentFormProps = {

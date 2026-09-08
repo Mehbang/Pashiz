@@ -2985,5 +2985,22 @@
   "item_category.fields.remove": "حذف این فیلد",
   "item_category.fields.duplicate": "دو فیلد نمی‌توانند یک نام داشته باشند.",
   "item.category_fields.label": "فیلدهای دسته‌بندی",
-  "item.category_fields.empty": "این دسته‌بندی فیلد اضافه‌ای ندارد."
+  "item.category_fields.empty": "این دسته‌بندی فیلد اضافه‌ای ندارد.",
+  "cannot_toggle_authorized_user": "نمی‌توانید حساب خودتان را فعال یا غیرفعال کنید.",
+  "features.label": "قابلیت‌ها",
+  "features.landed_cost": "بهای تمام‌شدهٔ ورود کالا",
+  "features.landed_cost.helper_text": "با روشن‌کردن این قابلیت می‌توانید هزینه‌های جانبی خرید — مانند حمل، بار، حقوق گمرکی و کارمزد — را به فاکتورهای خرید و هزینه‌ها بیفزایید. این هزینه‌ها میان ردیف‌های هر سند سرشکن می‌شوند تا بهای تمام‌شدهٔ واقعی موجودی به دست بیاید.",
+  "features.saved_success_message": "تنظیمات قابلیت‌ها ذخیره شد.",
+  "features.sms_notifications": "اعلان پیامکی",
+  "features.sms_notifications.helper_text": "با روشن‌کردن اعلان پیامکی می‌توانید برای فاکتورها، پیش‌فاکتورها، رسیدها و پرداخت‌ها از راه Twilio به مشتریان پیامک بفرستید.",
+  "permissions.contacts": "طرف‌حساب‌ها",
+  "permissions.vendor_credits": "برگشت از خرید",
+  "sms_integration.env_credentials_active": "شناسه‌های سراسری Twilio از متغیرهای محیطی فعال‌اند.",
+  "sms_integration.saved_success_message": "تنظیمات پیامک با موفقیت ذخیره شد.",
+  "sms_integration.twilio_account_sid": "شناسهٔ حساب Twilio",
+  "sms_integration.twilio_auth_token": "توکن احراز هویت Twilio",
+  "sms_integration.twilio_from_number": "شمارهٔ فرستندهٔ Twilio",
+  "the_user_has_been_activated_successfully": "کاربر با موفقیت فعال شد.",
+  "workspaces.no_workspaces_found": "فضای کاری‌ای پیدا نشد.",
+  "workspaces.workspace_ready_to_switch": "فضای کاری شما برای جابه‌جایی آماده است."
 }

@@ -39,7 +39,10 @@ export function useEditRolePermissionSchema(
     ...props,
     mutationFn: ([id, values]: [number, EditRoleBody]) =>
       editRole(fetcher, id, values),
-    onSuccess: () => commonInvalidateQueries(queryClient),
+    onSuccess: (_data, [id]) => {
+      queryClient.invalidateQueries({ queryKey: rolesKeys.detail(id) });
+      commonInvalidateQueries(queryClient);
+    },
   });
 }
 
@@ -72,7 +75,7 @@ export function usePermissionsSchema(
   query?: Record<string, unknown>,
   props?: Omit<UseQueryOptions<RolePermissionsSchema>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: [...rolesKeys.permissionsSchema(), query],
@@ -85,12 +88,12 @@ export function useRolePermission(
   props?: Omit<UseQueryOptions<Role>, 'queryKey' | 'queryFn'>,
   _requestProps?: Record<string, unknown>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: rolesKeys.detail(role_id),
     queryFn: () => fetchRole(fetcher, role_id!),
-    enabled: role_id != null,
+    enabled: role_id != null && (props?.enabled ?? true),
   });
 }
 
@@ -98,7 +101,7 @@ export function useRoles(
   query?: Record<string, unknown>,
   props?: Omit<UseQueryOptions<RolesListResponse>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: [...rolesKeys.all(), query],

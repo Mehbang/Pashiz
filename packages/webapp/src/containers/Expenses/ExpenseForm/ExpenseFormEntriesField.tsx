@@ -2,8 +2,10 @@ import { FastField } from 'formik';
 import React from 'react';
 import { ExpenseFormEntriesTable } from './ExpenseFormEntriesTable';
 import { useExpenseFormContext } from './ExpenseFormPageProvider';
-import type { ExpenseEntry, ExpenseFormValues } from './types';
 import { defaultExpenseEntry, accountsFieldShouldUpdate } from './utils';
+import type { ExpenseEntry, ExpenseFormValues } from './types';
+import { Features } from '@/constants';
+import { useFeatureCan } from '@/hooks/state';
 
 type ExpenseFormEntriesFieldProps = {
   linesNumber?: number;
@@ -15,13 +17,14 @@ type ExpenseFormEntriesFieldProps = {
 export function ExpenseFormEntriesField({
   linesNumber = 4,
 }: ExpenseFormEntriesFieldProps) {
-  const { accounts, projects } = useExpenseFormContext();
+  const { accounts } = useExpenseFormContext();
+  const { featureCan } = useFeatureCan();
+  const isLandedCostEnabled = featureCan(Features.LandedCost);
 
   return (
     <FastField
       name={'categories'}
       accounts={accounts}
-      projects={projects}
       shouldUpdate={accountsFieldShouldUpdate}
     >
       {({
@@ -37,6 +40,7 @@ export function ExpenseFormEntriesField({
           }}
           defaultEntry={defaultExpenseEntry}
           currencyCode={(values as ExpenseFormValues).currencyCode}
+          landedCost={isLandedCostEnabled}
         />
       )}
     </FastField>

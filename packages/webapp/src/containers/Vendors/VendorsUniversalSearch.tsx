@@ -1,7 +1,7 @@
 import intl from 'react-intl-universal';
-import type { VendorDetails } from '@/containers/Drawers/VendorDetailsDrawer/VendorDetailsDrawerProvider';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { withDrawerActions } from '../Drawer/withDrawerActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import type { VendorDetails } from '@/containers/Drawers/VendorDetailsDrawer/VendorDetailsDrawerProvider';
 import { AbilitySubject, VendorAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
@@ -40,8 +40,8 @@ const VendorUniversalSearchSelectAction = withDrawerActions(
  */
 const vendorToSearch = (contact: VendorDetails) => ({
   id: contact.id,
-  text: contact.displayName,
-  label: contact.formattedBalance,
+  text: contact.displayName ?? '',
+  label: contact.formattedBalance ?? '',
   reference: contact,
 });
 

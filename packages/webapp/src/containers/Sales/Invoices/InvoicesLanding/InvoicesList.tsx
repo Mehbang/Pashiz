@@ -1,5 +1,4 @@
 import React from 'react';
-
 import '@/style/pages/SaleInvoice/List.scss';
 import { InvoicesActionsBar } from './InvoicesActionsBar';
 import { InvoicesDataTable } from './InvoicesDataTable';
@@ -8,15 +7,11 @@ import { InvoicesListDrawers } from './InvoicesListDrawers';
 import { InvoicesListProvider } from './InvoicesListProvider';
 import { withInvoiceActions } from './withInvoiceActions';
 import { withInvoices } from './withInvoices';
+import type { WithInvoiceActionsProps } from './withInvoiceActions';
 import type { WithInvoicesProps } from './withInvoices';
 import { DashboardPageContent } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { transformTableStateToQuery, compose } from '@/utils';
-
-interface WithInvoiceActionsProps {
-  resetInvoicesTableState: () => void;
-  resetInvoicesSelectedRows: () => void;
-}
 
 interface InvoicesListProps
   extends Pick<

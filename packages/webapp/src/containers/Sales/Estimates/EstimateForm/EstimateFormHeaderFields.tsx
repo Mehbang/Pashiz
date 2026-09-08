@@ -1,21 +1,16 @@
-import { Position, Classes } from '@blueprintjs/core';
+import { Position } from '@blueprintjs/core';
 import { css } from '@emotion/css';
 import { useTheme } from '@emotion/react';
 import { Theme } from '@xstyled/emotion';
-import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import {
-  EstimateExchangeRateInputField,
-  EstimateProjectSelectButton,
-} from './components';
+import { EstimateExchangeRateInputField } from './components';
 import { EstimateFormEstimateNumberField } from './EstimateFormEstimateNumberField';
 import { useEstimateFormContext } from './EstimateFormProvider';
 import { customersFieldShouldUpdate } from './utils';
 import type { EstimateFormValues } from './utils';
 import {
-  FeatureCan,
   FFormGroup,
   FormattedMessage as T,
   FieldRequiredHint,
@@ -26,9 +21,7 @@ import {
   Stack,
   FDateInput,
 } from '@/components';
-import { Features } from '@/constants';
 import { useCustomerUpdateExRate } from '@/containers/Entries/withExRateItemEntriesPriceRecalc';
-import { ProjectsSelect } from '@/containers/Projects/components';
 import { useDateInputFormatter } from '@/hooks';
 
 const getEstimateFieldsStyle = (theme: Theme) => css`
@@ -48,14 +41,13 @@ const getEstimateFieldsStyle = (theme: Theme) => css`
   }
 `;
 
-type Customer = { id: number; currency_code: string };
+type Customer = { id: number; currencyCode: string };
 
 /**
  * Estimate form header.
  */
 export function EstimateFormHeader() {
   const theme = useTheme();
-  const { projects } = useEstimateFormContext();
   const styleClassName = getEstimateFieldsStyle(theme);
   const dateInputFormatter = useDateInputFormatter();
 
@@ -82,6 +74,7 @@ export function EstimateFormHeader() {
           inputProps={{
             leftIcon: <Icon icon={'date-range'} />,
             fill: true,
+            inputClassName: 'estimate-date-input',
           }}
           fill
           fastField
@@ -102,6 +95,7 @@ export function EstimateFormHeader() {
           inputProps={{
             leftIcon: <Icon icon={'date-range'} />,
             fill: true,
+            inputClassName: 'estimate-expiration-date-input',
           }}
           fill
           fastField
@@ -118,23 +112,6 @@ export function EstimateFormHeader() {
           data-testId="estimate-reference-input"
         />
       </FFormGroup>
-
-      {/*------------ Project name -----------*/}
-      <FeatureCan feature={Features.Projects}>
-        <FFormGroup
-          name={'projectId'}
-          label={intl.get('estimate.project_name.label')}
-          inline={true}
-          className={classNames('form-group--select-list', Classes.FILL)}
-        >
-          <ProjectsSelect
-            name={'projectId'}
-            projects={projects}
-            input={EstimateProjectSelectButton}
-            popoverFill={true}
-          />
-        </FFormGroup>
-      </FeatureCan>
     </Stack>
   );
 }
@@ -152,7 +129,7 @@ function EstimateFormCustomerSelect() {
   // Handles the customer item change.
   const handleItemChange = (customer: Customer) => {
     setFieldValue('customerId', customer.id);
-    setFieldValue('currencyCode', customer?.currency_code);
+    setFieldValue('currencyCode', customer?.currencyCode);
 
     updateEntries(customer);
   };

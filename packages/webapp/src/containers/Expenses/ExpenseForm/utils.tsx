@@ -1,17 +1,17 @@
 import { Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import * as FF from 'fp-ts/function';
 import { first, sumBy } from 'lodash';
 import moment from 'moment';
-import * as R from 'ramda';
 import React from 'react';
 import intl from 'react-intl-universal';
-import type { Expense } from '@bigcapital/sdk-ts';
 import { useExpenseFormContext } from './ExpenseFormPageProvider';
 import type {
   ExpenseEntry,
   ExpenseErrorResponse,
   ExpenseFormValues,
 } from './types';
+import type { Expense } from '@bigcapital/sdk-ts';
 import { AppToaster } from '@/components';
 import {
   transformAttachmentsToForm,
@@ -40,7 +40,6 @@ export const defaultExpenseEntry: ExpenseEntry = {
   expenseAccountId: '',
   description: '',
   landedCost: 0,
-  projectId: '',
 };
 
 export const defaultExpense: ExpenseFormValues = {
@@ -90,7 +89,7 @@ export const transformErrors = (
 export const transformToEditForm = (
   expense: Expense,
   defaultValues: ExpenseFormValues,
-  linesNumber = 4,
+  linesNumber = MIN_LINES_NUMBER,
 ): ExpenseFormValues => {
   const expenseEntry = defaultValues.categories[0];
   const initialEntries = [
@@ -102,9 +101,10 @@ export const transformToEditForm = (
       Math.max(linesNumber - expense.categories.length, 0),
     ),
   ];
-  const categories = R.compose(
+  const categories = FF.pipe(
+    initialEntries,
     ensureEntriesHasEmptyLine(MIN_LINES_NUMBER, expenseEntry),
-  )(initialEntries) as unknown as ExpenseEntry[];
+  ) as unknown as ExpenseEntry[];
 
   const attachments = transformAttachmentsToForm(expense);
 
@@ -153,7 +153,7 @@ export const transformFormValuesToRequest = (values: ExpenseFormValues) => {
 
   return {
     ...values,
-    categories: R.compose(orderingLinesIndexes)(categories),
+    categories: FF.pipe(categories, orderingLinesIndexes),
     attachments,
   };
 };

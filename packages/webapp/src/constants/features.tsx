@@ -2,6 +2,7 @@ export const Features = {
   Warehouses: 'warehouses',
   Branches: 'branches',
   ManualJournal: 'manualJournal',
-  Projects: 'Projects',
   BankSyncing: 'BankSyncing',
+  LandedCost: 'landed_cost',
+  SmsNotifications: 'sms_notifications',
 };

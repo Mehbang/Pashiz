@@ -1,10 +1,10 @@
 import { useFormikContext } from 'formik';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import { FSelect } from '../Forms';
 import { createNewItemFromQuery, createNewItemRenderer } from './utils';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { DRAWERS } from '@/constants/drawers';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { useCreateAutofillListener } from '@/hooks/state/autofill';
 
 interface CustomerSelectRootProps extends WithDrawerActionsProps {
@@ -66,4 +66,4 @@ function CustomerSelectRoot({
   );
 }
 
-export const CustomersSelect = R.compose(withDrawerActions)(CustomerSelectRoot);
+export const CustomersSelect = FF.pipe(CustomerSelectRoot, withDrawerActions);

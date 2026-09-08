@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { MenuItem } from '@blueprintjs/core';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import intl from 'react-intl-universal';
 import { FSelect } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
@@ -49,7 +49,7 @@ function TaxRatesSelectRoot({
     <FSelect
       valueAccessor={'id'}
       labelAccessor={'code'}
-      textAccessor={'name_formatted'}
+      textAccessor={'nameFormatted'}
       popoverProps={{ minimal: true, usePortal: true, inline: false }}
       createNewItemRenderer={maybeCreateNewItemRenderer}
       createNewItemFromQuery={maybeCreateNewItemFromQuery}
@@ -59,4 +59,4 @@ function TaxRatesSelectRoot({
   );
 }
 
-export const TaxRatesSelect = R.compose(withDialogActions)(TaxRatesSelectRoot);
+export const TaxRatesSelect = FF.pipe(TaxRatesSelectRoot, withDialogActions);

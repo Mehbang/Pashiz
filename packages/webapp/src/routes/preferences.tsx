@@ -167,10 +167,28 @@ export const getPreferenceRoutes = () => [
     exact: true,
   },
   {
+    path: `${BASE_URL}/features`,
+    component: lazy(() =>
+      import('@/containers/Preferences/Features/Features').then((m) => ({
+        default: m.FeaturesPreferences,
+      })),
+    ),
+    exact: true,
+  },
+  {
     path: `${BASE_URL}/api-keys`,
     component: lazy(() =>
       import('@/containers/Preferences/ApiKeys/ApiKeys').then((m) => ({
         default: m.ApiKeys,
+      })),
+    ),
+    exact: true,
+  },
+  {
+    path: `${BASE_URL}/sms-message`,
+    component: lazy(() =>
+      import('@/containers/Preferences/SMSIntegration').then((m) => ({
+        default: m.SMSIntegration,
       })),
     ),
     exact: true,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import intl from 'react-intl-universal';
 import {
   Button,
@@ -14,12 +13,16 @@ import {
   MenuItem,
 } from '@blueprintjs/core';
 import { isEmpty } from 'lodash';
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useBulkDeleteReceiptsDialog } from './hooks/use-bulk-delete-receipts-dialog';
 import { useReceiptsListContext } from './ReceiptsListProvider';
 import { withReceipts } from './withReceipts';
 import { withReceiptsActions } from './withReceiptsActions';
+import type { WithReceiptsProps } from './withReceipts';
+import type { WithReceiptsActionsProps } from './withReceiptsActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   Icon,
   AdvancedFilterPopover,
@@ -38,10 +41,18 @@ import { DialogsName } from '@/constants/dialogs';
 import { DRAWERS } from '@/constants/drawers';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useSaveSettings } from '@/hooks/query';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
 import { useRefreshReceipts } from '@/hooks/query/receipts';
-import { useSaveSettings } from '@/hooks/query';
 import { compose } from '@/utils';
+
+interface ReceiptActionsBarProps
+  extends Pick<WithReceiptsProps, 'receiptSelectedRows'>,
+    WithReceiptsActionsProps,
+    WithDialogActionsProps,
+    WithDrawerActionsProps {
+  receiptsFilterConditions: any[];
+}
 
 /**
  * Receipts actions bar.
@@ -49,25 +60,24 @@ import { compose } from '@/utils';
 function ReceiptActionsBarInner({
   // #withReceiptsActions
   setReceiptsTableState,
-  setReceiptsSelectedRows,
 
   // #withReceipts
   receiptsFilterConditions,
-  receiptSelectedRows,
+  receiptSelectedRows = [],
 
   // #withDialogActions
   openDialog,
 
   // #withDrawerActions
   openDrawer,
-}) {
+}: ReceiptActionsBarProps) {
   const { mutateAsync: saveSettings } = useSaveSettings();
 
   const history = useHistory();
 
   // Sale receipts list context.
   const { receiptsViews, fields, receiptSettings } = useReceiptsListContext();
-  const receiptsTableSize = receiptSettings?.tableSize;
+  const receiptsTableSize = receiptSettings?.tableSize as string | undefined;
 
   // Exports pdf document.
   const { downloadAsync: downloadExportPdf } = useDownloadExportPdf();
@@ -80,7 +90,7 @@ function ReceiptActionsBarInner({
   // Sale receipt refresh action.
   const { refresh } = useRefreshReceipts();
 
-  const handleTabChange = (view) => {
+  const handleTabChange = (view: { slug?: string } | null) => {
     setReceiptsTableState({
       viewSlug: view ? view.slug : null,
     });
@@ -92,7 +102,7 @@ function ReceiptActionsBarInner({
   };
 
   // Handle table row size change.
-  const handleTableRowSizeChange = (size) => {
+  const handleTableRowSizeChange = (size: any) => {
     saveSettings({
       options: [{ group: 'salesReceipts', key: 'tableSize', value: size }],
     });
@@ -121,7 +131,7 @@ function ReceiptActionsBarInner({
 
   if (!isEmpty(receiptSelectedRows)) {
     const handleBulkDelete = () => {
-      openBulkDeleteDialog(receiptSelectedRows);
+      openBulkDeleteDialog(receiptSelectedRows as number[]);
     };
     return (
       <DashboardActionsBar>
@@ -164,7 +174,7 @@ function ReceiptActionsBarInner({
             conditions: receiptsFilterConditions,
             defaultFieldKey: 'reference_no',
             fields: fields,
-            onFilterChange: (filterConditions) => {
+            onFilterChange: (filterConditions: any) => {
               setReceiptsTableState({ filterRoles: filterConditions });
             },
           }}
@@ -184,7 +194,7 @@ function ReceiptActionsBarInner({
         </If>
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'print-16'} iconSize={'16'} />}
+          icon={<Icon icon={'print-16'} iconSize={16} />}
           text={<T id={'print'} />}
           onClick={handlePrintButtonClick}
         />
@@ -196,7 +206,7 @@ function ReceiptActionsBarInner({
         />
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'file-export-16'} iconSize={'16'} />}
+          icon={<Icon icon={'file-export-16'} iconSize={16} />}
           text={<T id={'export'} />}
           onClick={handleExportBtnClick}
         />

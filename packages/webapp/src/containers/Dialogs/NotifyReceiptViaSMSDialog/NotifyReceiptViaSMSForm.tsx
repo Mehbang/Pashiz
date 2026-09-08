@@ -25,7 +25,7 @@ const NotifyViaSMSForm =
   NotifyViaSMSFormBase as unknown as React.ComponentType<NotifyViaSMSFormProps>;
 
 interface NotifyViaSMSFormValues {
-  notification_key: string;
+  notificationKey: string;
   [key: string]: unknown;
 }
 
@@ -53,7 +53,7 @@ function NotifyReceiptViaSMSFormInner({
 
   // Handles the form submit.
   const handleFormSubmit = (
-    values: NotifyViaSMSFormValues,
+    _values: NotifyViaSMSFormValues,
     {
       setErrors,
     }: {
@@ -80,19 +80,19 @@ function NotifyReceiptViaSMSFormInner({
       }
     };
     // @ts-expect-error — receiptId may be null in theory; dialog only opens with real id.
-    createNotifyReceiptBySMSMutate([receiptId, values])
-      .then(onSuccess)
-      .catch(onError);
+    createNotifyReceiptBySMSMutate(receiptId).then(onSuccess).catch(onError);
   };
   // Handle the form cancel.
   const handleFormCancel = () => {
     closeDialog(dialogName);
   };
-  // Initial values.
+  // Initial values. `NotifyViaSMSForm` expects camelCase field keys.
   const initialValues = React.useMemo(
     () => ({
-      ...receiptSMSDetail,
-      notification_key: notificationType.key,
+      customerName: receiptSMSDetail.customerName ?? '',
+      customerPhoneNumber: receiptSMSDetail.customerPhoneNumber ?? '',
+      smsMessage: receiptSMSDetail.smsMessage ?? '',
+      notificationKey: notificationType.key,
     }),
     [receiptSMSDetail],
   );

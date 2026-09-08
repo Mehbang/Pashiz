@@ -1,14 +1,14 @@
 import { Intent } from '@blueprintjs/core';
 import { flatten, unflatten } from 'flat';
 import { Formik, FormikHelpers } from 'formik';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import { useEffect } from 'react';
 import intl from 'react-intl-universal';
 import { AccountantSchema } from './Accountant.schema';
 import { AccountantForm } from './AccountantForm';
 import { useAccountantFormContext } from './AccountantFormProvider';
-import type { AccountantFormValues } from './types';
 import { transferObjectOptionsToArray } from './utils';
+import type { AccountantFormValues } from './types';
 import { AppToaster } from '@/components';
 import {
   withDashboardActions,
@@ -55,10 +55,11 @@ function AccountantFormPageInner({
     values: AccountantFormValues,
     { setSubmitting }: FormikHelpers<AccountantFormValues>,
   ) => {
-    const options = R.compose(
-      transferObjectOptionsToArray,
+    const options = FF.pipe(
+      values,
       transfromToSnakeCase,
-    )(values);
+      transferObjectOptionsToArray,
+    );
     setSubmitting(true);
 
     const onSuccess = () => {

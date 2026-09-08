@@ -11,7 +11,7 @@ export class ItemEstimateTransactionTransformer extends Transformer {
       'formattedQuantity',
       'formattedEstimateDate',
       'formattedRate',
-      'formattedCost',
+      'formattedQuantity',
     ];
   };
 

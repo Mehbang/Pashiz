@@ -5,13 +5,13 @@ export const transformErrors = (errors, { setErrors, setCalloutCode }) => {
   if (errors.some((e) => e.type === 'CUSTOMER_SMS_NOTIFY_PHONE_INVALID')) {
     setCalloutCode([200]);
     setErrors({
-      customer_phone_number: intl.get('the_personal_phone_number_is_invalid'),
+      customerPhoneNumber: intl.get('the_personal_phone_number_is_invalid'),
     });
   }
   if (errors.find((error) => error.type === 'CUSTOMER_HAS_NO_PHONE_NUMBER')) {
     setCalloutCode([100]);
     setErrors({
-      customer_phone_number: intl.get(
+      customerPhoneNumber: intl.get(
         'notify_via_sms.dialog.customer_no_phone_error_message',
       ),
     });

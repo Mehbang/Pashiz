@@ -1,16 +1,16 @@
 import { Intent } from '@blueprintjs/core';
 import { Formik, FormikHelpers } from 'formik';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import { useEffect } from 'react';
 import intl from 'react-intl-universal';
 import { transferObjectOptionsToArray } from '../Accountant/utils';
 import { PreferencesInvoiceFormSchema } from './PreferencesInvoiceForm.schema';
-import { PreferencesInvoicesForm } from './PreferencesInvoicesForm';
 import { usePreferencesInvoiceFormContext } from './PreferencesInvoiceFormBoot';
+import { PreferencesInvoicesForm } from './PreferencesInvoicesForm';
 import type { InvoicesPreferencesFormValues } from './types';
+import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
 import { AppToaster } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
 import { useSaveSettings } from '@/hooks/query';
 import { compose, transformToForm, transfromToSnakeCase } from '@/utils';
 
@@ -49,10 +49,11 @@ function PreferencesInvoiceFormPageInner({
     values: InvoicesPreferencesFormValues,
     { setSubmitting }: FormikHelpers<InvoicesPreferencesFormValues>,
   ) => {
-    const options = R.compose(
-      transferObjectOptionsToArray,
+    const options = FF.pipe(
+      { salesInvoices: { ...values } },
       transfromToSnakeCase,
-    )({ salesInvoices: { ...values } });
+      transferObjectOptionsToArray,
+    );
 
     // Handle request success.
     const onSuccess = () => {

@@ -16,6 +16,7 @@ import {
   deleteRefundCreditNote,
   applyCreditNoteToInvoices,
   deleteApplyCreditNoteToInvoices,
+  fetchCreditNotePdf,
 } from '@bigcapital/sdk-ts';
 import {
   useQueryClient,
@@ -26,7 +27,7 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
-import { useRequestPdf } from '../../useRequestPdf';
+import { usePdfDocument } from '../../useRequestPdf';
 import { accountsKeys } from '../accounts/query-keys';
 import { cashflowAccountsKeys } from '../cashflow-accounts/query-keys';
 import { customersKeys } from '../customers/query-keys';
@@ -219,7 +220,7 @@ export function useCreditNote(
     ...props,
     queryKey: creditNotesKeys.detail(id),
     queryFn: () => fetchCreditNote(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -272,12 +273,12 @@ export function useRefundCreditNote(
   >,
   _requestProps?: Record<string, unknown>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: creditNotesKeys.refund(id),
     queryFn: () => fetchCreditNoteRefunds(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -312,7 +313,7 @@ export function useReconcileCreditNote(
     ...props,
     queryKey: creditNotesKeys.reconcile(id),
     queryFn: () => fetchCreditNoteAssociatedInvoicesToApply(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -345,12 +346,12 @@ export function useReconcileCreditNotes(
   >,
   _requestProps?: Record<string, unknown>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: creditNotesKeys.reconciles(id),
     queryFn: () => fetchAppliedInvoices(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -378,17 +379,20 @@ export function useRefundCreditTransaction(
   >,
   _requestProps?: Record<string, unknown>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: creditNotesKeys.refundTransaction(id),
     queryFn: () => fetchRefundCreditNoteTransaction(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
 export function usePdfCreditNote(creditNoteId: number | string) {
-  return useRequestPdf({ url: `credit-notes/${creditNoteId}` });
+  const fetcher = useApiFetcher();
+  return usePdfDocument(() =>
+    fetchCreditNotePdf(fetcher, Number(creditNoteId)),
+  );
 }
 
 export interface CreditNoteStateResponse {

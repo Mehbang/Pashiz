@@ -1,4 +1,6 @@
 import { omit } from 'lodash';
+import React, { useState, createContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import type {
   ContactResponse,
   CreateVendorBody,
@@ -7,8 +9,6 @@ import type {
   EditVendorBody,
   Vendor,
 } from '@bigcapital/sdk-ts';
-import React, { useState, createContext } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Features } from '@/constants';
 import {
   useVendor,
@@ -120,7 +120,7 @@ function VendorFormProvider({
     vendor,
     branches: branches ?? [],
     contactDuplicate: contactDuplicate
-      ? { ...omit(contactDuplicate, ['opening_balance_at']) }
+      ? { ...omit(contactDuplicate, ['openingBalanceAt']) }
       : {},
     submitPayload,
     isNewMode,

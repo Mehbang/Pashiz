@@ -1,7 +1,6 @@
 // @ts-nocheck
 import intl from 'react-intl-universal';
 import { Callout, Classes } from '@blueprintjs/core';
-import * as R from 'ramda';
 import { ChangeSubscriptionPlans } from './ChangeSubscriptionPlans';
 import { Box } from '@/components';
 import { SubscriptionPlansPeriodSwitcher } from '@/containers/Setup/SetupSubscription/SubscriptionPlansPeriodSwitcher';

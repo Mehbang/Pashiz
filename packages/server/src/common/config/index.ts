@@ -15,6 +15,7 @@ import signupRestrictions from './signup-restrictions';
 import admin from './admin';
 import jwt from './jwt';
 import mail from './mail';
+import sms from './sms';
 import loops from './loops';
 import bankfeed from './bankfeed';
 import throttle from './throttle';
@@ -42,6 +43,7 @@ export const config = [
   admin,
   jwt,
   mail,
+  sms,
   loops,
   bankfeed,
   throttle,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import intl from 'react-intl-universal';
 import { Button, MenuItem } from '@blueprintjs/core';
 import { FormGroupProps } from '@blueprintjs-formik/core';

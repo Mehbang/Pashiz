@@ -1,7 +1,7 @@
 // @ts-nocheck
 import intl from 'react-intl-universal';
 import { Position } from '@blueprintjs/core';
-import * as R from 'ramda';
+import * as FF from 'fp-ts/function';
 import React, { lazy } from 'react';
 import { Drawer, DrawerHeaderContent, DrawerSuspense } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
@@ -39,6 +39,7 @@ function ChangeSubscriptionPlanDrawerInner({
   );
 }
 
-export const ChangeSubscriptionPlanDrawer = R.compose(withDrawers())(
+export const ChangeSubscriptionPlanDrawer = FF.pipe(
   ChangeSubscriptionPlanDrawerInner,
+  withDrawers(),
 );

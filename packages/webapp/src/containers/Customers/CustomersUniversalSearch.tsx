@@ -1,6 +1,6 @@
 import intl from 'react-intl-universal';
-import type { CustomerDetails } from '@/containers/Drawers/CustomerDetailsDrawer/CustomerDetailsDrawerProvider';
 import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
+import type { CustomerDetails } from '@/containers/Drawers/CustomerDetailsDrawer/CustomerDetailsDrawerProvider';
 import { AbilitySubject, CustomerAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
@@ -37,8 +37,8 @@ const CustomerUniversalSearchSelectAction = withDrawerActions(
  */
 const customersToSearch = (contact: CustomerDetails) => ({
   id: contact.id,
-  text: contact.displayName,
-  label: contact.formattedBalance,
+  text: contact.displayName ?? '',
+  label: contact.formattedBalance ?? '',
   reference: contact,
 });
 

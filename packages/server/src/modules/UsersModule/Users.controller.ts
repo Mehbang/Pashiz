@@ -4,7 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  Post,
+  ParseIntPipe,
   Put,
   Query,
 } from '@nestjs/common';
@@ -100,8 +100,8 @@ export class UsersController {
     },
   })
   async listUsers(
-    @Query('page_size') pageSize?: number,
-    @Query('page') page?: number,
+    @Query('page_size') _pageSize?: number,
+    @Query('page') _page?: number,
   ) {
     return this.usersApplication.getUsers();
   }
@@ -118,7 +118,7 @@ export class UsersController {
       example: { id: 1, message: 'The user has been activated successfully.' },
     },
   })
-  async activateUser(@Param('id') userId: number) {
+  async activateUser(@Param('id', ParseIntPipe) userId: number) {
     await this.usersApplication.activateUser(userId);
 
     return {
@@ -142,7 +142,7 @@ export class UsersController {
       },
     },
   })
-  async inactivateUser(@Param('id') userId: number) {
+  async inactivateUser(@Param('id', ParseIntPipe) userId: number) {
     await this.usersApplication.inactivateUser(userId);
 
     return {

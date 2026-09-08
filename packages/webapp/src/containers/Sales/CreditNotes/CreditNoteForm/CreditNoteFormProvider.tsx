@@ -173,7 +173,8 @@ function CreditNoteFormProvider({
     warehouses: warehouses ?? [],
     newCreditNote,
     submitPayload,
-    brandingTemplates: brandingTemplates?.templates ?? [],
+    brandingTemplates:
+      brandingTemplates?.templates ?? ([] as PdfTemplateResponse[]),
     isNewMode,
 
     isItemsLoading,

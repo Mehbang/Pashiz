@@ -15,6 +15,7 @@ import {
   sendSaleEstimateMail,
   fetchSaleEstimatesState,
   fetchSaleEstimateHtmlContent,
+  fetchSaleEstimatePdf,
 } from '@bigcapital/sdk-ts';
 import {
   useQueryClient,
@@ -25,7 +26,7 @@ import {
   UseMutationOptions,
 } from '@tanstack/react-query';
 import { useApiFetcher } from '../../useRequest';
-import { useRequestPdf } from '../../useRequestPdf';
+import { usePdfDocument } from '../../useRequestPdf';
 import { itemsKeys } from '../items/query-keys';
 import { settingsKeys } from '../settings/query-keys';
 import { estimatesKeys } from './query-keys';
@@ -93,7 +94,7 @@ export function useEstimate(
     ...props,
     queryKey: estimatesKeys.detail(id),
     queryFn: () => fetchSaleEstimate(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -111,7 +112,7 @@ export function useEstimateDetail(
     ...props,
     queryKey: estimatesKeys.detail(id),
     queryFn: () => fetchSaleEstimate(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -225,9 +226,8 @@ export function useRejectEstimate(
 }
 
 export function usePdfEstimate(estimateId: number) {
-  return useRequestPdf({
-    url: `sale-estimates/${estimateId}`,
-  });
+  const fetcher = useApiFetcher();
+  return usePdfDocument(() => fetchSaleEstimatePdf(fetcher, estimateId));
 }
 
 export function useRefreshEstimates() {
@@ -264,7 +264,7 @@ export function useEstimateSMSDetail(
   props?: Record<string, unknown>,
   requestProps?: Record<string, unknown>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: estimatesKeys.smsDetail(estimateId),
@@ -319,7 +319,7 @@ export const useGetSaleEstimateHtml = (
   estimateId: number,
   options?: UseQueryOptions<SaleEstimateHtmlContentResponse>,
 ): UseQueryResult<SaleEstimateHtmlContentResponse> => {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
 
   return useQuery({
     ...options,

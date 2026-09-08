@@ -86,7 +86,7 @@ export function useTransactionsLocking(
     'queryKey' | 'queryFn'
   >,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: transactionsLockingKeys.list(query),
@@ -100,11 +100,11 @@ export function useEditTransactionsLocking(
   query: string,
   props?: Omit<UseQueryOptions<unknown>, 'queryKey' | 'queryFn'>,
 ) {
-  const fetcher = useApiFetcher();
+  const fetcher = useApiFetcher({ enableCamelCaseTransform: true });
   return useQuery({
     ...props,
     queryKey: transactionsLockingKeys.detail(query),
     queryFn: () => fetchTransactionsLockingByModule(fetcher, query),
-    enabled: !!query,
+    enabled: !!query && (props?.enabled ?? true),
   });
 }

@@ -140,7 +140,7 @@ export function usePaymentMadeEditPage(
     ...props,
     queryKey: paymentMadesKeys.editPage(id),
     queryFn: () => fetchBillPaymentEditPage(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
 
@@ -179,6 +179,6 @@ export function usePaymentMade(
     ...props,
     queryKey: paymentMadesKeys.detail(id),
     queryFn: () => fetchBillPayment(fetcher, id!),
-    enabled: id != null,
+    enabled: id != null && (props?.enabled ?? true),
   });
 }
