@@ -55,6 +55,12 @@ measure** (a primary and secondary unit per item) and **category fields**
   — where the fields are defined
 - `packages/webapp/src/containers/Items/ItemFormCategoryFieldsSection.tsx` —
   where they are filled in
+- `packages/webapp/src/containers/Drawers/ItemDetailDrawer/category-fields.ts` —
+  which of an item's values belong on its detail view
+- `packages/server/src/modules/Items/utils/category-field-export.ts` — the
+  answers laid out where the export columns read
+- `packages/server/src/modules/ItemCategories/utils/category-field-names.ts` —
+  a category's field list as one spreadsheet cell, written and read back
 
 ## How a calendar is chosen
 
@@ -72,14 +78,16 @@ measure** (a primary and secondary unit per item) and **category fields**
 export PATH="$HOME/.claude-tools/node18/bin:$PATH"
 P="$HOME/.claude-tools/bin/pnpm"
 $P -C shared/bigcapital-utils exec vitest run   # 53 tests
-$P -C packages/webapp        exec vitest run    # 87 tests
-$P -C packages/server        exec jest src/utils # 30 tests
+$P -C packages/webapp        exec vitest run    # 131 tests
+$P -C packages/server        exec jest          # 152 tests, ~3½ minutes
 $P -C packages/server        exec tsc --noEmit  # 0 errors
-$P -C packages/webapp        exec tsc --noEmit  # 53 — pre-existing baseline
+$P -C packages/webapp        exec tsc --noEmit  # 49 — pre-existing baseline
 ```
 
-The webapp's 53 type errors were present before this work and are untouched by
-choice; they sit mostly in the financial reports' `dynamicColumns.tsx`.
+The webapp's 49 type errors were present before this work and are untouched by
+choice; they sit mostly in the financial reports' `dynamicColumns.tsx`. The
+server's full suite is slow because the financial-statement controller specs
+dominate it; `exec jest src/utils` alone is 41 tests in seconds.
 
 ## Keeping up with upstream
 
@@ -231,6 +239,36 @@ fault shows up.
 Not shown in invoices or reports, by design — Ehsan asked for the fields to
 reach item search and filtering, nothing further.
 
+### In and out of a spreadsheet
+
+Both resources carry their fields through export and import.
+
+A **category** carries its whole field list in one cell — «نویسنده، مترجم» —
+because a sheet has one column per category, not one per field. The cell is
+split on every separator a person might type, Latin and Persian alike, and a
+name repeated in it is kept once: the category cannot hold the same field twice
+and failing the row over a duplicated word would be a poor trade.
+
+An **item** gets one column per field, named the way the filter names it —
+«کارگردان — فیلم». Two categories may both define «رنگ», so the category has to
+be in the header or the columns cannot be told apart. The columns are built from
+the database at export time and offered by the same synthetic `categoryField_<id>`
+key at import time, which is what lets an exported sheet map straight back onto
+itself: 23 of the 25 columns match by name unaided, the two that do not being
+stock on hand and the creation date, neither of which is importable.
+
+Two turns in the import pipeline shape how this had to be written. The DTO is
+transformed *before* validation, so a key that starts as a string and becomes a
+list has to change its name on the way — hence the separate `fieldNames` cell
+feeding `fields`. And the item's flat `categoryField_<id>` keys must be gone by
+the time the Yup schema runs, since the item itself has no such attribute.
+
+One thing to know before blaming the fields: an **enumeration column is matched
+on its translated label**. A Persian sheet must say «خدمت», not `service`, or
+the row fails as "نوع کالا is a required field" — which names the type column
+and says nothing about the real cause. That is upstream behaviour, not this
+fork's, and it applies to every enumeration in every import.
+
 ## Untranslated strings a grep will never find
 
 The server passes some labels through `i18n.t()` that are already English prose
@@ -319,12 +357,12 @@ Each of these passed every local check and still broke:
   only gates `main`/`develop`, so `pashiz` is unaffected.
 - Organisations built before a seeder fix keep their old seeded data; only newly
   created ones pick it up.
-- Category fields are never rendered in the item drawer's overview, only on the
-  item form. Nobody has asked for it; worth knowing it is a gap rather than a
-  decision.
-- The 198 raw English labels in resource metadata were keyed, but nothing
-  exercises the import screens in Persian — the wording there has been read,
-  not used.
+- Nothing stops an import writing a value for a field belonging to a category
+  the item is not in — a hand-made sheet with the wrong column filled would do
+  it. An exported sheet cannot: the cell is blank, and a blank writes no row.
+  Worth an integrity check if hand-made sheets ever become common.
+- The downloadable sample sheet for items has no category-field columns. Its
+  data is static and those columns are not known until the database is read.
 - The payment page used to name `Bigcapital Technology, Inc.` as the party
   charging the customer. That was simply wrong — the money goes to the
   organization, which configures its own payment details — and the consent note
