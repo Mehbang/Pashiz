@@ -20,3 +20,8 @@ backups/
 
 # macOS Finder metadata
 .DS_Store
+
+# Uploaded import sheets. They land inside the repo, so a `git add -A` after
+# someone imports a file would commit their spreadsheet.
+packages/server/static/imports/*
+!packages/server/static/imports/.gitkeep

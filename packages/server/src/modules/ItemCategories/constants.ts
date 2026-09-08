@@ -16,6 +16,7 @@ export const ItemCategoriesSampleData = [
   {
     Name: 'Kassulke Group',
     Description: 'Optio itaque eaque qui adipisci illo sed.',
+    Fields: 'Author, Translator',
   },
   {
     Name: 'Crist, Mraz and Lueilwitz',

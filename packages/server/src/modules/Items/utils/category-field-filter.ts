@@ -88,3 +88,19 @@ export const categoryFieldFilterQuery =
       builder.whereExists(exists);
     }
   };
+
+/**
+ * How one category field is named wherever it appears beside ordinary fields.
+ *
+ * Two categories may both define «رنگ», and a filter list, an import mapping
+ * screen and a spreadsheet header all show them side by side, so the category
+ * has to be part of the label or they cannot be told apart.
+ */
+export const categoryFieldLabel = (
+  fieldName: string,
+  categoryName?: string | null,
+): string => (categoryName ? `${fieldName} — ${categoryName}` : fieldName);
+
+/** Where an item's answer to one category field sits on the exported row. */
+export const categoryFieldAccessor = (fieldId: number): string =>
+  `categoryFieldValues.${categoryFieldKey(fieldId)}`;

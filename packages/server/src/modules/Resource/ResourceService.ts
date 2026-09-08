@@ -12,7 +12,11 @@ import { Features } from '@/common/types/Features';
 import { resourceToModelName } from './_utils';
 import { ItemCategoryField } from '@/modules/ItemCategories/models/ItemCategoryField.model';
 import { TenantModelProxy } from '@/modules/System/models/TenantBaseModel';
-import { categoryFieldKey } from '@/modules/Items/utils/category-field-filter';
+import {
+  categoryFieldAccessor,
+  categoryFieldKey,
+  categoryFieldLabel,
+} from '@/modules/Items/utils/category-field-filter';
 
 const ERRORS = {
   RESOURCE_MODEL_NOT_FOUND: 'RESOURCE_MODEL_NOT_FOUND',
@@ -194,31 +198,78 @@ export class ResourceService {
    * @returns {IModelMeta} - The localized resource meta.
    */
   /**
-   * The filter fields an organization invented on its categories.
+   * The fields an organization invented on its categories.
    *
    * They belong to no column and are not known until the database is read, so
    * they are appended to the item resource's meta rather than declared in it.
-   * Two categories may both define "رنگ"; the name is shown once per category
-   * field, since they are separate fields that happen to share a label.
+   * The same list answers three questions — what can be filtered on, what a
+   * spreadsheet column can be mapped to, and what is exported — so it is read
+   * once and shaped per caller.
    */
-  public async getCategoryFilterFields(): Promise<Record<string, any>> {
+  private async getItemCategoryFieldRows(): Promise<
+    Array<{ id: number; key: string; label: string }>
+  > {
     const fields = await this.itemCategoryFieldModel()
       .query()
       .withGraphFetched('category')
+      // Grouped by category, then in the order the category arranged them:
+      // a filter list and a spreadsheet both read better with a category's
+      // fields together than with every category's first field first.
+      .orderBy('categoryId', 'asc')
       .orderBy('index', 'asc');
 
-    return fields.reduce(
-      (acc, field) => {
-        const category = (field as any).category?.name;
+    return fields.map((field) => ({
+      id: field.id,
+      key: categoryFieldKey(field.id),
+      label: categoryFieldLabel(field.name, (field as any).category?.name),
+    }));
+  }
 
-        acc[categoryFieldKey(field.id)] = {
-          name: category ? `${field.name} — ${category}` : field.name,
-          fieldType: 'text',
+  /**
+   * Those fields as meta fields — what a filter names and what an import maps
+   * a spreadsheet column onto. Free text in both cases.
+   */
+  public async getCategoryFilterFields(): Promise<Record<string, any>> {
+    const rows = await this.getItemCategoryFieldRows();
+
+    return rows.reduce(
+      (acc, row) => {
+        acc[row.key] = { name: row.label, fieldType: 'text' };
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+  }
+
+  /**
+   * Those fields as export columns, one per field, reading the item's answer
+   * off the map the items exportable builds for the sheet.
+   */
+  public async getCategoryExportColumns(): Promise<Record<string, any>> {
+    const rows = await this.getItemCategoryFieldRows();
+
+    return rows.reduce(
+      (acc, row) => {
+        acc[row.key] = {
+          name: row.label,
+          type: 'text',
+          accessor: categoryFieldAccessor(row.id),
+          printable: false,
         };
         return acc;
       },
       {} as Record<string, any>,
     );
+  }
+
+  /**
+   * Whether the resource is the item, whose meta grows at runtime.
+   *
+   * The name arrives spelled however the caller had it — `items`, `Item`,
+   * `item` — so it is normalized the same way the model lookup normalizes it.
+   */
+  private isItemResource(modelName: string): boolean {
+    return resourceToModelName(modelName) === 'Item';
   }
 
   public localizeResourceMeta(meta: IModelMeta): IModelMeta {
@@ -242,10 +293,17 @@ export class ResourceService {
   }> {
     const meta = this.getResourceMeta(modelName);
     const filteredFields = await this.filterSupportFeatures(meta.fields2);
-
-    return this.localizeFields(
+    const localized = this.localizeFields(
       filteredFields as Record<string, IModelMetaField2>,
     );
+    // An import sheet can carry a column for a field a category invented, and
+    // the mapping screen only offers what this list holds.
+    if (!this.isItemResource(modelName)) {
+      return localized;
+    }
+    const categoryFields = await this.getCategoryFilterFields();
+
+    return { ...localized, ...categoryFields };
   }
 
   /**
@@ -255,8 +313,16 @@ export class ResourceService {
    */
   public async getResourceColumns(modelName: string) {
     const meta = this.getResourceMeta(modelName);
+    const columns = await this.filterSupportFeatures(meta.columns);
 
-    return this.filterSupportFeatures(meta.columns);
+    // The item exports a column per field its categories define, so a sheet
+    // taken out of Pashiz can be edited and brought back whole.
+    if (!this.isItemResource(modelName)) {
+      return columns;
+    }
+    const categoryColumns = await this.getCategoryExportColumns();
+
+    return { ...columns, ...categoryColumns };
   }
 
   /**

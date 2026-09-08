@@ -5,6 +5,7 @@ import { ItemsApplicationService } from './ItemsApplication.service';
 import { IItemsFilter } from './types/Items.types';
 import { ExportableService } from '../Export/decorators/ExportableModel.decorator';
 import { Item } from './models/Item';
+import { withCategoryFieldValues } from './utils/category-field-export';
 
 @Injectable()
 @ExportableService({ name: Item.name })
@@ -29,6 +30,6 @@ export class ItemsExportable extends Exportable {
 
     return this.itemsApplication
       .getItems(parsedQuery)
-      .then((output) => output.data);
+      .then((output) => output.data.map(withCategoryFieldValues));
   }
 }

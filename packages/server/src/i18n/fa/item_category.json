@@ -2,5 +2,7 @@
   "field.name": "نام",
   "field.description": "شرح",
   "field.count": "تعداد",
+  "field.field_names": "فیلدها",
+  "field.field_names_hint": "نام فیلدهای افزودهٔ کالاهای این دسته‌بندی، جدا شده با ویرگول.",
   "field.created_at": "تاریخ ایجاد"
 }

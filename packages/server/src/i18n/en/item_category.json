@@ -2,5 +2,7 @@
   "field.name": "Name",
   "field.description": "Description",
   "field.count": "Count",
+  "field.field_names": "Fields",
+  "field.field_names_hint": "The names of the extra fields items in this category fill in, separated by commas.",
   "field.created_at": "Created at"
 }

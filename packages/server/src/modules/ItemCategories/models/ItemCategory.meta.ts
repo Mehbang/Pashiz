@@ -42,6 +42,11 @@ export const ItemCategoryMeta = {
       name: 'item_category.field.count',
       type: 'text',
     },
+    fieldNames: {
+      name: 'item_category.field.field_names',
+      type: 'text',
+      printable: false,
+    },
     createdAt: {
       name: 'item_category.field.created_at',
       type: 'text',
@@ -57,6 +62,11 @@ export const ItemCategoryMeta = {
       name: 'item_category.field.description',
       column: 'description',
       fieldType: 'text',
+    },
+    fieldNames: {
+      name: 'item_category.field.field_names',
+      fieldType: 'text',
+      importHint: 'item_category.field.field_names_hint',
     },
   },
 };
