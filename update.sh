@@ -324,7 +324,18 @@ cmd_update() {
     return
   fi
   info "از $(git rev-parse --short "$current")  به  $(git rev-parse --short "$target")"
-  git --no-pager log --oneline "$current..$target" | head -20 | sed 's/^/      /'
+
+  # `-n 20` rather than `| head -20`: head closes the pipe after twenty lines,
+  # git dies of SIGPIPE, and under `set -o pipefail` that aborts the whole
+  # update — silently, right after printing the list. It only bites when an
+  # update carries more than twenty commits, which is why it survived until
+  # the first upstream merge.
+  local total
+  total=$(git rev-list --count "$current..$target")
+  git --no-pager log --oneline -n 20 "$current..$target" | sed 's/^/      /'
+  if [ "$total" -gt 20 ]; then
+    info "و $((total - 20)) کامیت دیگر (مجموع $total)."
+  fi
 
   cmd_backup
 
