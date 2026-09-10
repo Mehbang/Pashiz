@@ -18,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: packages/webapp/Dockerfile
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
 
   server:
     container_name: pashiz-server
@@ -25,6 +27,8 @@ services:
     build:
       context: .
       dockerfile: packages/server/Dockerfile
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
     environment:
       # `docker-compose.prod.yml` lists every variable the server receives, so
       # a new key in `.env` reaches the container only if it is named here too.
@@ -83,3 +87,27 @@ services:
 
   gotenberg:
     container_name: pashiz-gotenberg
+
+  # Upstream's watchtower polls a registry every hour for a newer `:latest` of
+  # whatever it watches, and `docker-compose.prod.yml` labels the webapp and
+  # the server for it. That is right for upstream, whose containers run
+  # `bigcapitalhq/*` images published to Docker Hub. It is wrong here twice
+  # over.
+  #
+  # This installation's images are built from this checkout by `./update.sh`
+  # and named `pashiz/server` and `pashiz/webapp` — names that resolve to
+  # `docker.io/pashiz/*`, which nobody has registered. So the poll can only do
+  # one of two things: fail, or one day succeed against a namespace this
+  # installation does not own and run a stranger's image as the accounting
+  # system. There is no third outcome where it helps, because nothing here is
+  # ever pulled.
+  #
+  # It has in fact been failing for another reason — watchtower 1.7.1 speaks
+  # Docker API 1.25 and the daemon requires 1.40 — but a broken component is
+  # not a safe one, and a version bump on either side would turn it back on.
+  #
+  # Parked behind a profile that is never enabled, and the labels it keys on
+  # are cleared above, so neither the service nor its targets remain.
+  auto-update:
+    profiles:
+      - upstream-only

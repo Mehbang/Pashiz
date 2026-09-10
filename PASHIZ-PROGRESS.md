@@ -118,6 +118,17 @@ will not catch:
   `formatDateIn` on the server, or it will render Gregorian inside a Persian
   organisation.
 
+- **New services in `docker-compose.prod.yml`.** Upstream's compose file is
+  written for containers running `bigcapitalhq/*` images pulled from Docker
+  Hub. This installation builds its own and calls them `pashiz/*`, so anything
+  upstream adds that assumes a registry is wrong here by construction. The
+  September merge brought a watchtower that polls hourly for a newer `:latest`
+  of whatever carries its label — and it labelled the webapp and the server.
+  Those resolve to `docker.io/pashiz/*`, which nobody has registered: the poll
+  can only fail, or one day succeed against a namespace this installation does
+  not own. It is disabled in `docker-compose.pashiz.yml`, service and labels
+  both. Check any new service the same way: ask what it would pull.
+
 Merged so far: `6839a25b1` (2026-09-08), 143 commits. Before that,
 `2bbd98cba` (2026-08-25) — the password-length policy, the ESLint workflow,
 Garage object storage, and the e2e test overhaul.
