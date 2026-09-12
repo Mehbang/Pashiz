@@ -12,6 +12,7 @@ export function EstimateFormHeader() {
   return (
     <Group
       position="apart"
+      className="page-form__header"
       align={'flex-start'}
       p="25px 32px"
       bg="var(--x-estimate-form-header-background)"

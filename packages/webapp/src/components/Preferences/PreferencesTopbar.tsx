@@ -2,9 +2,11 @@
 import classNames from 'classnames';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { DashboardHamburgerButton } from '@/components/Dashboard/DashboardTopbar/_components';
 import DashboardTopbarUser from '@/components/Dashboard/TopbarUser';
 import { CLASSES } from '@/constants/classes';
 import { withDashboard } from '@/containers/Dashboard/withDashboard';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { ApiKeysActions } from '@/containers/Preferences/ApiKeys/ApiKeysActions';
 import { BranchesActions } from '@/containers/Preferences/Branches/BranchesActions';
 import { CurrenciesActions } from '@/containers/Preferences/Currencies/CurrenciesActions';
@@ -17,7 +19,7 @@ import '@/style/pages/Preferences/Topbar.scss';
 /**
  * Preferences topbar.
  */
-function PreferencesTopbar({ preferencesPageTitle }) {
+function PreferencesTopbar({ preferencesPageTitle, toggleSidebarExpand }) {
   return (
     <div
       className={classNames(
@@ -25,6 +27,14 @@ function PreferencesTopbar({ preferencesPageTitle }) {
         CLASSES.PREFERENCES_TOPBAR,
       )}
     >
+      {/* On a desktop the main sidebar stays beside this page as a rail, so
+          there is nothing to open. On a phone it is off screen, and without
+          this button the settings would be a page with no way out. Shown
+          below the desktop width only. */}
+      <div className="preferences-topbar__sidebar-toggle">
+        <DashboardHamburgerButton onClick={() => toggleSidebarExpand()} />
+      </div>
+
       <div class="preferences-topbar__title">
         <h2>{preferencesPageTitle}</h2>
       </div>
@@ -65,4 +75,5 @@ function PreferencesTopbar({ preferencesPageTitle }) {
 
 export default compose(
   withDashboard(({ preferencesPageTitle }) => ({ preferencesPageTitle })),
+  withDashboardActions,
 )(PreferencesTopbar);

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { MEDIA_BELOW_DESKTOP } from '@/constants/breakpoints';
 
 interface FinancialSheetRootProps {
   $minimal?: boolean;
@@ -17,6 +18,18 @@ export const FinancialSheetRoot = styled.div<FinancialSheetRootProps>`
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+  /* The sheet is a 640px sheet of paper on a desktop. Below that width it
+     takes the screen, and the table inside it scrolls sideways. */
+  @media ${MEDIA_BELOW_DESKTOP} {
+    min-width: 0;
+    width: 100%;
+    margin: 16px 0;
+    padding: 20px 10px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
 
   ${(props) =>
     props.$fullWidth &&

@@ -34,7 +34,10 @@ function DashboardBackLink({
     <If condition={!!(dashboardBackLink && crumb)}>
       <div className="dashboard__back-link">
         <a href="#no-link" onClick={handleClick}>
-          <Icon icon={'arrow-left'} iconSize={18} /> <T id={'back_to_list'} />
+          <Icon icon={'arrow-left'} iconSize={18} />{' '}
+          <span className="dashboard__back-link-text">
+            <T id={'back_to_list'} />
+          </span>
         </a>
       </div>
     </If>

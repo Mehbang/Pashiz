@@ -55,7 +55,7 @@ export function DashboardQuickSearchButton(
   }
   return (
     <Button
-      className={Classes.MINIMAL}
+      className={`${Classes.MINIMAL} topbar__quick-search`}
       icon={<Icon icon={'search-24'} iconSize={20} />}
       text={<T id={'quick_find'} />}
       {...rest}

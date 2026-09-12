@@ -1,0 +1,570 @@
+// Phone and tablet layouts.
+//
+// Upstream's interface is desktop-only: `.App` used to carry a 1100px floor,
+// so a phone rendered an 1100px canvas and panned around it. Everything here
+// applies below that width and is imported last so it wins over Blueprint,
+// the page styles, and the RTL corrections alike.
+//
+// Two widths, shared with `constants/breakpoints.ts` — change them together:
+//
+//   < 600px           phone   one column, sidebar off-canvas
+//   600px – 1023px    tablet  sidebar a narrow rail, content full width
+//   ≥ 1024px          desktop untouched
+//
+// Written with logical properties (`inset-inline-start`, `margin-inline-end`)
+// wherever a side is meant, so the same rule is right in Persian and English.
+//
+// Why the rules for the interface sit under `#root`: 75 page stylesheets are
+// imported by the components that use them, so they enter the cascade after
+// `App.scss` — after this file — and at equal specificity the page wins. The
+// id outweighs any chain of classes those files use, without `!important` on
+// every line. Rules for what Blueprint portals to `body` (drawers, dialogs,
+// the sidebar's submenu) stay outside it, since they are not under `#root`.
+
+$bp-tablet: 600px;
+$bp-desktop: 1024px;
+
+@mixin phone {
+  @media (max-width: ($bp-tablet - 0.02px)) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: $bp-tablet) and (max-width: ($bp-desktop - 0.02px)) {
+    @content;
+  }
+}
+
+@mixin below-desktop {
+  @media (max-width: ($bp-desktop - 0.02px)) {
+    @content;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// The shell
+// ---------------------------------------------------------------------------
+
+@include below-desktop {
+  .App {
+    min-width: 0;
+  }
+}
+
+#root {
+  // Below the desktop width `DashboardSplitPane` renders `.dashboard-compact`
+  // in place of the split pane: the content and the sidebar as plain siblings,
+  // with nothing to drag. Everything about where the sidebar sits is decided
+  // here.
+  .dashboard-compact {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+
+    > .dashboard-content {
+      flex: 1 1 auto;
+      min-width: 0;
+      // The desktop rule that shifts the content beside a 50px rail.
+      margin-left: 0;
+      margin-right: 0;
+      width: auto;
+    }
+
+    &__backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      background: rgba(16, 22, 26, 0.45);
+    }
+  }
+
+  @include below-desktop {
+    .dashboard-content {
+      min-width: 0;
+    }
+  }
+
+  // Tablet: the sidebar is a rail in the flow — 50px shut, 220px open — and
+  // the content takes the rest. The rail's hover-to-widen stays for a mouse.
+  @include tablet {
+    .dashboard-compact > .sidebar {
+      position: relative;
+      flex: 0 0 220px;
+      width: 220px;
+
+      &.sidebar--mini-sidebar {
+        position: relative;
+        flex-basis: $sidebar-mini-width;
+        width: $sidebar-mini-width;
+      }
+    }
+    // No backdrop on a tablet: the sidebar pushes, it does not cover.
+    .dashboard-compact__backdrop {
+      display: none;
+    }
+  }
+
+  // Phone: the sidebar lies over the content from the start edge, and slides
+  // away entirely when shut. Nothing of it stays on screen — a 50px rail on a
+  // 375px screen is a seventh of it.
+  @include phone {
+    .dashboard-compact > .sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      inset-inline-start: 0;
+      width: min(280px, 85vw);
+      height: 100%;
+      z-index: 16;
+      transition: transform 0.2s ease-out;
+      box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
+
+      &.sidebar--mini-sidebar {
+        // Keep the open sidebar's look even in the state that would be a rail
+        // on a desktop — it is simply off screen.
+        width: min(280px, 85vw);
+        box-shadow: none;
+        transform: translateX(-100%);
+
+        [dir='rtl'] & {
+          transform: translateX(100%);
+        }
+
+        .sidebar__head-organization,
+        .sidebar__menu,
+        .sidebar__version {
+          opacity: 1;
+        }
+        .sidebar__head-logo {
+          opacity: 0;
+          visibility: hidden;
+        }
+        .sidebar__scroll-wrapper {
+          min-width: 0;
+
+          .ScrollbarsCustom-Scroller {
+            overflow: scroll !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+// A submenu opens as a second panel beside the sidebar. On a phone there is
+// no "beside": it takes the sidebar's own place instead, and tapping outside
+// it brings the sidebar back — drill in, drill out.
+@include phone {
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: auto;
+    right: auto;
+    inset-inline-start: 0;
+    width: min(280px, 85vw);
+    height: 100%;
+    margin-inline-start: 0 !important;
+    z-index: 17;
+  }
+}
+
+// On a tablet the sidebar is in the flow, so the panel goes beside whichever
+// width it currently has.
+@include tablet {
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: auto;
+    right: auto;
+    inset-inline-start: 220px;
+    height: 100%;
+    margin-inline-start: 0 !important;
+    z-index: 17;
+
+    body.has-mini-sidebar & {
+      inset-inline-start: $sidebar-mini-width;
+    }
+  }
+}
+
+#root {
+  // ---------------------------------------------------------------------------
+  // Inside the content
+  // ---------------------------------------------------------------------------
+
+  // The desktop rule that shifts the content beside a 50px rail is written as
+  // `.sidebar--mini-sidebar + .dashboard-content`; it has to be outweighed, not
+  // just overridden, or the content keeps a 50px hole on the rail's side.
+  @include below-desktop {
+    .dashboard-compact > .sidebar + .dashboard-content,
+    .dashboard-compact > .sidebar.sidebar--mini-sidebar + .dashboard-content {
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+    }
+  }
+
+  // Tables keep their columns and scroll sideways inside their own box. The
+  // page never scrolls sideways: `body` is `overflow: hidden`, so anything that
+  // runs past the edge is simply gone, and in Persian it runs off the left.
+  @include below-desktop {
+    .bigcapital-datatable {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+
+      // The table is as wide as its columns, never narrower than its box, so
+      // the header and the rows scroll together as one thing. Left to `100%`
+      // the rows overflow their own scrolling body while the header stays
+      // put, and the two drift apart the moment the user swipes.
+      > .table {
+        width: max-content;
+        min-width: 100%;
+      }
+    }
+    .dashboard__datatable {
+      margin-left: 12px;
+      margin-right: 12px;
+    }
+  }
+
+  // The action bar and the view tabs are single rows that do not wrap on a
+  // desktop and would not fit a phone if they did. Sideways scroll, no bar.
+  @include below-desktop {
+    .dashboard__actions-bar,
+    .dashboard__views-tabs {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+    // Blueprint aligns a navbar group with a float. A float that is wider
+    // than its box overflows on the start side — the right, in Persian — and
+    // no scroll can reach that side. As a flex row the group begins at the
+    // start edge and its overflow lies on the end side, where scrolling works.
+    .dashboard__actions-bar {
+      display: flex;
+      align-items: center;
+
+      .bp4-navbar-group {
+        float: none;
+        flex: 0 0 auto;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+
+        // And nothing inside it gives up width either, or the buttons shrink
+        // to nothing and their labels pile onto each other.
+        > * {
+          flex: 0 0 auto;
+        }
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // The topbar
+  // ---------------------------------------------------------------------------
+
+  @include below-desktop {
+    .dashboard__breadcrumbs {
+      display: none;
+    }
+  }
+
+  // On both, the title gets one line and whatever width is left, and the
+  // controls become icons: a label beside each icon is what wraps the row.
+  @include below-desktop {
+    .dashboard__topbar {
+      &-left {
+        flex: 1 1 auto;
+        min-width: 0;
+        align-items: center;
+      }
+      &-right {
+        flex: 0 0 auto;
+      }
+    }
+    .dashboard__title {
+      min-width: 0;
+      overflow: hidden;
+
+      h1 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .topbar__quick-search .bp4-button-text,
+    .topbar__help .bp4-button-text,
+    .form-group--quick-new-downDrop .bp4-button-text {
+      display: none;
+    }
+    .dashboard__topbar-navbar .bp4-button {
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+  }
+
+  // A phone drops what a tablet still has room for: the theme switch and the
+  // notification bell (both reachable elsewhere), the page hint, the dividers.
+  @include phone {
+    .dashboard__topbar {
+      min-height: 52px;
+    }
+    .dashboard__title h1 {
+      font-size: 15px;
+    }
+    .dashboard__hint,
+    .topbar__theme-switch,
+    .topbar__notifications,
+    .dashboard__topbar-navbar .bp4-navbar-divider {
+      display: none;
+    }
+    .dashboard__topbar-navbar {
+      margin-right: 0;
+      margin-left: 0;
+    }
+    .dashboard__topbar-user {
+      margin-right: 8px;
+      margin-left: 8px;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Pages
+// ---------------------------------------------------------------------------
+
+#root {
+  // The home page and the reports page are a grid of 250px cards. On a phone
+  // they already fall into one column; they just do not fill it.
+  @include phone {
+    .financial-reports {
+      padding: 16px 12px;
+
+      &__list {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      &__item {
+        width: 100%;
+        min-height: 0;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 12px;
+      }
+    }
+  }
+  @include tablet {
+    .financial-reports {
+      padding: 20px 16px;
+
+      &__item {
+        width: calc(50% - 16px);
+      }
+    }
+  }
+}
+
+#root {
+  // Document forms — invoices, bills, estimates, receipts, credit notes,
+  // payments, journals — all share `PageForm`, so one set of rules reaches
+  // every one of them.
+  @include below-desktop {
+    // The header lays the fields and the big amount side by side.
+    .page-form__header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    // Every section of the form pads 32px each side; a phone cannot spare it.
+    .page-form__body > * {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .page-form__footer-actions {
+      flex-wrap: wrap;
+      row-gap: 10px;
+      padding: 12px 16px;
+    }
+    // The back link becomes its arrow alone; the label is what wrapped.
+    .dashboard__back-link-text {
+      display: none;
+    }
+  }
+
+  @include phone {
+    .page-form__body > * {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+    // Blueprint's inline form group puts the label beside the field, each
+    // taking half the width. Half a phone is too narrow for a date, a name
+    // or an amount, so the label goes above and the field takes it all.
+    .bp4-form-group.bp4-inline {
+      flex-direction: column;
+      align-items: stretch;
+
+      > .bp4-label {
+        width: auto;
+        min-width: 0;
+        max-width: none;
+        margin-bottom: 4px;
+        line-height: 1.4;
+      }
+      > .bp4-form-content {
+        width: 100%;
+        min-width: 0;
+
+        > .bp4-input-group,
+        > .bp4-popover-wrapper,
+        > .bp4-popover2-target,
+        .bp4-input,
+        .bp4-button {
+          max-width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// What Blueprint portals to `body`: drawers and dialogs
+// ---------------------------------------------------------------------------
+//
+// Not under `#root`, since they are not inside it. Their width is set inline
+// by the component that opens them — `size="65%"`, `style={{ width: 1000 }}`
+// — so `!important` is the only way to reach past it from a stylesheet.
+
+// A drawer is a side panel of 65–80% of the screen, and twenty of them also
+// pin `minWidth: 700px` inline. On a phone that is mostly off screen; it
+// takes the whole width instead.
+@include phone {
+  .bp4-drawer.bp4-position-left,
+  .bp4-drawer.bp4-position-right {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
+@include tablet {
+  .bp4-drawer.bp4-position-left,
+  .bp4-drawer.bp4-position-right {
+    width: min(92vw, 720px) !important;
+    min-width: 0 !important;
+  }
+}
+
+// A dialog is centred with a fixed pixel width; on a phone it is wider than
+// the screen. It gets the screen minus a margin, and scrolls inside itself.
+@include phone {
+  .bp4-dialog {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    margin: 8px auto;
+    max-height: calc(100vh - 16px);
+    overflow-y: auto;
+  }
+  .bp4-dialog-container {
+    align-items: flex-start;
+  }
+}
+@include tablet {
+  .bp4-dialog {
+    max-width: calc(100vw - 40px) !important;
+  }
+}
+
+#root {
+  // Settings: on a desktop a 220px column of sections beside the content;
+  // below that the same items are a strip of tabs across the top, and the
+  // page is one column. The hamburger exists only here — the desktop has the
+  // main sidebar's rail beside the page instead.
+  .preferences-topbar__sidebar-toggle {
+    display: none;
+  }
+
+  @include below-desktop {
+    .preferences-page {
+      flex-direction: column;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+
+      &__content {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+    }
+    .dashboard-content--preferences {
+      min-width: 0;
+      max-width: 100%;
+    }
+    .preferences-topbar {
+      padding: 0 8px;
+
+      &__sidebar-toggle {
+        display: flex;
+        align-items: center;
+      }
+      &__title h2 {
+        font-size: 17px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .preferences-tabs {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      background: var(--color-sidebar-preferences-background);
+      border-bottom: 1px solid var(--color-sidebar-preferences-border);
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      &__menu.bp4-menu {
+        display: flex;
+        flex-wrap: nowrap;
+        width: max-content;
+        min-width: 100%;
+        padding: 0 4px;
+        background: transparent;
+
+        > li {
+          flex: 0 0 auto;
+        }
+        .bp4-menu-item {
+          border-radius: 0;
+          padding: 12px 14px;
+          white-space: nowrap;
+          border-bottom: 2px solid transparent;
+
+          &.bp4-active {
+            background: transparent;
+            border-bottom-color: var(--color-primary, #1552c8);
+            color: var(--color-primary, #1552c8);
+          }
+        }
+      }
+    }
+  }
+}

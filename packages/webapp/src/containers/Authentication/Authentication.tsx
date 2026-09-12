@@ -67,9 +67,16 @@ function AuthenticationRoutes() {
 const AuthPage = styled.div``;
 const AuthInsider = styled.div`
   width: 384px;
+  max-width: 100%;
   margin: 0 auto;
   margin-bottom: 40px;
-  padding-top: 80px;
+  padding: 80px 16px 0;
+  box-sizing: border-box;
+
+  /* A phone is narrower than the card; the card gives way, not the phone. */
+  @media (max-width: 599.98px) {
+    padding-top: 40px;
+  }
 `;
 
 const AuthLogo = styled.div`

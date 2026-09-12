@@ -20,6 +20,7 @@ export function PaymentReceiveFormHeader() {
   return (
     <Group
       position="apart"
+      className="page-form__header"
       align={'flex-start'}
       p="25px 32px"
       bg="var(--x-header-background)"

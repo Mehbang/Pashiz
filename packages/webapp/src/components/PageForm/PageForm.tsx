@@ -14,7 +14,13 @@ interface PageFormProps extends SystemProps {
  */
 export const PageForm = ({ children, ...props }: PageFormProps) => {
   return (
-    <x.div display="flex" flexDirection={'column'} overflow="hidden" {...props}>
+    <x.div
+      display="flex"
+      flexDirection={'column'}
+      overflow="hidden"
+      className="page-form"
+      {...props}
+    >
       {children}
     </x.div>
   );
@@ -30,7 +36,7 @@ const PageFormBody: FC<{ children: React.ReactNode } & SystemProps> = ({
   ...props
 }) => {
   return (
-    <x.div flex="1" overflow="auto" {...props}>
+    <x.div flex="1" overflow="auto" className="page-form__body" {...props}>
       {children}
     </x.div>
   );
@@ -44,7 +50,7 @@ const PageFormHeader: FC<GroupProps> = ({ className, ...props }) => {
       align={'flex-start'}
       p="25px 32px"
       {...props}
-      className={clsx(css(pageFormHeaderStyle), className)}
+      className={clsx('page-form__header', css(pageFormHeaderStyle), className)}
     />
   );
 };
@@ -68,7 +74,7 @@ const pageFormHeaderStyle = `
 const PageFormFooter: FC<{ children: React.ReactNode } & SystemProps> = ({
   children,
 }) => {
-  return <x.div>{children} </x.div>;
+  return <x.div className="page-form__footer">{children} </x.div>;
 };
 
 PageFormFooter.displayName = 'PageFormFooter';
@@ -111,7 +117,11 @@ const PageFormFooterActions: FC<GroupProps> = ({
     <Group
       spacing={20}
       {...restProps}
-      className={clsx(css(footerActionsStyle), className)}
+      className={clsx(
+        'page-form__footer-actions',
+        css(footerActionsStyle),
+        className,
+      )}
     >
       {children}
     </Group>

@@ -14,7 +14,7 @@ export function InvoiceFormHeader() {
       position="apart"
       align={'flex-start'}
       p="25px 32px"
-      className={styles.root}
+      className={`page-form__header ${styles.root}`}
     >
       <InvoiceFormHeaderFields />
       <InvoiceFormBigTotal />

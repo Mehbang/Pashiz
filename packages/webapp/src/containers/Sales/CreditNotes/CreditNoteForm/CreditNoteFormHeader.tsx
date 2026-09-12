@@ -14,6 +14,7 @@ export function CreditNoteFormHeader() {
   return (
     <Group
       position="apart"
+      className="page-form__header"
       align={'flex-start'}
       display="flex"
       p="25px 32px"

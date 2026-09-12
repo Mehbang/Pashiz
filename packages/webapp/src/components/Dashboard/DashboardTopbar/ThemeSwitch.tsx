@@ -20,7 +20,7 @@ export function ThemeSwitch() {
   return (
     <Tooltip content={label} position={Position.BOTTOM}>
       <Button
-        className={Classes.MINIMAL}
+        className={`${Classes.MINIMAL} topbar__theme-switch`}
         aria-label={label}
         onClick={() => toggleTheme()}
         icon={isDarkMode ? <SunIcon /> : <MoonIcon />}

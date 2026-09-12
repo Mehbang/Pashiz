@@ -26,6 +26,7 @@ measure** (a primary and secondary unit per item) and **category fields**
 | Jalali date picker + Formik binding | `packages/webapp/src/components/Forms/JalaaliDateInput/` |
 | Calendar dispatcher for date fields | `packages/webapp/src/components/Forms/FDateInput.tsx` |
 | RTL corrections for Blueprint | `packages/webapp/src/style/_rtl.scss` |
+| Phone and tablet layouts | `packages/webapp/src/style/_responsive.scss` + `constants/breakpoints.ts` |
 | Bundled font (Vazirmatn) | `packages/webapp/src/style/_fonts.scss` + `style/fonts/` |
 | Client translations | `packages/webapp/src/lang/{en,fa}/index.json` |
 | Server translations | `packages/server/src/i18n/{en,fa}/` |
@@ -315,6 +316,53 @@ dropping it made the row fail as a *missing required field*, an error that names
 the column and hides the cause. It now says «نوع کالا» باید یکی از این‌ها باشد:
 انبارگردانی‌شده، خدمت، بدون انبارگردانی — which is the whole answer.
 
+## Phone and tablet layouts
+
+Upstream's interface is desktop-only: `.App` carried `min-width: 1100px`, so a
+phone rendered an 1100px canvas and the user panned around it. There were three
+media queries in the whole application, all on the setup page.
+
+Two breakpoints, shared by `_responsive.scss` and `constants/breakpoints.ts`
+and to be changed together: below 600px is a phone, 600–1023px a tablet,
+1024px and up is untouched upstream.
+
+**The shell.** `DashboardSplitPane` renders the draggable split pane only at
+desktop width; below it, `.dashboard-compact` — content full width, sidebar a
+plain sibling. On a tablet the sidebar is in the flow, 50px shut and 220px
+open. On a phone it is fixed over the content from the start edge, slides off
+entirely when shut, and starts shut: the store says "expanded" on every load,
+which is right for a desktop and wrong for a screen the sidebar would cover.
+It closes on navigation. The submenu panel, which sits *beside* the sidebar on
+a desktop, takes the sidebar's own place on a phone — drill in, drill out.
+
+**Why the rules sit under `#root`.** 75 page stylesheets are imported by their
+components, so they enter the cascade after `App.scss` and win at equal
+specificity. The id outweighs any chain of classes without `!important` on
+every line. Rules for what Blueprint portals to `body` — drawers, dialogs, the
+sidebar's submenu — stay outside it. Drawers and dialogs do need `!important`:
+their width is set inline by the component that opens them, and twenty drawers
+pin `minWidth: 700px` that way too.
+
+**Three things that only the browser showed.** Blueprint aligns a navbar group
+with a float, and a float wider than its box overflows on the start side — the
+right, in Persian — where no scroll can reach; as a flex row its overflow lies
+on the end side. A data table's rows overflow their own scrolling body while
+the header stays put, so the two drift apart on the first swipe unless the
+table is `width: max-content`. And the preferences page has no hamburger,
+because on a desktop the main sidebar's rail is beside it; on a phone that rail
+is gone, and without a button the settings were a page with no way out.
+
+**What it covers:** the shell, topbar, list pages and their action bars, the
+home and reports cards, the ten document forms (through `PageForm` and a
+`page-form__header` class on each header), drawers, dialogs, financial sheets,
+preferences (its section list becomes a tab strip), and the sign-in pages.
+Verified at 375px and 768px against the running application, and at 1280px
+that the desktop is unchanged.
+
+**Found on the way, not responsive:** every detail label in every drawer was
+white on white in the light theme — `Details.scss` declared the dark colour
+right after the light one, unguarded. Upstream's bug; fixed.
+
 ## Untranslated strings a grep will never find
 
 The server passes some labels through `i18n.t()` that are already English prose
@@ -409,6 +457,11 @@ Each of these passed every local check and still broke:
   Worth an integrity check if hand-made sheets ever become common.
 - The downloadable sample sheet for items has no category-field columns. Its
   data is static and those columns are not known until the database is read.
+- Phone and tablet layouts cover the pages listed above. Not yet looked at on a
+  small screen: the banking pages, the universal search overlay, the customize
+  (branding) screens, and the entry tables inside document forms, which scroll
+  but were not redesigned. The document-form footer wraps into three rows on a
+  phone; it works, and could be tighter.
 - The payment page used to name `Bigcapital Technology, Inc.` as the party
   charging the customer. That was simply wrong — the money goes to the
   organization, which configures its own payment details — and the consent note

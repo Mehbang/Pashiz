@@ -130,7 +130,7 @@ function DashboardTopbar({
               position={Position.BOTTOM}
             >
               <Button
-                className={Classes.MINIMAL}
+                className={`${Classes.MINIMAL} topbar__notifications`}
                 icon={<Icon icon={'notification-24'} iconSize={20} />}
               />
             </Tooltip>
@@ -158,7 +158,7 @@ function DashboardTopbar({
               }
             >
               <Button
-                className={Classes.MINIMAL}
+                className={`${Classes.MINIMAL} topbar__help`}
                 icon={<Icon icon={'help-24'} iconSize={20} />}
                 text={<T id={'help'} />}
               />
