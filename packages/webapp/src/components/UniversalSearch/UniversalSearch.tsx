@@ -22,6 +22,7 @@ import {
 import { filterItemsByResourceType } from './utils';
 import { Icon, If, FormattedMessage as T } from '@/components';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
+import { MEDIA_PHONE } from '@/constants/breakpoints';
 
 // Resource type from RESOURCES_TYPES constant
 type ResourceType = string;
@@ -84,6 +85,17 @@ const containerStyles = css`
   top: 20vh;
   width: 500px;
   z-index: 20;
+
+  /* A 500px box centred on a 375px phone hangs off both edges. It takes the
+     screen instead, and sits higher so the keyboard leaves room for results. */
+  @media ${MEDIA_PHONE} {
+    left: 8px;
+    right: 8px;
+    width: auto;
+    top: 8px;
+    max-height: calc(100vh - 16px);
+    overflow-y: auto;
+  }
 
   .bp4-input-group {
     .bp4-icon {
@@ -167,6 +179,11 @@ const inputRightElementsStyles = css`
 const footerStyles = css`
   padding: 12px 12px;
   border-top: 1px solid var(--color-universal-search-footer-divider);
+
+  /* Keyboard hints — ENTER, ESC, the arrows — on a screen with no keyboard. */
+  @media ${MEDIA_PHONE} {
+    display: none;
+  }
 `;
 
 const actionBaseStyles = css`

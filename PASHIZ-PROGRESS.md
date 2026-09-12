@@ -457,11 +457,11 @@ Each of these passed every local check and still broke:
   Worth an integrity check if hand-made sheets ever become common.
 - The downloadable sample sheet for items has no category-field columns. Its
   data is static and those columns are not known until the database is read.
-- Phone and tablet layouts cover the pages listed above. Not yet looked at on a
-  small screen: the banking pages, the universal search overlay, the customize
-  (branding) screens, and the entry tables inside document forms, which scroll
-  but were not redesigned. The document-form footer wraps into three rows on a
-  phone; it works, and could be tighter.
+- Phone and tablet layouts cover the pages listed above, plus the search
+  overlay, the filter dropdown, the bank account cards and the form footer.
+  Not yet looked at on a small screen: the customize (branding) screens, and
+  the entry tables inside document forms, which scroll but were not
+  redesigned.
 - The payment page used to name `Bigcapital Technology, Inc.` as the party
   charging the customer. That was simply wrong — the money goes to the
   organization, which configures its own payment details — and the consent note

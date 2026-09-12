@@ -401,6 +401,43 @@ $bp-desktop: 1024px;
     }
   }
 
+  // The footer's buttons wrapped into three rows on a phone, and the
+  // branding picker took a fourth: a quarter of the screen for one form's
+  // actions. The buttons share their rows evenly, the picker loses its
+  // label, and the whole thing fits in two.
+  @include phone {
+    .page-form__footer-actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      padding: 10px 12px;
+
+      > * {
+        min-width: 0;
+      }
+      > :first-child {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+
+        > .bp4-button-group,
+        > .bp4-button {
+          flex: 1 1 auto;
+          margin: 0;
+
+          > .bp4-button:first-child {
+            flex: 1 1 auto;
+          }
+        }
+      }
+      > :last-child {
+        .bp4-label {
+          display: none;
+        }
+      }
+    }
+  }
+
   @include phone {
     .page-form__body > * {
       padding-left: 12px;
@@ -566,5 +603,45 @@ $bp-desktop: 1024px;
         }
       }
     }
+  }
+}
+
+// The filter dropdown is a 600px popover whose every condition is one row
+// of four fixed-width fields. On a phone the popover takes the screen and a
+// condition wraps into two rows: the field and the comparator, then the
+// value with its remove button.
+@include phone {
+  .filter-dropdown {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+
+    &__condition {
+      flex-wrap: wrap;
+      row-gap: 6px;
+      padding: 8px 10px;
+
+      .bp4-form-group {
+        padding-right: 6px;
+        padding-left: 0;
+      }
+      .form-group--condition {
+        width: 60px;
+      }
+      .form-group--fieldKey {
+        width: calc(100% - 60px - 6px);
+      }
+      .form-group--comparator {
+        width: 120px;
+      }
+      .form-group--value {
+        width: calc(100% - 120px - 34px);
+      }
+    }
+  }
+  // Popper places a popover relative to its target and lets it run past the
+  // viewport; a popover this wide has to be pinned to the screen instead.
+  .bp4-popover:has(> .bp4-popover-content > .filter-dropdown),
+  .bp4-popover2:has(> .bp4-popover2-content > .filter-dropdown) {
+    max-width: calc(100vw - 16px);
   }
 }

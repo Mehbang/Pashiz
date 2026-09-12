@@ -5,6 +5,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { Icon } from '@/components/Icon';
+import { MEDIA_PHONE } from '@/constants/breakpoints';
 
 const ACCOUNT_TYPE = {
   CASH: 'cash',
@@ -109,6 +110,13 @@ const BankAccountWrap = styled.div`
   border: 1px solid var(--color-bank-account-card-border);
   transition: all 0.1s ease-in-out;
   color: var(--color-bank-account-card-text);
+
+  /* One card per row on a phone, and the row is the phone's width. */
+  @media ${MEDIA_PHONE} {
+    width: calc(100% - 16px);
+    height: auto;
+    min-height: 150px;
+  }
 
   &:hover {
     border-color: var(--color-bank-account-card-hover-border);
