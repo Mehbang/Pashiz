@@ -5,6 +5,7 @@ import { ImportOrganizationService } from './commands/ImportOrganization.service
 import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { S3Module } from '../S3/S3.module';
 import { AuthorizationGuard } from '../Roles/Authorization.guard';
+import { OrganizationBackupAdminGuard } from './OrganizationBackup.admin.guard';
 
 @Module({
   imports: [TenancyModule, S3Module],
@@ -13,6 +14,7 @@ import { AuthorizationGuard } from '../Roles/Authorization.guard';
     ExportOrganizationService,
     ImportOrganizationService,
     AuthorizationGuard,
+    OrganizationBackupAdminGuard,
   ],
   exports: [ExportOrganizationService, ImportOrganizationService],
 })

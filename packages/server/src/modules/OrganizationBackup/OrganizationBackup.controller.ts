@@ -15,11 +15,19 @@ import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { OrganizationBackupAdminGuard } from './OrganizationBackup.admin.guard';
 import { ExportOrganizationService } from './commands/ExportOrganization.service';
 import { ImportOrganizationService } from './commands/ImportOrganization.service';
 import { AdminBackupService } from '@/modules/Admin/AdminBackup.service';
 import { organizationArchivePrefix } from '@/modules/Admin/AdminSchedule.service';
 import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
+
+/**
+ * The largest backup the import routes accept. A real organization's export —
+ * its attachments are capped at 100 MB — stays well under this; the limit is
+ * here so an unbounded upload cannot be buffered into memory on a small server.
+ */
+const MAX_BACKUP_UPLOAD_BYTES = 200 * 1024 * 1024;
 
 /**
  * Export and import of one organization's data.
@@ -31,7 +39,7 @@ import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 @Controller('organization/backup')
 @ApiTags('Organization backup')
 @ApiCommonHeaders()
-@UseGuards(AuthorizationGuard)
+@UseGuards(AuthorizationGuard, OrganizationBackupAdminGuard)
 export class OrganizationBackupController {
   constructor(
     private readonly exportService: ExportOrganizationService,
@@ -66,7 +74,11 @@ export class OrganizationBackupController {
   @ApiOperation({
     summary: 'Reads a backup file and reports what it holds, changing nothing.',
   })
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: MAX_BACKUP_UPLOAD_BYTES, files: 1 },
+    }),
+  )
   async inspectBackup(
     @UploadedFile() file: Express.Multer.File,
     @Body() body: { entryIndex?: string },
@@ -86,7 +98,11 @@ export class OrganizationBackupController {
   @ApiOperation({
     summary: "Replaces the organization's data with the uploaded backup.",
   })
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: MAX_BACKUP_UPLOAD_BYTES, files: 1 },
+    }),
+  )
   async importBackup(
     @UploadedFile() file: Express.Multer.File,
     @Body() body: { entryIndex?: string },

@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { gunzip } from 'zlib';
 import { promisify } from 'util';
+import { randomUUID } from 'node:crypto';
 import { Knex } from 'knex';
 import { ServiceError } from '@/modules/Items/ServiceError';
 import { TENANCY_DB_CONNECTION } from '@/modules/Tenancy/TenancyDB/TenancyDB.constants';
@@ -19,6 +20,13 @@ import {
 } from '../OrganizationBackup.types';
 
 const gunzipAsync = promisify(gunzip);
+
+/**
+ * A gzip bomb is tiny on disk and vast once expanded. Bound the expansion so a
+ * crafted upload cannot exhaust memory; a real organization's JSON (attachments
+ * are capped at 100 MB on export) stays well under this.
+ */
+const MAX_UNZIPPED_BYTES = 256 * 1024 * 1024;
 
 @Injectable()
 export class ImportOrganizationService {
@@ -41,8 +49,11 @@ export class ImportOrganizationService {
     file: Buffer,
     entryIndex?: number,
   ): Promise<OrganizationBackupSummary> {
-    const backup = await this.parse(file, entryIndex);
+    return this.summarize(await this.parse(file, entryIndex));
+  }
 
+  /** The summary of an already-parsed backup, shared by inspect and import. */
+  private summarize(backup: OrganizationBackup): OrganizationBackupSummary {
     return {
       organizationName: backup.organization?.name,
       exportedAt: backup.exportedAt,
@@ -72,14 +83,13 @@ export class ImportOrganizationService {
     entryIndex?: number,
   ): Promise<OrganizationBackupSummary> {
     const backup = await this.parse(file, entryIndex);
-    const summary = await this.inspect(file, entryIndex);
 
     const tenant = await this.tenancyContext.getTenant(true);
     const user = await this.tenancyContext.getSystemUser();
 
     await this.importInto(this.tenantKnex(), tenant.id, user, backup);
 
-    return summary;
+    return this.summarize(backup);
   }
 
   /**
@@ -138,7 +148,7 @@ export class ImportOrganizationService {
 
     await this.ensureTenantUser(knex, owner);
     await this.applyOrganizationSettings(tenantId, backup);
-    await this.restoreAttachments(backup);
+    await this.restoreAttachments(knex, backup);
   }
 
   /**
@@ -255,23 +265,45 @@ export class ImportOrganizationService {
    * Puts the files back into this installation's object store under the same
    * keys the rows refer to.
    */
-  private async restoreAttachments(backup: OrganizationBackup): Promise<void> {
+  private async restoreAttachments(
+    knex: Knex,
+    backup: OrganizationBackup,
+  ): Promise<void> {
     const attachments = backup.attachments ?? [];
     if (!attachments.length) return;
 
     const bucket = this.configService.get('s3.bucket');
     if (!bucket) return;
 
+    // The key in the file was minted on the exporting installation and, on an
+    // uploaded backup, is attacker-controlled — writing to it verbatim would
+    // let a crafted file place or overwrite an object under another
+    // organization's prefix. Each attachment is re-keyed under this tenant's
+    // own prefix instead, and the matching `documents` row is repointed so the
+    // file still resolves. Objects under the old keys are simply left unused.
+    const prefix = this.configService.get('tenantDatabase.dbNamePrefix') ?? '';
+    const database = (knex.client.config.connection as any).database as string;
+    const organizationId =
+      database && database.startsWith(prefix)
+        ? database.slice(prefix.length)
+        : database;
+
     for (const attachment of attachments) {
+      const newKey = `${organizationId}/${randomUUID()}`;
       try {
         await this.s3.send(
           new PutObjectCommand({
             Bucket: bucket,
-            Key: attachment.key,
+            Key: newKey,
             Body: Buffer.from(attachment.data, 'base64'),
             ContentType: attachment.mimeType,
           }),
         );
+        if (attachment.key) {
+          await knex('documents')
+            .where('key', attachment.key)
+            .update({ key: newKey });
+        }
       } catch {
         // The books are already in; a file that will not upload is worth a
         // missing attachment, not a failed import.
@@ -309,7 +341,11 @@ export class ImportOrganizationService {
   ): Promise<OrganizationBackup> {
     let parsed: any;
     try {
-      parsed = JSON.parse((await gunzipAsync(file)).toString());
+      parsed = JSON.parse(
+        (
+          await gunzipAsync(file, { maxOutputLength: MAX_UNZIPPED_BYTES })
+        ).toString(),
+      );
     } catch {
       throw new ServiceError(ERRORS.INVALID_BACKUP_FILE);
     }
@@ -355,7 +391,11 @@ export class ImportOrganizationService {
   }> {
     let parsed: any;
     try {
-      parsed = JSON.parse((await gunzipAsync(file)).toString());
+      parsed = JSON.parse(
+        (
+          await gunzipAsync(file, { maxOutputLength: MAX_UNZIPPED_BYTES })
+        ).toString(),
+      );
     } catch {
       throw new ServiceError(ERRORS.INVALID_BACKUP_FILE);
     }
