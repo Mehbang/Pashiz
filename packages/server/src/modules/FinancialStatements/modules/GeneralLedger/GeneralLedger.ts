@@ -65,7 +65,7 @@ export class GeneralLedgerSheet extends R.compose(FinancialSheetStructure)(
     openingBalance: number,
     runningBalance?: number,
   ): number {
-    const lastRunningBalance = runningBalance || openingBalance;
+    const lastRunningBalance = runningBalance ?? openingBalance;
 
     const amount = Ledger.getAmount(
       entry.credit,

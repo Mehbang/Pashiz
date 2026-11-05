@@ -5,7 +5,7 @@ import { UserNotFoundException } from '../exceptions/UserNotFound.exception';
 
 describe('AuthSigninService token claims', () => {
   const userId = 42;
-  const user = { id: userId, email: 'owner@corp.com' } as any;
+  const user = { id: userId, email: 'owner@corp.com', active: true } as any;
 
   const createService = (foundUser: any = user) => {
     const findOne = jest.fn().mockImplementation(() => {

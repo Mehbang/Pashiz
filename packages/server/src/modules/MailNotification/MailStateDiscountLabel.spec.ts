@@ -28,7 +28,10 @@ const i18nMock = {
 const transformDiscountLabel = (transformer, model) => {
   transformer.includeAttributes = () => ['discountLabel'];
   transformer.options = {};
-  transformer.setContext({ i18n: i18nMock });
+  transformer.setContext({
+    i18n: i18nMock,
+    exportAls: { isExport: false },
+  } as any);
 
   return transformer.work(model).discountLabel;
 };
