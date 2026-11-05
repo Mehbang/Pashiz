@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsInt,
   IsArray,
+  ArrayMaxSize,
   ValidateIf,
   MaxLength,
   Min,
@@ -26,6 +27,7 @@ export class ItemFieldValueDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(2000)
   @ApiProperty({ example: 'محمود دولت‌آبادی', description: 'The value' })
   value?: string;
 }
@@ -262,6 +264,7 @@ export class CommandItemDto {
   mediaIds?: number[];
 
   @IsArray()
+  @ArrayMaxSize(200)
   @ValidateNested({ each: true })
   @Type(() => ItemFieldValueDto)
   @IsOptional()
