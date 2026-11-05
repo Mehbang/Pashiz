@@ -19,6 +19,14 @@ export * from './flatten-infinity-pages';
 /** Strips leading slash from a path segment to avoid double slashes when joining with a base (e.g. `/api/` + path). */
 export const normalizeApiPath = (path) => (path || '').replace(/^\//, '');
 
+export const compose = (...funcs) =>
+  funcs.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(...args)),
+    (arg) => arg,
+  );
+
 export const getCookie = (name, defaultValue?) =>
   _.defaultTo(jsCookie.get(name), defaultValue);
 

@@ -1,33 +1,27 @@
+// @ts-nocheck
 import { Intent, Alert } from '@blueprintjs/core';
-import * as FF from 'fp-ts/function';
 import React, { useEffect, useState, useCallback } from 'react';
-import intl from 'react-intl-universal';
 import { useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
-import type { WithDashboardActionsProps } from '@/containers/Dashboard/withDashboardActions';
-import type { WithResourcesActionsProps } from '@/containers/Resources/withResourcesActions';
-import type { ViewMeta } from '@/containers/Views/ViewForm';
-import type { WithViewsActionsProps } from '@/containers/Views/withViewsActions';
 import {
   If,
   AppToaster,
   DashboardInsider,
   DashboardPageContent,
   FormattedMessage as T,
+  FormattedHTMLMessage,
 } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
 import { withResourcesActions } from '@/containers/Resources/withResourcesActions';
 import { ViewForm } from '@/containers/Views/ViewForm';
 import { withViewsActions } from '@/containers/Views/withViewsActions';
+import { compose } from '@/utils';
 
-interface ViewFormPageProps
-  extends WithDashboardActionsProps,
-    WithResourcesActionsProps,
-    WithViewsActionsProps {}
-
+// @flow
 function ViewFormPageInner({
   // #withDashboardActions
   changePageTitle,
+  changePageSubtitle,
 
   requestFetchResourceFields,
   requestFetchResourceColumns,
@@ -35,12 +29,9 @@ function ViewFormPageInner({
 
   requestFetchView,
   requestDeleteView,
-}: ViewFormPageProps) {
-  const { resource_slug: resourceSlug, view_id: viewId } = useParams<{
-    resource_slug?: string;
-    view_id?: string;
-  }>();
-  const [stateDeleteView, setStateDeleteView] = useState<ViewMeta | null>(null);
+}) {
+  const { resource_slug: resourceSlug, view_id: viewId } = useParams();
+  const [stateDeleteView, setStateDeleteView] = useState(null);
 
   const fetchHook = useAsync(async () => {
     return Promise.all([
@@ -68,7 +59,7 @@ function ViewFormPageInner({
   }, [viewId, changePageTitle]);
 
   // Handle delete view button click.
-  const handleDeleteView = useCallback((view: ViewMeta | null) => {
+  const handleDeleteView = useCallback((view) => {
     setStateDeleteView(view);
   }, []);
 
@@ -79,10 +70,7 @@ function ViewFormPageInner({
 
   // Handle confirm delete custom view.
   const handleConfirmDeleteView = useCallback(() => {
-    if (!stateDeleteView?.id) {
-      return;
-    }
-    requestDeleteView(stateDeleteView.id).then(() => {
+    requestDeleteView(stateDeleteView.id).then((response) => {
       setStateDeleteView(null);
       AppToaster.show({
         message: intl.get('the_custom_view_has_been_deleted_successfully'),
@@ -98,7 +86,7 @@ function ViewFormPageInner({
       mount={false}
     >
       <DashboardPageContent>
-        <If condition={!!fetchHook.value}>
+        <If condition={fetchHook.value}>
           <ViewForm
             viewId={viewId}
             resourceName={resourceSlug}
@@ -106,23 +94,23 @@ function ViewFormPageInner({
           />
 
           <Alert
-            cancelButtonText={intl.get('cancel')}
-            confirmButtonText={intl.get('delete')}
+            cancelButtonText={<T id={'cancel'} />}
+            confirmButtonText={<T id={'delete'} />}
             icon="trash"
             intent={Intent.DANGER}
-            isOpen={stateDeleteView != null}
+            isOpen={stateDeleteView}
             onCancel={handleCancelDeleteView}
             onConfirm={handleConfirmDeleteView}
           >
             <p>
-              {intl.formatHTMLMessage({
-                id: 'once_delete_these_views_you_will_not_able_restore_them',
-              })}
+              <FormattedHTMLMessage
+                id={'once_delete_these_views_you_will_not_able_restore_them'}
+              />
             </p>
           </Alert>
         </If>
 
-        <If condition={!!fetchHook.error}>
+        <If condition={fetchHook.error}>
           <h4>
             <T id={'something_wrong'} />
           </h4>
@@ -132,9 +120,8 @@ function ViewFormPageInner({
   );
 }
 
-export const ViewFormPage = FF.pipe(
-  ViewFormPageInner,
-  withResourcesActions,
-  withViewsActions,
+export const ViewFormPage = compose(
   withDashboardActions,
-);
+  withViewsActions,
+  withResourcesActions,
+)(ViewFormPageInner);

@@ -253,6 +253,8 @@ export class ItemResponseDto {
     example: '50,000 g',
   })
   secondaryQuantityOnHandFormatted: string;
+
+  @ApiProperty({
     description:
       'The stock level at which the item should be reordered (for inventory items)',
     example: 10,

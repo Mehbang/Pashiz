@@ -1,16 +1,12 @@
+// @ts-nocheck
 import * as FF from 'fp-ts/function';
 import _, { isEmpty, includes } from 'lodash';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import {
-  ISidebarMenuItem,
-  ISidebarMenuItemDialog,
-  ISidebarMenuItemLink,
-  ISidebarMenuItemOverlay,
   ISidebarMenuItemType,
   ISidebarSubscriptionAbility,
 } from './interfaces';
-import type { SidebarMenuItem } from '@/constants/sidebarMenu';
 import { SidebarMenu } from '@/constants/sidebarMenu';
 import { useAbilityContext } from '@/hooks';
 import { useSubscription } from '@/hooks/query';
@@ -22,13 +18,10 @@ import {
 } from '@/hooks/state';
 import { filterValuesDeep, deepdash } from '@/utils';
 
-// deepdash's bundled typings wrongly require `childrenPath` to be an array of
-// paths while its runtime accepts a single path string (`'children'`).
 const deepDashConfig = {
   childrenPath: 'children',
   pathFormat: 'array',
-} as unknown as Parameters<typeof deepdash.mapValuesDeep>[2];
-
+};
 const ingoreTypesEmpty = [
   ISidebarMenuItemType.Group,
   ISidebarMenuItemType.Overlay,
@@ -39,19 +32,12 @@ const ingoreTypesEmpty = [
  * @param   {ISidebarMenuItem[]} menu
  * @returns {ISidebarMenuItem[]}
  */
-function removeSidebarOverlayChildren(
-  menu: Array<SidebarMenuItem | ISidebarMenuItem>,
-): ISidebarMenuItem[] {
+function removeSidebarOverlayChildren(menu) {
   return deepdash.mapValuesDeep(
     menu,
-    (item: SidebarMenuItem | ISidebarMenuItem, key, parent, context) => {
+    (item, key, parent, context) => {
       if (item.type === ISidebarMenuItemType.Overlay) {
-        // `skipChildren` exists on deepdash's runtime iteratee context but is
-        // missing from its bundled typings.
-        const ctx = context as typeof context & {
-          skipChildren: (skip: boolean) => void;
-        };
-        ctx.skipChildren(true);
+        context.skipChildren(true);
         return _.omit(item, ['children']);
       }
       return item;
@@ -64,7 +50,7 @@ function removeSidebarOverlayChildren(
  * Retrives the main sidebar pre-menu.
  * @returns {ISidebarMenuItem[]}
  */
-export function getMainSidebarMenu(): ISidebarMenuItem[] {
+export function getMainSidebarMenu() {
   return removeSidebarOverlayChildren(SidebarMenu);
 }
 
@@ -76,7 +62,7 @@ function useFilterSidebarItemFeaturePredicater() {
 
   return {
     // Returns false if the item has `feature` prop and that feature has no ability.
-    predicate: (item: ISidebarMenuItem) => {
+    predicate: (item) => {
       if (item.feature && !featureCan(item.feature)) {
         return false;
       }
@@ -93,7 +79,7 @@ function useFilterSidebarItemAbilityPredicater() {
 
   return {
     // Retruns false if the item has `permission` prop and that permission has no ability.
-    predicate: (item: ISidebarMenuItem) => {
+    predicate: (item) => {
       if (
         item.permission &&
         !ability.can(item.permission.ability, item.permission.subject)
@@ -111,34 +97,20 @@ function useFilterSidebarItemAbilityPredicater() {
 function useFilterSidebarItemSubscriptionPredicater() {
   const { isSubscriptionActive, isSubscriptionInactive } = useSubscription();
 
-  // NOTE: the legacy code passes an array as the searched value (a latent bug
-  // that can never match); the wrapper keeps the exact runtime behavior while
-  // satisfying lodash's typings.
-  const includesValue = includes as unknown as (
-    collection: ISidebarSubscriptionAbility[],
-    value: unknown,
-  ) => boolean;
-
   return {
-    predicate: (item: ISidebarMenuItem) => {
+    predicate: (item) => {
       const { subscription } = item;
 
       if (subscription) {
-        const isActive = includesValue(subscription, [
+        const isActive = includes(subscription, [
           ISidebarSubscriptionAbility.Active,
         ])
           ? isSubscriptionActive
           : true;
 
-        // `Inactive` is missing from `ISidebarSubscriptionAbility` (latent bug);
-        // the cast preserves the same runtime value (`undefined`).
-        const inactiveAbility = (
-          ISidebarSubscriptionAbility as Partial<
-            Record<'Inactive', ISidebarSubscriptionAbility>
-          >
-        ).Inactive;
-
-        const isInactive = includesValue(subscription, [inactiveAbility])
+        const isInactive = includes(subscription, [
+          ISidebarSubscriptionAbility.Inactive,
+        ])
           ? isSubscriptionInactive
           : true;
 
@@ -154,9 +126,7 @@ function useFilterSidebarItemSubscriptionPredicater() {
  * @param   {} menu
  * @returns {}
  */
-function useFilterSidebarMenuAbility(
-  menu: Array<SidebarMenuItem | ISidebarMenuItem>,
-): ISidebarMenuItem[] {
+function useFilterSidebarMenuAbility(menu) {
   const { predicate: predFeature } = useFilterSidebarItemFeaturePredicater();
   const { predicate: predAbility } = useFilterSidebarItemAbilityPredicater();
   const { predicate: predSubscription } =
@@ -164,7 +134,7 @@ function useFilterSidebarMenuAbility(
 
   return deepdash.filterDeep(
     menu,
-    (item: ISidebarMenuItem) => predFeature(item) && predAbility(item),
+    (item) => predFeature(item) && predAbility(item),
     deepDashConfig,
   );
 }
@@ -174,7 +144,7 @@ function useFilterSidebarMenuAbility(
  * @param   {*} menu
  * @returns {}
  */
-function useFlatSidebarMenu(menu: ISidebarMenuItem[]): ISidebarMenuItem[] {
+function useFlatSidebarMenu(menu) {
   return React.useMemo(() => {
     return deepdash.mapDeep(menu, (item) => item, deepDashConfig);
   }, [menu]);
@@ -189,12 +159,12 @@ function useBindSidebarItemLinkClick() {
   const { closeSidebarSubmenu } = useSidebarSubmnuActions();
 
   // Handle sidebar item click.
-  const onClick = (item: ISidebarMenuItemLink) => (event: React.MouseEvent) => {
+  const onClick = (item) => (event) => {
     closeSidebarSubmenu();
     history.push(item.href);
   };
   return {
-    bindOnClick: (item: ISidebarMenuItemLink) => {
+    bindOnClick: (item) => {
       return {
         ...item,
         onClick: onClick(item),
@@ -212,13 +182,12 @@ function useBindSidebarItemDialogClick() {
   const { openDialog } = useDialogActions();
 
   // Handle sidebar item click.
-  const onClick =
-    (item: ISidebarMenuItemDialog) => (event: React.MouseEvent) => {
-      closeSidebarSubmenu();
-      openDialog(item.dialogName, item.dialogPayload);
-    };
+  const onClick = (item) => (event) => {
+    closeSidebarSubmenu();
+    openDialog(item.dialogName, item.dialogPayload);
+  };
   return {
-    bindOnClick: (item: ISidebarMenuItemDialog) => {
+    bindOnClick: (item) => {
       return {
         ...item,
         onClick: onClick(item),
@@ -235,13 +204,12 @@ function useBindSidebarItemOverlayClick() {
     useSidebarSubmnuActions();
 
   // Handle sidebar item click.
-  const onClick =
-    (item: ISidebarMenuItemOverlay) => (event: React.MouseEvent) => {
-      closeSidebarSubmenu();
-      toggleSidebarSubmenu({ submenuId: item.overlayId });
-    };
+  const onClick = (item) => (event) => {
+    closeSidebarSubmenu();
+    toggleSidebarSubmenu({ submenuId: item.overlayId });
+  };
   return {
-    bindOnClick: (item: ISidebarMenuItemOverlay) => {
+    bindOnClick: (item) => {
       return {
         ...item,
         onClick: onClick(item),
@@ -253,7 +221,7 @@ function useBindSidebarItemOverlayClick() {
 /**
  * Binds click action of the given sidebar menu for each item based on item type.
  */
-function useBindSidebarItemClick(menu: ISidebarMenuItem[]): ISidebarMenuItem[] {
+function useBindSidebarItemClick(menu) {
   const { bindOnClick: bindLinkClickEvt } = useBindSidebarItemLinkClick();
   const { bindOnClick: bindOverlayClickEvt } = useBindSidebarItemOverlayClick();
   const { bindOnClick: bindItemDialogEvt } = useBindSidebarItemDialogClick();
@@ -261,7 +229,7 @@ function useBindSidebarItemClick(menu: ISidebarMenuItem[]): ISidebarMenuItem[] {
   return React.useMemo(() => {
     return deepdash.mapValuesDeep(
       menu,
-      (item: ISidebarMenuItem) => {
+      (item) => {
         switch (item.type) {
           case ISidebarMenuItemType.Link:
             return bindLinkClickEvt(item);
@@ -284,27 +252,25 @@ function useBindSidebarItemClick(menu: ISidebarMenuItem[]): ISidebarMenuItem[] {
  * @param   {ISidebarMenuItem[]} menu -
  * @returns {ISidebarMenuItem[]}
  */
-const findSubmenuBySubmenuId =
-  (submenuId: unknown) =>
-  (menu: SidebarMenuItem[]): ISidebarMenuItem[] => {
-    const groupItem = deepdash.findDeep(
-      menu,
-      (item: SidebarMenuItem) => {
-        return (
-          item.type === ISidebarMenuItemType.Overlay &&
-          item.overlayId === submenuId
-        );
-      },
-      deepDashConfig,
-    );
-    return groupItem?.value?.children || [];
-  };
+const findSubmenuBySubmenuId = (submenuId) => (menu) => {
+  const groupItem = deepdash.findDeep(
+    menu,
+    (item) => {
+      return (
+        item.type === ISidebarMenuItemType.Overlay &&
+        item.overlayId === submenuId
+      );
+    },
+    deepDashConfig,
+  );
+  return groupItem?.value?.children || [];
+};
 
 /**
  * Retrieves the main sidebar post-menu.
  * @returns {ISidebarMenuItem[]}
  */
-export function useMainSidebarMenu(): ISidebarMenuItem[] {
+export function useMainSidebarMenu() {
   return FF.pipe(
     SidebarMenu,
     useFilterSidebarMenuAbility,
@@ -321,12 +287,10 @@ export function useMainSidebarMenu(): ISidebarMenuItem[] {
  * @param   {ISidebarMenuItem[]} items
  * @returns {ISidebarMenuItem[]}
  */
-function useAssocSidebarItemHasChildren(
-  items: ISidebarMenuItem[],
-): ISidebarMenuItem[] {
+function useAssocSidebarItemHasChildren(items) {
   return deepdash.mapValuesDeep(
     items,
-    (item: ISidebarMenuItem) => {
+    (item) => {
       return {
         ...item,
         hasChildren: !isEmpty(item.children),
@@ -341,7 +305,7 @@ function useAssocSidebarItemHasChildren(
  * @param   {ISidebarMenuOverlayIds} submenuId
  * @returns {ISidebarMenuItem[]}
  */
-export function useSubSidebarMenu(submenuId: unknown): ISidebarMenuItem[] {
+export function useSubSidebarMenu(submenuId) {
   if (!submenuId) return [];
 
   return FF.pipe(
@@ -358,7 +322,7 @@ export function useSubSidebarMenu(submenuId: unknown): ISidebarMenuItem[] {
  * Observes the sidebar expending with body class.
  * @param {boolean} sidebarExpended
  */
-export function useObserveSidebarExpendedBodyclass(sidebarExpended: boolean) {
+export function useObserveSidebarExpendedBodyclass(sidebarExpended) {
   React.useEffect(() => {
     document.body.classList.toggle('has-mini-sidebar', !sidebarExpended);
   }, [sidebarExpended]);
@@ -368,7 +332,7 @@ export function useObserveSidebarExpendedBodyclass(sidebarExpended: boolean) {
  * Detamrines whether the given sidebar menu item is active.
  * @returns {boolean}
  */
-export function useIsSidebarMenuItemActive(item: ISidebarMenuItem): boolean {
+export function useIsSidebarMenuItemActive(item) {
   const { submenuId } = useSidebarSubmenu();
   return (
     item.type === ISidebarMenuItemType.Overlay && submenuId === item.overlayId
@@ -380,10 +344,8 @@ export function useIsSidebarMenuItemActive(item: ISidebarMenuItem): boolean {
  * @param   {ISidebarMenuItem[]} items -
  * @returns {ISidebarMenuItem[]}
  */
-export function filterSidebarItemHasNoChildren(
-  items: ISidebarMenuItem[],
-): ISidebarMenuItem[] {
-  return filterValuesDeep((item: ISidebarMenuItem) => {
+export function filterSidebarItemHasNoChildren(items) {
+  return filterValuesDeep((item) => {
     // If it was group item and has no children items so discard that item.
     if (ingoreTypesEmpty.indexOf(item.type) !== -1 && isEmpty(item.children)) {
       return false;

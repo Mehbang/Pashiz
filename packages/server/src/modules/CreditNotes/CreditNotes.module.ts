@@ -46,7 +46,6 @@ import { GetCreditNoteMailTemplateService } from './queries/GetCreditNoteMailTem
 import { SendCreditNoteMailProcessor } from './processors/SendCreditNoteMail.processor';
 import { MailNotificationModule } from '../MailNotification/MailNotification.module';
 import { MailModule } from '../Mail/Mail.module';
-import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { SendCreditNoteMailQueue } from './types/CreditNotes.types';
 
 @Module({

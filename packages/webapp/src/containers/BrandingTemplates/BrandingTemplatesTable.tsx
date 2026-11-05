@@ -1,21 +1,16 @@
+// @ts-nocheck
 import * as FF from 'fp-ts/function';
 import { ActionsMenu } from './_components';
 import { useBrandingTemplatesColumns } from './_hooks';
 import { getCustomizeDrawerNameFromResource } from './_utils';
 import { useBrandingTemplatesBoot } from './BrandingTemplatesBoot';
 import styles from './BrandTemplates.module.scss';
-import type { BrandingTemplateRow } from './_components';
-import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
-import type { MouseEvent } from 'react';
 import { DataTable, TableSkeletonRows } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 
-interface BrandingTemplatesTableProps
-  extends WithDrawerActionsProps,
-    WithAlertActionsProps {}
+interface BrandingTemplatesTableProps {}
 
 function BrandingTemplateTableRoot({
   openAlert,
@@ -25,21 +20,18 @@ function BrandingTemplateTableRoot({
   const columns = useBrandingTemplatesColumns();
   const { isPdfTemplatesLoading, pdfTemplates } = useBrandingTemplatesBoot();
 
-  const handleEditTemplate = (template: BrandingTemplateRow) => {
+  const handleEditTemplate = (template) => {
     openDrawer(DRAWERS.INVOICE_CUSTOMIZE, {
       templateId: template.id,
       resource: template.resource,
     });
   };
 
-  const handleDeleteTemplate = (template: BrandingTemplateRow) => {
+  const handleDeleteTemplate = (template) => {
     openAlert('branding-template-delete', { templateId: template.id });
   };
 
-  const handleCellClick = (
-    cell: { row: { original: BrandingTemplateRow } },
-    _event: MouseEvent,
-  ) => {
+  const handleCellClick = (cell, event) => {
     const templateId = cell.row.original.id;
     const resource = cell.row.original.resource;
 
@@ -50,7 +42,7 @@ function BrandingTemplateTableRoot({
   };
 
   // Handle mark as default button click.
-  const handleMarkDefaultTemplate = (template: BrandingTemplateRow) => {
+  const handleMarkDefaultTemplate = (template) => {
     openAlert('branding-template-mark-default', { templateId: template.id });
   };
 

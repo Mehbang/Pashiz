@@ -178,6 +178,18 @@ export class ItemEntryDto {
   quantityFormatted?: string;
 
   @ApiProperty({
+    description: 'Formatted quantity carrying the unit symbol',
+    required: false,
+  })
+  quantityWithUnit?: string;
+
+  @ApiProperty({
+    description: 'Formatted quantity read in the secondary unit',
+    required: false,
+  })
+  secondaryQuantityWithUnit?: string;
+
+  @ApiProperty({
     description: 'Formatted rate of the item entry',
     example: '$10.00',
     required: false,

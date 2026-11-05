@@ -1,22 +1,18 @@
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import * as FF from 'fp-ts/function';
 import React, { useCallback } from 'react';
 import { usePaymentMadeEntriesTableColumns } from './components';
 import { usePaymentMadeInnerContext } from './PaymentMadeInnerProvider';
 import type { PaymentMadeEntry, PaymentMadeFormValues } from './utils';
-import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   DataTableEditable,
   CloudLoadingIndicator,
   FormattedMessage as T,
 } from '@/components';
 import { CLASSES } from '@/constants/classes';
-import { DRAWERS } from '@/constants/drawers';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { updateTableCell } from '@/utils';
+import { compose, updateTableCell } from '@/utils';
 
-type PaymentMadeEntriesTableProps = WithDrawerActionsProps & {
+type PaymentMadeEntriesTableProps = {
   onUpdateData: (entries: PaymentMadeEntry[]) => void;
   entries: PaymentMadeEntry[];
   currencyCode: string;
@@ -25,24 +21,16 @@ type PaymentMadeEntriesTableProps = WithDrawerActionsProps & {
 /**
  * Payment made items table.
  */
-function PaymentMadeEntriesTableInner({
+export function PaymentMadeEntriesTable({
   onUpdateData,
   entries,
   currencyCode,
-
-  // #withDrawerActions
-  openDrawer,
 }: PaymentMadeEntriesTableProps) {
   // Payment made inner context.
   const { isNewEntriesFetching } = usePaymentMadeInnerContext();
 
-  // Opens the bill detail drawer of the given bill.
-  const handleViewBillDetail = (billId: number) => {
-    openDrawer(DRAWERS.BILL_DETAILS, { billId });
-  };
-
   // Payment entries table columns.
-  const columns = usePaymentMadeEntriesTableColumns(handleViewBillDetail);
+  const columns = usePaymentMadeEntriesTableColumns();
 
   // Formik context.
   const {
@@ -53,9 +41,8 @@ function PaymentMadeEntriesTableInner({
   // Handle update data.
   const handleUpdateData = useCallback(
     (rowIndex: number, columnId: string, value: unknown) => {
-      const newRows = FF.pipe(
+      const newRows = compose(updateTableCell(rowIndex, columnId, value))(
         entries,
-        updateTableCell(rowIndex, columnId, value),
       );
       onUpdateData(newRows);
     },
@@ -90,8 +77,3 @@ function PaymentMadeEntriesTableInner({
     </CloudLoadingIndicator>
   );
 }
-
-export const PaymentMadeEntriesTable = FF.pipe(
-  PaymentMadeEntriesTableInner,
-  withDrawerActions,
-);

@@ -15,7 +15,6 @@ import {
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, ToNumber } from '@/common/decorators/Validators';
-import { ITEM_UNITS, ItemUnit } from '../Items.constants';
 
 /**
  * One value an item carries for a field its category defines.
@@ -76,16 +75,6 @@ export class CommandItemDto {
   })
   reorderPoint?: number;
 
-  @IsString()
-  @IsIn([...ITEM_UNITS])
-  @MaxLength(20)
-  @ApiProperty({
-    description: 'Unit of measure the item is measured in',
-    enum: [...ITEM_UNITS],
-    example: 'kg',
-    required: false,
-  })
-  unit?: ItemUnit;
 
   // Purchase attributes
   @IsOptional()

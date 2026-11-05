@@ -18,6 +18,10 @@ import {
   ITableRow,
 } from '../../types/Table.types';
 import { tableRowMapper } from '../../utils/Table.utils';
+import {
+  IFinancialReportMeta,
+  DEFAULT_REPORT_META,
+} from '../../types/Report.types';
 import { FinancialSheet } from '../../common/FinancialSheet';
 import { BalanceSheetComparsionPreviousYear } from './BalanceSheetComparsionPreviousYear';
 import { IROW_TYPE, DISPLAY_COLUMNS_BY } from './constants';

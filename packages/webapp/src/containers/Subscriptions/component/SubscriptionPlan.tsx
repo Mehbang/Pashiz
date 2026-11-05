@@ -32,7 +32,7 @@ export interface SubscriptionPricingProps {
 
 interface SubscriptionPricingCombinedProps
   extends SubscriptionPricingProps,
-    WithPlansProps {}
+    Pick<WithPlansProps, 'plansPeriod'> {}
 
 function SubscriptionPlanRoot({
   label,

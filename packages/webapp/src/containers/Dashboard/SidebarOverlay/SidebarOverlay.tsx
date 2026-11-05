@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Overlay, OverlayProps } from '@blueprintjs/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -16,9 +17,9 @@ export interface ISidebarOverlayProps {
 }
 
 export interface ISidebarOverlayItemProps {
-  text: React.ReactNode;
+  text: string | JSX.Element;
   href: string;
-  onClick?: (event: React.MouseEvent) => void;
+  onClick?: any;
 }
 
 export interface ISidebarOverlayItemDivider {
@@ -45,7 +46,7 @@ export function SidebarOverlayItemLink({
 }
 
 export interface ISidebarOverlayItemLabel {
-  text: React.ReactNode;
+  text: string;
 }
 
 /**
@@ -115,7 +116,6 @@ function SidebarOverlayMenu({ items }: ISidebarOverlayMenu) {
 
 export interface SidebarOverlayProps extends OverlayProps {
   items: ISidebarMenuItem[];
-  label?: React.ReactNode;
 }
 
 /**

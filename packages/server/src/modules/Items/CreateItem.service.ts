@@ -10,7 +10,6 @@ import { UnitOfWork } from '../Tenancy/TenancyDB/UnitOfWork.service';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
 import { CreateItemDto } from './dtos/Item.dto';
 import { SyncItemFieldValuesService } from './commands/SyncItemFieldValues.service';
-import { DEFAULT_ITEM_UNIT } from './Items.constants';
 
 @Injectable({ scope: Scope.REQUEST })
 export class CreateItemService {
@@ -89,7 +88,6 @@ export class CreateItemService {
 
     return {
       ...attributes,
-      unit: attributes.unit ?? DEFAULT_ITEM_UNIT,
       active: Boolean(defaultTo(itemDTO.active, true)),
       quantityOnHand: itemDTO.type === 'inventory' ? 0 : null,
       reorderPoint:
