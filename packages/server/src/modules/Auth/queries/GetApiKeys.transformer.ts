@@ -6,7 +6,10 @@ export class GetApiKeysTransformer extends Transformer {
   };
 
   public excludeAttributes = (): string[] => {
-    return ['tenantId'];
+    // 'key' is the full secret; the base transformer spreads every column, so
+    // without excluding it the list endpoint returned the plaintext key. Only
+    // the truncated 'token' virtual below is exposed.
+    return ['tenantId', 'key'];
   };
 
   public token(apiKey) {
