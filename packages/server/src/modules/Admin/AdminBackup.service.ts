@@ -311,9 +311,15 @@ export class AdminBackupService {
     const groups = new Map<string, BackupFile[]>();
 
     for (const file of files) {
-      if (!/-auto-\d{8}T\d{6}\./.test(file.name)) continue;
+      // `<stem>-auto-<stamp>.<ext>` — group by the stem+ext, so each
+      // organization's archives (`org-<id>…`) and the installation dumps
+      // (`pashiz-portal…`) are pruned within their own group. Grouping by the
+      // extension alone made KEEP_PER_KIND a single budget shared across every
+      // organization, so with enough of them the oldest lost its only backup.
+      const match = /^(.*)-auto-\d{8}T\d{6}\.(.+)$/.exec(file.name);
+      if (!match) continue;
 
-      const kind = file.name.slice(file.name.indexOf('.') + 1);
+      const kind = `${match[1]}.${match[2]}`;
       groups.set(kind, [...(groups.get(kind) ?? []), file]);
     }
     let removed = 0;
