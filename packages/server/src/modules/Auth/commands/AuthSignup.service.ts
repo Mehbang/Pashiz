@@ -49,10 +49,12 @@ export class AuthSignupService {
     await this.validateEmailUniqiness(signupDTO.email);
 
     const hashedPassword = await hashPassword(signupDTO.password);
-    const signupConfirmation = this.configService.get('signupConfirmation');
+    // Read the live instance setting the admin portal writes, not the boot-time
+    // environment, so toggling email confirmation there actually takes effect.
+    const signupSettings = await this.instanceSettings.getSignupSettings();
 
     const verifyTokenCrypto = crypto.randomBytes(64).toString('hex');
-    const verifiedEnabed = signupConfirmation.enabled ?? false;
+    const verifiedEnabed = signupSettings.emailConfirmation ?? false;
     const verifyToken = verifiedEnabed ? verifyTokenCrypto : '';
     const verified = !verifiedEnabed;
 
