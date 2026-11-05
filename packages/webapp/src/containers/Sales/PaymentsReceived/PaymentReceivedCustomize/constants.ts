@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 export const initialValues = {
   templateName: '',
 
@@ -12,62 +13,66 @@ export const initialValues = {
 
   // Top details.
   showPaymentReceivedNumber: true,
-  paymentReceivedNumberLabel: 'Payment number',
+  paymentReceivedNumberLabel: intl.get('payment_no_'),
 
   // Payment date
   showPaymentReceivedDate: true,
-  paymentReceivedDateLabel: 'Date of Issue',
+  paymentReceivedDateLabel: intl.get('date_of_issue'),
 
   // Company address
   showCompanyAddress: true,
 
   // Customer address
   showCustomerAddress: true,
-  billedToLabel: 'Billed To',
+  billedToLabel: intl.get('billed_to'),
 
   // Subtotal
   showSubtotal: true,
-  subtotalLabel: 'Subtotal',
+  subtotalLabel: intl.get('subtotal'),
 
   // Total
   showTotal: true,
-  totalLabel: 'Total',
+  totalLabel: intl.get('total'),
 };
 
 export const fieldsGroups = [
   {
-    label: 'Header',
+    label: intl.get('header'),
     fields: [
       {
         labelKey: 'paymentReceivedNumberLabel',
         enableKey: 'showPaymentReceivedNumber',
-        label: 'Payment No.',
+        label: intl.get('payment_no'),
       },
       {
         labelKey: 'paymentReceivedDateLabel',
         enableKey: 'showPaymentReceivedDate',
-        label: 'Payment Date',
+        label: intl.get('payment_date'),
       },
       {
         enableKey: 'showCustomerAddress',
         labelKey: 'billedToLabel',
-        label: 'Bill To',
+        label: intl.get('bill_to'),
       },
       {
         enableKey: 'showCompanyAddress',
-        label: 'Billed From',
+        label: intl.get('billed_from'),
       },
     ],
   },
   {
-    label: 'Totals',
+    label: intl.get('totals'),
     fields: [
       {
         labelKey: 'subtotalLabel',
         enableKey: 'showSubtotal',
-        label: 'Subtotal',
+        label: intl.get('subtotal'),
       },
-      { labelKey: 'totalLabel', enableKey: 'showTotal', label: 'Total' },
+      {
+        labelKey: 'totalLabel',
+        enableKey: 'showTotal',
+        label: intl.get('total'),
+      },
     ],
   },
 ];
