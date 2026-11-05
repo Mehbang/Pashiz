@@ -29,15 +29,21 @@ export class AuthorizationGuard implements CanActivate {
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const { user } = request as any;
     const userId = this.clsService.get('userId');
+    const organizationId = this.clsService.get('organizationId');
+    // Scope the cache by organization as well as user: one person may belong to
+    // several organizations with a different role in each, and keying on the
+    // user alone leaked one organization's abilities into the others. (The
+    // entry is still only evicted by the LRU; a role edit is reflected once it
+    // ages out — the upstream purge-on-edit is a later change.)
+    const cacheKey = `${organizationId}:${userId}`;
 
-    if (ABILITIES_CACHE.has(userId)) {
-      (request as any).ability = ABILITIES_CACHE.get(userId);
+    if (ABILITIES_CACHE.has(cacheKey)) {
+      (request as any).ability = ABILITIES_CACHE.get(cacheKey);
     } else {
       const ability = await this.getAbilityForUser();
       (request as any).ability = ability;
-      ABILITIES_CACHE.set(user.id, ability);
+      ABILITIES_CACHE.set(cacheKey, ability);
     }
     return true;
   }
