@@ -13,21 +13,30 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { BankRulesApplication } from './BankRulesApplication';
 import { CreateBankRuleDto } from './dtos/BankRule.dto';
 import { EditBankRuleDto } from './dtos/BankRule.dto';
 import { BankRuleResponseDto } from './dtos/BankRuleResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { CashflowAction } from '@/modules/BankingTransactions/types/BankingTransactions.types';
 
 @Controller('banking/rules')
 @ApiTags('Bank Rules')
 @ApiExtraModels(BankRuleResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@RequirePermission(CashflowAction.View, AbilitySubject.Cashflow)
 export class BankRulesController {
   constructor(private readonly bankRulesApplication: BankRulesApplication) {}
 
   @Post()
+  @RequirePermission(CashflowAction.Create, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Create a new bank rule.' })
   @ApiResponse({
     status: 201,
@@ -43,6 +52,7 @@ export class BankRulesController {
   }
 
   @Put(':id')
+  @RequirePermission(CashflowAction.Create, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Edit the given bank rule.' })
   async editBankRule(
     @Param('id') ruleId: number,
@@ -52,6 +62,7 @@ export class BankRulesController {
   }
 
   @Delete(':id')
+  @RequirePermission(CashflowAction.Delete, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Delete the given bank rule.' })
   @ApiResponse({
     status: 200,

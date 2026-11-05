@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -12,11 +12,18 @@ import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import { RecognizedTransactionsApplication } from './RecognizedTransactions.application';
 import { GetRecognizedTransactionResponseDto } from './dtos/GetRecognizedTransactionResponse.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { CashflowAction } from '@/modules/BankingTransactions/types/BankingTransactions.types';
 
 @Controller('banking/recognized')
 @ApiTags('Banking Recognized Transactions')
 @ApiExtraModels(GetRecognizedTransactionResponseDto, PaginatedResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@RequirePermission(CashflowAction.View, AbilitySubject.Cashflow)
 export class BankingRecognizedTransactionsController {
   constructor(
     private readonly recognizedTransactionsApplication: RecognizedTransactionsApplication,

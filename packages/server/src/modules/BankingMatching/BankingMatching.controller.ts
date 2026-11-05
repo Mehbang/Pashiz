@@ -14,6 +14,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { castArray } from 'lodash';
 import { BankingMatchingApplication } from './BankingMatchingApplication';
@@ -21,11 +22,18 @@ import { MatchBankTransactionDto } from './dtos/MatchBankTransaction.dto';
 import { GetMatchedTransactionsQueryDto } from './dtos/GetMatchedTransactionsQuery.dto';
 import { GetMatchedTransactionsResponseDto } from './dtos/GetMatchedTransactionsResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { CashflowAction } from '@/modules/BankingTransactions/types/BankingTransactions.types';
 
 @Controller('banking/matching')
 @ApiTags('Banking Transactions Matching')
 @ApiExtraModels(GetMatchedTransactionsResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@RequirePermission(CashflowAction.View, AbilitySubject.Cashflow)
 export class BankingMatchingController {
   constructor(
     private readonly bankingMatchingApplication: BankingMatchingApplication,
@@ -60,6 +68,7 @@ export class BankingMatchingController {
   }
 
   @Post('/match')
+  @RequirePermission(CashflowAction.Create, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Match the given uncategorized transaction.' })
   async matchTransaction(@Body() matchedTransactions: MatchBankTransactionDto) {
     return this.bankingMatchingApplication.matchTransaction(
@@ -69,6 +78,7 @@ export class BankingMatchingController {
   }
 
   @Patch('/unmatch/:uncategorizedTransactionId')
+  @RequirePermission(CashflowAction.Delete, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Unmatch the given uncategorized transaction.' })
   async unmatchMatchedTransaction(
     @Param('uncategorizedTransactionId') uncategorizedTransactionId: number,

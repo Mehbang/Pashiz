@@ -5,7 +5,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Put, Get, Body, Param } from '@nestjs/common';
+import { Controller, Put, Get, Body, Param, UseGuards } from '@nestjs/common';
 import { TransactionsLockingService } from './commands/CommandTransactionsLockingService';
 import { TransactionsLockingGroup } from './types/TransactionsLocking.types';
 import { ITransactionLockingPartiallyDTO } from './types/TransactionsLocking.types';
@@ -16,11 +16,18 @@ import {
 } from './dtos/TransactionsLocking.dto';
 import { TransactionLockingResponseDto } from './dtos/TransactionLockingResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { AccountAction } from '@/interfaces/Account';
 
 @Controller('transactions-locking')
 @ApiTags('Transactions Locking')
 @ApiExtraModels(TransactionLockingResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@RequirePermission(AccountAction.TransactionsLocking, AbilitySubject.Account)
 export class TransactionsLockingController {
   constructor(
     private readonly transactionsLockingService: TransactionsLockingService,

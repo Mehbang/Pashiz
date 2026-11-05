@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -12,11 +12,18 @@ import { GetUncategorizedTransactionsQueryDto } from '../dtos/GetUncategorizedTr
 import { GetAutofillCategorizeTransactionResponseDto } from '../dtos/GetAutofillCategorizeTransactionResponse.dto';
 import { BankingTransactionsApplication } from '../BankingTransactionsApplication.service';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { CashflowAction } from '@/modules/BankingTransactions/types/BankingTransactions.types';
 
 @Controller('banking/uncategorized')
 @ApiTags('Banking Uncategorized Transactions')
 @ApiExtraModels(GetAutofillCategorizeTransactionResponseDto)
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@RequirePermission(CashflowAction.View, AbilitySubject.Cashflow)
 export class BankingUncategorizedTransactionsController {
   constructor(
     private readonly bankingTransactionsApplication: BankingTransactionsApplication,

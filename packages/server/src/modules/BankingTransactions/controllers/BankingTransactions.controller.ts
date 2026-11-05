@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -25,6 +26,11 @@ import { BankTransactionDetailResponseDto } from '../dtos/BankTransactionDetailR
 import { NumberFormatQueryDto } from '../dtos/NumberFormatQuery.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { CashflowAction } from '../types/BankingTransactions.types';
 
 @Controller('banking/transactions')
 @ApiTags('Banking Transactions')
@@ -35,6 +41,8 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
   NumberFormatQueryDto,
 )
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@RequirePermission(CashflowAction.View, AbilitySubject.Cashflow)
 export class BankingTransactionsController {
   constructor(
     private readonly bankingTransactionsApplication: BankingTransactionsApplication,
@@ -89,6 +97,7 @@ export class BankingTransactionsController {
   }
 
   @Post()
+  @RequirePermission(CashflowAction.Create, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Create a new bank transaction' })
   @ApiResponse({
     status: 201,
@@ -106,6 +115,7 @@ export class BankingTransactionsController {
   }
 
   @Delete(':id')
+  @RequirePermission(CashflowAction.Delete, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Delete a bank transaction' })
   @ApiResponse({
     status: 200,

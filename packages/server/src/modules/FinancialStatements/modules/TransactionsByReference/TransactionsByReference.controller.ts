@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import {
   ApiExtraModels,
   ApiOperation,
@@ -11,10 +11,17 @@ import { TransactionsByReferenceApplication } from './TransactionsByReferenceApp
 import { TransactionsByReferenceQueryDto } from './TransactionsByReferenceQuery.dto';
 import { TransactionsByReferenceResponseDto } from './TransactionsByReferenceResponse.dto';
 import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { ReportsAction } from '../../types/Report.types';
 
 @Controller('reports/transactions-by-reference')
 @ApiTags('Reports')
 @ApiExtraModels(NumberFormatQueryDto, TransactionsByReferenceResponseDto)
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@RequirePermission(ReportsAction.READ_GENERAL_LEDGET, AbilitySubject.Report)
 export class TransactionsByReferenceController {
   constructor(
     private readonly transactionsByReferenceApp: TransactionsByReferenceApplication,

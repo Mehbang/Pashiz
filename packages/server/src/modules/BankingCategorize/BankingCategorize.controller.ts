@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { castArray, omit } from 'lodash';
 import { BankingCategorizeApplication } from './BankingCategorize.application';
 import { CategorizeBankTransactionRouteDto } from './dtos/CategorizeBankTransaction.dto';
@@ -11,16 +19,24 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { RequirePermission } from '@/modules/Roles/RequirePermission.decorator';
+import { PermissionGuard } from '@/modules/Roles/Permission.guard';
+import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
+import { AbilitySubject } from '@/modules/Roles/Roles.types';
+import { CashflowAction } from '@/modules/BankingTransactions/types/BankingTransactions.types';
 
 @Controller('banking/categorize')
 @ApiTags('Banking Categorization')
 @ApiCommonHeaders()
+@UseGuards(AuthorizationGuard, PermissionGuard)
+@RequirePermission(CashflowAction.View, AbilitySubject.Cashflow)
 export class BankingCategorizeController {
   constructor(
     private readonly bankingCategorizeApplication: BankingCategorizeApplication,
   ) {}
 
   @Post()
+  @RequirePermission(CashflowAction.Create, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Categorize bank transactions.' })
   @ApiBody({ type: CategorizeBankTransactionRouteDto })
   @ApiResponse({
@@ -37,6 +53,7 @@ export class BankingCategorizeController {
   }
 
   @Delete('/bulk')
+  @RequirePermission(CashflowAction.Delete, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Uncategorize bank transactions in bulk.' })
   @ApiQuery({
     name: 'uncategorizedTransactionIds',
@@ -58,6 +75,7 @@ export class BankingCategorizeController {
   }
 
   @Delete('/:id')
+  @RequirePermission(CashflowAction.Delete, AbilitySubject.Cashflow)
   @ApiOperation({ summary: 'Uncategorize a bank transaction.' })
   @ApiParam({
     name: 'id',
