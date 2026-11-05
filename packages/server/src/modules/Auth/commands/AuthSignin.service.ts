@@ -48,6 +48,11 @@ export class AuthSigninService {
     if (!(await user.checkPassword(password))) {
       throw new InvalidEmailPasswordException(email);
     }
+    // An inactivated user must not sign in. Reported as a failed credential so
+    // it does not reveal that the account exists but has been disabled.
+    if (!(user as any).active) {
+      throw new InvalidEmailPasswordException(email);
+    }
     return user;
   }
 
@@ -66,6 +71,11 @@ export class AuthSigninService {
 
       this.clsService.set('userId', user.id);
     } catch (_error) {
+      throw new UserNotFoundException(String(payload.sub));
+    }
+    // Reject a token belonging to a user who has since been inactivated, so an
+    // issued token stops working the moment the account is disabled.
+    if (!(user as any).active) {
       throw new UserNotFoundException(String(payload.sub));
     }
     return payload;
