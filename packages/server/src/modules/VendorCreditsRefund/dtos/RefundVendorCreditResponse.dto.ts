@@ -2,6 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { AccountResponseDto } from '@/modules/Accounts/dtos/AccountResponse.dto';
 
+class RefundVendorCreditSummaryDto {
+  @ApiProperty({ example: 1001 })
+  id: number;
+
+  @ApiProperty({ example: 'VC-0001' })
+  vendorCreditNumber: string;
+}
+
 export class RefundVendorCreditResponseDto {
   @ApiProperty({
     description: 'The unique identifier of the refund transaction',
@@ -61,7 +69,7 @@ export class RefundVendorCreditResponseDto {
 
   @ApiProperty({
     description: 'The date of the refund',
-    example: '2024-03-15T00:00:00Z',
+    example: '2024-03-15',
   })
   date: Date;
 
@@ -72,6 +80,12 @@ export class RefundVendorCreditResponseDto {
   })
   @Type(() => AccountResponseDto)
   depositAccount?: AccountResponseDto;
+
+  @ApiProperty({
+    description: 'The vendor credit being refunded',
+    type: RefundVendorCreditSummaryDto,
+  })
+  vendorCredit: RefundVendorCreditSummaryDto;
 
   // Formatted fields
   @ApiProperty({

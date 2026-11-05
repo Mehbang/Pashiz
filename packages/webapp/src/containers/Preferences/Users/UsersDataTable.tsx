@@ -1,5 +1,6 @@
 import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React, { useCallback } from 'react';
 import { ActionsMenu, useUsersListColumns } from './components';
 import { useUsersListContext } from './UsersProvider';
@@ -9,7 +10,6 @@ import { DataTable, TableSkeletonRows, AppToaster } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { useResendInvitation } from '@/hooks/query';
-import { compose } from '@/utils';
 
 // See components.tsx — UserRow widens the SDK User with legacy property names.
 type UserRow = {
@@ -116,7 +116,8 @@ function UsersDataTableInner({
   );
 }
 
-export const UsersDataTable = compose(
-  withDialogActions,
+export const UsersDataTable = FF.pipe(
+  UsersDataTableInner,
   withAlertActions,
-)(UsersDataTableInner);
+  withDialogActions,
+);

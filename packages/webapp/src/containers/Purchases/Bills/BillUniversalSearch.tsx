@@ -1,14 +1,23 @@
-// @ts-nocheck
 import { MenuItem, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
+import type { Bill } from '@bigcapital/sdk-ts';
 import { T, Icon, Choose, If, TextStatus } from '@/components';
 import { AbilitySubject, BillAction } from '@/constants/abilityOption';
 import { DRAWERS } from '@/constants/drawers';
 import { RESOURCES_TYPES } from '@/constants/resourcesTypes';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import { formattedAmount } from '@/utils';
 import { localizedDigits } from '@/utils/locale';
+
+interface BillUniversalSearchSelectProps extends WithDrawerActionsProps {
+  resourceType: string;
+  resourceId: number;
+  onAction?: () => void;
+}
 
 /**
  * Universal search bill item select action.
@@ -21,7 +30,7 @@ function BillUniversalSearchSelectComponent({
 
   // #withDrawerActions
   openDrawer,
-}) {
+}: BillUniversalSearchSelectProps) {
   if (resourceType === RESOURCES_TYPES.BILL) {
     openDrawer(DRAWERS.BILL_DETAILS, { billId: resourceId });
     onAction && onAction();
@@ -36,15 +45,19 @@ export const BillUniversalSearchSelect = withDrawerActions(
 /**
  * Status accessor.
  */
-export function BillStatus({ bill }) {
+interface BillStatusProps {
+  bill: Bill;
+}
+
+export function BillStatus({ bill }: BillStatusProps) {
   return (
     <Choose>
-      <Choose.When condition={bill.isFullyPaid && bill.isOpen}>
+      <Choose.When condition={!!(bill.isFullyPaid && bill.isOpen)}>
         <TextStatus intent={Intent.SUCCESS}>
           <T id={'paid'} />
         </TextStatus>
       </Choose.When>
-      <Choose.When condition={bill.isOpen}>
+      <Choose.When condition={!!bill.isOpen}>
         <Choose>
           <Choose.When condition={bill.isOverdue}>
             <TextStatus intent={Intent.DANGER}>
@@ -81,9 +94,21 @@ export function BillStatus({ bill }) {
 /**
  * Bill universal search item.
  */
+interface BillUniversalSearchItemData {
+  id: number;
+  text: string;
+  reference: Bill;
+}
+
+interface BillUniversalSearchItemActions {
+  handleClick: () => void;
+  modifiers: { active: boolean };
+  query: string;
+}
+
 export function BillUniversalSearchItem(
-  item,
-  { handleClick, modifiers, query },
+  item: BillUniversalSearchItemData,
+  { handleClick, modifiers, query }: BillUniversalSearchItemActions,
 ) {
   return (
     <MenuItem
@@ -91,16 +116,16 @@ export function BillUniversalSearchItem(
       text={
         <div>
           <div>{item.text}</div>
-          <span class="bp4-text-muted">
+          <span className="bp4-text-muted">
             {item.reference.billNumber}{' '}
             <Icon icon={'caret-right-16'} iconSize={16} />
             {item.reference.formattedBillDate}
           </span>
         </div>
       }
-      label={
+      labelElement={
         <>
-          <div class="amount">{item.reference.formattedAmount}</div>
+          <div className="amount">{item.reference.formattedAmount}</div>
           <BillStatus bill={item.reference} />
         </>
       }
@@ -110,7 +135,7 @@ export function BillUniversalSearchItem(
   );
 }
 
-const billsToSearch = (bill) => ({
+const billsToSearch = (bill: Bill) => ({
   id: bill.id,
   text: bill.vendor?.displayName ?? '',
   reference: bill,

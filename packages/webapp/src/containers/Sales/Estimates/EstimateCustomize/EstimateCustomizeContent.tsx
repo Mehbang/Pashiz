@@ -1,4 +1,7 @@
-import intl from 'react-intl-universal';
+import {
+  EstimatePaperTemplate,
+  EstimatePaperTemplateProps,
+} from '@bigcapital/pdf-templates';
 import { useFormikContext } from 'formik';
 import {
   ElementCustomize,
@@ -7,16 +10,16 @@ import {
 import { initialValues } from './constants';
 import { EstimateCustomizeContentFields } from './EstimateCustomizeFieldsContent';
 import { EstimateCustomizeGeneralField } from './EstimateCustomizeFieldsGeneral';
-import {
-  EstimatePaperTemplate,
-  EstimatePaperTemplateProps,
-} from './EstimatePaperTemplate';
 import { EstimateBrandingState, EstimateCustomizeValues } from './types';
 import { Box } from '@/components';
 import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
 import { BrandingTemplateForm } from '@/containers/BrandingTemplates/BrandingTemplateForm';
 import { useIsTemplateNamedFilled } from '@/containers/BrandingTemplates/utils';
 import { useElementCustomizeContext } from '@/containers/ElementCustomize/ElementCustomizeProvider';
+import {
+  paperTemplatePreviewStyle,
+  pickPaperTemplateProps,
+} from '@/containers/ElementCustomize/paperTemplatePreview';
 import { useDrawerActions } from '@/hooks/state';
 
 export function EstimateCustomizeContent() {
@@ -51,13 +54,13 @@ function EstimateCustomizeFormContent() {
         </Box>
       </ElementCustomize.PaperTemplate>
 
-      <ElementCustomize.FieldsTab id={'general'} label={intl.get('general')}>
+      <ElementCustomize.FieldsTab id={'general'} label={'General'}>
         <EstimateCustomizeGeneralField />
       </ElementCustomize.FieldsTab>
 
       <ElementCustomize.FieldsTab
         id={'content'}
-        label={intl.get('content')}
+        label={'Content'}
         tabProps={{ disabled: !isTemplateNameFilled }}
       >
         <EstimateCustomizeContentFields />
@@ -74,10 +77,12 @@ function EstimatePaperTemplateFormConnected() {
   const { values } = useFormikContext<EstimateCustomizeValues>();
   const { brandingState } = useElementCustomizeContext();
 
-  const mergedProps: EstimatePaperTemplateProps = {
-    ...brandingState,
-    ...values,
-  };
+  const mergedProps = pickPaperTemplateProps<EstimatePaperTemplateProps>(
+    { ...brandingState, ...values },
+    initialValues,
+  );
 
-  return <EstimatePaperTemplate {...mergedProps} />;
+  return (
+    <EstimatePaperTemplate {...mergedProps} style={paperTemplatePreviewStyle} />
+  );
 }

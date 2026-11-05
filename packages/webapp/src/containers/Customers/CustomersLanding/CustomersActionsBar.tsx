@@ -8,13 +8,13 @@ import {
   Switch,
   Alignment,
 } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import { isEmpty } from 'lodash';
 import { useHistory } from 'react-router-dom';
 import { useCustomersListContext } from './CustomersListProvider';
 import { useBulkDeleteCustomersDialog } from './hooks/use-bulk-delete-customers-dialog';
 import { withCustomers } from './withCustomers';
 import { withCustomersActions } from './withCustomersActions';
-import type { WithCustomersProps } from './withCustomers';
 import type { WithCustomersActionsProps } from './withCustomersActions';
 import type { IFilterRole } from '@/components/AdvancedFilter/interfaces';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
@@ -34,11 +34,9 @@ import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { useSaveSettings } from '@/hooks/query';
 import { useRefreshCustomers } from '@/hooks/query/customers';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-import { compose } from '@/utils';
 
 interface CustomerActionsBarInnerProps
-  extends Pick<WithCustomersProps, 'customersTableState'>,
-    WithCustomersActionsProps,
+  extends WithCustomersActionsProps,
     WithDialogActionsProps {
   customersSelectedRows: unknown[];
   customersFilterConditions: IFilterRole[];
@@ -227,12 +225,13 @@ function CustomerActionsBar({
   );
 }
 
-export const CustomersActionsBar = compose(
-  withCustomersActions,
+export const CustomersActionsBar = FF.pipe(
+  CustomerActionsBar,
+  withDialogActions,
   withCustomers(({ customersSelectedRows, customersTableState }) => ({
     customersSelectedRows,
     customersInactiveMode: customersTableState.inactiveMode,
     customersFilterConditions: customersTableState.filterRoles,
   })),
-  withDialogActions,
-)(CustomerActionsBar);
+  withCustomersActions,
+);

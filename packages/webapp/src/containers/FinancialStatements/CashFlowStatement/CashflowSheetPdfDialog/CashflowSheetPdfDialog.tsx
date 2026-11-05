@@ -1,10 +1,10 @@
 import intl from 'react-intl-universal';
 import classNames from 'classnames';
+import * as FF from 'fp-ts/function';
 import React, { lazy } from 'react';
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { CLASSES } from '@/constants/classes';
-import { compose } from '@/utils';
 
 const CashflowSheetPdfDialogContent = lazy(() =>
   import('./CashflowSheetPdfDialogContent').then((m) => ({
@@ -39,6 +39,7 @@ function CashflowSheetPdfDialogRoot({
   );
 }
 
-export const CashflowSheetPdfDialog = compose(withDialogRedux())(
+export const CashflowSheetPdfDialog = FF.pipe(
   CashflowSheetPdfDialogRoot,
+  withDialogRedux(),
 );

@@ -1,6 +1,7 @@
 import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik, type FormikHelpers } from 'formik';
+import * as FF from 'fp-ts/function';
 import { ExportDialogFormSchema } from './ExportDialogForm.schema';
 import { ExportDialogFormContent } from './ExportDialogFormContent';
 import type { ExportFormInitialValues } from './type';
@@ -9,7 +10,7 @@ import { AppToaster } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { useResourceExport } from '@/hooks/query/FinancialReports/use-export';
-import { compose, transformToForm } from '@/utils';
+import { transformToForm } from '@/utils';
 
 interface ExportDialogFormValues {
   resource: string;
@@ -79,5 +80,7 @@ function ExportDialogFormRoot({
   );
 }
 
-export const ExportDialogForm =
-  compose(withDialogActions)(ExportDialogFormRoot);
+export const ExportDialogForm = FF.pipe(
+  ExportDialogFormRoot,
+  withDialogActions,
+);

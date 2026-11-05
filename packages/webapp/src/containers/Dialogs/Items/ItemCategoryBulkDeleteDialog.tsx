@@ -1,4 +1,5 @@
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
@@ -9,33 +10,36 @@ import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { withItemCategoriesActions } from '@/containers/ItemsCategories/withItemCategoriesActions';
 import { useBulkDeleteItemCategories } from '@/hooks/query/items-categories';
-import { compose } from '@/utils';
+
+interface ItemCategoryBulkDeleteDialogPayload {
+  ids?: number[];
+  deletableCount?: number;
+  undeletableCount?: number;
+  totalSelected?: number;
+}
 
 interface ItemCategoryBulkDeleteDialogProps
   extends WithDialogActionsProps,
     WithItemCategoriesActionsProps {
   dialogName: string;
   isOpen: boolean;
-  payload: {
-    ids?: number[];
-    deletableCount?: number;
-    undeletableCount?: number;
-    totalSelected?: number;
-  };
+  payload?: ItemCategoryBulkDeleteDialogPayload;
 }
 
 function ItemCategoryBulkDeleteDialogInner({
   dialogName,
   isOpen,
-  payload: {
+  payload,
+  resetItemsCategoriesSelectedRows,
+  closeDialog,
+}: ItemCategoryBulkDeleteDialogProps): React.ReactElement {
+  const {
     ids = [],
     deletableCount = 0,
     undeletableCount = 0,
     totalSelected = ids.length,
-  } = {},
-  resetItemsCategoriesSelectedRows,
-  closeDialog,
-}: ItemCategoryBulkDeleteDialogProps): React.ReactElement {
+  }: ItemCategoryBulkDeleteDialogPayload = payload ?? {};
+
   const { mutateAsync: bulkDeleteItemCategories, isPending } =
     useBulkDeleteItemCategories();
 
@@ -109,8 +113,9 @@ function ItemCategoryBulkDeleteDialogInner({
   );
 }
 
-export const ItemCategoryBulkDeleteDialog = compose(
-  withDialogRedux(),
-  withDialogActions,
+export const ItemCategoryBulkDeleteDialog = FF.pipe(
+  ItemCategoryBulkDeleteDialogInner,
   withItemCategoriesActions,
-)(ItemCategoryBulkDeleteDialogInner);
+  withDialogActions,
+  withDialogRedux(),
+);

@@ -1,4 +1,5 @@
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -9,7 +10,6 @@ import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { useDeleteEstimate } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface EstimateDeleteAlertPayload {
   estimateId: number;
@@ -84,7 +84,6 @@ function EstimateDeleteAlertInner({
       onConfirm={handleAlertConfirm}
     >
       <p data-testId={'estimate-delete-alert'}>
-        {/* @ts-expect-error — react-intl-universal FormattedHTMLMessage JSX type mismatch (library-level issue, see Alerts/Items/ItemDeleteAlert.tsx) */}
         <FormattedHTMLMessage
           id={'once_delete_this_estimate_you_will_able_to_restore_it'}
         />
@@ -93,8 +92,9 @@ function EstimateDeleteAlertInner({
   );
 }
 
-export const EstimateDeleteAlert = compose(
-  withAlertStoreConnect(),
-  withAlertActions,
+export const EstimateDeleteAlert = FF.pipe(
+  EstimateDeleteAlertInner,
   withDrawerActions,
-)(EstimateDeleteAlertInner);
+  withAlertActions,
+  withAlertStoreConnect(),
+);

@@ -1,4 +1,5 @@
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
@@ -9,33 +10,36 @@ import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { withItemsActions } from '@/containers/Items/withItemsActions';
 import { useBulkDeleteItems } from '@/hooks/query/items';
-import { compose } from '@/utils';
+
+interface ItemBulkDeleteDialogPayload {
+  ids?: number[];
+  deletableCount?: number;
+  undeletableCount?: number;
+  totalSelected?: number;
+}
 
 interface ItemBulkDeleteDialogProps
   extends WithDialogActionsProps,
     WithItemsActionsProps {
   dialogName: string;
   isOpen: boolean;
-  payload: {
-    ids?: number[];
-    deletableCount?: number;
-    undeletableCount?: number;
-    totalSelected?: number;
-  };
+  payload?: ItemBulkDeleteDialogPayload;
 }
 
 function ItemBulkDeleteDialogInner({
   dialogName,
   isOpen,
-  payload: {
+  payload,
+  resetItemsSelectedRows,
+  closeDialog,
+}: ItemBulkDeleteDialogProps): React.ReactElement {
+  const {
     ids = [],
     deletableCount = 0,
     undeletableCount = 0,
     totalSelected = ids.length,
-  } = {},
-  resetItemsSelectedRows,
-  closeDialog,
-}: ItemBulkDeleteDialogProps): React.ReactElement {
+  }: ItemBulkDeleteDialogPayload = payload ?? {};
+
   const { mutateAsync: bulkDeleteItems, isPending } = useBulkDeleteItems();
 
   const handleCancel = () => {
@@ -104,8 +108,9 @@ function ItemBulkDeleteDialogInner({
   );
 }
 
-export const ItemBulkDeleteDialog = compose(
-  withDialogRedux(),
-  withDialogActions,
+export const ItemBulkDeleteDialog = FF.pipe(
+  ItemBulkDeleteDialogInner,
   withItemsActions,
-)(ItemBulkDeleteDialogInner);
+  withDialogActions,
+  withDialogRedux(),
+);

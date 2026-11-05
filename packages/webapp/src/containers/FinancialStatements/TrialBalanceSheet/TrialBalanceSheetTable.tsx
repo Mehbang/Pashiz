@@ -2,6 +2,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { getReportRowTestId } from '../reportTestIds';
+import { useFinancialReportSorting } from '../useReportSorting';
 import { useTrialBalanceSheetTableColumns } from './hooks';
 import { useTrialBalanceSheetContext } from './TrialBalanceProvider';
 import { ReportDataTable, FinancialSheet } from '@/components';
@@ -19,20 +20,28 @@ export function TrialBalanceSheetTable({
   companyName,
 }: TrialBalanceSheetTableProps) {
   // Trial balance sheet context.
-  const { trialBalanceSheet } = useTrialBalanceSheetContext();
+  const { trialBalanceSheet, pageQuery, setPageQuery } =
+    useTrialBalanceSheetContext();
 
   const table = (trialBalanceSheet as any)?.table;
   const meta = (trialBalanceSheet as any)?.meta;
+  const query = trialBalanceSheet?.query;
 
   // Trial balance sheet table columns.
   const columns = useTrialBalanceSheetTableColumns();
+
+  // Trial balance sheet backend columns sorting.
+  const { sortableTableProps } = useFinancialReportSorting({
+    pageQuery,
+    setPageQuery,
+  });
 
   return (
     <FinancialSheet
       companyName={companyName}
       sheetType={intl.get('trial_balance_sheet')}
       dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
-      basis={'cash'}
+      basis={query?.basis}
     >
       <TrialBalanceDataTable
         columns={columns}
@@ -41,6 +50,8 @@ export function TrialBalanceSheetTable({
         expandToggleColumn={1}
         expandColumnSpace={1}
         sticky={true}
+        noInitialFetch={true}
+        {...sortableTableProps}
         rowClassNames={tableRowTypesToClassnames}
         rowTestId={getReportRowTestId('trial-balance')}
         styleName={TableStyle.Constrant}

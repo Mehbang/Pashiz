@@ -92,7 +92,7 @@ export interface ISaleReceiptBrandingTemplateAttributes {
   primaryColor: string;
   secondaryColor: string;
   showCompanyLogo: boolean;
-  companyLogo: string;
+  companyLogoUri: string;
   companyName: string;
 
   // Customer Address
@@ -103,6 +103,12 @@ export interface ISaleReceiptBrandingTemplateAttributes {
   showCompanyAddress: boolean;
   companyAddress: string;
   billedToLabel: string;
+
+  // Entries
+  lineItemLabel: string;
+  lineQuantityLabel: string;
+  lineRateLabel: string;
+  lineTotalLabel: string;
 
   // Total
   total: string;
@@ -142,6 +148,13 @@ export interface ISaleReceiptBrandingTemplateAttributes {
   receiptDate: string;
   showReceiptDate: boolean;
   receiptDateLabel: string;
+
+  // Discount
+  discount?: string;
+  discountLabel?: string;
+
+  // Adjustment
+  adjustment?: string;
 }
 
 export interface ISaleReceiptState {

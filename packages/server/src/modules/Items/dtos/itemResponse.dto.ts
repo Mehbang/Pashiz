@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { DEFAULT_ITEM_UNIT, ITEM_UNITS } from '../Items.constants';
 
 /** One answer an item gives to a field its category defines. */
 export class ItemFieldValueResponseDto {
@@ -50,6 +51,14 @@ export class ItemResponseDto {
     required: false,
   })
   code?: string;
+
+  @ApiProperty({
+    description: 'Unit of measure the item is measured in',
+    enum: [...ITEM_UNITS],
+    default: DEFAULT_ITEM_UNIT,
+    example: 'kg',
+  })
+  unit: string;
 
   @ApiProperty({
     description: 'Whether the item can be sold',
@@ -244,6 +253,12 @@ export class ItemResponseDto {
     example: '50,000 g',
   })
   secondaryQuantityOnHandFormatted: string;
+    description:
+      'The stock level at which the item should be reordered (for inventory items)',
+    example: 10,
+    required: false,
+  })
+  reorderPoint?: number;
 
   @ApiProperty({
     description: 'Additional notes about the item',

@@ -1,4 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+import { BullModule } from '@nestjs/bullmq';
 import { CreateCreditNoteService } from './commands/CreateCreditNote.service';
 import { CommandCreditNoteDTOTransform } from './commands/CommandCreditNoteDTOTransform.service';
 import { EditCreditNoteService } from './commands/EditCreditNote.service';
@@ -37,6 +40,14 @@ import { CreditNoteRefundsModule } from '../CreditNoteRefunds/CreditNoteRefunds.
 import { CreditNotesApplyInvoiceModule } from '../CreditNotesApplyInvoice/CreditNotesApplyInvoice.module';
 import { BulkDeleteCreditNotesService } from './BulkDeleteCreditNotes.service';
 import { ValidateBulkDeleteCreditNotesService } from './ValidateBulkDeleteCreditNotes.service';
+import { SendCreditNoteMail } from './commands/SendCreditNoteMail';
+import { GetCreditNoteMailStateService } from './queries/GetCreditNoteMailState.service';
+import { GetCreditNoteMailTemplateService } from './queries/GetCreditNoteMailTemplate.service';
+import { SendCreditNoteMailProcessor } from './processors/SendCreditNoteMail.processor';
+import { MailNotificationModule } from '../MailNotification/MailNotification.module';
+import { MailModule } from '../Mail/Mail.module';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
+import { SendCreditNoteMailQueue } from './types/CreditNotes.types';
 
 @Module({
   imports: [
@@ -52,8 +63,15 @@ import { ValidateBulkDeleteCreditNotesService } from './ValidateBulkDeleteCredit
     AccountsModule,
     DynamicListModule,
     InventoryCostModule,
+    MailNotificationModule,
+    MailModule,
     forwardRef(() => CreditNoteRefundsModule),
     forwardRef(() => CreditNotesApplyInvoiceModule),
+    BullModule.registerQueue({ name: SendCreditNoteMailQueue }),
+    BullBoardModule.forFeature({
+      name: SendCreditNoteMailQueue,
+      adapter: BullMQAdapter,
+    }),
   ],
   providers: [
     CreateCreditNoteService,
@@ -79,6 +97,10 @@ import { ValidateBulkDeleteCreditNotesService } from './ValidateBulkDeleteCredit
     CreditNoteAutoSerialSubscriber,
     BulkDeleteCreditNotesService,
     ValidateBulkDeleteCreditNotesService,
+    SendCreditNoteMail,
+    GetCreditNoteMailStateService,
+    GetCreditNoteMailTemplateService,
+    SendCreditNoteMailProcessor,
   ],
   exports: [
     CreateCreditNoteService,
@@ -94,6 +116,8 @@ import { ValidateBulkDeleteCreditNotesService } from './ValidateBulkDeleteCredit
     CreditNoteBrandingTemplate,
     CreditNotesExportable,
     CreditNotesImportable,
+    GetCreditNoteMailStateService,
+    GetCreditNoteMailTemplateService,
   ],
   controllers: [CreditNotesController],
 })

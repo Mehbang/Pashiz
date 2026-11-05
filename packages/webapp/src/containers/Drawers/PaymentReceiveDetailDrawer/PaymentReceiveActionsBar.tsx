@@ -6,6 +6,7 @@ import {
   NavbarDivider,
   Intent,
 } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { usePaymentReceiveDetailContext } from './PaymentReceiveDetailProvider';
@@ -33,7 +34,6 @@ import {
   withDrawerActions,
   WithDrawerActionsProps,
 } from '@/containers/Drawer/withDrawerActions';
-import { compose } from '@/utils';
 
 interface PaymentReceiveActionsBarInnerProps
   extends WithDialogActionsProps,
@@ -139,8 +139,9 @@ function PaymentsReceivedActionsBar({
   );
 }
 
-export const PaymentReceiveActionsBar = compose(
-  withDialogActions,
-  withDrawerActions,
+export const PaymentReceiveActionsBar = FF.pipe(
+  PaymentsReceivedActionsBar,
   withAlertActions,
-)(PaymentsReceivedActionsBar);
+  withDrawerActions,
+  withDialogActions,
+);

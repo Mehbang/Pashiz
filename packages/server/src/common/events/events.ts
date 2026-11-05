@@ -428,21 +428,14 @@ export const events = {
 
     onCreated: 'onInventoryAdjustmentCreated',
 
+    onEditing: 'onInventoryAdjustmentEditing',
+    onEdited: 'onInventoryAdjustmentEdited',
+
     onDeleting: 'onInventoryAdjustmentDeleting',
     onDeleted: 'onInventoryAdjustmentDeleted',
 
     onPublishing: 'onInventoryAdjustmentPublishing',
     onPublished: 'onInventoryAdjustmentPublished',
-  },
-
-  /**
-   * Bill landed cost.
-   */
-  billLandedCost: {
-    onCreate: 'onBillLandedCostCreate',
-    onCreated: 'onBillLandedCostCreated',
-    onDelete: 'onBillLandedCostDelete',
-    onDeleted: 'onBillLandedCostDeleted',
   },
 
   cashflow: {
@@ -523,6 +516,10 @@ export const events = {
     onApplyToInvoicesCreated: 'onCreditNoteApplyToInvoiceCreated',
     onApplyToInvoicesCreate: 'onCreditNoteApplyToInvoiceCreate',
     onApplyToInvoicesDeleted: 'onCreditNoteApplyToInvoiceDeleted',
+
+    onPreMailSend: 'onCreditNotePreMailSend',
+    onMailSend: 'onCreditNoteMailSend',
+    onMailSent: 'onCreditNoteMailSent',
   },
 
   /**

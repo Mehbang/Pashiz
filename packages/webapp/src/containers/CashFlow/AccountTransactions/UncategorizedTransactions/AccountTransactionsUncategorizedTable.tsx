@@ -1,6 +1,7 @@
 import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import clsx from 'classnames';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import { withBanking } from '../../withBanking';
 import { withBankingActions } from '../../withBankingActions';
@@ -23,7 +24,6 @@ import {
 import { TABLES } from '@/constants/tables';
 import { useMemorizedColumnsWidths } from '@/hooks';
 import { useExcludeUncategorizedTransaction } from '@/hooks/query/banking';
-import { compose } from '@/utils';
 
 interface AccountTransactionsDataTableProps
   extends Pick<
@@ -162,12 +162,13 @@ function AccountTransactionsDataTable({
   );
 }
 
-export const AccountTransactionsUncategorizedTable = compose(
-  withBankingActions,
+export const AccountTransactionsUncategorizedTable = FF.pipe(
+  AccountTransactionsDataTable,
   withBanking(
     ({ openMatchingTransactionAside, enableMultipleCategorization }) => ({
       openMatchingTransactionAside,
       enableMultipleCategorization,
     }),
   ),
-)(AccountTransactionsDataTable);
+  withBankingActions,
+);

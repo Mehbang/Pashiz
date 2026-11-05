@@ -1,3 +1,4 @@
+import * as FF from 'fp-ts/function';
 import moment from 'moment';
 import React from 'react';
 import { ProfitLossSheetAlerts, ProfitLossSheetLoadingBar } from './components';
@@ -11,9 +12,8 @@ import {
   withProfitLossActions,
   WithProfitLossActionsProps,
 } from './withProfitLossActions';
-import { DashboardPageContent } from '@/components';
+import { DashboardPageContent, FinancialStatement } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { compose } from '@/utils';
 
 type ProfitLossSheetProps = Pick<
   WithProfitLossActionsProps,
@@ -49,7 +49,7 @@ function ProfitLossSheetInner({
   );
 
   return (
-    <ProfitLossSheetProvider query={query}>
+    <ProfitLossSheetProvider query={query} setQuery={setLocationQuery}>
       <ProfitLossActionsBar
         numberFormat={query.numberFormat}
         onNumberFormatSubmit={handleNumberFormatSubmit}
@@ -58,11 +58,13 @@ function ProfitLossSheetInner({
       <ProfitLossSheetAlerts />
 
       <DashboardPageContent>
-        <ProfitLossSheetHeader
-          pageFilter={query}
-          onSubmitFilter={handleSubmitFilter}
-        />
-        <ProfitLossBody />
+        <FinancialStatement numberFormat={query.numberFormat}>
+          <ProfitLossSheetHeader
+            pageFilter={query}
+            onSubmitFilter={handleSubmitFilter}
+          />
+          <ProfitLossBody />
+        </FinancialStatement>
       </DashboardPageContent>
 
       <ProfitLossSheetDialogs />
@@ -70,7 +72,8 @@ function ProfitLossSheetInner({
   );
 }
 
-export const ProfitLossSheet = compose(
-  withDashboardActions,
+export const ProfitLossSheet = FF.pipe(
+  ProfitLossSheetInner,
   withProfitLossActions,
-)(ProfitLossSheetInner);
+  withDashboardActions,
+);

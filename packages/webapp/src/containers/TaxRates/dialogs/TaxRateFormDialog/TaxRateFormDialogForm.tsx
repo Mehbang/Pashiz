@@ -1,6 +1,7 @@
 import intl from 'react-intl-universal';
 import { Classes, Intent } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers } from 'formik';
+import * as FF from 'fp-ts/function';
 import {
   CreateTaxRateFormSchema,
   EditTaxRateFormSchema,
@@ -28,7 +29,6 @@ import {
   WithDrawerActionsProps,
 } from '@/containers/Drawer/withDrawerActions';
 import { useCreateTaxRate, useEditTaxRate } from '@/hooks/query/tax-rates';
-import { compose } from '@/utils';
 
 interface TaxRateFormDialogFormProps
   extends Pick<WithDialogActionsProps, 'closeDialog'>,
@@ -123,7 +123,8 @@ function TaxRateFormDialogFormInner({
   );
 }
 
-export const TaxRateFormDialogForm = compose(
-  withDialogActions,
+export const TaxRateFormDialogForm = FF.pipe(
+  TaxRateFormDialogFormInner,
   withDrawerActions,
-)(TaxRateFormDialogFormInner);
+  withDialogActions,
+);

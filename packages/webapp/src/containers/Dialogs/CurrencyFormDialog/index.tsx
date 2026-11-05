@@ -1,9 +1,9 @@
+import * as FF from 'fp-ts/function';
 import React, { lazy } from 'react';
 import type { CurrencyFormDialogPayload } from './types';
 import { FormattedMessage as T } from '@/components';
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
-import { compose } from '@/utils';
 
 const CurrencyFormDialogContent = lazy(() =>
   import('./CurrencyFormDialogContent').then((m) => ({
@@ -22,7 +22,7 @@ interface CurrencyFormDialogProps {
  */
 function CurrencyFormDialog({
   dialogName,
-  payload = { action: '', id: null, currency: '' },
+  payload = { action: '' },
   isOpen,
 }: CurrencyFormDialogProps): React.ReactElement {
   return (
@@ -44,7 +44,7 @@ function CurrencyFormDialog({
       <DialogSuspense>
         <CurrencyFormDialogContent
           dialogName={dialogName}
-          currencyCode={payload.currency}
+          currency={payload.currency}
           action={payload.action}
         />
       </DialogSuspense>
@@ -52,4 +52,4 @@ function CurrencyFormDialog({
   );
 }
 
-export const index = compose(withDialogRedux())(CurrencyFormDialog);
+export const index = FF.pipe(CurrencyFormDialog, withDialogRedux());

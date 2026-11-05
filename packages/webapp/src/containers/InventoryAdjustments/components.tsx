@@ -22,6 +22,7 @@ import { formatDateLocalized } from '@/utils/locale';
 
 interface ActionsMenuPayload {
   onDelete: (row: InventoryAdjustment) => void;
+  onEdit: (row: InventoryAdjustment) => void;
   onPublish: (row: InventoryAdjustment) => void;
   onViewDetails: (row: InventoryAdjustment) => void;
 }
@@ -111,7 +112,7 @@ export const ItemTypeAccessor = (row: InventoryAdjustment) => {
 
 export const ActionsMenu = ({
   row: { original },
-  payload: { onDelete, onPublish, onViewDetails },
+  payload: { onDelete, onEdit, onPublish, onViewDetails },
 }: ActionsMenuProps) => {
   return (
     <Menu>
@@ -122,17 +123,24 @@ export const ActionsMenu = ({
       />
 
       <Can
+        I={InventoryAdjustmentAction.Edit}
+        a={AbilitySubject.InventoryAdjustment}
+      >
+        <MenuItem
+          icon={<Icon icon="pen-18" />}
+          text={intl.get('edit_adjustment')}
+          onClick={safeCallback(onEdit, original)}
+        />
+      </Can>
+
+      <Can
         I={InventoryAdjustmentAction.Create}
         a={AbilitySubject.InventoryAdjustment}
       >
         <MenuDivider />
         <If condition={!original.isPublished}>
           <MenuItem
-            icon={
-              // Icon wants `iconSize`, not `size`; preserved from @ts-nocheck.
-              // @ts-expect-error see comment above
-              <Icon icon={'arrow-to-top'} size={16} />
-            }
+            icon={<Icon icon={'arrow-to-top'} iconSize={16} />}
             text={intl.get('publish_adjustment')}
             onClick={safeCallback(onPublish, original)}
           />

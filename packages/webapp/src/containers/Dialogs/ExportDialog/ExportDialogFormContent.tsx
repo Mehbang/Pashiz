@@ -2,13 +2,13 @@ import intl from 'react-intl-universal';
 import { Button, Intent, Radio } from '@blueprintjs/core';
 import { x } from '@xstyled/emotion';
 import { Form, useFormikContext } from 'formik';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import { ExportResources } from './constants';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { FFormGroup, FRadioGroup, FSelect, Group } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { compose } from '@/utils';
 
 interface ExportDialogFormContentValues {
   resource: string;
@@ -68,6 +68,7 @@ function ExportDialogFormContentRoot({
   );
 }
 
-export const ExportDialogFormContent = compose(withDialogActions)(
+export const ExportDialogFormContent = FF.pipe(
   ExportDialogFormContentRoot,
+  withDialogActions,
 );

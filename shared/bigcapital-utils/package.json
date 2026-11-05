@@ -17,8 +17,9 @@
     "build:esm": "tsup src/index.ts --format esm --dts --sourcemap",
     "build": "npm run build:cjs && npm run build:esm",
     "dev": "npm run build -- --watch",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --exclude test/**",
+    "test:watch": "vitest --exclude test/**",
+    "test:node": "npm run build && node --test test/"
   },
   "author": "",
   "license": "ISC",

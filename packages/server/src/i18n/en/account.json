@@ -16,6 +16,8 @@
   "field.parent_account": "Parent Account",
   "field.created_at": "Created at",
   "field.account_hint": "Matches the account name or code.",
+  "accounts_receivable.currency": "Accounts Receivable ({currency})",
+  "accounts_payable.currency": "Accounts Payable ({currency})",
   "type.cash": "Cash",
   "type.bank": "Bank",
   "type.accounts_receivable": "Accounts Receivable",
@@ -39,7 +41,5 @@
   "root_type.liability": "Liability",
   "root_type.equity": "Equity",
   "root_type.income": "Income",
-  "root_type.expense": "Expense",
-  "accounts_receivable.currency": "Accounts Receivable ({currency})",
-  "accounts_payable.currency": "Accounts Payable ({currency})"
+  "root_type.expense": "Expense"
 }

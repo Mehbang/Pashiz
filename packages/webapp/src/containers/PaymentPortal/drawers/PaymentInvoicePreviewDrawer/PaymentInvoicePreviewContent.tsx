@@ -1,15 +1,13 @@
-// @ts-nocheck
-import intl from 'react-intl-universal';
+import { InvoicePaperTemplate } from '@bigcapital/pdf-templates';
 import { usePaymentPortalBoot } from '../../PaymentPortalBoot';
 import { Box, DrawerBody, DrawerHeaderContent } from '@/components';
-import { InvoicePaperTemplate } from '@/containers/Sales/Invoices/InvoiceCustomize/InvoicePaperTemplate';
 
 export function PaymentInvoicePreviewContent() {
   const { sharableLinkMeta } = usePaymentPortalBoot();
 
   return (
     <>
-      <DrawerHeaderContent title={intl.get('invoice')} />
+      <DrawerHeaderContent title={'Invoice'} />
 
       <DrawerBody>
         <Box style={{ paddingTop: 20, paddingBottom: 20 }}>
@@ -19,26 +17,21 @@ export function PaymentInvoicePreviewContent() {
             dateIssue={sharableLinkMeta?.invoiceDateFormatted}
             total={sharableLinkMeta?.totalFormatted}
             subtotal={sharableLinkMeta?.subtotalFormatted}
-            balanceDue={sharableLinkMeta?.dueAmountFormatted}
+            dueAmount={sharableLinkMeta?.dueAmountFormatted}
             paymentMade={sharableLinkMeta?.paymentAmountFormatted}
-            discount={sharableLinkMeta?.discountAmountFormatted}
-            discountLabel={
-              sharableLinkMeta?.discountPercentageFormatted
-                ? `${intl.get('discount')} [${sharableLinkMeta.discountPercentageFormatted}]`
-                : undefined
-            }
             termsConditions={sharableLinkMeta?.termsConditions}
             statement={sharableLinkMeta?.invoiceMessage}
-            companyName={sharableLinkMeta?.companyName}
             primaryColor={sharableLinkMeta?.brandingTemplate?.primaryColor}
             secondaryColor={sharableLinkMeta?.brandingTemplate?.secondaryColor}
+            style={{
+              borderRadius: 5,
+              boxShadow:
+                'inset 0 4px 0 0 var(--invoice-primary-color), 0 10px 15px rgba(0, 0, 0, 0.05)',
+            }}
             lines={sharableLinkMeta?.entries?.map((entry) => ({
               item: entry.itemName,
               description: entry.description,
-              // The same two readings the printed copy carries, so the page a
-              // customer opens agrees with the invoice they are sent.
-              quantity: entry.quantityWithUnit || entry.quantityFormatted,
-              secondaryQuantity: entry.secondaryQuantityWithUnit,
+              quantity: entry.quantityFormatted,
               rate: entry.rateFormatted,
               total: entry.totalFormatted,
             }))}

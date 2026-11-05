@@ -7,6 +7,7 @@ import {
   Alignment,
   Switch,
 } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import { withCashflowAccountsTableActions } from '../AccountTransactions/withCashflowAccountsTableActions';
 import type { WithCashflowAccountsTableActionsProps } from '../AccountTransactions/withCashflowAccountsTableActions';
@@ -26,7 +27,6 @@ import { AccountDialogAction } from '@/containers/Dialogs/AccountDialog/utils';
 import { useRefreshCashflowAccounts } from '@/hooks/query';
 import { useOpenPlaidConnect } from '@/hooks/utils/useOpenPlaidConnect';
 import { CreditCard2Icon } from '@/icons/CreditCard2';
-import { compose } from '@/utils';
 
 interface CashFlowAccountsActionsBarInnerProps
   extends Pick<WithDialogActionsProps, 'openDialog'>,
@@ -99,18 +99,11 @@ function CashFlowAccountsActionsBarInner({
           <NavbarDivider />
         </Can>
         <NavbarDivider />
-        <Can
-          // @ts-expect-error latent bug — CashflowAction.Edit is not defined in
-          // the constants file; runtime receives `undefined`.
-          I={CashflowAction.Edit}
-          a={AbilitySubject.Cashflow}
-        >
-          <Switch
-            labelElement={<T id={'inactive'} />}
-            defaultChecked={false}
-            onChange={handleInactiveSwitchChange}
-          />
-        </Can>
+        <Switch
+          labelElement={<T id={'inactive'} />}
+          defaultChecked={false}
+          onChange={handleInactiveSwitchChange}
+        />
       </NavbarGroup>
 
       <NavbarGroup align={Alignment.RIGHT}>
@@ -133,7 +126,8 @@ function CashFlowAccountsActionsBarInner({
     </DashboardActionsBar>
   );
 }
-export const CashFlowAccountsActionsBar = compose(
-  withDialogActions,
+export const CashFlowAccountsActionsBar = FF.pipe(
+  CashFlowAccountsActionsBarInner,
   withCashflowAccountsTableActions,
-)(CashFlowAccountsActionsBarInner);
+  withDialogActions,
+);

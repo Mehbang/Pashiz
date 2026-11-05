@@ -1,5 +1,6 @@
 import { Alert, Intent } from '@blueprintjs/core';
 import { useQueryClient } from '@tanstack/react-query';
+import * as FF from 'fp-ts/function';
 import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -7,7 +8,6 @@ import { AppToaster, FormattedMessage as T } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { useApproveEstimate } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface EstimateApproveAlertPayload {
   estimateId: number;
@@ -46,7 +46,7 @@ function EstimateApproveAlertInner({
         queryClient.invalidateQueries({ queryKey: ['estimates-table'] });
       })
       .catch((error: Error) => {
-        // Bugfix: original @ts-nocheck had an empty `.catch((error) => {})` that silently swallowed failures.
+        // Bugfix: the original had an empty `.catch((error) => {})` that silently swallowed failures.
         AppToaster.show({
           message: error.message,
           intent: Intent.DANGER,
@@ -74,7 +74,8 @@ function EstimateApproveAlertInner({
   );
 }
 
-export const EstimateApproveAlert = compose(
-  withAlertStoreConnect(),
+export const EstimateApproveAlert = FF.pipe(
+  EstimateApproveAlertInner,
   withAlertActions,
-)(EstimateApproveAlertInner);
+  withAlertStoreConnect(),
+);

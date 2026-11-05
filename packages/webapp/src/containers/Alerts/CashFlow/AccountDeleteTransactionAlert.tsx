@@ -1,4 +1,5 @@
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -9,7 +10,6 @@ import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { useDeleteCashflowTransaction } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface AccountDeleteTransactionAlertPayload {
   referenceId: number;
@@ -99,7 +99,6 @@ function AccountDeleteTransactionAlertInner({
       loading={isLoading}
     >
       <p>
-        {/* @ts-expect-error — react-intl-universal FormattedHTMLMessage JSX type mismatch (library-level issue, see Alerts/Items/ItemDeleteAlert.tsx) */}
         <FormattedHTMLMessage
           id={
             'cash_flow_transaction_once_delete_this_transaction_you_will_able_to_restore_it'
@@ -110,8 +109,9 @@ function AccountDeleteTransactionAlertInner({
   );
 }
 
-export const AccountDeleteTransactionAlert = compose(
-  withAlertStoreConnect(),
-  withAlertActions,
+export const AccountDeleteTransactionAlert = FF.pipe(
+  AccountDeleteTransactionAlertInner,
   withDrawerActions,
-)(AccountDeleteTransactionAlertInner);
+  withAlertActions,
+  withAlertStoreConnect(),
+);

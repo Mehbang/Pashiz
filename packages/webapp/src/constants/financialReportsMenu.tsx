@@ -7,6 +7,7 @@ import {
   AbilitySubject,
   AuditLogAction,
 } from '@/constants/abilityOption';
+import { Features } from '@/constants/features';
 
 export const financialReportMenus: FinancialSection[] = [
   {
@@ -194,6 +195,7 @@ export const financialReportMenus: FinancialSection[] = [
         link: '/financial-reports/sales-tax-liability-summary',
         subject: AbilitySubject.Report,
         ability: ReportsAction.READ_SALES_TAX_LIABILITY_SUMMARY,
+        feature: Features.SalesTax,
       },
     ],
   },

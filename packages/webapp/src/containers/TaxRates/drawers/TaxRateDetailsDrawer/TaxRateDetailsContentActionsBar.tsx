@@ -11,6 +11,7 @@ import {
   PopoverInteractionKind,
   Position,
 } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import { useTaxRateDetailsContext } from './TaxRateDetailsContentBoot';
 import { AppToaster, Can, DrawerActionsBar, Icon } from '@/components';
 import { AbilitySubject, TaxRateAction } from '@/constants/abilityOption';
@@ -28,7 +29,6 @@ import {
   useActivateTaxRate,
   useInactivateTaxRate,
 } from '@/hooks/query/tax-rates';
-import { compose } from '@/utils';
 
 interface TaxRateDetailsContentActionsBarInnerProps
   extends Pick<WithDialogActionsProps, 'openDialog'>,
@@ -147,8 +147,9 @@ function TaxRateDetailsContentActionsBarInner({
   );
 }
 
-export const TaxRateDetailsContentActionsBar = compose(
-  withDrawerActions,
-  withDialogActions,
+export const TaxRateDetailsContentActionsBar = FF.pipe(
+  TaxRateDetailsContentActionsBarInner,
   withAlertActions,
-)(TaxRateDetailsContentActionsBarInner);
+  withDialogActions,
+  withDrawerActions,
+);

@@ -1,4 +1,5 @@
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -10,7 +11,6 @@ import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect'
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { handleDeleteErrors } from '@/containers/Sales/CreditNotes/CreditNotesLanding/utils';
 import { useDeleteCreditNote } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface CreditNoteDeleteAlertPayload {
   creditNoteId: number;
@@ -72,15 +72,15 @@ function CreditNoteDeleteAlertInner({
       loading={isLoading}
     >
       <p>
-        {/* @ts-expect-error — react-intl-universal FormattedHTMLMessage JSX type mismatch (library-level issue, see Alerts/Items/ItemDeleteAlert.tsx) */}
         <FormattedHTMLMessage id={'credit_note.once_delete_this_credit_note'} />
       </p>
     </Alert>
   );
 }
 
-export const CreditNoteDeleteAlert = compose(
-  withAlertStoreConnect(),
-  withAlertActions,
+export const CreditNoteDeleteAlert = FF.pipe(
+  CreditNoteDeleteAlertInner,
   withDrawerActions,
-)(CreditNoteDeleteAlertInner);
+  withAlertActions,
+  withAlertStoreConnect(),
+);

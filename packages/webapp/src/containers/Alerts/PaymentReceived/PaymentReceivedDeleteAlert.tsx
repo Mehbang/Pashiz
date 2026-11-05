@@ -1,4 +1,5 @@
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { handleDeleteErrors } from './_utils';
@@ -10,7 +11,6 @@ import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { useDeletePaymentReceive } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface PaymentReceivedDeleteAlertPayload {
   paymentReceiveId: number;
@@ -74,7 +74,6 @@ function PaymentReceivedDeleteAlertInner({
       loading={isLoading}
     >
       <p>
-        {/* @ts-expect-error — react-intl-universal FormattedHTMLMessage JSX type mismatch (library-level issue, see Alerts/Items/ItemDeleteAlert.tsx) */}
         <FormattedHTMLMessage
           id={'once_delete_this_payment_received_you_will_able_to_restore_it'}
         />
@@ -83,8 +82,9 @@ function PaymentReceivedDeleteAlertInner({
   );
 }
 
-export const PaymentReceivedDeleteAlert = compose(
-  withAlertStoreConnect(),
-  withAlertActions,
+export const PaymentReceivedDeleteAlert = FF.pipe(
+  PaymentReceivedDeleteAlertInner,
   withDrawerActions,
-)(PaymentReceivedDeleteAlertInner);
+  withAlertActions,
+  withAlertStoreConnect(),
+);

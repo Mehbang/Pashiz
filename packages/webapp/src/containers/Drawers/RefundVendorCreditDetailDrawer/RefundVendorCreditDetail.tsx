@@ -1,15 +1,14 @@
-// @ts-nocheck
 import { Tab } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
 import { RefundVendorCreditDetailActionsBar } from './RefundVendorCreditDetailActionsBar';
 import { RefundVendorCreditDetailTab } from './RefundVendorCreditDetailTab';
+import { RefundVendorCreditGLEntriesPanel } from './RefundVendorCreditGLEntriesPanel';
 import { DrawerMainTabs } from '@/components';
 
 /**
  * Refund vendor credit detail.
- * @returns {React.JSX}
  */
 export function RefundVendorCreditDetail() {
   return (
@@ -22,7 +21,6 @@ export function RefundVendorCreditDetail() {
 
 /**
  * Refund vendor credit detail tabs.
- * @returns {React.JSX}
  */
 function RefundVendorCreditDetailTabs() {
   return (
@@ -31,6 +29,11 @@ function RefundVendorCreditDetailTabs() {
         title={intl.get('details')}
         id={'details'}
         panel={<RefundVendorCreditDetailTab />}
+      />
+      <Tab
+        title={intl.get('journal_entries')}
+        id={'journal_entries'}
+        panel={<RefundVendorCreditGLEntriesPanel />}
       />
     </DrawerMainTabs>
   );

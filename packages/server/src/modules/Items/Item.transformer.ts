@@ -6,6 +6,14 @@ import { convertToSecondaryUnit } from './utils/item-units';
 
 export class ItemTransformer extends Transformer {
   /**
+   * Exclude internal attributes from the item response.
+   * @returns {string[]}
+   */
+  public excludeAttributes = (): string[] => {
+    return ['reorderPointNotified'];
+  };
+
+  /**
    * Include these attributes to sale invoice object.
    * @returns {Array}
    */

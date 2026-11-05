@@ -12,6 +12,7 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -44,7 +45,6 @@ import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { useSaveSettings } from '@/hooks/query';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
 import { useRefreshReceipts } from '@/hooks/query/receipts';
-import { compose } from '@/utils';
 
 interface ReceiptActionsBarProps
   extends Pick<WithReceiptsProps, 'receiptSelectedRows'>,
@@ -247,12 +247,13 @@ function ReceiptActionsBarInner({
   );
 }
 
-export const ReceiptActionsBar = compose(
-  withReceiptsActions,
+export const ReceiptActionsBar = FF.pipe(
+  ReceiptActionsBarInner,
+  withDrawerActions,
+  withDialogActions,
   withReceipts(({ receiptTableState, receiptSelectedRows }) => ({
     receiptsFilterConditions: receiptTableState.filterRoles,
     receiptSelectedRows,
   })),
-  withDialogActions,
-  withDrawerActions,
-)(ReceiptActionsBarInner);
+  withReceiptsActions,
+);

@@ -1,5 +1,6 @@
-import * as R from 'ramda';
+import { flow } from 'fp-ts/function';
 import { isEmpty, sum } from 'lodash';
+import { when } from '@/common/fp';
 import { IAgingPeriod } from '../AgingSummary/AgingSummary.types';
 import {
   IARAgingSummaryCustomer,
@@ -150,9 +151,9 @@ export class ARAgingSummarySheet extends AgingSummaryReport {
   private customersWalker = (
     customers: ModelObject<Customer>[],
   ): IARAgingSummaryCustomer[] => {
-    return R.compose(
-      R.when(this.isCustomersFilterEnabled, this.customersFilter),
+    return flow(
       this.customersMapper,
+      when(this.isCustomersFilterEnabled, this.customersFilter),
     )(customers);
   };
 

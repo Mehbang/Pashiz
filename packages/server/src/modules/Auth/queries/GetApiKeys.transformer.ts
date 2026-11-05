@@ -1,18 +1,24 @@
 import { Transformer } from '@/modules/Transformer/Transformer';
 
 export class GetApiKeysTransformer extends Transformer {
+  /**
+   * Whitelisted attributes to expose in the response.
+   */
   public includeAttributes = (): string[] => {
-    return ['token'];
+    return ['id', 'name', 'token', 'createdAt', 'expiresAt', 'revoked'];
   };
 
+  /**
+   * Excludes all attributes except the whitelisted ones.
+   */
   public excludeAttributes = (): string[] => {
-    // 'key' is the full secret; the base transformer spreads every column, so
-    // without excluding it the list endpoint returned the plaintext key. Only
-    // the truncated 'token' virtual below is exposed.
-    return ['tenantId', 'key'];
+    return ['*'];
   };
 
+  /**
+   * Masks the API key prefix for display purposes.
+   */
   public token(apiKey) {
-    return apiKey.key ? `${apiKey.key.substring(0, 8)}...` : '';
+    return apiKey.keyPrefix ? `${apiKey.keyPrefix}...` : '';
   }
 }

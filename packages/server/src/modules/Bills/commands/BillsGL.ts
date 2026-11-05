@@ -1,21 +1,34 @@
-import { sumBy } from 'lodash';
 import * as moment from 'moment';
 import { ILedgerEntry } from '@/modules/Ledger/types/Ledger.types';
 import { ItemEntry } from '@/modules/TransactionItemEntry/models/ItemEntry';
 import { Bill } from '../models/Bill';
 import { AccountNormal } from '@/modules/Accounts/Accounts.types';
 import { Ledger } from '@/modules/Ledger/Ledger';
-import { BillLandedCost } from '@/modules/BillLandedCosts/models/BillLandedCost';
+import {
+  IBillItemAllocatedCost,
+  IBillLandedCostLedgerEntry,
+} from '../integrations/BillLandedCostsBridge';
+import { AccountingBasis } from '@/common/types/AccountingBasis';
 
 export class BillGL {
   private bill: Bill;
+  private itemAllocatedCosts: Map<number, number>;
+  private landedCostLedgerEntries: IBillLandedCostLedgerEntry[];
   private payableAccountId: number;
   private taxPayableAccountId: number;
   private purchaseDiscountAccountId: number;
   private otherExpensesAccountId: number;
 
-  constructor(bill: Bill) {
+  constructor(
+    bill: Bill,
+    itemAllocatedCosts: IBillItemAllocatedCost[] = [],
+    landedCostLedgerEntries: IBillLandedCostLedgerEntry[] = [],
+  ) {
     this.bill = bill;
+    this.itemAllocatedCosts = new Map(
+      itemAllocatedCosts.map((item) => [item.entryId, item.amount]),
+    );
+    this.landedCostLedgerEntries = landedCostLedgerEntries;
   }
 
   setPayableAccountId(payableAccountId: number) {
@@ -44,6 +57,8 @@ export class BillGL {
    */
   private get billCommonEntry() {
     return {
+      basis: AccountingBasis.Accrual,
+
       debit: 0,
       credit: 0,
 
@@ -74,7 +89,7 @@ export class BillGL {
   private getBillItemEntry(entry: ItemEntry, index: number): ILedgerEntry {
     const commonJournalMeta = this.billCommonEntry;
     const totalLocal = this.bill.exchangeRate * entry.totalExcludingTax;
-    const landedCostAmount = sumBy(entry.allocatedCostEntries, 'cost');
+    const landedCostAmount = this.itemAllocatedCosts.get(entry.id) ?? 0;
 
     return {
       ...commonJournalMeta,
@@ -92,11 +107,11 @@ export class BillGL {
 
   /**
    * Retrieves the bill landed cost entry.
-   * @param {BillLandedCost} landedCost - Landed cost
+   * @param {IBillLandedCostLedgerEntry} landedCost - Landed cost
    * @param {number} index - Index
    */
   private getBillLandedCostEntry(
-    landedCost: BillLandedCost,
+    landedCost: IBillLandedCostLedgerEntry,
     _index: number,
   ): ILedgerEntry {
     const commonJournalMeta = this.billCommonEntry;
@@ -208,7 +223,7 @@ export class BillGL {
     const itemsEntries = this.bill.entries.map((entry, index) =>
       this.getBillItemEntry(entry, index),
     );
-    const landedCostEntries = this.bill.locatedLandedCosts.map(
+    const landedCostEntries = this.landedCostLedgerEntries.map(
       (landedCost, index) => this.getBillLandedCostEntry(landedCost, index),
     );
 

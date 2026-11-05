@@ -1,9 +1,9 @@
+import * as FF from 'fp-ts/function';
 import React, { lazy } from 'react';
 import type { QuickPaymentReceiveDialogPayload } from './types';
 import type { DialogBaseProps } from '@/components/DialogReduxConnect';
 import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
-import { compose } from '@/utils';
 
 const QuickPaymentReceiveFormDialogContent = lazy(() =>
   import('./QuickPaymentReceiveFormDialogContent').then((m) => ({
@@ -29,7 +29,7 @@ function QuickPaymentReceiveFormDialog({
       name={dialogName}
       title={<T id={'quick_receive_payment'} />}
       isOpen={isOpen}
-      // FIXME: typo `canEscapeJeyClose` preserved from @ts-nocheck original.
+      // FIXME: typo `canEscapeJeyClose` preserved from the original.
       canEscapeJeyClose={true}
       autoFocus={true}
       className={'dialog--quick-payment-receive'}
@@ -44,4 +44,4 @@ function QuickPaymentReceiveFormDialog({
   );
 }
 
-export const index = compose(withDialogRedux())(QuickPaymentReceiveFormDialog);
+export const index = FF.pipe(QuickPaymentReceiveFormDialog, withDialogRedux());

@@ -9,8 +9,23 @@ import { If, DetailsMenu, DetailItem, Card } from '@/components';
 /**
  * Item header drawer of readonly details.
  */
+const toNullableNumber = (value: unknown): number | null => {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+  const parsedValue = Number(value);
+
+  return Number.isNaN(parsedValue) ? null : parsedValue;
+};
+
 export function ItemDetailHeader() {
   const { item } = useItemDetailDrawerContext();
+  const quantityOnHand = toNullableNumber(item?.quantityOnHand);
+  const reorderPoint = toNullableNumber(item?.reorderPoint);
+  const isLowStock =
+    quantityOnHand !== null &&
+    reorderPoint !== null &&
+    quantityOnHand <= reorderPoint;
 
   // What the item answered for the fields its category defines.
   const categoryFields = React.useMemo(
@@ -48,16 +63,27 @@ export function ItemDetailHeader() {
             label={intl.get('item_code')}
             children={defaultTo(item?.code, '-')}
           />
+          <DetailItem
+            label={intl.get('item_unit')}
+            children={defaultTo(item?.unit, '-')}
+          />
           <If condition={item?.type === 'inventory'}>
             <DetailItem name={'quantity'} label={intl.get('quantity_on_hand')}>
               <span
                 className={classNames({
-                  mines: (item?.quantityOnHand ?? 0) <= 0,
-                  plus: (item?.quantityOnHand ?? 0) > 0,
+                  mines: (quantityOnHand ?? 0) <= 0,
+                  plus: (quantityOnHand ?? 0) > 0,
+                  'low-stock': isLowStock,
                 })}
               >
                 {item?.quantityOnHandFormatted || '-'}
               </span>
+            </DetailItem>
+            <DetailItem
+              name={'reorder_point'}
+              label={intl.get('reorder_point')}
+            >
+              {defaultTo(item?.reorderPoint, '-')}
             </DetailItem>
           </If>
           <DetailItem

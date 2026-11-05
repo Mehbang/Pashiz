@@ -71,9 +71,54 @@ describe('GL entries — Purchases transactions (e2e)', () => {
       expectLegs(
         legs,
         [
-          { accountCode: '20001', contactId: vendorId, credit: 1800 },
-          { accountCode: '40002', debit: 2000 },
-          { accountCode: '40009', credit: 200 },
+          {
+            accountCode: '20001',
+            contactId: vendorId,
+            credit: 1800,
+            basis: 'accrual',
+          },
+          { accountCode: '40002', debit: 2000, basis: 'accrual' },
+          { accountCode: '40009', credit: 200, basis: 'accrual' },
+        ],
+        'Bill',
+      );
+    });
+
+    it('posts a balanced journal for a bill with an amount-type line discount', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/bills')
+        .set(authHeaders())
+        .send({
+          vendorId,
+          billDate: '2023-01-01',
+          dueDate: '2023-02-01',
+          billNumber: faker.string.alphanumeric(10),
+          referenceNo: 'REF-000201',
+          open: true,
+          branchId: 1,
+          warehouseId: 1,
+          entries: [
+            {
+              index: 1,
+              itemId,
+              quantity: 2,
+              rate: 1000,
+              discount: 100,
+              discountType: 'amount',
+              description: 'Item description...',
+            },
+          ],
+        })
+        .expect(201);
+
+      const legs = await fetchLegs('Bill', res.body.id);
+
+      expectBalanced(legs);
+      expectLegs(
+        legs,
+        [
+          { accountCode: '20001', contactId: vendorId, credit: 1900 },
+          { accountCode: '40002', debit: 1900 },
         ],
         'Bill',
       );
@@ -99,10 +144,15 @@ describe('GL entries — Purchases transactions (e2e)', () => {
       expectLegs(
         legs,
         [
-          { accountCode: '20001', contactId: vendorId, credit: 2000 },
-          { accountCode: '40002', debit: 2000 },
-          { accountCode: '20006', debit: 200 },
-          { accountCode: '40009', credit: 200 },
+          {
+            accountCode: '20001',
+            contactId: vendorId,
+            credit: 2000,
+            basis: 'accrual',
+          },
+          { accountCode: '40002', debit: 2000, basis: 'accrual' },
+          { accountCode: '20006', debit: 200, basis: 'accrual' },
+          { accountCode: '40009', credit: 200, basis: 'accrual' },
         ],
         'Bill',
       );
@@ -229,16 +279,42 @@ describe('GL entries — Purchases transactions (e2e)', () => {
         })
         .expect(201);
 
-      const legs = await fetchLegs('BillPayment', paymentRes.body.id);
-
-      expectBalanced(legs);
-      expectLegs(
-        legs,
-        [
-          { accountCode: '20001', contactId: vendorId, debit: 1000 },
-          { accountCode: '10001', credit: 1000 },
-        ],
+      const accrualLegs = await fetchLegs(
         'BillPayment',
+        paymentRes.body.id,
+        'accrual',
+      );
+      const cashLegs = await fetchLegs(
+        'BillPayment',
+        paymentRes.body.id,
+        'cash',
+      );
+
+      expectBalanced(accrualLegs);
+      expectLegs(
+        accrualLegs,
+        [
+          // Accrual basis: settle the payable against the payment account.
+          {
+            accountCode: '20001',
+            contactId: vendorId,
+            debit: 1000,
+            basis: 'accrual',
+          },
+          { accountCode: '10001', credit: 1000, basis: 'accrual' },
+        ],
+        'BillPayment (accrual)',
+      );
+
+      expectBalanced(cashLegs);
+      expectLegs(
+        cashLegs,
+        [
+          // Cash basis: recognize the purchase expense composition.
+          { accountCode: '40002', debit: 1000, basis: 'cash' },
+          { accountCode: '10001', credit: 1000, basis: 'cash' },
+        ],
+        'BillPayment (cash)',
       );
     });
   });
@@ -281,6 +357,125 @@ describe('GL entries — Purchases transactions (e2e)', () => {
           { accountCode: '40009', debit: 100 },
         ],
         'VendorCredit',
+      );
+      // The vendor credit journal entries are accrual basis flagged.
+      expect(legs.every((leg) => leg.basis === 'accrual')).toBe(true);
+    });
+
+    it('posts a balanced journal for an opened vendor credit with an amount-type line discount', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/vendor-credits')
+        .set(authHeaders())
+        .send({
+          vendorId,
+          exchangeRate: 1,
+          vendorCreditNumber: faker.string.uuid(),
+          vendorCreditDate: '2025-01-01',
+          open: true,
+          entries: [
+            {
+              index: 1,
+              itemId,
+              quantity: 2,
+              rate: 1000,
+              discount: 100,
+              discountType: 'amount',
+              description: "It's description here.",
+            },
+          ],
+          branchId: 1,
+          warehouseId: 1,
+        })
+        .expect(201);
+
+      const legs = await fetchLegs('VendorCredit', res.body.id);
+
+      expectBalanced(legs);
+      expectLegs(
+        legs,
+        [
+          { accountCode: '20001', contactId: vendorId, debit: 1900 },
+          { accountCode: '40002', credit: 1900 },
+        ],
+        'VendorCredit',
+      );
+    });
+  });
+
+  describe('Vendor Credit Refund', () => {
+    it('posts a balanced journal for a vendor credit refund', async () => {
+      const creditRes = await request(app.getHttpServer())
+        .post('/vendor-credits')
+        .set(authHeaders())
+        .send({
+          vendorId,
+          exchangeRate: 1,
+          vendorCreditNumber: faker.string.uuid(),
+          vendorCreditDate: '2025-01-01',
+          open: true,
+          entries: [
+            {
+              index: 1,
+              itemId,
+              quantity: 1,
+              rate: 1000,
+              description: "It's description here.",
+            },
+          ],
+          branchId: 1,
+          warehouseId: 1,
+        })
+        .expect(201);
+
+      const refundRes = await request(app.getHttpServer())
+        .post(`/vendor-credits/${creditRes.body.id}/refund`)
+        .set(authHeaders())
+        .send({
+          depositAccountId: 1000,
+          amount: 1000,
+          exchangeRate: 1,
+          referenceNo: faker.string.uuid(),
+          description: 'Refund vendor credit',
+          date: '2025-01-02',
+        })
+        .expect(201);
+
+      const accrualLegs = await fetchLegs(
+        'RefundVendorCredit',
+        refundRes.body.id,
+        'accrual',
+      );
+      const cashLegs = await fetchLegs(
+        'RefundVendorCredit',
+        refundRes.body.id,
+        'cash',
+      );
+
+      expectBalanced(accrualLegs);
+      expectLegs(
+        accrualLegs,
+        [
+          // Accrual basis: Dr deposit / Cr A/P.
+          { accountCode: '10001', debit: 1000, basis: 'accrual' },
+          {
+            accountCode: '20001',
+            contactId: vendorId,
+            credit: 1000,
+            basis: 'accrual',
+          },
+        ],
+        'RefundVendorCredit (accrual)',
+      );
+
+      expectBalanced(cashLegs);
+      expectLegs(
+        cashLegs,
+        [
+          // Cash basis: Dr deposit / Cr cost of goods sold.
+          { accountCode: '10001', debit: 1000, basis: 'cash' },
+          { accountCode: '40002', credit: 1000, basis: 'cash' },
+        ],
+        'RefundVendorCredit (cash)',
       );
     });
   });

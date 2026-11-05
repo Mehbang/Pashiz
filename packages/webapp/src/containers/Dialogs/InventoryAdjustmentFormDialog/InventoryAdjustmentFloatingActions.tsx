@@ -1,12 +1,12 @@
 import { Button, Classes, Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import { useInventoryAdjContext } from './InventoryAdjustmentFormProvider';
 import type { InventoryAdjustmentFormValues } from './types';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { compose } from '@/utils';
 
 interface InventoryAdjustmentFloatingActionsProps
   extends WithDialogActionsProps {}
@@ -17,8 +17,16 @@ function InventoryAdjustmentFloatingActionsInner({
   const { isSubmitting, submitForm } =
     useFormikContext<InventoryAdjustmentFormValues>();
 
-  const { dialogName, setSubmitPayload, submitPayload } =
-    useInventoryAdjContext();
+  const {
+    dialogName,
+    setSubmitPayload,
+    submitPayload,
+    isEditMode,
+    inventoryAdjustment,
+  } = useInventoryAdjContext();
+
+  // Published adjustments can't be reverted to draft.
+  const isPublished = isEditMode && !!inventoryAdjustment?.isPublished;
 
   const handleSubmitDraftBtnClick = () => {
     setSubmitPayload({ publish: false });
@@ -44,28 +52,43 @@ function InventoryAdjustmentFloatingActionsInner({
           <T id={'close'} />
         </Button>
 
-        <Button
-          loading={isSubmitting && !submitPayload.publish}
-          style={{ minWidth: '75px' }}
-          onClick={handleSubmitDraftBtnClick}
-        >
-          <T id={'save_as_draft'} />
-        </Button>
+        {!isPublished && (
+          <Button
+            loading={isSubmitting && !submitPayload.publish}
+            style={{ minWidth: '75px' }}
+            onClick={handleSubmitDraftBtnClick}
+          >
+            <T id={'save_as_draft'} />
+          </Button>
+        )}
 
-        <Button
-          intent={Intent.PRIMARY}
-          loading={isSubmitting && submitPayload.publish}
-          style={{ minWidth: '75px' }}
-          type="submit"
-          onClick={handleSubmitMakeAdjustmentBtnClick}
-        >
-          <T id={'make_adjustment'} />
-        </Button>
+        {isPublished ? (
+          <Button
+            intent={Intent.PRIMARY}
+            loading={isSubmitting}
+            style={{ minWidth: '75px' }}
+            type="submit"
+            onClick={handleSubmitMakeAdjustmentBtnClick}
+          >
+            <T id={'save_changes'} />
+          </Button>
+        ) : (
+          <Button
+            intent={Intent.PRIMARY}
+            loading={isSubmitting && submitPayload.publish}
+            style={{ minWidth: '75px' }}
+            type="submit"
+            onClick={handleSubmitMakeAdjustmentBtnClick}
+          >
+            <T id={'make_adjustment'} />
+          </Button>
+        )}
       </div>
     </div>
   );
 }
 
-export const InventoryAdjustmentFloatingActions = compose(withDialogActions)(
+export const InventoryAdjustmentFloatingActions = FF.pipe(
   InventoryAdjustmentFloatingActionsInner,
+  withDialogActions,
 );

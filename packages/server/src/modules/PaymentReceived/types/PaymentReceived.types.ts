@@ -51,6 +51,23 @@ export interface IPaymentsReceivedFilter extends IDynamicListFilter {
   filterQuery?: (trx: Knex.Transaction) => void;
 }
 
+export interface IPaymentReceivedTransformedEntry {
+  paymentAmountFormatted: string;
+  invoice: {
+    invoiceNo: string;
+    totalFormatted: string;
+  };
+}
+
+export type IPaymentReceivedTransformed = Omit<PaymentReceived, 'entries'> & {
+  formattedAmount: string;
+  subtotalFormatted: string;
+  formattedPaymentDate: string;
+  formattedCreatedAt: string;
+  formattedExchangeRate: string;
+  entries: IPaymentReceivedTransformedEntry[];
+};
+
 export interface IPaymentReceivePageEntry {
   invoiceId: number;
   entryType: string;
@@ -154,12 +171,13 @@ export interface PaymentReceivedPdfTemplateAttributes {
   primaryColor: string;
   secondaryColor: string;
   showCompanyLogo: boolean;
-  companyLogo: string;
+  companyLogoUri: string;
   companyName: string;
 
   // Customer Address
   showCustomerAddress: boolean;
   customerAddress: string;
+  customerName?: string;
 
   // Company address
   showCompanyAddress: boolean;

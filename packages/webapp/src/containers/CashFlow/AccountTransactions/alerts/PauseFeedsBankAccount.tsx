@@ -1,5 +1,6 @@
 import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import type { WithAlertStoreConnectProps } from '@/containers/Alert/withAlertStoreConnect';
@@ -7,7 +8,6 @@ import { AppToaster } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { usePauseFeedsBankAccount } from '@/hooks/query/banking';
-import { compose } from '@/utils';
 
 interface PauseFeedsBankAccountAlertProps
   extends Pick<WithAlertActionsProps, 'closeAlert'>,
@@ -73,7 +73,8 @@ function PauseFeedsBankAccountAlert({
   );
 }
 
-export const PauseFeedsBankAccount = compose(
-  withAlertStoreConnect(),
+export const PauseFeedsBankAccount = FF.pipe(
+  PauseFeedsBankAccountAlert,
   withAlertActions,
-)(PauseFeedsBankAccountAlert);
+  withAlertStoreConnect(),
+);

@@ -8,6 +8,7 @@ import {
   Switch,
   Alignment,
 } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -38,10 +39,9 @@ import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { useSaveSettings } from '@/hooks/query';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
 import { useRefreshItems } from '@/hooks/query/items';
-import { compose } from '@/utils';
 
 interface ItemsActionsBarInnerProps
-  extends Pick<WithItemsProps, 'itemsSelectedRows' | 'itemsTableState'>,
+  extends Pick<WithItemsProps, 'itemsSelectedRows'>,
     WithItemsActionsProps,
     WithDialogActionsProps {
   itemsFilterRoles: IFilterRole[];
@@ -229,12 +229,13 @@ function ItemsActionsBarInner({
   );
 }
 
-export const ItemsActionsBar = compose(
+export const ItemsActionsBar = FF.pipe(
+  ItemsActionsBarInner,
+  withDialogActions,
+  withItemsActions,
   withItems(({ itemsSelectedRows, itemsTableState }) => ({
     itemsSelectedRows,
     itemsInactiveMode: itemsTableState.inactiveMode,
     itemsFilterRoles: itemsTableState.filterRoles,
   })),
-  withItemsActions,
-  withDialogActions,
-)(ItemsActionsBarInner);
+);

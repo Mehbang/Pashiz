@@ -1,3 +1,4 @@
+import * as FF from 'fp-ts/function';
 import moment from 'moment';
 import { useEffect, useCallback } from 'react';
 import { SalesByItemsLoadingBar } from './components';
@@ -12,7 +13,6 @@ import {
   WithSalesByItemsActionsProps,
 } from './withSalesByItemsActions';
 import { FinancialStatement, DashboardPageContent } from '@/components';
-import { compose } from '@/utils';
 
 interface SalesByItemsProps {
   toggleSalesByItemsFilterDrawer: WithSalesByItemsActionsProps['toggleSalesByItemsFilterDrawer'];
@@ -56,13 +56,13 @@ function SalesByItemsInner({
   return (
     <SalesByItemProvider query={query}>
       <SalesByItemsActionsBar
-        numberFormat={query.numberFormat}
+        numberFormat={query.numberFormat ?? {}}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <SalesByItemsLoadingBar />
 
       <DashboardPageContent>
-        <FinancialStatement>
+        <FinancialStatement numberFormat={query.numberFormat ?? {}}>
           <SalesByItemsHeader
             pageFilter={query}
             onSubmitFilter={handleFilterSubmit}
@@ -76,4 +76,4 @@ function SalesByItemsInner({
   );
 }
 
-export const SalesByItems = compose(withSalesByItemsActions)(SalesByItemsInner);
+export const SalesByItems = FF.pipe(SalesByItemsInner, withSalesByItemsActions);

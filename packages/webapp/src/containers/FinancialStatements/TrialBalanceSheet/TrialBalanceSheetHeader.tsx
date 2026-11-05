@@ -1,5 +1,6 @@
 import { Tabs, Tab, Button, Intent } from '@blueprintjs/core';
 import { Formik, Form, FormikHelpers } from 'formik';
+import * as FF from 'fp-ts/function';
 import moment from 'moment';
 import React from 'react';
 import intl from 'react-intl-universal';
@@ -16,11 +17,12 @@ import {
 import { FormattedMessage as T } from '@/components';
 import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
-import { compose, transformToForm } from '@/utils';
+import { transformToForm } from '@/utils';
 
 interface TrialBalanceFormValues {
   fromDate: Date;
   toDate: Date;
+  basis: 'cash' | 'accrual';
   branchesIds: string[];
   filterByOption: string;
   [key: string]: unknown;
@@ -66,6 +68,8 @@ function TrialBalanceSheetHeaderInner({
   const defaultValues: TrialBalanceFormValues = {
     fromDate: moment().toDate(),
     toDate: moment().toDate(),
+    // Must match the report default basis in `getDefaultTrialBalanceQuery`.
+    basis: 'accrual',
     branchesIds: [],
     filterByOption: 'with-transactions',
   };
@@ -138,12 +142,13 @@ function TrialBalanceSheetHeaderInner({
   );
 }
 
-export const TrialBalanceSheetHeader = compose(
+export const TrialBalanceSheetHeader = FF.pipe(
+  TrialBalanceSheetHeaderInner,
+  withTrialBalanceActions,
   withTrialBalance(({ trialBalanceDrawerFilter }) => ({
     trialBalanceDrawerFilter,
   })),
-  withTrialBalanceActions,
-)(TrialBalanceSheetHeaderInner);
+);
 
 const TrialBalanceSheetDrawerHeader = styled(FinancialStatementHeader)`
   .bp4-drawer {

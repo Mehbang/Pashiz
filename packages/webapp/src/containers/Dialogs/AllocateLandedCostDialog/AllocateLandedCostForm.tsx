@@ -1,5 +1,6 @@
 import { Intent } from '@blueprintjs/core';
 import { Formik, type FormikHelpers } from 'formik';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import '@/style/pages/AllocateLandedCost/AllocateLandedCostForm.scss';
@@ -11,7 +12,7 @@ import type { AllocateLandedCostFormValues } from './types';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { compose, transformToForm } from '@/utils';
+import { transformToForm } from '@/utils';
 
 interface AllocateLandedCostFormProps
   extends Pick<WithDialogActionsProps, 'closeDialog'> {}
@@ -100,9 +101,9 @@ function AllocateLandedCostFormInner({
         });
       }
     };
-    // `useCreateLandedCost` lives in an `@ts-nocheck` queries file and infers
-    // a `void` variables type; the runtime accepts `[billId, form]`.
-    // @ts-expect-error — @ts-nocheck hook infers void variables type.
+    // `useCreateLandedCost` infers a `void` variables type while the runtime
+    // accepts `[billId, form]`.
+    // @ts-expect-error — hook infers void variables type.
     createLandedCostMutate([billId, form]).then(onSuccess).catch(onError);
   };
 
@@ -119,6 +120,7 @@ function AllocateLandedCostFormInner({
   );
 }
 
-export const AllocateLandedCostForm = compose(withDialogActions)(
+export const AllocateLandedCostForm = FF.pipe(
   AllocateLandedCostFormInner,
+  withDialogActions,
 );

@@ -1,4 +1,5 @@
-import * as R from 'ramda';
+import { flow } from 'fp-ts/function';
+import * as A from 'fp-ts/Array';
 import { isEmpty, sumBy } from 'lodash';
 import {
   SalesTaxLiabilitySummaryQuery,
@@ -60,9 +61,10 @@ export class SalesTaxLiabilitySummary extends FinancialSheet {
     const salesTaxAmount = salesTax ? salesTax.credit - salesTax.debit : 0;
 
     // Calculates the tax percentage.
-    const taxPercentage = R.compose(
-      R.unless(R.equals(0), R.divide(R.__, salesTaxAmount)),
-    )(payableTaxAmount);
+    const taxPercentage = this.getPercentageBasis(
+      salesTaxAmount,
+      payableTaxAmount,
+    );
 
     // Calculates the payable tax amount.
     const collectedTaxAmount = payableTax ? payableTax.debit : 0;
@@ -98,9 +100,9 @@ export class SalesTaxLiabilitySummary extends FinancialSheet {
    * @returns {SalesTaxLiabilitySummaryRate[]}
    */
   private taxRatesLiability = (): SalesTaxLiabilitySummaryRate[] => {
-    return R.compose(
+    return flow(
+      A.map(this.taxRateLiability),
       this.filterNonTransactionsTaxRates,
-      R.map(this.taxRateLiability),
     )(this.repository.taxRates);
   };
 

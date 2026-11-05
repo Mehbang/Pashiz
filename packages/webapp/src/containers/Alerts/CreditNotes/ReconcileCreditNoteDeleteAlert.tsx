@@ -1,4 +1,5 @@
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -8,7 +9,6 @@ import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { useDeleteReconcileCredit } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface ReconcileCreditNoteDeleteAlertPayload {
   creditNoteId: number;
@@ -48,7 +48,7 @@ function ReconcileCreditNoteDeleteAlertInner({
         });
       })
       .catch((error: Error) => {
-        // Bugfix: original @ts-nocheck had a commented-out `handleDeleteErrors(errors)` and empty catch — failures were silently swallowed.
+        // Bugfix: the original had a commented-out `handleDeleteErrors(errors)` and empty catch — failures were silently swallowed.
         AppToaster.show({
           message: error.message,
           intent: Intent.DANGER,
@@ -71,7 +71,6 @@ function ReconcileCreditNoteDeleteAlertInner({
       loading={isLoading}
     >
       <p>
-        {/* @ts-expect-error — react-intl-universal FormattedHTMLMessage JSX type mismatch (library-level issue, see Alerts/Items/ItemDeleteAlert.tsx) */}
         <FormattedHTMLMessage
           id={
             'reconcile_credit_note.once_you_delete_this_reconcile_credit_note'
@@ -82,8 +81,9 @@ function ReconcileCreditNoteDeleteAlertInner({
   );
 }
 
-export const ReconcileCreditNoteDeleteAlert = compose(
-  withAlertStoreConnect(),
-  withAlertActions,
+export const ReconcileCreditNoteDeleteAlert = FF.pipe(
+  ReconcileCreditNoteDeleteAlertInner,
   withDrawerActions,
-)(ReconcileCreditNoteDeleteAlertInner);
+  withAlertActions,
+  withAlertStoreConnect(),
+);

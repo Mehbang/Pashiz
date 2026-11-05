@@ -1,4 +1,3 @@
-import intl from 'react-intl-universal';
 export const initialValues = {
   templateName: '',
 
@@ -13,72 +12,62 @@ export const initialValues = {
 
   // Top details.
   showPaymentReceivedNumber: true,
-  paymentReceivedNumberLabel: intl.get('payment_no_'),
+  paymentReceivedNumberLabel: 'Payment number',
 
-  // Payment number
+  // Payment date
   showPaymentReceivedDate: true,
-  paymentReceivedDateLabel: intl.get('date_of_issue'),
-
-  // Customer address
-  showCompanyAddress: true,
+  paymentReceivedDateLabel: 'Date of Issue',
 
   // Company address
-  showCustomerAddress: true,
-  billedToLabel: intl.get('billed_to'),
+  showCompanyAddress: true,
 
-  // Entries
-  itemNameLabel: intl.get('item'),
-  itemDescriptionLabel: intl.get('description'),
-  itemRateLabel: intl.get('rate'),
-  itemTotalLabel: intl.get('total'),
+  // Customer address
+  showCustomerAddress: true,
+  billedToLabel: 'Billed To',
 
   // Subtotal
   showSubtotal: true,
-  subtotalLabel: intl.get('subtotal'),
+  subtotalLabel: 'Subtotal',
 
   // Total
   showTotal: true,
-  totalLabel: intl.get('total'),
+  totalLabel: 'Total',
 };
 
 export const fieldsGroups = [
   {
-    label: intl.get('header'),
+    label: 'Header',
     fields: [
       {
         labelKey: 'paymentReceivedNumberLabel',
         enableKey: 'showPaymentReceivedNumber',
-        label: intl.get('payment_no'),
+        label: 'Payment No.',
       },
       {
         labelKey: 'paymentReceivedDateLabel',
         enableKey: 'showPaymentReceivedDate',
-        label: intl.get('payment_date'),
+        label: 'Payment Date',
       },
       {
         enableKey: 'showCustomerAddress',
         labelKey: 'billedToLabel',
-        label: intl.get('bill_to'),
+        label: 'Bill To',
       },
       {
         enableKey: 'showCompanyAddress',
-        label: intl.get('billed_from'),
+        label: 'Billed From',
       },
     ],
   },
   {
-    label: intl.get('totals'),
+    label: 'Totals',
     fields: [
       {
         labelKey: 'subtotalLabel',
         enableKey: 'showSubtotal',
-        label: intl.get('subtotal'),
+        label: 'Subtotal',
       },
-      {
-        labelKey: 'totalLabel',
-        enableKey: 'showTotal',
-        label: intl.get('total'),
-      },
+      { labelKey: 'totalLabel', enableKey: 'showTotal', label: 'Total' },
     ],
   },
 ];

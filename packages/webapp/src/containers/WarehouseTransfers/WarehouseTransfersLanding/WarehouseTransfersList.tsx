@@ -1,18 +1,20 @@
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import { WarehouseTransfersActionsBar } from './WarehouseTransfersActionsBar';
 import { WarehouseTransfersDataTable } from './WarehouseTransfersDataTable';
+import { WarehouseTransfersListDialogs } from './WarehouseTransfersListDialogs';
 import { WarehouseTransfersListDrawers } from './WarehouseTransfersListDrawers';
 import { WarehouseTransfersListProvider } from './WarehouseTransfersListProvider';
 import { withWarehouseTransfers } from './withWarehouseTransfers';
 import { withWarehouseTransfersActions } from './withWarehouseTransfersActions';
 import type { WithWarehouseTransfersActionsProps } from './withWarehouseTransfersActions';
 import { DashboardPageContent } from '@/components';
-import { transformTableStateToQuery, compose } from '@/utils';
+import { transformTableStateToQuery } from '@/utils';
 
 interface WarehouseTransfersListInnerProps
   extends Pick<
     WithWarehouseTransfersActionsProps,
-    'resetWarehouseTransferTableState'
+    'resetWarehouseTransferTableState' | 'resetWarehouseTransferSelectedRows'
   > {
   warehouseTransferTableState?: unknown;
   warehouseTransferTableStateChanged?: boolean;
@@ -25,13 +27,15 @@ function WarehouseTransfersListInner({
 
   // #withWarehouseTransfersActions
   resetWarehouseTransferTableState,
+  resetWarehouseTransferSelectedRows,
 }: WarehouseTransfersListInnerProps) {
   // Resets the warehouse transfer table state once the page unmount.
   React.useEffect(
     () => () => {
       resetWarehouseTransferTableState();
+      resetWarehouseTransferSelectedRows();
     },
-    [resetWarehouseTransferTableState],
+    [resetWarehouseTransferTableState, resetWarehouseTransferSelectedRows],
   );
 
   return (
@@ -43,6 +47,7 @@ function WarehouseTransfersListInner({
     >
       <WarehouseTransfersActionsBar />
       <WarehouseTransfersListDrawers />
+      <WarehouseTransfersListDialogs />
 
       <DashboardPageContent>
         <WarehouseTransfersDataTable />
@@ -51,12 +56,13 @@ function WarehouseTransfersListInner({
   );
 }
 
-export const WarehouseTransfersList = compose(
-  withWarehouseTransfersActions,
+export const WarehouseTransfersList = FF.pipe(
+  WarehouseTransfersListInner,
   withWarehouseTransfers(
     ({ warehouseTransferTableState, warehouseTransferTableStateChanged }) => ({
       warehouseTransferTableState,
       warehouseTransferTableStateChanged,
     }),
   ),
-)(WarehouseTransfersListInner);
+  withWarehouseTransfersActions,
+);

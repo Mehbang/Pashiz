@@ -1314,6 +1314,64 @@
         "tags": [
           "Inventory Adjustments"
         ]
+      },
+      "put": {
+        "operationId": "InventoryAdjustmentsController_editQuickInventoryAdjustment",
+        "summary": "Edit the given inventory adjustment.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditQuickInventoryAdjustmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The inventory adjustment has been successfully edited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryAdjustmentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Inventory Adjustments"
+        ]
       }
     },
     "/api/inventory-adjustments": {
@@ -3978,6 +4036,16 @@
             }
           }
         ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateSaleInvoiceSharableLinkDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "The link has been generated successfully.",
@@ -6787,219 +6855,6 @@
         ]
       }
     },
-    "/api/item-units": {
-      "get": {
-        "operationId": "ItemUnitsController_getUnits",
-        "summary": "Retrieves the organization's units of measure.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The units have been retrieved."
-          }
-        },
-        "tags": [
-          "Item Units"
-        ]
-      },
-      "post": {
-        "operationId": "ItemUnitsController_createUnit",
-        "summary": "Creates a unit of measure.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateItemUnitDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Item Units"
-        ]
-      }
-    },
-    "/api/item-units/{id}": {
-      "get": {
-        "operationId": "ItemUnitsController_getUnit",
-        "summary": "Retrieves the given unit of measure.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Item Units"
-        ]
-      },
-      "put": {
-        "operationId": "ItemUnitsController_editUnit",
-        "summary": "Edits the given unit of measure.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditItemUnitDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Item Units"
-        ]
-      },
-      "delete": {
-        "operationId": "ItemUnitsController_deleteUnit",
-        "summary": "Deletes the given unit of measure.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Item Units"
-        ]
-      }
-    },
     "/api/expenses/validate-bulk-delete": {
       "post": {
         "operationId": "ExpensesController_validateBulkDeleteExpenses",
@@ -7462,6 +7317,359 @@
         },
         "tags": [
           "Expenses"
+        ]
+      }
+    },
+    "/api/tracking-categories": {
+      "get": {
+        "operationId": "TrackingCategoriesController_getTrackingCategories",
+        "summary": "Retrieves all tracking categories.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The tracking categories have been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrackingCategoryResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tracking Categories"
+        ]
+      },
+      "post": {
+        "operationId": "TrackingCategoriesController_createTrackingCategory",
+        "summary": "Creates a new tracking category.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTrackingCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The tracking category has been successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrackingCategoryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tracking Categories"
+        ]
+      }
+    },
+    "/api/tracking-categories/{id}": {
+      "get": {
+        "operationId": "TrackingCategoriesController_getTrackingCategory",
+        "summary": "Retrieves the tracking category details.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The tracking category id",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The tracking category details have been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrackingCategoryResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The tracking category not found."
+          }
+        },
+        "tags": [
+          "Tracking Categories"
+        ]
+      },
+      "put": {
+        "operationId": "TrackingCategoriesController_editTrackingCategory",
+        "summary": "Edits the given tracking category.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The tracking category id",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditTrackingCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The tracking category has been successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrackingCategoryResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The tracking category not found."
+          }
+        },
+        "tags": [
+          "Tracking Categories"
+        ]
+      },
+      "delete": {
+        "operationId": "TrackingCategoriesController_deleteTrackingCategory",
+        "summary": "Deletes the given tracking category.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The tracking category id",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The tracking category has been successfully deleted."
+          },
+          "404": {
+            "description": "The tracking category not found."
+          }
+        },
+        "tags": [
+          "Tracking Categories"
+        ]
+      }
+    },
+    "/api/warehouse-transfers/validate-bulk-delete": {
+      "post": {
+        "operationId": "WarehouseTransfersController_validateBulkDeleteWarehouseTransfers",
+        "summary": "Validates which warehouse transfers can be deleted and returns the results.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkDeleteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validation completed with counts and IDs of deletable and non-deletable warehouse transfers.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateBulkDeleteResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Warehouse Transfers"
+        ]
+      }
+    },
+    "/api/warehouse-transfers/bulk-delete": {
+      "post": {
+        "operationId": "WarehouseTransfersController_bulkDeleteWarehouseTransfers",
+        "summary": "Deletes multiple warehouse transfers.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkDeleteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Warehouse transfers deleted successfully."
+          }
+        },
+        "tags": [
+          "Warehouse Transfers"
         ]
       }
     },
@@ -10549,198 +10757,6 @@
         ]
       }
     },
-    "/api/landed-cost/transactions": {
-      "get": {
-        "operationId": "BillAllocateLandedCostController_getLandedCostTransactions",
-        "summary": "Get landed cost transactions",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of landed cost transactions."
-          }
-        },
-        "tags": [
-          "Landed Cost"
-        ]
-      }
-    },
-    "/api/landed-cost/bills/{billId}/allocate": {
-      "post": {
-        "operationId": "BillAllocateLandedCostController_calculateLandedCost",
-        "summary": "Allocate landed cost to bill items",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AllocateBillLandedCostDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Landed cost allocated successfully."
-          }
-        },
-        "tags": [
-          "Landed Cost"
-        ]
-      }
-    },
-    "/api/landed-cost/{allocatedLandedCostId}": {
-      "delete": {
-        "operationId": "BillAllocateLandedCostController_deleteAllocatedLandedCost",
-        "summary": "Delete allocated landed cost",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "allocatedLandedCostId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Allocated landed cost deleted successfully."
-          }
-        },
-        "tags": [
-          "Landed Cost"
-        ]
-      }
-    },
-    "/api/landed-cost/bills/{billId}/transactions": {
-      "get": {
-        "operationId": "BillAllocateLandedCostController_getBillLandedCostTransactions",
-        "summary": "Get bill landed cost transactions",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of bill landed cost transactions.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "billId": {
-                      "type": "number"
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/BillLandedCostTransactionDto"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Landed Cost"
-        ]
-      }
-    },
     "/api/manual-journals/validate-bulk-delete": {
       "post": {
         "operationId": "ManualJournalsController_validateBulkDeleteManualJournals",
@@ -11463,6 +11479,99 @@
         ]
       }
     },
+    "/api/credit-notes/{id}/mail": {
+      "post": {
+        "operationId": "CreditNotesController_sendCreditNoteMail",
+        "summary": "Send the given credit note by mail.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The credit note id",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The credit note mail has been queued successfully."
+          }
+        },
+        "tags": [
+          "Credit Notes"
+        ]
+      },
+      "get": {
+        "operationId": "CreditNotesController_getCreditNoteMail",
+        "summary": "Retrieves the credit note mail state.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The credit note id",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieves the credit note mail state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditNoteMailStateResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Credit Notes"
+        ]
+      }
+    },
     "/api/credit-notes/{id}": {
       "get": {
         "operationId": "CreditNotesController_getCreditNote",
@@ -11512,6 +11621,11 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreditNoteResponseDto"
+                }
+              },
+              "application/json+html": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditNoteHtmlContentResponseDto"
                 }
               }
             }
@@ -13359,7 +13473,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The refund vendor credit transaction has been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefundVendorCreditResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -14213,7 +14334,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BankTransactionResponseDto"
+                  "$ref": "#/components/schemas/BankTransactionDetailResponseDto"
                 }
               }
             }
@@ -15826,9 +15947,10 @@
               "default": "year",
               "enum": [
                 "day",
+                "week",
                 "month",
-                "year",
-                "quarter"
+                "quarter",
+                "year"
               ],
               "type": "string"
             }
@@ -15974,6 +16096,40 @@
             "schema": {
               "default": false,
               "type": "boolean"
+            }
+          },
+          {
+            "name": "columnSortBy",
+            "required": false,
+            "in": "query",
+            "description": "Column to sort the accounts by",
+            "schema": {
+              "enum": [
+                "name",
+                "total",
+                "previous_period",
+                "previous_period_change",
+                "previous_period_percentage",
+                "previous_year",
+                "previous_year_change",
+                "previous_year_percentage",
+                "percentage_of_column",
+                "percentage_of_row"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "description": "Sort order for the accounts",
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
             }
           },
           {
@@ -19230,6 +19386,34 @@
             }
           },
           {
+            "name": "columnSortBy",
+            "required": false,
+            "in": "query",
+            "description": "Column to sort the accounts by",
+            "schema": {
+              "enum": [
+                "account",
+                "debit",
+                "credit",
+                "total"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "description": "Sort order for the accounts",
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "name": "accept",
             "required": true,
             "in": "header",
@@ -20063,6 +20247,20 @@
             "schema": {
               "example": "1",
               "type": "number"
+            }
+          },
+          {
+            "name": "basis",
+            "required": false,
+            "in": "query",
+            "description": "The accounting basis of the transactions",
+            "schema": {
+              "example": "accrual",
+              "enum": [
+                "cash",
+                "accrual"
+              ],
+              "type": "string"
             }
           },
           {
@@ -20909,7 +21107,7 @@
             "in": "query",
             "description": "The date for which the inventory valuation is requested",
             "schema": {
-              "example": "2024-01-01T00:00:00.000Z",
+              "example": "2024-01-01",
               "type": "string"
             }
           },
@@ -21169,6 +21367,20 @@
             }
           },
           {
+            "name": "basis",
+            "required": false,
+            "in": "query",
+            "description": "Accounting basis for the report",
+            "schema": {
+              "example": "accrual",
+              "enum": [
+                "cash",
+                "accrual"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "name": "transactionType",
             "required": false,
             "in": "query",
@@ -21238,6 +21450,7 @@
                   "query": {
                     "from_date": "2025-06-01",
                     "to_date": "2025-06-21",
+                    "basis": "accrual",
                     "from_range": null,
                     "to_range": null,
                     "accounts_ids": [],
@@ -21622,6 +21835,13 @@
             "in": "query",
             "description": "How to display columns",
             "schema": {
+              "enum": [
+                "day",
+                "week",
+                "month",
+                "quarter",
+                "year"
+              ],
               "type": "string"
             }
           },
@@ -21713,6 +21933,42 @@
             "description": "Whether to show previous year percentage change",
             "schema": {
               "type": "boolean"
+            }
+          },
+          {
+            "name": "columnSortBy",
+            "required": false,
+            "in": "query",
+            "description": "Column to sort the accounts by",
+            "schema": {
+              "enum": [
+                "name",
+                "total",
+                "previous_period",
+                "previous_period_change",
+                "previous_period_percentage",
+                "previous_year",
+                "previous_year_change",
+                "previous_year_percentage",
+                "percentage_income",
+                "percentage_expenses",
+                "percentage_column",
+                "percentage_row"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "description": "Sort order for the accounts",
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
             }
           },
           {
@@ -22060,9 +22316,10 @@
               "default": "year",
               "enum": [
                 "day",
+                "week",
                 "month",
-                "year",
-                "quarter"
+                "quarter",
+                "year"
               ],
               "type": "string"
             }
@@ -23243,224 +23500,6 @@
         },
         "tags": [
           "Organization"
-        ]
-      }
-    },
-    "/api/organization/backup/export": {
-      "get": {
-        "operationId": "OrganizationBackupController_exportOrganization",
-        "summary": "Downloads the organization's data as one file.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Organization backup"
-        ]
-      }
-    },
-    "/api/organization/backup/inspect": {
-      "post": {
-        "operationId": "OrganizationBackupController_inspectBackup",
-        "summary": "Reads a backup file and reports what it holds, changing nothing.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Organization backup"
-        ]
-      }
-    },
-    "/api/organization/backup/import": {
-      "post": {
-        "operationId": "OrganizationBackupController_importBackup",
-        "summary": "Replaces the organization's data with the uploaded backup.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Organization backup"
-        ]
-      }
-    },
-    "/api/organization/backup/archives": {
-      "get": {
-        "operationId": "OrganizationBackupController_listArchives",
-        "summary": "Lists this organization's automatic backups.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Organization backup"
-        ]
-      }
-    },
-    "/api/organization/backup/archives/download": {
-      "get": {
-        "operationId": "OrganizationBackupController_downloadArchive",
-        "summary": "Downloads one of this organization's backups.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Organization backup"
-        ]
-      }
-    },
-    "/api/organization/backup/archives/restore": {
-      "post": {
-        "operationId": "OrganizationBackupController_restoreArchive",
-        "summary": "Restores this organization from one of its backups.",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer bc_1234567890abcdef"
-            }
-          },
-          {
-            "name": "organization-id",
-            "in": "header",
-            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Organization backup"
         ]
       }
     },
@@ -24835,7 +24874,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Contact details (under \"customer\" key for form/duplicate use)"
+            "description": "Contact details (under \"customer\" key for form/duplicate use)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -24928,6 +24974,274 @@
         },
         "tags": [
           "Contacts"
+        ]
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "operationId": "NotificationsController_getNotifications",
+        "summary": "Retrieves the list of notifications for the current user.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of notifications per page",
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "Offset for pagination",
+            "schema": {
+              "example": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "unreadOnly",
+            "required": false,
+            "in": "query",
+            "description": "Filter to only unread notifications",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Filter by notification category",
+            "schema": {
+              "example": "inventory",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The notifications list has been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationsListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/notifications/unread-count": {
+      "get": {
+        "operationId": "NotificationsController_getUnreadCount",
+        "summary": "Gets the count of unread notifications for the current user.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The unread notifications count has been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnreadNotificationsCountResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/notifications/{id}/read": {
+      "post": {
+        "operationId": "NotificationsController_markAsRead",
+        "summary": "Marks a notification as read.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The notification id",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The notification has been successfully marked as read.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkNotificationAsReadResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/notifications/read-all": {
+      "post": {
+        "operationId": "NotificationsController_markAllAsRead",
+        "summary": "Marks all notifications as read for the current user.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All notifications have been successfully marked as read.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkAllNotificationsAsReadResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/notifications/{id}/delete": {
+      "post": {
+        "operationId": "NotificationsController_deleteNotification",
+        "summary": "Deletes a notification.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The notification id",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The notification has been successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteNotificationResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Notifications"
         ]
       }
     },
@@ -25088,6 +25402,198 @@
         },
         "tags": [
           "Audit logs"
+        ]
+      }
+    },
+    "/api/landed-cost/transactions": {
+      "get": {
+        "operationId": "BillAllocateLandedCostController_getLandedCostTransactions",
+        "summary": "Get landed cost transactions",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of landed cost transactions."
+          }
+        },
+        "tags": [
+          "Landed Cost"
+        ]
+      }
+    },
+    "/api/landed-cost/bills/{billId}/allocate": {
+      "post": {
+        "operationId": "BillAllocateLandedCostController_calculateLandedCost",
+        "summary": "Allocate landed cost to bill items",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "billId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AllocateBillLandedCostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Landed cost allocated successfully."
+          }
+        },
+        "tags": [
+          "Landed Cost"
+        ]
+      }
+    },
+    "/api/landed-cost/{allocatedLandedCostId}": {
+      "delete": {
+        "operationId": "BillAllocateLandedCostController_deleteAllocatedLandedCost",
+        "summary": "Delete allocated landed cost",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "allocatedLandedCostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Allocated landed cost deleted successfully."
+          }
+        },
+        "tags": [
+          "Landed Cost"
+        ]
+      }
+    },
+    "/api/landed-cost/bills/{billId}/transactions": {
+      "get": {
+        "operationId": "BillAllocateLandedCostController_getBillLandedCostTransactions",
+        "summary": "Get bill landed cost transactions",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer bc_1234567890abcdef"
+            }
+          },
+          {
+            "name": "organization-id",
+            "in": "header",
+            "description": "Required if Authorization is a JWT token. The organization ID to operate within.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "billId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of bill landed cost transactions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "billId": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/BillLandedCostTransactionDto"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Landed Cost"
         ]
       }
     },
@@ -25344,7 +25850,7 @@
           "key": {
             "type": "string",
             "example": "bc_1234567890abcdef",
-            "description": "The API key string"
+            "description": "The API key string. Returned only once when the key is created."
           }
         },
         "required": [
@@ -25387,7 +25893,7 @@
           "token": {
             "type": "string",
             "example": "bc_1234...",
-            "description": "First 8 characters of the API key token"
+            "description": "Masked API key prefix"
           },
           "createdAt": {
             "format": "date-time",
@@ -25943,35 +26449,6 @@
           "pagination"
         ]
       },
-      "ItemFieldValueResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1,
-            "description": "The value ID"
-          },
-          "categoryFieldId": {
-            "type": "number",
-            "example": 1,
-            "description": "The category field being answered"
-          },
-          "value": {
-            "type": "string",
-            "example": "محمود دولت‌آبادی",
-            "description": "The value"
-          },
-          "categoryField": {
-            "type": "object",
-            "description": "The field definition, so the value can be labelled"
-          }
-        },
-        "required": [
-          "id",
-          "categoryFieldId",
-          "value"
-        ]
-      },
       "ItemResponseDto": {
         "type": "object",
         "properties": {
@@ -26004,6 +26481,32 @@
             "type": "string",
             "description": "The item code/SKU",
             "example": "CHAIR-X2000"
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit of measure the item is measured in",
+            "enum": [
+              "piece",
+              "dozen",
+              "pair",
+              "set",
+              "pack",
+              "box",
+              "kg",
+              "g",
+              "lb",
+              "oz",
+              "l",
+              "ml",
+              "m",
+              "cm",
+              "m2",
+              "m3",
+              "hour",
+              "day"
+            ],
+            "default": "piece",
+            "example": "kg"
           },
           "sellable": {
             "type": "boolean",
@@ -26091,53 +26594,10 @@
             "description": "The quantity of the item in stock (for inventory items)",
             "example": 50
           },
-          "fieldValues": {
-            "description": "Values this item carries for its category's fields",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemFieldValueResponseDto"
-            }
-          },
-          "unitId": {
+          "reorderPoint": {
             "type": "number",
-            "description": "The ID of the unit the item is counted in",
-            "example": 1
-          },
-          "secondaryUnitId": {
-            "type": "number",
-            "description": "The ID of the second unit the item can also be read in",
-            "example": 2
-          },
-          "secondaryUnitFactor": {
-            "type": "number",
-            "description": "How many secondary units make one primary unit",
-            "example": 1000
-          },
-          "unitLabel": {
-            "type": "string",
-            "description": "What is written beside a quantity of this item",
-            "example": "kg"
-          },
-          "secondaryUnitLabel": {
-            "type": "string",
-            "description": "What is written beside a quantity in the item's second unit",
-            "example": "g"
-          },
-          "quantityOnHandFormatted": {
-            "type": "string",
-            "description": "The stock on hand, formatted and carrying its unit",
-            "example": "50 kg"
-          },
-          "secondaryQuantityOnHand": {
-            "type": "number",
-            "description": "The same stock read in the second unit, or null where the item has none",
-            "example": 50000,
-            "nullable": true
-          },
-          "secondaryQuantityOnHandFormatted": {
-            "type": "string",
-            "description": "The stock in the second unit, formatted and carrying that unit",
-            "example": "50,000 g"
+            "description": "The stock level at which the item should be reordered (for inventory items)",
+            "example": 10
           },
           "note": {
             "type": "string",
@@ -26189,35 +26649,13 @@
           "name",
           "type",
           "typeFormatted",
+          "unit",
           "sellable",
           "purchasable",
           "currencyCode",
-          "unitLabel",
-          "secondaryUnitLabel",
-          "quantityOnHandFormatted",
-          "secondaryQuantityOnHandFormatted",
           "active",
           "createdAt",
           "updatedAt"
-        ]
-      },
-      "ItemFieldValueDto": {
-        "type": "object",
-        "properties": {
-          "categoryFieldId": {
-            "type": "number",
-            "example": 1,
-            "description": "The category field being answered"
-          },
-          "value": {
-            "type": "string",
-            "example": "محمود دولت‌آبادی",
-            "description": "The value"
-          }
-        },
-        "required": [
-          "categoryFieldId",
-          "value"
         ]
       },
       "EditItemDto": {
@@ -26242,6 +26680,37 @@
             "type": "string",
             "description": "Item code/SKU",
             "example": "CHAIR-X2000"
+          },
+          "reorderPoint": {
+            "type": "number",
+            "description": "Stock level at which the item should be reordered (inventory items only)",
+            "minimum": 0,
+            "example": 10
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit of measure the item is measured in",
+            "enum": [
+              "piece",
+              "dozen",
+              "pair",
+              "set",
+              "pack",
+              "box",
+              "kg",
+              "g",
+              "lb",
+              "oz",
+              "l",
+              "ml",
+              "m",
+              "cm",
+              "m2",
+              "m3",
+              "hour",
+              "day"
+            ],
+            "example": "kg"
           },
           "purchasable": {
             "type": "boolean",
@@ -26309,21 +26778,6 @@
             "minimum": 0,
             "example": 5
           },
-          "unitId": {
-            "type": "number",
-            "description": "Unit every stored quantity of this item is counted in",
-            "example": 3
-          },
-          "secondaryUnitId": {
-            "type": "number",
-            "description": "A second unit the same quantity may be read in",
-            "example": 4
-          },
-          "secondaryUnitFactor": {
-            "type": "number",
-            "description": "How many secondary units make one primary unit — 1000 for gram against kilogram",
-            "example": 1000
-          },
           "note": {
             "type": "string",
             "description": "Additional notes about the item",
@@ -26345,13 +26799,6 @@
             "type": "array",
             "items": {
               "type": "number"
-            }
-          },
-          "fieldValues": {
-            "description": "Values for the fields this item's category defines",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemFieldValueDto"
             }
           }
         },
@@ -26408,6 +26855,37 @@
             "description": "Item code/SKU",
             "example": "CHAIR-X2000"
           },
+          "reorderPoint": {
+            "type": "number",
+            "description": "Stock level at which the item should be reordered (inventory items only)",
+            "minimum": 0,
+            "example": 10
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit of measure the item is measured in",
+            "enum": [
+              "piece",
+              "dozen",
+              "pair",
+              "set",
+              "pack",
+              "box",
+              "kg",
+              "g",
+              "lb",
+              "oz",
+              "l",
+              "ml",
+              "m",
+              "cm",
+              "m2",
+              "m3",
+              "hour",
+              "day"
+            ],
+            "example": "kg"
+          },
           "purchasable": {
             "type": "boolean",
             "description": "Whether the item can be purchased",
@@ -26474,21 +26952,6 @@
             "minimum": 0,
             "example": 5
           },
-          "unitId": {
-            "type": "number",
-            "description": "Unit every stored quantity of this item is counted in",
-            "example": 3
-          },
-          "secondaryUnitId": {
-            "type": "number",
-            "description": "A second unit the same quantity may be read in",
-            "example": 4
-          },
-          "secondaryUnitFactor": {
-            "type": "number",
-            "description": "How many secondary units make one primary unit — 1000 for gram against kilogram",
-            "example": 1000
-          },
           "note": {
             "type": "string",
             "description": "Additional notes about the item",
@@ -26510,13 +26973,6 @@
             "type": "array",
             "items": {
               "type": "number"
-            }
-          },
-          "fieldValues": {
-            "description": "Values for the fields this item's category defines",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemFieldValueDto"
             }
           }
         },
@@ -26677,7 +27133,7 @@
           "publishedAt": {
             "type": "string",
             "description": "The date when the adjustment was published",
-            "example": "2024-03-20T10:00:00Z"
+            "example": "2024-03-20"
           },
           "isPublished": {
             "type": "boolean",
@@ -26764,6 +27220,76 @@
         ]
       },
       "CreateQuickInventoryAdjustmentDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date of the inventory adjustment"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of adjustment",
+            "enum": [
+              "increment",
+              "decrement"
+            ]
+          },
+          "adjustmentAccountId": {
+            "type": "number",
+            "description": "ID of the adjustment account"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Reason for the adjustment"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the adjustment"
+          },
+          "referenceNo": {
+            "type": "string",
+            "description": "Reference number"
+          },
+          "itemId": {
+            "type": "number",
+            "description": "ID of the item being adjusted"
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Quantity to adjust"
+          },
+          "cost": {
+            "type": "number",
+            "description": "Cost of the item"
+          },
+          "publish": {
+            "type": "boolean",
+            "description": "Whether to publish the adjustment immediately"
+          },
+          "warehouseId": {
+            "type": "number",
+            "description": "ID of the warehouse (optional)"
+          },
+          "branchId": {
+            "type": "number",
+            "description": "ID of the branch (optional)"
+          }
+        },
+        "required": [
+          "date",
+          "type",
+          "adjustmentAccountId",
+          "reason",
+          "description",
+          "referenceNo",
+          "itemId",
+          "quantity",
+          "cost",
+          "publish"
+        ]
+      },
+      "EditQuickInventoryAdjustmentDto": {
         "type": "object",
         "properties": {
           "date": {
@@ -28165,7 +28691,7 @@
           "openingBalanceAt": {
             "format": "date-time",
             "type": "string",
-            "example": "2024-01-01T00:00:00Z"
+            "example": "2024-01-01"
           },
           "openingBalanceExchangeRate": {
             "type": "number",
@@ -28330,13 +28856,13 @@
             "format": "date-time",
             "type": "string",
             "description": "The date of the invoice",
-            "example": "2023-01-01T00:00:00Z"
+            "example": "2023-01-01"
           },
           "dueDate": {
             "format": "date-time",
             "type": "string",
             "description": "The due date of the invoice",
-            "example": "2023-01-15T00:00:00Z"
+            "example": "2023-01-15"
           },
           "invoiceNo": {
             "type": "string",
@@ -28396,7 +28922,7 @@
             "format": "date-time",
             "type": "string",
             "description": "The date when the invoice was delivered",
-            "example": "2023-01-02T00:00:00Z"
+            "example": "2023-01-02"
           },
           "warehouseId": {
             "type": "number",
@@ -28691,13 +29217,13 @@
             "format": "date-time",
             "type": "string",
             "description": "Invoice date",
-            "example": "2023-01-01T00:00:00Z"
+            "example": "2023-01-01"
           },
           "dueDate": {
             "format": "date-time",
             "type": "string",
             "description": "Due date",
-            "example": "2023-01-15T00:00:00Z"
+            "example": "2023-01-15"
           },
           "invoiceNo": {
             "type": "string",
@@ -28827,13 +29353,13 @@
             "format": "date-time",
             "type": "string",
             "description": "Invoice date",
-            "example": "2023-01-01T00:00:00Z"
+            "example": "2023-01-01"
           },
           "dueDate": {
             "format": "date-time",
             "type": "string",
             "description": "Due date",
-            "example": "2023-01-15T00:00:00Z"
+            "example": "2023-01-15"
           },
           "invoiceNo": {
             "type": "string",
@@ -28971,6 +29497,25 @@
               "reminder"
             ],
             "deprecated": true
+          }
+        }
+      },
+      "GenerateSaleInvoiceSharableLinkDto": {
+        "type": "object",
+        "properties": {
+          "publicity": {
+            "type": "string",
+            "description": "Determines whether the link is accessible by anyone.",
+            "enum": [
+              "public",
+              "private"
+            ],
+            "default": "private"
+          },
+          "expiryTime": {
+            "type": "string",
+            "description": "The date the shared link expires at the end of the day.",
+            "example": "2026-11-07"
           }
         }
       },
@@ -29533,7 +30078,7 @@
           "paymentDate": {
             "type": "object",
             "description": "The date of the payment",
-            "example": "2023-01-01T00:00:00Z"
+            "example": "2023-01-01"
           },
           "formattedPaymentDate": {
             "type": "string",
@@ -30668,37 +31213,6 @@
           "nonDeletableIds"
         ]
       },
-      "ItemCategoryFieldResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1,
-            "description": "The field ID"
-          },
-          "categoryId": {
-            "type": "number",
-            "example": 1,
-            "description": "The category that defines it"
-          },
-          "name": {
-            "type": "string",
-            "example": "نویسنده",
-            "description": "The field label"
-          },
-          "index": {
-            "type": "number",
-            "example": 0,
-            "description": "The order it is shown in"
-          }
-        },
-        "required": [
-          "id",
-          "categoryId",
-          "name",
-          "index"
-        ]
-      },
       "ItemCategoryResponseDto": {
         "type": "object",
         "properties": {
@@ -30737,13 +31251,6 @@
             "example": "FIFO",
             "description": "The cost method"
           },
-          "fields": {
-            "description": "The extra fields items in this category fill in",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemCategoryFieldResponseDto"
-            }
-          },
           "userId": {
             "type": "number",
             "example": 1,
@@ -30774,25 +31281,6 @@
           "createdAt",
           "updatedAt",
           "count"
-        ]
-      },
-      "ItemCategoryFieldDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1,
-            "description": "The field ID, when it already exists"
-          },
-          "name": {
-            "type": "string",
-            "example": "نویسنده",
-            "description": "The field label"
-          }
-        },
-        "required": [
-          "id",
-          "name"
         ]
       },
       "CreateItemCategoryDto": {
@@ -30827,13 +31315,6 @@
             "type": "string",
             "example": "FIFO",
             "description": "The cost method"
-          },
-          "fields": {
-            "description": "The extra fields items in this category fill in",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemCategoryFieldDto"
-            }
           }
         },
         "required": [
@@ -30877,13 +31358,6 @@
             "type": "string",
             "example": "FIFO",
             "description": "The cost method"
-          },
-          "fields": {
-            "description": "The extra fields items in this category fill in",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemCategoryFieldDto"
-            }
           }
         },
         "required": [
@@ -30918,54 +31392,6 @@
         },
         "required": [
           "ids"
-        ]
-      },
-      "CreateItemUnitDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Unit name",
-            "example": "Kilogram"
-          },
-          "symbol": {
-            "type": "string",
-            "description": "Short form written beside a quantity",
-            "example": "kg"
-          },
-          "active": {
-            "type": "boolean",
-            "description": "Whether the unit may be chosen",
-            "default": true
-          }
-        },
-        "required": [
-          "name",
-          "active"
-        ]
-      },
-      "EditItemUnitDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Unit name",
-            "example": "Kilogram"
-          },
-          "symbol": {
-            "type": "string",
-            "description": "Short form written beside a quantity",
-            "example": "kg"
-          },
-          "active": {
-            "type": "boolean",
-            "description": "Whether the unit may be chosen",
-            "default": true
-          }
-        },
-        "required": [
-          "name",
-          "active"
         ]
       },
       "ExpenseCategoryResponseDto": {
@@ -31070,7 +31496,7 @@
           "publishedAt": {
             "format": "date-time",
             "type": "string",
-            "example": "2024-03-20T10:00:00Z",
+            "example": "2024-03-20",
             "description": "The date when the expense was published"
           },
           "userId": {
@@ -31081,7 +31507,7 @@
           "paymentDate": {
             "format": "date-time",
             "type": "string",
-            "example": "2024-03-20T10:00:00Z",
+            "example": "2024-03-20",
             "description": "The payment date of the expense"
           },
           "payeeId": {
@@ -31407,6 +31833,220 @@
           "attachments"
         ]
       },
+      "TrackingCategoryOptionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Option ID",
+            "example": 1
+          },
+          "categoryId": {
+            "type": "number",
+            "description": "Tracking category ID",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Option name",
+            "example": "North Store"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the option is active",
+            "example": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Created date"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Updated date"
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "name",
+          "active"
+        ]
+      },
+      "TrackingCategoryResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Tracking category ID",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Category name",
+            "example": "Location"
+          },
+          "description": {
+            "type": "string",
+            "description": "Category description",
+            "example": "Tracks the business location of transactions"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the category is active",
+            "example": true
+          },
+          "modules": {
+            "type": "array",
+            "description": "Modules where the tracking category is available",
+            "items": {
+              "type": "string",
+              "enum": [
+                "manual_journals",
+                "sale_invoices",
+                "sale_estimates"
+              ]
+            }
+          },
+          "options": {
+            "description": "Tracking options",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrackingCategoryOptionResponseDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Created date"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Updated date"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "active",
+          "modules",
+          "options"
+        ]
+      },
+      "TrackingCategoryOptionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Option ID (only provided when updating an existing option)",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Option name",
+            "example": "North Store"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the option is active",
+            "example": true
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CreateTrackingCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Category name",
+            "example": "Location"
+          },
+          "description": {
+            "type": "string",
+            "description": "Category description",
+            "example": "Tracks the business location of transactions"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the category is active",
+            "example": true
+          },
+          "modules": {
+            "type": "array",
+            "description": "Modules where the tracking category is available",
+            "example": [
+              "sale_invoices",
+              "sale_estimates"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "manual_journals",
+                "sale_invoices",
+                "sale_estimates"
+              ]
+            }
+          },
+          "options": {
+            "description": "Tracking options",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrackingCategoryOptionDto"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "EditTrackingCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Category name",
+            "example": "Location"
+          },
+          "description": {
+            "type": "string",
+            "description": "Category description",
+            "example": "Tracks the business location of transactions"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the category is active",
+            "example": true
+          },
+          "modules": {
+            "type": "array",
+            "description": "Modules where the tracking category is available",
+            "example": [
+              "sale_invoices",
+              "sale_estimates"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "manual_journals",
+                "sale_invoices",
+                "sale_estimates"
+              ]
+            }
+          },
+          "options": {
+            "description": "Tracking options",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrackingCategoryOptionDto"
+            }
+          }
+        }
+      },
       "WarehouseTransferEntryResponseDto": {
         "type": "object",
         "properties": {
@@ -31505,13 +32145,13 @@
             "format": "date-time",
             "type": "string",
             "description": "The date when the transfer was initiated",
-            "example": "2024-03-20T10:00:00Z"
+            "example": "2024-03-20"
           },
           "transferDeliveredAt": {
             "format": "date-time",
             "type": "string",
             "description": "The date when the transfer was delivered",
-            "example": "2024-03-21T15:00:00Z"
+            "example": "2024-03-21"
           },
           "isInitiated": {
             "type": "boolean",
@@ -32136,7 +32776,7 @@
           "openingBalanceAt": {
             "format": "date-time",
             "type": "string",
-            "example": "2024-01-01T00:00:00Z"
+            "example": "2024-01-01"
           },
           "openingBalanceExchangeRate": {
             "type": "number",
@@ -33475,7 +34115,7 @@
             "format": "date-time",
             "type": "string",
             "description": "The date of the sale receipt",
-            "example": "2024-01-01T00:00:00Z"
+            "example": "2024-01-01"
           },
           "receiptNumber": {
             "type": "string",
@@ -33546,7 +34186,7 @@
           "closedAt": {
             "type": "object",
             "description": "The date when the receipt was closed",
-            "example": "2024-01-02T00:00:00Z"
+            "example": "2024-01-02"
           },
           "warehouseId": {
             "type": "number",
@@ -34091,13 +34731,13 @@
             "format": "date-time",
             "type": "string",
             "description": "The date the bill was issued",
-            "example": "2024-03-15T00:00:00Z"
+            "example": "2024-03-15"
           },
           "dueDate": {
             "format": "date-time",
             "type": "string",
             "description": "The due date of the bill",
-            "example": "2024-04-15T00:00:00Z"
+            "example": "2024-04-15"
           },
           "referenceNo": {
             "type": "string",
@@ -34755,97 +35395,96 @@
           "entries"
         ]
       },
-      "BillLandedCostTransactionDto": {
+      "TrackingCategorySummaryResponseDto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "number",
-            "description": "The unique identifier of the landed cost transaction",
-            "example": 1
-          },
-          "billId": {
-            "type": "number",
-            "description": "The bill id the landed cost is allocated to",
-            "example": 10
-          },
-          "fromTransactionId": {
-            "type": "number",
-            "description": "The id of the source transaction the cost was allocated from",
-            "example": 5
-          },
-          "fromTransactionType": {
-            "type": "string",
-            "description": "The type of the source transaction (Bill or Expense)",
-            "example": "Expense"
-          },
-          "fromTransactionEntryId": {
-            "type": "number",
-            "description": "The entry id of the source transaction",
-            "example": 2
-          },
-          "allocationMethod": {
-            "type": "string",
-            "description": "The allocation method used to distribute the cost",
-            "example": "quantity"
-          },
-          "allocationMethodFormatted": {
-            "type": "string",
-            "description": "The translated label of the allocation method",
-            "example": "Quantity"
-          },
-          "costAccountId": {
-            "type": "number",
-            "description": "The cost account id the landed cost is posted to",
-            "example": 1020
-          },
-          "description": {
-            "type": "string",
-            "description": "The description of the landed cost transaction",
-            "example": "Freight charges"
-          },
-          "amount": {
-            "type": "number",
-            "description": "The allocated landed cost amount",
-            "example": 150
-          },
-          "localAmount": {
-            "type": "number",
-            "description": "The allocated landed cost amount in the base currency",
-            "example": 150
-          },
-          "currencyCode": {
-            "type": "string",
-            "description": "The currency code of the landed cost transaction",
-            "example": "USD"
-          },
-          "exchangeRate": {
-            "type": "number",
-            "description": "The exchange rate applied to the amount",
+            "description": "Tracking category ID",
             "example": 1
           },
           "name": {
             "type": "string",
-            "description": "The resolved name of the source item or expense account",
-            "example": "Widget A"
+            "description": "Category name",
+            "example": "Location"
           },
-          "formattedAmount": {
-            "type": "string",
-            "description": "Formatted allocated amount",
-            "example": "$150.00"
-          },
-          "formattedLocalAmount": {
-            "type": "string",
-            "description": "Formatted allocated amount in the base currency",
-            "example": "$150.00"
+          "active": {
+            "type": "boolean",
+            "description": "Whether the category is active",
+            "example": true
           }
         },
         "required": [
-          "id"
+          "id",
+          "name",
+          "active"
         ]
       },
-      "AllocateBillLandedCostDto": {
+      "TrackingCategoryOptionSummaryResponseDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Option ID",
+            "example": 1
+          },
+          "categoryId": {
+            "type": "number",
+            "description": "Tracking category ID",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Option name",
+            "example": "North Store"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the option is active",
+            "example": true
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "name",
+          "active"
+        ]
+      },
+      "ManualJournalEntryTrackingCategoryResponseDto": {
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "number",
+            "description": "Tracking category ID",
+            "example": 1
+          },
+          "optionId": {
+            "type": "number",
+            "description": "Tracking category option ID",
+            "example": 2
+          },
+          "category": {
+            "description": "Tracking category details",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TrackingCategorySummaryResponseDto"
+              }
+            ]
+          },
+          "option": {
+            "description": "Tracking category option details",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TrackingCategoryOptionSummaryResponseDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "categoryId",
+          "optionId"
+        ]
       },
       "ManualJournalEntryResponseDto": {
         "type": "object",
@@ -34901,6 +35540,13 @@
           "branch": {
             "type": "object",
             "description": "Branch details"
+          },
+          "trackingCategories": {
+            "description": "Tracking category assignments",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManualJournalEntryTrackingCategoryResponseDto"
+            }
           }
         },
         "required": [
@@ -34931,6 +35577,16 @@
             "type": "string",
             "description": "Journal type",
             "example": "General"
+          },
+          "basis": {
+            "type": "string",
+            "description": "Accounting basis of the journal entries; null means general, which appears in both cash and accrual reports",
+            "enum": [
+              "cash",
+              "accrual"
+            ],
+            "nullable": true,
+            "example": "accrual"
           },
           "reference": {
             "type": "string",
@@ -34966,7 +35622,7 @@
             "format": "date-time",
             "type": "string",
             "description": "Published date",
-            "example": "2024-03-20T10:00:00Z"
+            "example": "2024-03-20"
           },
           "createdAt": {
             "format": "date-time",
@@ -35033,6 +35689,25 @@
           "entries"
         ]
       },
+      "TrackingCategoryAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "number",
+            "description": "Tracking category ID",
+            "example": 1
+          },
+          "optionId": {
+            "type": "number",
+            "description": "Tracking category option ID",
+            "example": 2
+          }
+        },
+        "required": [
+          "categoryId",
+          "optionId"
+        ]
+      },
       "ManualJournalEntryDto": {
         "type": "object",
         "properties": {
@@ -35067,6 +35742,13 @@
           "projectId": {
             "type": "number",
             "description": "Project ID"
+          },
+          "trackingCategories": {
+            "description": "Tracking category assignments of the entry",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrackingCategoryAssignmentDto"
+            }
           }
         },
         "required": [
@@ -35097,6 +35779,15 @@
           "journalType": {
             "type": "string",
             "description": "Journal type"
+          },
+          "basis": {
+            "type": "string",
+            "description": "Accounting basis of the journal entries; null means general, which appears in both cash and accrual reports",
+            "enum": [
+              "cash",
+              "accrual"
+            ],
+            "nullable": true
           },
           "reference": {
             "type": "string",
@@ -35158,6 +35849,15 @@
             "type": "string",
             "description": "Journal type"
           },
+          "basis": {
+            "type": "string",
+            "description": "Accounting basis of the journal entries; null means general, which appears in both cash and accrual reports",
+            "enum": [
+              "cash",
+              "accrual"
+            ],
+            "nullable": true
+          },
           "reference": {
             "type": "string",
             "description": "Reference"
@@ -35194,6 +35894,190 @@
           "entries"
         ]
       },
+      "CreditNoteHtmlContentResponseDto": {
+        "type": "object",
+        "properties": {
+          "htmlContent": {
+            "type": "string",
+            "description": "The HTML content of the credit note",
+            "example": "<html>...</html>"
+          }
+        },
+        "required": [
+          "htmlContent"
+        ]
+      },
+      "CreditNoteEntryMailDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "unitPriceFormatted": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          },
+          "totalFormatted": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "quantity",
+          "unitPrice",
+          "unitPriceFormatted",
+          "total",
+          "totalFormatted"
+        ]
+      },
+      "CreditNoteMailStateResponseDto": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "formatArgs": {
+            "type": "object"
+          },
+          "toOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddressItemDto"
+            }
+          },
+          "fromOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddressItemDto"
+            }
+          },
+          "attachPdf": {
+            "type": "boolean"
+          },
+          "creditNoteDate": {
+            "type": "string"
+          },
+          "creditNoteDateFormatted": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          },
+          "totalFormatted": {
+            "type": "string"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "subtotalFormatted": {
+            "type": "string"
+          },
+          "discountAmount": {
+            "type": "number"
+          },
+          "discountAmountFormatted": {
+            "type": "string"
+          },
+          "discountPercentage": {
+            "type": "number"
+          },
+          "discountPercentageFormatted": {
+            "type": "string"
+          },
+          "discountLabel": {
+            "type": "string"
+          },
+          "adjustment": {
+            "type": "number"
+          },
+          "adjustmentFormatted": {
+            "type": "string"
+          },
+          "creditNoteNumber": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditNoteEntryMailDto"
+            }
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "companyLogoUri": {
+            "type": "string"
+          },
+          "primaryColor": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "subject",
+          "message",
+          "toOptions",
+          "fromOptions",
+          "creditNoteDate",
+          "creditNoteDateFormatted",
+          "total",
+          "totalFormatted",
+          "subtotal",
+          "subtotalFormatted",
+          "discountAmount",
+          "discountAmountFormatted",
+          "discountPercentage",
+          "discountPercentageFormatted",
+          "discountLabel",
+          "adjustment",
+          "adjustmentFormatted",
+          "creditNoteNumber",
+          "entries",
+          "companyName",
+          "companyLogoUri",
+          "primaryColor",
+          "customerName"
+        ]
+      },
       "CreditNoteResponseDto": {
         "type": "object",
         "properties": {
@@ -35206,7 +36090,7 @@
             "format": "date-time",
             "type": "string",
             "description": "The date of the credit note",
-            "example": "2023-01-01T00:00:00Z"
+            "example": "2023-01-01"
           },
           "creditNoteNumber": {
             "type": "string",
@@ -35760,7 +36644,7 @@
             "type": "number",
             "example": 250
           },
-          "formttedAmount": {
+          "formattedAmount": {
             "type": "string",
             "example": "$250.00"
           },
@@ -35786,7 +36670,7 @@
           "date",
           "formattedDate",
           "amount",
-          "formttedAmount",
+          "formattedAmount",
           "fromAccount",
           "creditNote"
         ]
@@ -36026,7 +36910,7 @@
             "format": "date-time",
             "type": "string",
             "description": "The date of the vendor credit",
-            "example": "2024-03-15T00:00:00Z"
+            "example": "2024-03-15"
           },
           "referenceNo": {
             "type": "string",
@@ -36062,7 +36946,7 @@
             "format": "date-time",
             "type": "string",
             "description": "The date the vendor credit was opened",
-            "example": "2024-03-15T00:00:00Z"
+            "example": "2024-03-15"
           },
           "userId": {
             "type": "number",
@@ -36558,7 +37442,7 @@
             "format": "date-time",
             "type": "string",
             "description": "The vendor credit date",
-            "example": "2024-03-15T00:00:00Z"
+            "example": "2024-03-15"
           },
           "formattedVendorCreditDate": {
             "type": "string",
@@ -37145,6 +38029,23 @@
           "attachments"
         ]
       },
+      "RefundVendorCreditSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1001
+          },
+          "vendorCreditNumber": {
+            "type": "string",
+            "example": "VC-0001"
+          }
+        },
+        "required": [
+          "id",
+          "vendorCreditNumber"
+        ]
+      },
       "RefundVendorCreditResponseDto": {
         "type": "object",
         "properties": {
@@ -37197,13 +38098,21 @@
             "format": "date-time",
             "type": "string",
             "description": "The date of the refund",
-            "example": "2024-03-15T00:00:00Z"
+            "example": "2024-03-15"
           },
           "depositAccount": {
             "description": "The deposit account the refund was paid into",
             "allOf": [
               {
                 "$ref": "#/components/schemas/AccountResponseDto"
+              }
+            ]
+          },
+          "vendorCredit": {
+            "description": "The vendor credit being refunded",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RefundVendorCreditSummaryDto"
               }
             ]
           },
@@ -37239,6 +38148,7 @@
           "referenceNo",
           "depositAccountId",
           "date",
+          "vendorCredit",
           "createdAt"
         ]
       },
@@ -37508,7 +38418,7 @@
             "format": "date-time",
             "type": "string",
             "description": "The date of the bank transaction",
-            "example": "2023-01-01T00:00:00.000Z"
+            "example": "2023-01-01"
           },
           "creditAccountId": {
             "type": "number",
@@ -37643,7 +38553,7 @@
             "format": "date-time",
             "type": "string",
             "description": "Transaction date",
-            "example": "2024-03-20T10:30:00Z"
+            "example": "2024-03-20"
           },
           "formattedDate": {
             "type": "string",
@@ -37687,6 +38597,163 @@
           "uncategorizedTransactionId"
         ]
       },
+      "BankTransactionDetailContactDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "displayName": {
+            "type": "string",
+            "example": "John Doe"
+          }
+        },
+        "required": [
+          "id",
+          "displayName"
+        ]
+      },
+      "BankTransactionDetailEntryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "credit": {
+            "type": "number",
+            "example": 100
+          },
+          "debit": {
+            "type": "number",
+            "example": 0
+          },
+          "account": {
+            "$ref": "#/components/schemas/AccountResponseDto"
+          },
+          "contact": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BankTransactionDetailContactDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "credit",
+          "debit",
+          "account"
+        ]
+      },
+      "BankTransactionDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "transactionType": {
+            "type": "string",
+            "example": "deposit"
+          },
+          "transactionTypeFormatted": {
+            "type": "string",
+            "example": "Deposit"
+          },
+          "amount": {
+            "type": "number",
+            "example": 1000
+          },
+          "formattedAmount": {
+            "type": "string",
+            "example": "$1,000.00"
+          },
+          "currencyCode": {
+            "type": "string",
+            "example": "USD"
+          },
+          "exchangeRate": {
+            "type": "number",
+            "example": 1
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15"
+          },
+          "formattedDate": {
+            "type": "string",
+            "example": "2024-01-15"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T00:00:00Z"
+          },
+          "formattedCreatedAt": {
+            "type": "string",
+            "example": "2024-01-15"
+          },
+          "transactionNumber": {
+            "type": "string",
+            "example": "TRX-2024-001"
+          },
+          "referenceNo": {
+            "type": "string",
+            "example": "REF-001",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Transaction statement",
+            "nullable": true
+          },
+          "uncategorizedTransactionId": {
+            "type": "number",
+            "example": 12,
+            "nullable": true
+          },
+          "cashflowAccountId": {
+            "type": "number",
+            "example": 5
+          },
+          "creditAccountId": {
+            "type": "number",
+            "example": 6
+          },
+          "branchId": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BankTransactionDetailEntryDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "transactionType",
+          "transactionTypeFormatted",
+          "amount",
+          "formattedAmount",
+          "currencyCode",
+          "exchangeRate",
+          "date",
+          "formattedDate",
+          "createdAt",
+          "formattedCreatedAt",
+          "transactionNumber",
+          "cashflowAccountId",
+          "creditAccountId",
+          "transactions"
+        ]
+      },
       "NumberFormatQueryDto": {
         "type": "object",
         "properties": {
@@ -37704,6 +38771,11 @@
             "type": "boolean",
             "description": "Whether to show zero values",
             "example": true
+          },
+          "showInRed": {
+            "type": "boolean",
+            "description": "Whether to show negative amounts in red",
+            "example": false
           },
           "formatMoney": {
             "type": "string",
@@ -37733,7 +38805,7 @@
             "format": "date-time",
             "type": "string",
             "description": "The date of the bank transaction",
-            "example": "2023-01-01T00:00:00.000Z"
+            "example": "2023-01-01"
           },
           "transactionNumber": {
             "type": "string",
@@ -39017,6 +40089,30 @@
           "previousYearPercentageChange": {
             "type": "boolean",
             "description": "Show previous year percentage change"
+          },
+          "columnSortBy": {
+            "type": "string",
+            "description": "Column the accounts are sorted by",
+            "enum": [
+              "name",
+              "total",
+              "previous_period",
+              "previous_period_change",
+              "previous_period_percentage",
+              "previous_year",
+              "previous_year_change",
+              "previous_year_percentage",
+              "percentage_of_column",
+              "percentage_of_row"
+            ]
+          },
+          "sortOrder": {
+            "type": "string",
+            "description": "Sort order of the accounts",
+            "enum": [
+              "asc",
+              "desc"
+            ]
           }
         },
         "required": [
@@ -39645,7 +40741,6 @@
             "enum": [
               "item_name",
               "quantity_purchases",
-              "secondary_quantity_purchases",
               "purchase_amount",
               "average_cost"
             ]
@@ -40432,7 +41527,6 @@
             "enum": [
               "item_name",
               "sold_quantity",
-              "secondary_sold_quantity",
               "sold_amount",
               "average_price"
             ]
@@ -40959,6 +42053,24 @@
               {
                 "$ref": "#/components/schemas/NumberFormatQueryDto"
               }
+            ]
+          },
+          "columnSortBy": {
+            "type": "string",
+            "description": "Column the accounts are sorted by",
+            "enum": [
+              "account",
+              "debit",
+              "credit",
+              "total"
+            ]
+          },
+          "sortOrder": {
+            "type": "string",
+            "description": "Sort order of the accounts",
+            "enum": [
+              "asc",
+              "desc"
             ]
           }
         },
@@ -41892,6 +43004,15 @@
           "accountId": {
             "type": "number",
             "description": "Account ID"
+          },
+          "basis": {
+            "type": "string",
+            "description": "Accounting basis of the entry; null means general",
+            "enum": [
+              "cash",
+              "accrual"
+            ],
+            "nullable": true
           }
         },
         "required": [
@@ -41906,7 +43027,8 @@
           "referenceId",
           "accountName",
           "accountCode",
-          "accountId"
+          "accountId",
+          "basis"
         ]
       },
       "TransactionsByReferenceResponseDto": {
@@ -43084,7 +44206,6 @@
             "enum": [
               "item_name",
               "quantity",
-              "secondary_quantity",
               "valuation",
               "average"
             ]
@@ -43425,6 +44546,14 @@
             "type": "string",
             "description": "End date"
           },
+          "basis": {
+            "type": "string",
+            "description": "Accounting basis",
+            "enum": [
+              "cash",
+              "accrual"
+            ]
+          },
           "fromRange": {
             "type": "number",
             "description": "From range"
@@ -43452,6 +44581,7 @@
         "required": [
           "fromDate",
           "toDate",
+          "basis",
           "accountsIds",
           "numberFormat"
         ]
@@ -43848,6 +44978,32 @@
           "previousYearPercentageChange": {
             "type": "boolean",
             "description": "Show previous year percentage change"
+          },
+          "columnSortBy": {
+            "type": "string",
+            "description": "Column the accounts are sorted by",
+            "enum": [
+              "name",
+              "total",
+              "previous_period",
+              "previous_period_change",
+              "previous_period_percentage",
+              "previous_year",
+              "previous_year_change",
+              "previous_year_percentage",
+              "percentage_income",
+              "percentage_expenses",
+              "percentage_column",
+              "percentage_row"
+            ]
+          },
+          "sortOrder": {
+            "type": "string",
+            "description": "Sort order of the accounts",
+            "enum": [
+              "asc",
+              "desc"
+            ]
           }
         },
         "required": [
@@ -46224,6 +47380,367 @@
           "contactService"
         ]
       },
+      "ContactResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "contactService": {
+            "type": "string",
+            "example": "customer",
+            "enum": [
+              "customer",
+              "vendor"
+            ]
+          },
+          "contactType": {
+            "type": "string",
+            "example": "customer",
+            "enum": [
+              "customer",
+              "vendor"
+            ]
+          },
+          "displayName": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "balance": {
+            "type": "number",
+            "example": 250.5
+          },
+          "currencyCode": {
+            "type": "string",
+            "example": "USD"
+          },
+          "openingBalance": {
+            "type": "number",
+            "example": 250.5,
+            "nullable": true
+          },
+          "openingBalanceAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15",
+            "nullable": true
+          },
+          "salutation": {
+            "type": "string",
+            "example": "Mr.",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "example": "Acme Inc.",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "john@acme.com",
+            "nullable": true
+          },
+          "workPhone": {
+            "type": "string",
+            "example": "+1 555 0100",
+            "nullable": true
+          },
+          "personalPhone": {
+            "type": "string",
+            "example": "+1 555 0101",
+            "nullable": true
+          },
+          "website": {
+            "type": "string",
+            "example": "https://acme.com",
+            "nullable": true
+          },
+          "billingAddress1": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingAddress2": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingAddressCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingAddressCountry": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingAddressEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingAddressPostcode": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingAddressPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "billingAddressState": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddress1": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddress2": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddressCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddressCountry": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddressEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddressPostcode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddressPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddressState": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "example": "Internal note",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          },
+          "formattedContactService": {
+            "type": "string",
+            "example": "Customer"
+          },
+          "contactNormal": {
+            "type": "string",
+            "example": "debit",
+            "nullable": true
+          },
+          "closingBalance": {
+            "type": "number",
+            "example": 250.5
+          },
+          "formattedBalance": {
+            "type": "string",
+            "example": "$250.50"
+          },
+          "formattedOpeningBalance": {
+            "type": "string",
+            "example": "$250.50"
+          },
+          "formattedOpeningBalanceAt": {
+            "type": "string",
+            "example": "2024-01-15"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T00:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T00:00:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "contactService",
+          "contactType",
+          "displayName",
+          "balance",
+          "currencyCode",
+          "active"
+        ]
+      },
+      "NotificationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "userId": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "example": "Inventory cost calculation completed"
+          },
+          "message": {
+            "type": "string",
+            "example": "The inventory cost for 12 items has been calculated."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "success",
+              "info",
+              "warning",
+              "error"
+            ],
+            "example": "info"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "inventory",
+              "billing",
+              "system",
+              "export",
+              "report"
+            ],
+            "example": "inventory"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional notification metadata",
+            "additionalProperties": true,
+            "example": {
+              "itemId": 1
+            },
+            "nullable": true
+          },
+          "readAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date the notification was read",
+            "example": "2024-03-20T10:00:00Z",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-03-20T10:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-03-20T10:00:00Z"
+          },
+          "isRead": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "message",
+          "type",
+          "category",
+          "createdAt",
+          "updatedAt",
+          "isRead"
+        ]
+      },
+      "NotificationsListResponseDto": {
+        "type": "object",
+        "properties": {
+          "notifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationResponseDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "example": 25
+          },
+          "unreadCount": {
+            "type": "number",
+            "example": 3
+          }
+        },
+        "required": [
+          "notifications",
+          "total",
+          "unreadCount"
+        ]
+      },
+      "UnreadNotificationsCountResponseDto": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "number",
+            "example": 3
+          }
+        },
+        "required": [
+          "count"
+        ]
+      },
+      "MarkNotificationAsReadResponseDto": {
+        "type": "object",
+        "properties": {
+          "notification": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NotificationResponseDto"
+              }
+            ]
+          }
+        }
+      },
+      "MarkAllNotificationsAsReadResponseDto": {
+        "type": "object",
+        "properties": {
+          "markedAsRead": {
+            "type": "number",
+            "example": 3
+          }
+        },
+        "required": [
+          "markedAsRead"
+        ]
+      },
+      "DeleteNotificationResponseDto": {
+        "type": "object",
+        "properties": {
+          "deleted": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "deleted"
+        ]
+      },
       "AuditLogFilterOptionDto": {
         "type": "object",
         "properties": {
@@ -46370,6 +47887,98 @@
           "data",
           "pagination"
         ]
+      },
+      "BillLandedCostTransactionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "The unique identifier of the landed cost transaction",
+            "example": 1
+          },
+          "billId": {
+            "type": "number",
+            "description": "The bill id the landed cost is allocated to",
+            "example": 10
+          },
+          "fromTransactionId": {
+            "type": "number",
+            "description": "The id of the source transaction the cost was allocated from",
+            "example": 5
+          },
+          "fromTransactionType": {
+            "type": "string",
+            "description": "The type of the source transaction (Bill or Expense)",
+            "example": "Expense"
+          },
+          "fromTransactionEntryId": {
+            "type": "number",
+            "description": "The entry id of the source transaction",
+            "example": 2
+          },
+          "allocationMethod": {
+            "type": "string",
+            "description": "The allocation method used to distribute the cost",
+            "example": "quantity"
+          },
+          "allocationMethodFormatted": {
+            "type": "string",
+            "description": "The translated label of the allocation method",
+            "example": "Quantity"
+          },
+          "costAccountId": {
+            "type": "number",
+            "description": "The cost account id the landed cost is posted to",
+            "example": 1020
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the landed cost transaction",
+            "example": "Freight charges"
+          },
+          "amount": {
+            "type": "number",
+            "description": "The allocated landed cost amount",
+            "example": 150
+          },
+          "localAmount": {
+            "type": "number",
+            "description": "The allocated landed cost amount in the base currency",
+            "example": 150
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "The currency code of the landed cost transaction",
+            "example": "USD"
+          },
+          "exchangeRate": {
+            "type": "number",
+            "description": "The exchange rate applied to the amount",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "The resolved name of the source item or expense account",
+            "example": "Widget A"
+          },
+          "formattedAmount": {
+            "type": "string",
+            "description": "Formatted allocated amount",
+            "example": "$150.00"
+          },
+          "formattedLocalAmount": {
+            "type": "string",
+            "description": "Formatted allocated amount in the base currency",
+            "example": "$150.00"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "AllocateBillLandedCostDto": {
+        "type": "object",
+        "properties": {}
       },
       "ExchangeRateLatestResponseDto": {
         "type": "object",

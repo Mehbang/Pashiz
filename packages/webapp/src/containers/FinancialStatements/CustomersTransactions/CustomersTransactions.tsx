@@ -1,3 +1,4 @@
+import * as FF from 'fp-ts/function';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useCustomersTransactionsQuery } from './_utils';
@@ -12,7 +13,6 @@ import {
   WithCustomersTransactionsActionsProps,
 } from './withCustomersTransactionsActions';
 import { FinancialStatement, DashboardPageContent } from '@/components';
-import { compose } from '@/utils';
 
 interface CustomersTransactionsProps
   extends WithCustomersTransactionsActionsProps {}
@@ -54,12 +54,12 @@ function CustomersTransactionsInner({
   return (
     <CustomersTransactionsProvider filter={filter}>
       <CustomersTransactionsActionsBar
-        numberFormat={filter.numberFormat}
+        numberFormat={filter.numberFormat ?? {}}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <CustomersTransactionsLoadingBar />
       <DashboardPageContent>
-        <FinancialStatement>
+        <FinancialStatement numberFormat={filter.numberFormat ?? {}}>
           <CustomersTransactionsHeader
             pageFilter={filter}
             onSubmitFilter={handleFilterSubmit}
@@ -72,6 +72,7 @@ function CustomersTransactionsInner({
     </CustomersTransactionsProvider>
   );
 }
-export const CustomersTransactions = compose(withCustomersTransactionsActions)(
+export const CustomersTransactions = FF.pipe(
   CustomersTransactionsInner,
+  withCustomersTransactionsActions,
 );

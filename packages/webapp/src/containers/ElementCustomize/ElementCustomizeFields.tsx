@@ -1,5 +1,3 @@
-// @ts-nocheck
-import intl from 'react-intl-universal';
 import { Button, Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import * as FF from 'fp-ts/function';
@@ -9,6 +7,7 @@ import { ElementCustomizeHeader } from './ElementCustomizeHeader';
 import { useElementCustomizeContext } from './ElementCustomizeProvider';
 import { ElementCustomizeTabs } from './ElementCustomizeTabs';
 import { useElementCustomizeTabsController } from './ElementCustomizeTabsController';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { Box, Group, Stack } from '@/components';
 import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
@@ -29,14 +28,17 @@ export function ElementCustomizeFieldsMain() {
   const CustomizeTabPanel = React.useMemo(
     () =>
       React.Children.map(CustomizeTabs, (tab) => {
-        return tab.props.id === currentTabId ? tab : null;
-      }).filter(Boolean),
+        if (React.isValidElement(tab) && tab.props.id === currentTabId) {
+          return tab;
+        }
+        return null;
+      })?.filter(Boolean),
     [CustomizeTabs, currentTabId],
   );
 
   return (
     <Stack spacing={0} className={styles.mainFields}>
-      <ElementCustomizeHeader label={intl.get('customize')} />
+      <ElementCustomizeHeader label={'Customize'} />
 
       <Stack spacing={0} flex="1 1 auto" overflow="auto">
         <Box flex={'1 1'} overflow="auto">
@@ -48,7 +50,9 @@ export function ElementCustomizeFieldsMain() {
   );
 }
 
-function ElementCustomizeFooterActionsRoot({ closeDrawer }) {
+function ElementCustomizeFooterActionsRoot({
+  closeDrawer,
+}: WithDrawerActionsProps) {
   const { name } = useDrawerContext();
   const { submitForm, isSubmitting } = useFormikContext();
 
@@ -70,7 +74,7 @@ function ElementCustomizeFooterActionsRoot({ closeDrawer }) {
       >
         Save
       </Button>
-      <Button onClick={handleCancelBtnClick}>{intl.get('cancel')}</Button>
+      <Button onClick={handleCancelBtnClick}>Cancel</Button>
     </Group>
   );
 }

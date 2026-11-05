@@ -124,14 +124,6 @@ export const objectKeysTransform = (obj, transform) => {
   }, {});
 };
 
-export const compose = (...funcs) =>
-  funcs.reduce(
-    (a, b) =>
-      (...args) =>
-        a(b(...args)),
-    (arg) => arg,
-  );
-
 export const getObjectDiff = (a, b) => {
   return _.reduce(
     a,
@@ -159,6 +151,18 @@ export const parseDateRangeQuery = (keyword) => {
     this_quarter: {
       range: 'quarter',
     },
+    last_year: {
+      range: 'year',
+      offset: 1,
+    },
+    last_quarter: {
+      range: 'quarter',
+      offset: 1,
+    },
+    last_month: {
+      range: 'month',
+      offset: 1,
+    },
   };
 
   if (typeof queries[keyword] === 'undefined') {
@@ -166,9 +170,15 @@ export const parseDateRangeQuery = (keyword) => {
   }
   const query = queries[keyword];
 
+  // `offset` counts whole `range` units back from now, so `last_year` anchors
+  // on the same calendar unit a year ago before `startOf`/`endOf` are applied.
+  const anchor = query.offset
+    ? moment().subtract(query.offset, query.range)
+    : moment();
+
   return {
-    fromDate: moment().startOf(query.range).toDate(),
-    toDate: moment().endOf(query.range).toDate(),
+    fromDate: anchor.clone().startOf(query.range).toDate(),
+    toDate: anchor.clone().endOf(query.range).toDate(),
   };
 };
 

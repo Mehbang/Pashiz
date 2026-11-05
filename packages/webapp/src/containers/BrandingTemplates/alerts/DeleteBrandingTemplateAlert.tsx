@@ -1,12 +1,23 @@
-// @ts-nocheck
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
 import { AppToaster } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { useDeletePdfTemplate } from '@/hooks/query/pdf-templates';
-import { compose } from '@/utils';
+
+/** Error shape rejected by the SDK fetcher on failed requests. */
+interface DeleteBrandingTemplateError {
+  data: { errors: Array<{ type: string }> };
+}
+
+interface DeleteBrandingTemplateAlertProps extends WithAlertActionsProps {
+  name: string;
+  isOpen: boolean;
+  payload: { templateId: number };
+}
 
 /**
  * Delete branding template alert.
@@ -21,7 +32,7 @@ function DeleteBrandingTemplateAlertInner({
 
   // #withAlertActions
   closeAlert,
-}) {
+}: DeleteBrandingTemplateAlertProps): React.ReactElement {
   const { mutateAsync: deleteBrandingTemplateMutate } = useDeletePdfTemplate();
 
   const handleConfirmDelete = () => {
@@ -35,7 +46,7 @@ function DeleteBrandingTemplateAlertInner({
         });
         closeAlert(name);
       })
-      .catch(({ data: { errors } }) => {
+      .catch(({ data: { errors } }: DeleteBrandingTemplateError) => {
         if (
           errors.find(
             (error) => error.type === 'CANNOT_DELETE_PREDEFINED_PDF_TEMPLATE',
@@ -73,7 +84,8 @@ function DeleteBrandingTemplateAlertInner({
   );
 }
 
-export const DeleteBrandingTemplateAlert = compose(
-  withAlertStoreConnect(),
+export const DeleteBrandingTemplateAlert = FF.pipe(
+  DeleteBrandingTemplateAlertInner,
   withAlertActions,
-)(DeleteBrandingTemplateAlertInner);
+  withAlertStoreConnect(),
+);

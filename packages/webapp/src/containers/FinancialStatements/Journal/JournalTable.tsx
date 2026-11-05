@@ -1,3 +1,4 @@
+import * as FF from 'fp-ts/function';
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
@@ -14,11 +15,7 @@ import {
 import { TableStyle } from '@/constants';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { handleViewTransactionDetail } from '@/containers/FinancialStatements/utils/transactionDrawer';
-import {
-  compose,
-  defaultExpanderReducer,
-  tableRowTypesToClassnames,
-} from '@/utils';
+import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 
 interface JournalTableProps extends WithDrawerActionsProps {
   companyName: string;
@@ -39,6 +36,7 @@ function JournalTableInner({
 
   const table = (journalSheet as any)?.table;
   const meta = (journalSheet as any)?.meta;
+  const query = journalSheet?.query;
 
   // Opens the detail drawer of the given transaction reference.
   const handleViewDetail = (referenceType: string, referenceId: number) => {
@@ -56,6 +54,7 @@ function JournalTableInner({
       companyName={companyName}
       sheetType={intl.get('journal_sheet')}
       dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
+      basis={query?.basis}
       fullWidth={true}
     >
       <JournalDataTable
@@ -80,7 +79,7 @@ function JournalTableInner({
   );
 }
 
-export const JournalTable = compose(withDrawerActions)(JournalTableInner);
+export const JournalTable = FF.pipe(JournalTableInner, withDrawerActions);
 
 const JournalDataTable = styled(ReportDataTable)`
   --color-table-text-color: var(--color-light-gray1);

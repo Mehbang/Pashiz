@@ -1,5 +1,6 @@
 import { Intent } from '@blueprintjs/core';
 import { Formik, type FormikHelpers } from 'formik';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { transformErrors } from './utils';
@@ -10,7 +11,7 @@ import type { WarehouseFormValues } from './types';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { compose, transformToForm } from '@/utils';
+import { transformToForm } from '@/utils';
 
 const defaultInitialValues: WarehouseFormValues = {
   name: '',
@@ -65,7 +66,7 @@ function WarehouseFormInner({
       data: { errors: Array<{ type: string }> };
     }) => {
       if (errors) {
-        // no-op (preserved from @ts-nocheck original).
+        // no-op (preserved from the original).
       }
       transformErrors(errors, { setErrors });
       setSubmitting(false);
@@ -88,4 +89,4 @@ function WarehouseFormInner({
   );
 }
 
-export const WarehouseForm = compose(withDialogActions)(WarehouseFormInner);
+export const WarehouseForm = FF.pipe(WarehouseFormInner, withDialogActions);

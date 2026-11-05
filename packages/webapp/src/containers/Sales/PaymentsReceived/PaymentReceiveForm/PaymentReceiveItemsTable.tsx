@@ -1,15 +1,19 @@
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
+import * as FF from 'fp-ts/function';
 import React, { useCallback } from 'react';
 import { usePaymentReceiveEntriesColumns } from './components';
 import { usePaymentReceiveInnerContext } from './PaymentReceiveInnerProvider';
 import type { PaymentReceiveEntry, PaymentReceiveFormValues } from './utils';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import { CloudLoadingIndicator, FormattedMessage as T } from '@/components';
 import { DataTableEditable } from '@/components';
 import { CLASSES } from '@/constants/classes';
-import { compose, updateTableCell } from '@/utils';
+import { DRAWERS } from '@/constants/drawers';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { updateTableCell } from '@/utils';
 
-type PaymentReceiveItemsTableProps = {
+type PaymentReceiveItemsTableProps = WithDrawerActionsProps & {
   entries: PaymentReceiveEntry[];
   onUpdateData: (entries: PaymentReceiveEntry[]) => void;
   currencyCode: string;
@@ -18,14 +22,22 @@ type PaymentReceiveItemsTableProps = {
 /**
  * Payment receive items table.
  */
-export function PaymentReceiveItemsTable({
+function PaymentReceiveItemsTableInner({
   entries,
   onUpdateData,
   currencyCode,
+
+  // #withDrawerActions
+  openDrawer,
 }: PaymentReceiveItemsTableProps) {
   const { isDueInvoicesFetching } = usePaymentReceiveInnerContext();
 
-  const columns = usePaymentReceiveEntriesColumns();
+  // Opens the invoice detail drawer of the given invoice.
+  const handleViewInvoiceDetail = (invoiceId: number) => {
+    openDrawer(DRAWERS.INVOICE_DETAILS, { invoiceId });
+  };
+
+  const columns = usePaymentReceiveEntriesColumns(handleViewInvoiceDetail);
 
   const {
     values: { customerId },
@@ -40,8 +52,9 @@ export function PaymentReceiveItemsTable({
 
   const handleUpdateData = useCallback(
     (rowIndex: number, columnId: string, value: unknown) => {
-      const newRows = compose(updateTableCell(rowIndex, columnId, value))(
+      const newRows = FF.pipe(
         entries,
+        updateTableCell(rowIndex, columnId, value),
       ) as PaymentReceiveEntry[];
 
       onUpdateData(newRows);
@@ -67,3 +80,8 @@ export function PaymentReceiveItemsTable({
     </CloudLoadingIndicator>
   );
 }
+
+export const PaymentReceiveItemsTable = FF.pipe(
+  PaymentReceiveItemsTableInner,
+  withDrawerActions,
+);

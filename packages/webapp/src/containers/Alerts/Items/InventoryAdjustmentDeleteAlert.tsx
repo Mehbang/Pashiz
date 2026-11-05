@@ -1,4 +1,5 @@
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -13,7 +14,6 @@ import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { useDeleteInventoryAdjustment } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface InventoryAdjustmentDeleteAlertProps
   extends WithAlertActionsProps,
@@ -66,7 +66,6 @@ function InventoryAdjustmentDeleteAlertInner({
       loading={isPending}
     >
       <p>
-        {/* @ts-expect-error — react-intl-universal FormattedHTMLMessage JSX type mismatch */}
         <FormattedHTMLMessage
           id={
             'once_delete_this_inventory_a_adjustment_you_will_able_to_restore_it'
@@ -77,8 +76,9 @@ function InventoryAdjustmentDeleteAlertInner({
   );
 }
 
-export const InventoryAdjustmentDeleteAlert = compose(
-  withAlertStoreConnect(),
-  withAlertActions,
+export const InventoryAdjustmentDeleteAlert = FF.pipe(
+  InventoryAdjustmentDeleteAlertInner,
   withDrawerActions,
-)(InventoryAdjustmentDeleteAlertInner);
+  withAlertActions,
+  withAlertStoreConnect(),
+);

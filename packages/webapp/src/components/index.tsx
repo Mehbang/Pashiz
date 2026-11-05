@@ -48,6 +48,7 @@ export * from './FlexGrid';
 export * from './Menu';
 export * from './Icon';
 export * from './Items';
+export * from './TrackingCategories';
 export * from './Select';
 export * from './FormattedMessage';
 export * from './MaterialProgressBar';
@@ -61,6 +62,7 @@ export * from './EmptyStatus';
 export * from './Postbox';
 export * from './AppToaster';
 export * from './Layout';
+export * from './SegmentedControl';
 export * from '@/ee/workspaces/components/WorkspaceSwitchingOverlay';
 
 export { MODIFIER, ContextMenu, AvatarCell };

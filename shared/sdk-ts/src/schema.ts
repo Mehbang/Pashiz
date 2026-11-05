@@ -406,7 +406,8 @@ export interface paths {
         };
         /** Retrieves the inventory adjustment details. */
         get: operations["InventoryAdjustmentsController_getInventoryAdjustment"];
-        put?: never;
+        /** Edit the given inventory adjustment. */
+        put: operations["InventoryAdjustmentsController_editQuickInventoryAdjustment"];
         post?: never;
         /** Delete the given inventory adjustment. */
         delete: operations["InventoryAdjustmentsController_deleteInventoryAdjustment"];
@@ -1947,6 +1948,77 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tracking-categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves all tracking categories. */
+        get: operations["TrackingCategoriesController_getTrackingCategories"];
+        put?: never;
+        /** Creates a new tracking category. */
+        post: operations["TrackingCategoriesController_createTrackingCategory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tracking-categories/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves the tracking category details. */
+        get: operations["TrackingCategoriesController_getTrackingCategory"];
+        /** Edits the given tracking category. */
+        put: operations["TrackingCategoriesController_editTrackingCategory"];
+        post?: never;
+        /** Deletes the given tracking category. */
+        delete: operations["TrackingCategoriesController_deleteTrackingCategory"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/warehouse-transfers/validate-bulk-delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Validates which warehouse transfers can be deleted and returns the results. */
+        post: operations["WarehouseTransfersController_validateBulkDeleteWarehouseTransfers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/warehouse-transfers/bulk-delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Deletes multiple warehouse transfers. */
+        post: operations["WarehouseTransfersController_bulkDeleteWarehouseTransfers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/warehouse-transfers": {
         parameters: {
             query?: never;
@@ -2664,74 +2736,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/landed-cost/transactions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get landed cost transactions */
-        get: operations["BillAllocateLandedCostController_getLandedCostTransactions"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/landed-cost/bills/{billId}/allocate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Allocate landed cost to bill items */
-        post: operations["BillAllocateLandedCostController_calculateLandedCost"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/landed-cost/{allocatedLandedCostId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete allocated landed cost */
-        delete: operations["BillAllocateLandedCostController_deleteAllocatedLandedCost"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/landed-cost/bills/{billId}/transactions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get bill landed cost transactions */
-        get: operations["BillAllocateLandedCostController_getBillLandedCostTransactions"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/manual-journals/validate-bulk-delete": {
         parameters: {
             query?: never;
@@ -2849,6 +2853,24 @@ export interface paths {
         get: operations["CreditNotesController_getCreditNoteState"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credit-notes/{id}/mail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves the credit note mail state. */
+        get: operations["CreditNotesController_getCreditNoteMail"];
+        put?: never;
+        /** Send the given credit note by mail. */
+        post: operations["CreditNotesController_sendCreditNoteMail"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5180,6 +5202,91 @@ export interface paths {
         patch: operations["ContactsController_inactivateContact"];
         trace?: never;
     };
+    "/api/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves the list of notifications for the current user. */
+        get: operations["NotificationsController_getNotifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications/unread-count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets the count of unread notifications for the current user. */
+        get: operations["NotificationsController_getUnreadCount"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications/{id}/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Marks a notification as read. */
+        post: operations["NotificationsController_markAsRead"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications/read-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Marks all notifications as read for the current user. */
+        post: operations["NotificationsController_markAllAsRead"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notifications/{id}/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Deletes a notification. */
+        post: operations["NotificationsController_deleteNotification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/audit-logs/filter-options": {
         parameters: {
             query?: never;
@@ -5206,6 +5313,74 @@ export interface paths {
         };
         /** List financial audit log entries for the tenant. */
         get: operations["AuditLogsController_getAuditLogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/landed-cost/transactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get landed cost transactions */
+        get: operations["BillAllocateLandedCostController_getLandedCostTransactions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/landed-cost/bills/{billId}/allocate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Allocate landed cost to bill items */
+        post: operations["BillAllocateLandedCostController_calculateLandedCost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/landed-cost/{allocatedLandedCostId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete allocated landed cost */
+        delete: operations["BillAllocateLandedCostController_deleteAllocatedLandedCost"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/landed-cost/bills/{billId}/transactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get bill landed cost transactions */
+        get: operations["BillAllocateLandedCostController_getBillLandedCostTransactions"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5339,7 +5514,7 @@ export interface components {
              */
             id: number;
             /**
-             * @description The API key string
+             * @description The API key string. Returned only once when the key is created.
              * @example bc_1234567890abcdef
              */
             key: string;
@@ -5368,7 +5543,7 @@ export interface components {
              */
             name: string;
             /**
-             * @description First 8 characters of the API key token
+             * @description Masked API key prefix
              * @example bc_1234...
              */
             token: string;
@@ -5797,6 +5972,13 @@ export interface components {
              */
             code?: string;
             /**
+             * @description Unit of measure the item is measured in
+             * @default piece
+             * @example kg
+             * @enum {string}
+             */
+            unit: "piece" | "dozen" | "pair" | "set" | "pack" | "box" | "kg" | "g" | "lb" | "oz" | "l" | "ml" | "m" | "cm" | "m2" | "m3" | "hour" | "day";
+            /**
              * @description Whether the item can be sold
              * @example true
              */
@@ -5917,6 +6099,11 @@ export interface components {
              */
             secondaryQuantityOnHandFormatted: string;
             /**
+             * @description The stock level at which the item should be reordered (for inventory items)
+             * @example 10
+             */
+            reorderPoint?: number;
+            /**
              * @description Additional notes about the item
              * @example Available in black, gray, and navy colors. 5-year warranty included.
              */
@@ -5984,6 +6171,17 @@ export interface components {
              * @example CHAIR-X2000
              */
             code?: string;
+            /**
+             * @description Stock level at which the item should be reordered (inventory items only)
+             * @example 10
+             */
+            reorderPoint?: number;
+            /**
+             * @description Unit of measure the item is measured in
+             * @example kg
+             * @enum {string}
+             */
+            unit?: "piece" | "dozen" | "pair" | "set" | "pack" | "box" | "kg" | "g" | "lb" | "oz" | "l" | "ml" | "m" | "cm" | "m2" | "m3" | "hour" | "day";
             /**
              * @description Whether the item can be purchased
              * @example true
@@ -6115,6 +6313,17 @@ export interface components {
              * @example CHAIR-X2000
              */
             code?: string;
+            /**
+             * @description Stock level at which the item should be reordered (inventory items only)
+             * @example 10
+             */
+            reorderPoint?: number;
+            /**
+             * @description Unit of measure the item is measured in
+             * @example kg
+             * @enum {string}
+             */
+            unit?: "piece" | "dozen" | "pair" | "set" | "pack" | "box" | "kg" | "g" | "lb" | "oz" | "l" | "ml" | "m" | "cm" | "m2" | "m3" | "hour" | "day";
             /**
              * @description Whether the item can be purchased
              * @example true
@@ -6322,7 +6531,7 @@ export interface components {
             userId: number;
             /**
              * @description The date when the adjustment was published
-             * @example 2024-03-20T10:00:00Z
+             * @example 2024-03-20
              */
             publishedAt?: string;
             /**
@@ -6361,6 +6570,38 @@ export interface components {
             pagination: components["schemas"]["InventoryAdjustmentsPaginationDto"];
         };
         CreateQuickInventoryAdjustmentDto: {
+            /**
+             * Format: date-time
+             * @description Date of the inventory adjustment
+             */
+            date: string;
+            /**
+             * @description Type of adjustment
+             * @enum {string}
+             */
+            type: "increment" | "decrement";
+            /** @description ID of the adjustment account */
+            adjustmentAccountId: number;
+            /** @description Reason for the adjustment */
+            reason: string;
+            /** @description Description of the adjustment */
+            description: string;
+            /** @description Reference number */
+            referenceNo: string;
+            /** @description ID of the item being adjusted */
+            itemId: number;
+            /** @description Quantity to adjust */
+            quantity: number;
+            /** @description Cost of the item */
+            cost: number;
+            /** @description Whether to publish the adjustment immediately */
+            publish: boolean;
+            /** @description ID of the warehouse (optional) */
+            warehouseId?: number;
+            /** @description ID of the branch (optional) */
+            branchId?: number;
+        };
+        EditQuickInventoryAdjustmentDto: {
             /**
              * Format: date-time
              * @description Date of the inventory adjustment
@@ -7347,7 +7588,7 @@ export interface components {
             openingBalance: number;
             /**
              * Format: date-time
-             * @example 2024-01-01T00:00:00Z
+             * @example 2024-01-01
              */
             openingBalanceAt: string;
             /** @example 1 */
@@ -7432,13 +7673,13 @@ export interface components {
             /**
              * Format: date-time
              * @description The date of the invoice
-             * @example 2023-01-01T00:00:00Z
+             * @example 2023-01-01
              */
             invoiceDate: string;
             /**
              * Format: date-time
              * @description The due date of the invoice
-             * @example 2023-01-15T00:00:00Z
+             * @example 2023-01-15
              */
             dueDate: string;
             /**
@@ -7488,7 +7729,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The date when the invoice was delivered
-             * @example 2023-01-02T00:00:00Z
+             * @example 2023-01-02
              */
             deliveredAt?: string;
             /**
@@ -7717,13 +7958,13 @@ export interface components {
             /**
              * Format: date-time
              * @description Invoice date
-             * @example 2023-01-01T00:00:00Z
+             * @example 2023-01-01
              */
             invoiceDate: string;
             /**
              * Format: date-time
              * @description Due date
-             * @example 2023-01-15T00:00:00Z
+             * @example 2023-01-15
              */
             dueDate: string;
             /**
@@ -7825,13 +8066,13 @@ export interface components {
             /**
              * Format: date-time
              * @description Invoice date
-             * @example 2023-01-01T00:00:00Z
+             * @example 2023-01-01
              */
             invoiceDate: string;
             /**
              * Format: date-time
              * @description Due date
-             * @example 2023-01-15T00:00:00Z
+             * @example 2023-01-15
              */
             dueDate: string;
             /**
@@ -7937,6 +8178,19 @@ export interface components {
              * @enum {string}
              */
             notification_key?: "details" | "reminder";
+        };
+        GenerateSaleInvoiceSharableLinkDto: {
+            /**
+             * @description Determines whether the link is accessible by anyone.
+             * @default private
+             * @enum {string}
+             */
+            publicity: "public" | "private";
+            /**
+             * @description The date the shared link expires at the end of the day.
+             * @example 2026-11-07
+             */
+            expiryTime?: string;
         };
         CreatePdfTemplateDto: Record<string, never>;
         EditPdfTemplateDto: Record<string, never>;
@@ -8301,7 +8555,7 @@ export interface components {
             paymentReceiveNo: string;
             /**
              * @description The date of the payment
-             * @example 2023-01-01T00:00:00Z
+             * @example 2023-01-01
              */
             paymentDate: Record<string, never>;
             /**
@@ -9249,7 +9503,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The date when the expense was published
-             * @example 2024-03-20T10:00:00Z
+             * @example 2024-03-20
              */
             publishedAt?: string;
             /**
@@ -9260,7 +9514,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The payment date of the expense
-             * @example 2024-03-20T10:00:00Z
+             * @example 2024-03-20
              */
             paymentDate: string;
             /**
@@ -9506,6 +9760,145 @@ export interface components {
              */
             attachments: string[];
         };
+        TrackingCategoryOptionResponseDto: {
+            /**
+             * @description Option ID
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description Tracking category ID
+             * @example 1
+             */
+            categoryId: number;
+            /**
+             * @description Option name
+             * @example North Store
+             */
+            name: string;
+            /**
+             * @description Whether the option is active
+             * @example true
+             */
+            active: boolean;
+            /**
+             * Format: date-time
+             * @description Created date
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @description Updated date
+             */
+            updatedAt?: string;
+        };
+        TrackingCategoryResponseDto: {
+            /**
+             * @description Tracking category ID
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description Category name
+             * @example Location
+             */
+            name: string;
+            /**
+             * @description Category description
+             * @example Tracks the business location of transactions
+             */
+            description?: string;
+            /**
+             * @description Whether the category is active
+             * @example true
+             */
+            active: boolean;
+            /** @description Modules where the tracking category is available */
+            modules: ("manual_journals" | "sale_invoices" | "sale_estimates")[];
+            /** @description Tracking options */
+            options: components["schemas"]["TrackingCategoryOptionResponseDto"][];
+            /**
+             * Format: date-time
+             * @description Created date
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @description Updated date
+             */
+            updatedAt?: string;
+        };
+        TrackingCategoryOptionDto: {
+            /**
+             * @description Option ID (only provided when updating an existing option)
+             * @example 1
+             */
+            id?: number;
+            /**
+             * @description Option name
+             * @example North Store
+             */
+            name: string;
+            /**
+             * @description Whether the option is active
+             * @example true
+             */
+            active?: boolean;
+        };
+        CreateTrackingCategoryDto: {
+            /**
+             * @description Category name
+             * @example Location
+             */
+            name: string;
+            /**
+             * @description Category description
+             * @example Tracks the business location of transactions
+             */
+            description?: string;
+            /**
+             * @description Whether the category is active
+             * @example true
+             */
+            active?: boolean;
+            /**
+             * @description Modules where the tracking category is available
+             * @example [
+             *       "sale_invoices",
+             *       "sale_estimates"
+             *     ]
+             */
+            modules?: ("manual_journals" | "sale_invoices" | "sale_estimates")[];
+            /** @description Tracking options */
+            options?: components["schemas"]["TrackingCategoryOptionDto"][];
+        };
+        EditTrackingCategoryDto: {
+            /**
+             * @description Category name
+             * @example Location
+             */
+            name?: string;
+            /**
+             * @description Category description
+             * @example Tracks the business location of transactions
+             */
+            description?: string;
+            /**
+             * @description Whether the category is active
+             * @example true
+             */
+            active?: boolean;
+            /**
+             * @description Modules where the tracking category is available
+             * @example [
+             *       "sale_invoices",
+             *       "sale_estimates"
+             *     ]
+             */
+            modules?: ("manual_journals" | "sale_invoices" | "sale_estimates")[];
+            /** @description Tracking options */
+            options?: components["schemas"]["TrackingCategoryOptionDto"][];
+        };
         WarehouseTransferEntryResponseDto: {
             /**
              * @description The ID of the warehouse transfer entry
@@ -9585,13 +9978,13 @@ export interface components {
             /**
              * Format: date-time
              * @description The date when the transfer was initiated
-             * @example 2024-03-20T10:00:00Z
+             * @example 2024-03-20
              */
             transferInitiatedAt: string;
             /**
              * Format: date-time
              * @description The date when the transfer was delivered
-             * @example 2024-03-21T15:00:00Z
+             * @example 2024-03-21
              */
             transferDeliveredAt: string;
             /**
@@ -9984,7 +10377,7 @@ export interface components {
             openingBalance: number;
             /**
              * Format: date-time
-             * @example 2024-01-01T00:00:00Z
+             * @example 2024-01-01
              */
             openingBalanceAt: string;
             /** @example 1 */
@@ -10773,7 +11166,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The date of the sale receipt
-             * @example 2024-01-01T00:00:00Z
+             * @example 2024-01-01
              */
             receiptDate: string;
             /**
@@ -10832,7 +11225,7 @@ export interface components {
             isDraft?: boolean;
             /**
              * @description The date when the receipt was closed
-             * @example 2024-01-02T00:00:00Z
+             * @example 2024-01-02
              */
             closedAt?: Record<string, never>;
             /**
@@ -11245,13 +11638,13 @@ export interface components {
             /**
              * Format: date-time
              * @description The date the bill was issued
-             * @example 2024-03-15T00:00:00Z
+             * @example 2024-03-15
              */
             billDate: string;
             /**
              * Format: date-time
              * @description The due date of the bill
-             * @example 2024-04-15T00:00:00Z
+             * @example 2024-04-15
              */
             dueDate: string;
             /**
@@ -11782,89 +12175,61 @@ export interface components {
              */
             adjustment?: number;
         };
-        BillLandedCostTransactionDto: {
+        TrackingCategorySummaryResponseDto: {
             /**
-             * @description The unique identifier of the landed cost transaction
+             * @description Tracking category ID
              * @example 1
              */
             id: number;
             /**
-             * @description The bill id the landed cost is allocated to
-             * @example 10
+             * @description Category name
+             * @example Location
              */
-            billId?: number;
+            name: string;
             /**
-             * @description The id of the source transaction the cost was allocated from
-             * @example 5
+             * @description Whether the category is active
+             * @example true
              */
-            fromTransactionId?: number;
+            active: boolean;
+        };
+        TrackingCategoryOptionSummaryResponseDto: {
             /**
-             * @description The type of the source transaction (Bill or Expense)
-             * @example Expense
-             */
-            fromTransactionType?: string;
-            /**
-             * @description The entry id of the source transaction
-             * @example 2
-             */
-            fromTransactionEntryId?: number;
-            /**
-             * @description The allocation method used to distribute the cost
-             * @example quantity
-             */
-            allocationMethod?: string;
-            /**
-             * @description The translated label of the allocation method
-             * @example Quantity
-             */
-            allocationMethodFormatted?: string;
-            /**
-             * @description The cost account id the landed cost is posted to
-             * @example 1020
-             */
-            costAccountId?: number;
-            /**
-             * @description The description of the landed cost transaction
-             * @example Freight charges
-             */
-            description?: string;
-            /**
-             * @description The allocated landed cost amount
-             * @example 150
-             */
-            amount?: number;
-            /**
-             * @description The allocated landed cost amount in the base currency
-             * @example 150
-             */
-            localAmount?: number;
-            /**
-             * @description The currency code of the landed cost transaction
-             * @example USD
-             */
-            currencyCode?: string;
-            /**
-             * @description The exchange rate applied to the amount
+             * @description Option ID
              * @example 1
              */
-            exchangeRate?: number;
+            id: number;
             /**
-             * @description The resolved name of the source item or expense account
-             * @example Widget A
+             * @description Tracking category ID
+             * @example 1
              */
-            name?: string;
+            categoryId: number;
             /**
-             * @description Formatted allocated amount
-             * @example $150.00
+             * @description Option name
+             * @example North Store
              */
-            formattedAmount?: string;
+            name: string;
             /**
-             * @description Formatted allocated amount in the base currency
-             * @example $150.00
+             * @description Whether the option is active
+             * @example true
              */
-            formattedLocalAmount?: string;
+            active: boolean;
         };
-        AllocateBillLandedCostDto: Record<string, never>;
+        ManualJournalEntryTrackingCategoryResponseDto: {
+            /**
+             * @description Tracking category ID
+             * @example 1
+             */
+            categoryId: number;
+            /**
+             * @description Tracking category option ID
+             * @example 2
+             */
+            optionId: number;
+            /** @description Tracking category details */
+            category?: components["schemas"]["TrackingCategorySummaryResponseDto"];
+            /** @description Tracking category option details */
+            option?: components["schemas"]["TrackingCategoryOptionSummaryResponseDto"];
+        };
         ManualJournalEntryResponseDto: {
             /**
              * @description Entry index
@@ -11912,6 +12277,8 @@ export interface components {
             contact?: Record<string, never>;
             /** @description Branch details */
             branch?: Record<string, never>;
+            /** @description Tracking category assignments */
+            trackingCategories?: components["schemas"]["ManualJournalEntryTrackingCategoryResponseDto"][];
         };
         ManualJournalResponseDto: {
             /**
@@ -11935,6 +12302,12 @@ export interface components {
              * @example General
              */
             journalType?: string;
+            /**
+             * @description Accounting basis of the journal entries; null means general, which appears in both cash and accrual reports
+             * @example accrual
+             * @enum {string|null}
+             */
+            basis?: "cash" | "accrual" | null;
             /**
              * @description Reference number
              * @example REF-001
@@ -11968,7 +12341,7 @@ export interface components {
             /**
              * Format: date-time
              * @description Published date
-             * @example 2024-03-20T10:00:00Z
+             * @example 2024-03-20
              */
             publishedAt?: string;
             /**
@@ -12013,6 +12386,18 @@ export interface components {
             /** @description Attachments */
             attachments?: string[];
         };
+        TrackingCategoryAssignmentDto: {
+            /**
+             * @description Tracking category ID
+             * @example 1
+             */
+            categoryId: number;
+            /**
+             * @description Tracking category option ID
+             * @example 2
+             */
+            optionId: number;
+        };
         ManualJournalEntryDto: {
             /** @description Entry index */
             index: number;
@@ -12030,6 +12415,8 @@ export interface components {
             branchId?: number;
             /** @description Project ID */
             projectId?: number;
+            /** @description Tracking category assignments of the entry */
+            trackingCategories?: components["schemas"]["TrackingCategoryAssignmentDto"][];
         };
         CreateManualJournalDto: {
             /**
@@ -12045,6 +12432,11 @@ export interface components {
             journalNumber?: string;
             /** @description Journal type */
             journalType?: string;
+            /**
+             * @description Accounting basis of the journal entries; null means general, which appears in both cash and accrual reports
+             * @enum {string|null}
+             */
+            basis?: "cash" | "accrual" | null;
             /** @description Reference */
             reference?: string;
             /** @description Description */
@@ -12072,6 +12464,11 @@ export interface components {
             journalNumber?: string;
             /** @description Journal type */
             journalType?: string;
+            /**
+             * @description Accounting basis of the journal entries; null means general, which appears in both cash and accrual reports
+             * @enum {string|null}
+             */
+            basis?: "cash" | "accrual" | null;
             /** @description Reference */
             reference?: string;
             /** @description Description */
@@ -12085,6 +12482,52 @@ export interface components {
             /** @description Attachments */
             attachments?: components["schemas"]["AttachmentDto"][];
         };
+        CreditNoteHtmlContentResponseDto: {
+            /**
+             * @description The HTML content of the credit note
+             * @example <html>...</html>
+             */
+            htmlContent: string;
+        };
+        CreditNoteEntryMailDto: {
+            name: string;
+            quantity: number;
+            unitPrice: number;
+            unitPriceFormatted: string;
+            total: number;
+            totalFormatted: string;
+        };
+        CreditNoteMailStateResponseDto: {
+            from: string[];
+            to: string[];
+            cc?: string[];
+            bcc?: string[];
+            subject: string;
+            message: string;
+            formatArgs?: Record<string, never>;
+            toOptions: components["schemas"]["AddressItemDto"][];
+            fromOptions: components["schemas"]["AddressItemDto"][];
+            attachPdf?: boolean;
+            creditNoteDate: string;
+            creditNoteDateFormatted: string;
+            total: number;
+            totalFormatted: string;
+            subtotal: number;
+            subtotalFormatted: string;
+            discountAmount: number;
+            discountAmountFormatted: string;
+            discountPercentage: number;
+            discountPercentageFormatted: string;
+            discountLabel: string;
+            adjustment: number;
+            adjustmentFormatted: string;
+            creditNoteNumber: string;
+            entries: components["schemas"]["CreditNoteEntryMailDto"][];
+            companyName: string;
+            companyLogoUri: string;
+            primaryColor: string;
+            customerName: string;
+        };
         CreditNoteResponseDto: {
             /**
              * @description The unique identifier of the credit note
@@ -12094,7 +12537,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The date of the credit note
-             * @example 2023-01-01T00:00:00Z
+             * @example 2023-01-01
              */
             creditNoteDate: string;
             /**
@@ -12510,7 +12953,7 @@ export interface components {
             /** @example 250 */
             amount: number;
             /** @example $250.00 */
-            formttedAmount: string;
+            formattedAmount: string;
             /** @example REF-001 */
             referenceNo?: string | null;
             /** @example Refund issued to customer */
@@ -12646,7 +13089,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The date of the vendor credit
-             * @example 2024-03-15T00:00:00Z
+             * @example 2024-03-15
              */
             vendorCreditDate: string;
             /**
@@ -12682,7 +13125,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The date the vendor credit was opened
-             * @example 2024-03-15T00:00:00Z
+             * @example 2024-03-15
              */
             openedAt?: string;
             /**
@@ -13078,7 +13521,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The vendor credit date
-             * @example 2024-03-15T00:00:00Z
+             * @example 2024-03-15
              */
             vendorCreditDate?: string;
             /**
@@ -13471,6 +13914,12 @@ export interface components {
              */
             attachments: string[];
         };
+        RefundVendorCreditSummaryDto: {
+            /** @example 1001 */
+            id: number;
+            /** @example VC-0001 */
+            vendorCreditNumber: string;
+        };
         RefundVendorCreditResponseDto: {
             /**
              * @description The unique identifier of the refund transaction
@@ -13520,11 +13969,13 @@ export interface components {
             /**
              * Format: date-time
              * @description The date of the refund
-             * @example 2024-03-15T00:00:00Z
+             * @example 2024-03-15
              */
             date: string;
             /** @description The deposit account the refund was paid into */
             depositAccount?: components["schemas"]["AccountResponseDto"];
+            /** @description The vendor credit being refunded */
+            vendorCredit: components["schemas"]["RefundVendorCreditSummaryDto"];
             /**
              * @description Formatted refund amount
              * @example $500.00
@@ -13753,7 +14204,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The date of the bank transaction
-             * @example 2023-01-01T00:00:00.000Z
+             * @example 2023-01-01
              */
             date: string;
             /**
@@ -13876,7 +14327,7 @@ export interface components {
             /**
              * Format: date-time
              * @description Transaction date
-             * @example 2024-03-20T10:30:00Z
+             * @example 2024-03-20
              */
             date: string;
             /**
@@ -13900,6 +14351,67 @@ export interface components {
              */
             uncategorizedTransactionId: number;
         };
+        BankTransactionDetailContactDto: {
+            /** @example 1 */
+            id: number;
+            /** @example John Doe */
+            displayName: string;
+        };
+        BankTransactionDetailEntryDto: {
+            /** @example 1 */
+            id: number;
+            /** @example 100 */
+            credit: number;
+            /** @example 0 */
+            debit: number;
+            account: components["schemas"]["AccountResponseDto"];
+            contact?: components["schemas"]["BankTransactionDetailContactDto"] | null;
+        };
+        BankTransactionDetailResponseDto: {
+            /** @example 1 */
+            id: number;
+            /** @example deposit */
+            transactionType: string;
+            /** @example Deposit */
+            transactionTypeFormatted: string;
+            /** @example 1000 */
+            amount: number;
+            /** @example $1,000.00 */
+            formattedAmount: string;
+            /** @example USD */
+            currencyCode: string;
+            /** @example 1 */
+            exchangeRate: number;
+            /**
+             * Format: date-time
+             * @example 2024-01-15
+             */
+            date: string;
+            /** @example 2024-01-15 */
+            formattedDate: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-15T00:00:00Z
+             */
+            createdAt: string;
+            /** @example 2024-01-15 */
+            formattedCreatedAt: string;
+            /** @example TRX-2024-001 */
+            transactionNumber: string;
+            /** @example REF-001 */
+            referenceNo?: string | null;
+            /** @example Transaction statement */
+            description?: string | null;
+            /** @example 12 */
+            uncategorizedTransactionId?: number | null;
+            /** @example 5 */
+            cashflowAccountId: number;
+            /** @example 6 */
+            creditAccountId: number;
+            /** @example 1 */
+            branchId?: number | null;
+            transactions: components["schemas"]["BankTransactionDetailEntryDto"][];
+        };
         NumberFormatQueryDto: {
             /**
              * @description Number of decimal places to display
@@ -13917,6 +14429,11 @@ export interface components {
              */
             showZero?: boolean;
             /**
+             * @description Whether to show negative amounts in red
+             * @example false
+             */
+            showInRed?: boolean;
+            /**
              * @description How to format money values
              * @example total
              * @enum {string}
@@ -13933,7 +14450,7 @@ export interface components {
             /**
              * Format: date-time
              * @description The date of the bank transaction
-             * @example 2023-01-01T00:00:00.000Z
+             * @example 2023-01-01
              */
             date: string;
             /**
@@ -14789,6 +15306,16 @@ export interface components {
             previousYearAmountChange: boolean;
             /** @description Show previous year percentage change */
             previousYearPercentageChange: boolean;
+            /**
+             * @description Column the accounts are sorted by
+             * @enum {string}
+             */
+            columnSortBy?: "name" | "total" | "previous_period" | "previous_period_change" | "previous_period_percentage" | "previous_year" | "previous_year_change" | "previous_year_percentage" | "percentage_of_column" | "percentage_of_row";
+            /**
+             * @description Sort order of the accounts
+             * @enum {string}
+             */
+            sortOrder?: "asc" | "desc";
         };
         FinancialReportTotalDto: {
             /** @description Numeric amount */
@@ -15406,6 +15933,16 @@ export interface components {
             displayColumnsBy: "day" | "month" | "year" | "quarter";
             /** @description Number format settings */
             numberFormat: components["schemas"]["NumberFormatQueryDto"];
+            /**
+             * @description Column the accounts are sorted by
+             * @enum {string}
+             */
+            columnSortBy?: "account" | "debit" | "credit" | "total";
+            /**
+             * @description Sort order of the accounts
+             * @enum {string}
+             */
+            sortOrder?: "asc" | "desc";
         };
         TrialBalanceSheetAccountDto: {
             /** @description Account ID */
@@ -15707,6 +16244,11 @@ export interface components {
             accountCode: string;
             /** @description Account ID */
             accountId: number;
+            /**
+             * @description Accounting basis of the entry; null means general
+             * @enum {string|null}
+             */
+            basis: "cash" | "accrual" | null;
         };
         TransactionsByReferenceResponseDto: {
             /** @description Transactions linked to the given reference */
@@ -16176,6 +16718,11 @@ export interface components {
             fromDate: string;
             /** @description End date */
             toDate: string;
+            /**
+             * @description Accounting basis
+             * @enum {string}
+             */
+            basis: "cash" | "accrual";
             /** @description From range */
             fromRange?: number;
             /** @description To range */
@@ -16332,6 +16879,16 @@ export interface components {
             previousYearAmountChange: boolean;
             /** @description Show previous year percentage change */
             previousYearPercentageChange: boolean;
+            /**
+             * @description Column the accounts are sorted by
+             * @enum {string}
+             */
+            columnSortBy?: "name" | "total" | "previous_period" | "previous_period_change" | "previous_period_percentage" | "previous_year" | "previous_year_change" | "previous_year_percentage" | "percentage_income" | "percentage_expenses" | "percentage_column" | "percentage_row";
+            /**
+             * @description Sort order of the accounts
+             * @enum {string}
+             */
+            sortOrder?: "asc" | "desc";
         };
         ProfitLossSheetDataNodeDto: {
             /** @description Node identifier (string for aggregates, number for accounts) */
@@ -17600,6 +18157,160 @@ export interface components {
              */
             contactService: "customer" | "vendor";
         };
+        ContactResponseDto: {
+            /** @example 1 */
+            id: number;
+            /**
+             * @example customer
+             * @enum {string}
+             */
+            contactService: "customer" | "vendor";
+            /**
+             * @example customer
+             * @enum {string}
+             */
+            contactType: "customer" | "vendor";
+            /** @example John Doe */
+            displayName: string;
+            /** @example 250.5 */
+            balance: number;
+            /** @example USD */
+            currencyCode: string;
+            /** @example 250.5 */
+            openingBalance?: number | null;
+            /**
+             * Format: date-time
+             * @example 2024-01-15
+             */
+            openingBalanceAt?: string | null;
+            /** @example Mr. */
+            salutation?: string | null;
+            /** @example John */
+            firstName?: string | null;
+            /** @example Doe */
+            lastName?: string | null;
+            /** @example Acme Inc. */
+            companyName?: string | null;
+            /** @example john@acme.com */
+            email?: string | null;
+            /** @example +1 555 0100 */
+            workPhone?: string | null;
+            /** @example +1 555 0101 */
+            personalPhone?: string | null;
+            /** @example https://acme.com */
+            website?: string | null;
+            billingAddress1?: string | null;
+            billingAddress2?: string | null;
+            billingAddressCity?: string | null;
+            billingAddressCountry?: string | null;
+            billingAddressEmail?: string | null;
+            billingAddressPostcode?: string | null;
+            billingAddressPhone?: string | null;
+            billingAddressState?: string | null;
+            shippingAddress1?: string | null;
+            shippingAddress2?: string | null;
+            shippingAddressCity?: string | null;
+            shippingAddressCountry?: string | null;
+            shippingAddressEmail?: string | null;
+            shippingAddressPostcode?: string | null;
+            shippingAddressPhone?: string | null;
+            shippingAddressState?: string | null;
+            /** @example Internal note */
+            note?: string | null;
+            /** @example true */
+            active: boolean;
+            /** @example Customer */
+            formattedContactService?: string;
+            /** @example debit */
+            contactNormal?: string | null;
+            /** @example 250.5 */
+            closingBalance?: number;
+            /** @example $250.50 */
+            formattedBalance?: string;
+            /** @example $250.50 */
+            formattedOpeningBalance?: string;
+            /** @example 2024-01-15 */
+            formattedOpeningBalanceAt?: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-15T00:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-15T00:00:00Z
+             */
+            updatedAt?: string;
+        };
+        NotificationResponseDto: {
+            /** @example 1 */
+            id: number;
+            /** @example 1 */
+            userId?: number | null;
+            /** @example Inventory cost calculation completed */
+            title: string;
+            /** @example The inventory cost for 12 items has been calculated. */
+            message: string;
+            /**
+             * @example info
+             * @enum {string}
+             */
+            type: "success" | "info" | "warning" | "error";
+            /**
+             * @example inventory
+             * @enum {string}
+             */
+            category: "inventory" | "billing" | "system" | "export" | "report";
+            /**
+             * @description Additional notification metadata
+             * @example {
+             *       "itemId": 1
+             *     }
+             */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Format: date-time
+             * @description Date the notification was read
+             * @example 2024-03-20T10:00:00Z
+             */
+            readAt?: string | null;
+            /**
+             * Format: date-time
+             * @example 2024-03-20T10:00:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2024-03-20T10:00:00Z
+             */
+            updatedAt: string;
+            /** @example false */
+            isRead: boolean;
+        };
+        NotificationsListResponseDto: {
+            notifications: components["schemas"]["NotificationResponseDto"][];
+            /** @example 25 */
+            total: number;
+            /** @example 3 */
+            unreadCount: number;
+        };
+        UnreadNotificationsCountResponseDto: {
+            /** @example 3 */
+            count: number;
+        };
+        MarkNotificationAsReadResponseDto: {
+            notification?: components["schemas"]["NotificationResponseDto"] | null;
+        };
+        MarkAllNotificationsAsReadResponseDto: {
+            /** @example 3 */
+            markedAsRead: number;
+        };
+        DeleteNotificationResponseDto: {
+            /** @example true */
+            deleted: boolean;
+        };
         AuditLogFilterOptionDto: {
             /** @example SaleInvoice */
             key: string;
@@ -17652,6 +18363,89 @@ export interface components {
             data: components["schemas"]["AuditLogListItemDto"][];
             pagination: components["schemas"]["PaginationMetaDto"];
         };
+        BillLandedCostTransactionDto: {
+            /**
+             * @description The unique identifier of the landed cost transaction
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The bill id the landed cost is allocated to
+             * @example 10
+             */
+            billId?: number;
+            /**
+             * @description The id of the source transaction the cost was allocated from
+             * @example 5
+             */
+            fromTransactionId?: number;
+            /**
+             * @description The type of the source transaction (Bill or Expense)
+             * @example Expense
+             */
+            fromTransactionType?: string;
+            /**
+             * @description The entry id of the source transaction
+             * @example 2
+             */
+            fromTransactionEntryId?: number;
+            /**
+             * @description The allocation method used to distribute the cost
+             * @example quantity
+             */
+            allocationMethod?: string;
+            /**
+             * @description The translated label of the allocation method
+             * @example Quantity
+             */
+            allocationMethodFormatted?: string;
+            /**
+             * @description The cost account id the landed cost is posted to
+             * @example 1020
+             */
+            costAccountId?: number;
+            /**
+             * @description The description of the landed cost transaction
+             * @example Freight charges
+             */
+            description?: string;
+            /**
+             * @description The allocated landed cost amount
+             * @example 150
+             */
+            amount?: number;
+            /**
+             * @description The allocated landed cost amount in the base currency
+             * @example 150
+             */
+            localAmount?: number;
+            /**
+             * @description The currency code of the landed cost transaction
+             * @example USD
+             */
+            currencyCode?: string;
+            /**
+             * @description The exchange rate applied to the amount
+             * @example 1
+             */
+            exchangeRate?: number;
+            /**
+             * @description The resolved name of the source item or expense account
+             * @example Widget A
+             */
+            name?: string;
+            /**
+             * @description Formatted allocated amount
+             * @example $150.00
+             */
+            formattedAmount?: string;
+            /**
+             * @description Formatted allocated amount in the base currency
+             * @example $150.00
+             */
+            formattedLocalAmount?: string;
+        };
+        AllocateBillLandedCostDto: Record<string, never>;
         ExchangeRateLatestResponseDto: {
             /**
              * @description The base currency code
@@ -18471,6 +19265,37 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description The inventory adjustment details have been successfully retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InventoryAdjustmentResponseDto"];
+                };
+            };
+        };
+    };
+    InventoryAdjustmentsController_editQuickInventoryAdjustment: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EditQuickInventoryAdjustmentDto"];
+            };
+        };
+        responses: {
+            /** @description The inventory adjustment has been successfully edited. */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -20046,7 +20871,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["GenerateSaleInvoiceSharableLinkDto"];
+            };
+        };
         responses: {
             /** @description The link has been generated successfully. */
             201: {
@@ -22012,6 +22841,223 @@ export interface operations {
             };
         };
     };
+    TrackingCategoriesController_getTrackingCategories: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The tracking categories have been successfully retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrackingCategoryResponseDto"][];
+                };
+            };
+        };
+    };
+    TrackingCategoriesController_createTrackingCategory: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTrackingCategoryDto"];
+            };
+        };
+        responses: {
+            /** @description The tracking category has been successfully created. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrackingCategoryResponseDto"];
+                };
+            };
+        };
+    };
+    TrackingCategoriesController_getTrackingCategory: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The tracking category id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The tracking category details have been successfully retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrackingCategoryResponseDto"];
+                };
+            };
+            /** @description The tracking category not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TrackingCategoriesController_editTrackingCategory: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The tracking category id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EditTrackingCategoryDto"];
+            };
+        };
+        responses: {
+            /** @description The tracking category has been successfully updated. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrackingCategoryResponseDto"];
+                };
+            };
+            /** @description The tracking category not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TrackingCategoriesController_deleteTrackingCategory: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The tracking category id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The tracking category has been successfully deleted. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The tracking category not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WarehouseTransfersController_validateBulkDeleteWarehouseTransfers: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkDeleteDto"];
+            };
+        };
+        responses: {
+            /** @description Validation completed with counts and IDs of deletable and non-deletable warehouse transfers. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidateBulkDeleteResponseDto"];
+                };
+            };
+        };
+    };
+    WarehouseTransfersController_bulkDeleteWarehouseTransfers: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkDeleteDto"];
+            };
+        };
+        responses: {
+            /** @description Warehouse transfers deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WarehouseTransfersController_getWarehousesTransfers: {
         parameters: {
             query?: never;
@@ -23705,113 +24751,6 @@ export interface operations {
             };
         };
     };
-    BillAllocateLandedCostController_getLandedCostTransactions: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
-                Authorization: string;
-                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
-                "organization-id": string;
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of landed cost transactions. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    BillAllocateLandedCostController_calculateLandedCost: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
-                Authorization: string;
-                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
-                "organization-id": string;
-            };
-            path: {
-                billId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AllocateBillLandedCostDto"];
-            };
-        };
-        responses: {
-            /** @description Landed cost allocated successfully. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    BillAllocateLandedCostController_deleteAllocatedLandedCost: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
-                Authorization: string;
-                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
-                "organization-id": string;
-            };
-            path: {
-                allocatedLandedCostId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Allocated landed cost deleted successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    BillAllocateLandedCostController_getBillLandedCostTransactions: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
-                Authorization: string;
-                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
-                "organization-id": string;
-            };
-            path: {
-                billId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of bill landed cost transactions. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        billId?: number;
-                        data?: components["schemas"]["BillLandedCostTransactionDto"][];
-                    };
-                };
-            };
-        };
-    };
     ManualJournalsController_validateBulkDeleteManualJournals: {
         parameters: {
             query?: never;
@@ -24195,6 +25134,60 @@ export interface operations {
             };
         };
     };
+    CreditNotesController_getCreditNoteMail: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The credit note id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Retrieves the credit note mail state. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreditNoteMailStateResponseDto"];
+                };
+            };
+        };
+    };
+    CreditNotesController_sendCreditNoteMail: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The credit note id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The credit note mail has been queued successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     CreditNotesController_getCreditNote: {
         parameters: {
             query?: never;
@@ -24220,6 +25213,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CreditNoteResponseDto"];
+                    "application/json+html": components["schemas"]["CreditNoteHtmlContentResponseDto"];
                 };
             };
             /** @description Credit note not found */
@@ -25280,11 +26274,14 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The refund vendor credit transaction has been successfully retrieved. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["RefundVendorCreditResponseDto"];
+                };
             };
         };
     };
@@ -25768,7 +26765,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BankTransactionResponseDto"];
+                    "application/json": components["schemas"]["BankTransactionDetailResponseDto"];
                 };
             };
             /** @description Bank transaction not found */
@@ -26650,7 +27647,7 @@ export interface operations {
                 /** @description Type of columns to display in the balance sheet */
                 displayColumnsType: "total" | "date_periods";
                 /** @description Time period for column display */
-                displayColumnsBy: "day" | "month" | "year" | "quarter";
+                displayColumnsBy: "day" | "week" | "month" | "quarter" | "year";
                 /** @description Start date for the balance sheet period */
                 fromDate?: string;
                 /** @description End date for the balance sheet period */
@@ -26679,6 +27676,10 @@ export interface operations {
                 previousYearAmountChange?: boolean;
                 /** @description Whether to show percentage change from previous year */
                 previousYearPercentageChange?: boolean;
+                /** @description Column to sort the accounts by */
+                columnSortBy?: "name" | "total" | "previous_period" | "previous_period_change" | "previous_period_percentage" | "previous_year" | "previous_year_change" | "previous_year_percentage" | "percentage_of_column" | "percentage_of_row";
+                /** @description Sort order for the accounts */
+                sortOrder?: "asc" | "desc";
                 /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
                 numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
@@ -29422,6 +30423,10 @@ export interface operations {
                 onlyActive?: boolean;
                 /** @description Filter by specific account IDs */
                 accountIds?: number[];
+                /** @description Column to sort the accounts by */
+                columnSortBy?: "account" | "debit" | "credit" | "total";
+                /** @description Sort order for the accounts */
+                sortOrder?: "asc" | "desc";
                 /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
                 numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
@@ -30115,6 +31120,8 @@ export interface operations {
                 referenceType: string;
                 /** @description The ID of the reference */
                 referenceId: number;
+                /** @description The accounting basis of the transactions */
+                basis?: "cash" | "accrual";
                 /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
                 numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
@@ -30784,6 +31791,8 @@ export interface operations {
             query?: {
                 /** @description Filter out branches (if multiple branches feature is enabled) */
                 branchesIds?: number[];
+                /** @description Accounting basis for the report */
+                basis?: "cash" | "accrual";
                 /** @description Type of transaction to filter */
                 transactionType?: string;
                 /** @description ID of the transaction to filter */
@@ -30818,6 +31827,7 @@ export interface operations {
                      *       "query": {
                      *         "from_date": "2025-06-01",
                      *         "to_date": "2025-06-21",
+                     *         "basis": "accrual",
                      *         "from_range": null,
                      *         "to_range": null,
                      *         "accounts_ids": [],
@@ -31117,7 +32127,7 @@ export interface operations {
                 /** @description Type of columns to display */
                 displayColumnsType: "total" | "date_periods";
                 /** @description How to display columns */
-                displayColumnsBy: string;
+                displayColumnsBy: "day" | "week" | "month" | "quarter" | "year";
                 /** @description Whether to show percentage column */
                 percentageColumn?: boolean;
                 /** @description Whether to show percentage row */
@@ -31138,6 +32148,10 @@ export interface operations {
                 previousYearAmountChange?: boolean;
                 /** @description Whether to show previous year percentage change */
                 previousYearPercentageChange?: boolean;
+                /** @description Column to sort the accounts by */
+                columnSortBy?: "name" | "total" | "previous_period" | "previous_period_change" | "previous_period_percentage" | "previous_year" | "previous_year_change" | "previous_year_percentage" | "percentage_income" | "percentage_expenses" | "percentage_column" | "percentage_row";
+                /** @description Sort order for the accounts */
+                sortOrder?: "asc" | "desc";
                 /** @description Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2) */
                 numberFormat?: components["schemas"]["NumberFormatQueryDto"];
             };
@@ -31417,7 +32431,7 @@ export interface operations {
                 /** @description End date for the cash flow statement period */
                 toDate?: string;
                 /** @description Display columns by time period */
-                displayColumnsBy?: "day" | "month" | "year" | "quarter";
+                displayColumnsBy?: "day" | "week" | "month" | "quarter" | "year";
                 /** @description Type of column display */
                 displayColumnsType?: "total" | "date_periods";
                 /** @description Filter out zero values */
@@ -33324,7 +34338,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ContactResponseDto"];
+                };
             };
         };
     };
@@ -33375,6 +34391,146 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    NotificationsController_getNotifications: {
+        parameters: {
+            query?: {
+                /** @description Number of notifications per page */
+                limit?: number;
+                /** @description Offset for pagination */
+                offset?: number;
+                /** @description Filter to only unread notifications */
+                unreadOnly?: boolean;
+                /** @description Filter by notification category */
+                category?: string;
+            };
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The notifications list has been successfully retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationsListResponseDto"];
+                };
+            };
+        };
+    };
+    NotificationsController_getUnreadCount: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The unread notifications count has been successfully retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnreadNotificationsCountResponseDto"];
+                };
+            };
+        };
+    };
+    NotificationsController_markAsRead: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The notification id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The notification has been successfully marked as read. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarkNotificationAsReadResponseDto"];
+                };
+            };
+        };
+    };
+    NotificationsController_markAllAsRead: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All notifications have been successfully marked as read. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarkAllNotificationsAsReadResponseDto"];
+                };
+            };
+        };
+    };
+    NotificationsController_deleteNotification: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                /** @description The notification id */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The notification has been successfully deleted. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeleteNotificationResponseDto"];
+                };
             };
         };
     };
@@ -33433,6 +34589,113 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetAuditLogsResponseDto"];
+                };
+            };
+        };
+    };
+    BillAllocateLandedCostController_getLandedCostTransactions: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of landed cost transactions. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BillAllocateLandedCostController_calculateLandedCost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                billId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AllocateBillLandedCostDto"];
+            };
+        };
+        responses: {
+            /** @description Landed cost allocated successfully. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BillAllocateLandedCostController_deleteAllocatedLandedCost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                allocatedLandedCostId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Allocated landed cost deleted successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BillAllocateLandedCostController_getBillLandedCostTransactions: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Value must be 'Bearer <token>' where <token> is an API key prefixed with 'bc_' or a JWT token. */
+                Authorization: string;
+                /** @description Required if Authorization is a JWT token. The organization ID to operate within. */
+                "organization-id": string;
+            };
+            path: {
+                billId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of bill landed cost transactions. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        billId?: number;
+                        data?: components["schemas"]["BillLandedCostTransactionDto"][];
+                    };
                 };
             };
         };

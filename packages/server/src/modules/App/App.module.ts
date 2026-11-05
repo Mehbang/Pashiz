@@ -22,6 +22,7 @@ import { ClsModule, ClsService } from 'nestjs-cls';
 import { AppController } from './App.controller';
 import { AppService } from './App.service';
 import { ItemsModule } from '../Items/Items.module';
+import { ItemReorderPointsModule } from '../ItemReorderPoints/ItemReorderPoints.module';
 import { config } from '../../common/config';
 import { ENV_FILE_PATHS } from '../../common/config/env';
 import { SystemDatabaseModule } from '../System/SystemDB/SystemDB.module';
@@ -39,6 +40,7 @@ import { ItemUnitsModule } from '../ItemUnits/ItemUnits.module';
 import { TaxRatesModule } from '../TaxRates/TaxRate.module';
 import { PdfTemplatesModule } from '../PdfTemplate/PdfTemplates.module';
 import { BranchesModule } from '../Branches/Branches.module';
+import { TrackingCategoriesModule } from '../TrackingCategories/TrackingCategories.module';
 import { WarehousesModule } from '../Warehouses/Warehouses.module';
 import { SerializeInterceptor } from '@/common/interceptors/serialize.interceptor';
 import { ToJsonInterceptor } from '@/common/interceptors/to-json.interceptor';
@@ -106,9 +108,10 @@ import { BankingPlaidModule } from '../BankingPlaid/BankingPlaid.module';
 import { BankingCategorizeModule } from '../BankingCategorize/BankingCategorize.module';
 import { ExchangeRatesModule } from '../ExchangeRates/ExchangeRates.module';
 import { TenantModelsInitializeModule } from '../Tenancy/TenantModelsInitialize.module';
-import { BillLandedCostsModule } from '../BillLandedCosts/BillLandedCosts.module';
 import { SocketModule } from '../Socket/Socket.module';
+import { NotificationsModule } from '../Notifications/Notifications.module';
 import { EEModule } from '../EE/EE.module';
+import { AnalyticsModule } from '../Analytics/Analytics.module';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { AppThrottleModule } from './AppThrottle.module';
 
@@ -118,6 +121,7 @@ import { AppThrottleModule } from './AppThrottle.module';
       rootPath: join(__dirname, '../../..', 'public'),
       serveRoot: '/public',
     }),
+
     ConfigModule.forRoot({
       envFilePath: ENV_FILE_PATHS,
       load: config,
@@ -202,6 +206,7 @@ import { AppThrottleModule } from './AppThrottle.module';
     TransformerModule,
     MailModule,
     ItemsModule,
+    ItemReorderPointsModule,
     ItemCategoryModule,
     ItemUnitsModule,
     AccountsModule,
@@ -209,6 +214,7 @@ import { AppThrottleModule } from './AppThrottle.module';
     TaxRatesModule,
     PdfTemplatesModule,
     BranchesModule,
+    TrackingCategoriesModule,
     WarehousesModule,
     WarehousesTransfersModule,
     CustomersModule,
@@ -217,7 +223,6 @@ import { AppThrottleModule } from './AppThrottle.module';
     SaleEstimatesModule,
     SaleReceiptsModule,
     BillsModule,
-    BillLandedCostsModule,
     ManualJournalsModule,
     CreditNotesModule,
     VendorCreditsModule,
@@ -267,7 +272,9 @@ import { AppThrottleModule } from './AppThrottle.module';
     UsersModule,
     ContactsModule,
     SocketModule,
+    NotificationsModule,
     EEModule,
+    AnalyticsModule,
     ExchangeRatesModule,
   ],
   controllers: [AppController],

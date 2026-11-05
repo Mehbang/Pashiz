@@ -5,6 +5,7 @@ export interface INumberFormatQuery {
   showZero: boolean;
   formatMoney: 'total' | 'always' | 'none';
   negativeFormat: 'parentheses' | 'mines';
+  showInRed?: boolean;
 }
 
 export interface IFormatNumberSettings {
@@ -82,6 +83,7 @@ export const DEFAULT_REPORT_META: Omit<IFinancialReportMeta, 'baseCurrency'> = {
 
 export enum IFinancialDatePeriodsUnit {
   Day = 'day',
+  Week = 'week',
   Month = 'month',
   Year = 'year',
 }
@@ -124,8 +126,8 @@ export interface IFinancialNodeWithPreviousPeriod {
   previousPeriodPercentage?: IFinancialSheetPercentage;
 }
 export interface IFinancialNodeWithPreviousYear {
-  previousYearFromDate: FinancialDateMeta;
-  previousYearToDate: FinancialDateMeta;
+  previousYearFromDate?: FinancialDateMeta;
+  previousYearToDate?: FinancialDateMeta;
 
   previousYear?: IFinancialSheetTotal;
   previousYearChange?: IFinancialSheetTotal;

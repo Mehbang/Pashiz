@@ -1,6 +1,7 @@
 import intl from 'react-intl-universal';
 import { Classes, Intent, ProgressBar } from '@blueprintjs/core';
 import clsx from 'classnames';
+import * as FF from 'fp-ts/function';
 import { debounce } from 'lodash';
 import React, { Suspense } from 'react';
 import styled from 'styled-components';
@@ -9,7 +10,6 @@ import type { ComponentType } from 'react';
 import { AppToaster } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { compose } from '@/utils';
 
 interface AlertLazyFallbackMessageProps {
   amount: number;
@@ -104,7 +104,7 @@ function AlertLazyFallback(): React.ReactElement {
 interface AlertLazyInsideProps extends WithAlertActionsProps {
   name: string;
   isOpen: boolean;
-  Component: ComponentType<{ name: string }>;
+  Component: ComponentType<any>;
 }
 
 function AlertLazyInside({
@@ -123,10 +123,11 @@ function AlertLazyInside({
   );
 }
 
-export const AlertLazy = compose(
-  withAlertStoreConnect(),
+export const AlertLazy = FF.pipe(
+  AlertLazyInside,
   withAlertActions,
-)(AlertLazyInside);
+  withAlertStoreConnect(),
+);
 
 const ToastText = styled.div`
   margin-bottom: 10px;

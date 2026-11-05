@@ -1,4 +1,5 @@
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -11,7 +12,6 @@ import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { handleDeleteErrors } from '@/containers/Preferences/Warehouses/utils';
 import { useDeleteWarehouse } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface WarehouseDeleteAlertProps extends WithAlertActionsProps {
   name: string;
@@ -60,14 +60,14 @@ function WarehouseDeleteAlertInner({
       loading={isPending}
     >
       <p data-testId={'warehouse-delete-alert'}>
-        {/* @ts-expect-error — react-intl-universal FormattedHTMLMessage JSX type mismatch */}
         <FormattedHTMLMessage id={'warehouse.once_delete_this_warehouse'} />
       </p>
     </Alert>
   );
 }
 
-export const WarehouseDeleteAlert = compose(
-  withAlertStoreConnect(),
+export const WarehouseDeleteAlert = FF.pipe(
+  WarehouseDeleteAlertInner,
   withAlertActions,
-)(WarehouseDeleteAlertInner);
+  withAlertStoreConnect(),
+);

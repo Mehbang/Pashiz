@@ -1,33 +1,16 @@
 import { Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useEstimateViaSMSContext } from './NotifyEstimateViaSMSFormProvider';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { NotifyViaSMSForm as NotifyViaSMSFormBase } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
+import {
+  NotifyViaSMSForm,
+  type NotifyViaSMSFormValues,
+} from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
 import { transformErrors } from '@/containers/NotifyViaSMS/utils';
-import { compose } from '@/utils';
-
-// `NotifyViaSMSForm` is `@ts-nocheck` with required destructured props; widen
-// locally so this dialog can pass only the props it actually uses.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type NotifyViaSMSFormProps = {
-  initialValues?: any;
-  notificationTypes?: any;
-  onSubmit?: any;
-  onCancel?: any;
-  onValuesChange?: any;
-  calloutCodes?: any;
-  formikProps?: any;
-};
-const NotifyViaSMSForm =
-  NotifyViaSMSFormBase as unknown as React.ComponentType<NotifyViaSMSFormProps>;
-
-interface NotifyViaSMSFormValues {
-  notificationKey: string;
-  [key: string]: unknown;
-}
 
 const notificationType = {
   key: 'sale-estimate-details',
@@ -109,6 +92,7 @@ function NotifyEstimateViaSMSFormInner({
   );
 }
 
-export const NotifyEstimateViaSMSForm = compose(withDialogActions)(
+export const NotifyEstimateViaSMSForm = FF.pipe(
   NotifyEstimateViaSMSFormInner,
+  withDialogActions,
 );

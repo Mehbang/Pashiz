@@ -1,5 +1,5 @@
 import { sumBy } from 'lodash';
-import * as R from 'ramda';
+import { flow } from 'fp-ts/function';
 import {
   ITrialBalanceSheetQuery,
   ITrialBalanceAccount,
@@ -16,6 +16,7 @@ import {
   IFinancialReportMeta,
   DEFAULT_REPORT_META,
 } from '../../types/Report.types';
+import { sortTrialBalanceAccounts } from './_utils';
 
 export class TrialBalanceSheet extends FinancialSheet {
   /**
@@ -244,15 +245,29 @@ export class TrialBalanceSheet extends FinancialSheet {
   }
 
   /**
+   * Sort accounts nodes.
+   * @param {ITrialBalanceAccount[]}
+   * @returns {ITrialBalanceAccount[]}
+   */
+  private sortAccounts = (accountsNodes: ITrialBalanceAccount[]) => {
+    return sortTrialBalanceAccounts(
+      accountsNodes,
+      this.query.columnSortBy,
+      this.query.sortOrder,
+    );
+  };
+
+  /**
    * Retrieve accounts section of trial balance report.
    * @param {IAccount[]} accounts
    * @returns {ITrialBalanceAccount[]}
    */
   private accountsSection(accounts: ModelObject<Account>[]) {
-    return R.compose(
-      this.accountsFilter,
-      this.nestedAccountsNode,
+    return flow(
       this.accountsMapper,
+      this.sortAccounts,
+      this.nestedAccountsNode,
+      this.accountsFilter,
     )(accounts);
   }
 

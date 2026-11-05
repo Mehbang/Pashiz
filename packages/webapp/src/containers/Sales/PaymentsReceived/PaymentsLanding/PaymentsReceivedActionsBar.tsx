@@ -12,6 +12,7 @@ import {
   PopoverInteractionKind,
   Position,
 } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -44,7 +45,6 @@ import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { useSaveSettings } from '@/hooks/query';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
 import { useRefreshPaymentReceive } from '@/hooks/query/payment-receives';
-import { compose } from '@/utils';
 
 interface PaymentsReceivedActionsBarProps
   extends Pick<WithPaymentsReceivedProps, 'paymentReceivesSelectedRows'>,
@@ -211,8 +211,10 @@ function PaymentsReceivedActionsBarInner({
   );
 }
 
-export const PaymentsReceivedActionsBar = compose(
-  withPaymentsReceivedActions,
+export const PaymentsReceivedActionsBar = FF.pipe(
+  PaymentsReceivedActionsBarInner,
+  withDrawerActions,
+  withDialogActions,
   withPaymentsReceived(
     ({ paymentReceivesTableState, paymentReceivesSelectedRows }) => ({
       paymentReceivesTableState,
@@ -220,6 +222,5 @@ export const PaymentsReceivedActionsBar = compose(
       paymentReceivesSelectedRows,
     }),
   ),
-  withDialogActions,
-  withDrawerActions,
-)(PaymentsReceivedActionsBarInner);
+  withPaymentsReceivedActions,
+);

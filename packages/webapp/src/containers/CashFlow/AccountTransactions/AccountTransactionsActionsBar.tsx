@@ -15,6 +15,7 @@ import {
   Tooltip,
   MenuDivider,
 } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import { isEmpty } from 'lodash';
 import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -50,7 +51,6 @@ import {
   useUnexcludeUncategorizedTransactions,
 } from '@/hooks/query/banking';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { compose } from '@/utils';
 
 interface AccountTransactionsActionsBarInnerProps
   extends Pick<WithDialogActionsProps, 'openDialog'>,
@@ -472,9 +472,9 @@ function AccountTransactionsActionsBarInner({
   );
 }
 
-export const AccountTransactionsActionsBar = compose(
-  withDialogActions,
-  withAlertActions,
+export const AccountTransactionsActionsBar = FF.pipe(
+  AccountTransactionsActionsBarInner,
+  withBankingActions,
   withBanking(
     ({
       uncategorizedTransationsIdsSelected,
@@ -488,5 +488,6 @@ export const AccountTransactionsActionsBar = compose(
       categorizedTransactionsSelected,
     }),
   ),
-  withBankingActions,
-)(AccountTransactionsActionsBarInner);
+  withAlertActions,
+  withDialogActions,
+);

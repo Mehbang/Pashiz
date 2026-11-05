@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   Button,
   InputGroup,
@@ -9,11 +8,16 @@ import {
   Position,
 } from '@blueprintjs/core';
 import styled, { x } from '@xstyled/emotion';
+import * as FF from 'fp-ts/function';
 import { useMemo, useState } from 'react';
 import intl from 'react-intl-universal';
-import { Icon, FormattedMessage as T } from '@/components';
+import type { ComponentType } from 'react';
+import { Icon, IconProps, FormattedMessage as T } from '@/components';
 import { DRAWERS } from '@/constants/drawers';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import {
+  withDrawerActions,
+  WithDrawerActionsProps,
+} from '@/containers/Drawer/withDrawerActions';
 import { useWorkspaces } from '@/ee/workspaces/hooks/query';
 import { useSwitchOrganization } from '@/ee/workspaces/hooks/useSwitchOrganization';
 import {
@@ -21,7 +25,7 @@ import {
   useCurrentOrganizationMetadata,
 } from '@/hooks/query';
 import { useAuthOrganizationId, useAuthActions } from '@/hooks/state';
-import { compose, firstLettersArgs } from '@/utils';
+import { firstLettersArgs } from '@/utils';
 
 // Popover modifiers.
 const POPOVER_MODIFIERS = {
@@ -103,13 +107,21 @@ const DashboardSearchInput = styled(InputGroup)`
   }
 `;
 
+interface SidebarHeadProps extends Pick<WithDrawerActionsProps, 'openDrawer'> {}
+
+// The shared `Icon` ignores the legacy `size` prop (it wants `iconSize`) and
+// renders it as a DOM attribute; accepted here to preserve the current output.
+const SidebarIcon = Icon as unknown as ComponentType<
+  IconProps & { size?: number }
+>;
+
 /**
  * Sidebar head.
  */
 function SidebarHeadJSX({
   // #withDrawerActions
   openDrawer,
-}) {
+}: SidebarHeadProps) {
   const metadata = useCurrentOrganizationMetadata();
   const { data: user } = useAuthenticatedAccount();
   const { data: workspaces } = useWorkspaces();
@@ -129,7 +141,7 @@ function SidebarHeadJSX({
     );
   }, [workspaces, searchQuery]);
 
-  const handleSwitchWorkspace = (organizationId) => {
+  const handleSwitchWorkspace = (organizationId: string) => {
     if (organizationId === currentOrganizationId) {
       return;
     }
@@ -188,7 +200,7 @@ function SidebarHeadJSX({
               <MenuDivider />
 
               <MenuItem
-                icon={<Icon icon={'list'} size={16} />}
+                icon={<SidebarIcon icon={'list'} size={16} />}
                 text={<T id={'workspaces.view_all_workspaces'} />}
                 onClick={() => openDrawer(DRAWERS.ORGANIZATIONS_LIST)}
               />
@@ -298,13 +310,13 @@ function SidebarHeadJSX({
 
               <MenuDivider />
               <MenuItem
-                icon={<Icon icon={'plus'} size={16} />}
+                icon={<SidebarIcon icon={'plus'} size={16} />}
                 text={<T id={'workspaces.create_workspace'} />}
                 onClick={() => openDrawer(DRAWERS.CREATE_WORKSPACE)}
               />
               <MenuDivider />
               <MenuItem
-                icon={<Icon icon={'log-out'} size={16} />}
+                icon={<SidebarIcon icon={'log-out'} size={16} />}
                 text={<T id={'logout'} />}
                 onClick={handleLogout}
               />
@@ -315,7 +327,7 @@ function SidebarHeadJSX({
         >
           <Button
             className="title"
-            rightIcon={<Icon icon={'caret-down-16'} size={16} />}
+            rightIcon={<SidebarIcon icon={'caret-down-16'} size={16} />}
           >
             {metadata?.name}
           </Button>
@@ -337,4 +349,4 @@ function SidebarHeadJSX({
   );
 }
 
-export const SidebarHead = compose(withDrawerActions)(SidebarHeadJSX);
+export const SidebarHead = FF.pipe(SidebarHeadJSX, withDrawerActions);

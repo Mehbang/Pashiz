@@ -1,3 +1,4 @@
+import * as FF from 'fp-ts/function';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { BalanceSheetActionsBar } from './BalanceSheetActionsBar';
@@ -12,7 +13,6 @@ import {
   WithBalanceSheetActionsProps,
 } from './withBalanceSheetActions';
 import { FinancialStatement, DashboardPageContent } from '@/components';
-import { compose } from '@/utils';
 
 interface BalanceSheetFilterValues {
   fromDate: Date | string;
@@ -56,16 +56,16 @@ function BalanceSheetInner({
   );
 
   return (
-    <BalanceSheetProvider filter={query}>
+    <BalanceSheetProvider filter={query} setQuery={setLocationQuery}>
       <BalanceSheetActionsBar
-        numberFormat={query.numberFormat}
+        numberFormat={query.numberFormat ?? {}}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <BalanceSheetLoadingBar />
       <BalanceSheetAlerts />
 
       <DashboardPageContent>
-        <FinancialStatement>
+        <FinancialStatement numberFormat={query.numberFormat ?? {}}>
           <BalanceSheetHeader
             pageFilter={query}
             onSubmitFilter={handleFilterSubmit}
@@ -79,4 +79,4 @@ function BalanceSheetInner({
   );
 }
 
-export const BalanceSheet = compose(withBalanceSheetActions)(BalanceSheetInner);
+export const BalanceSheet = FF.pipe(BalanceSheetInner, withBalanceSheetActions);

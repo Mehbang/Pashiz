@@ -1,4 +1,5 @@
 import { Alert, Intent } from '@blueprintjs/core';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
@@ -6,7 +7,6 @@ import { AppToaster, FormattedMessage as T } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { useOpenCreditNote } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface CreditNoteOpenedAlertPayload {
   creditNoteId: number;
@@ -43,7 +43,7 @@ function CreditNoteOpenedAlertInner({
         });
       })
       .catch((error: Error) => {
-        // Bugfix: original @ts-nocheck had an empty `.catch((error) => {})` that silently swallowed failures.
+        // Bugfix: the original had an empty `.catch((error) => {})` that silently swallowed failures.
         AppToaster.show({
           message: error.message,
           intent: Intent.DANGER,
@@ -71,7 +71,8 @@ function CreditNoteOpenedAlertInner({
   );
 }
 
-export const CreditNoteOpenedAlert = compose(
-  withAlertStoreConnect(),
+export const CreditNoteOpenedAlert = FF.pipe(
+  CreditNoteOpenedAlertInner,
   withAlertActions,
-)(CreditNoteOpenedAlertInner);
+  withAlertStoreConnect(),
+);

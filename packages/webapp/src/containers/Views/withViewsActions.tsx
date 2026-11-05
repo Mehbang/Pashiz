@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import type { RootState } from '@/store/reducers';
+import type { ComponentType } from 'react';
 import {
   fetchView,
   submitView,
@@ -12,12 +13,12 @@ import {
 } from '@/store/custom-views/custom-views.actions';
 
 export interface WithViewsActionsProps {
-  requestFetchView: (id: string | number) => unknown;
-  requestSubmitView: (form: unknown) => unknown;
-  requestEditView: (id: string | number, form: unknown) => unknown;
-  requestDeleteView: (id: string | number) => unknown;
-  requestFetchResourceViews: (resourceSlug: string) => unknown;
-  requestFetchViewResource: (id: string | number) => unknown;
+  requestFetchView: (id: string | number) => Promise<unknown>;
+  requestSubmitView: (form: unknown) => Promise<unknown>;
+  requestEditView: (id: string | number, form: unknown) => Promise<unknown>;
+  requestDeleteView: (id: string | number) => Promise<unknown>;
+  requestFetchResourceViews: (resourceSlug: string) => Promise<unknown>;
+  requestFetchViewResource: (id: string | number) => Promise<unknown>;
 }
 
 export const mapDispatchToProps = (
@@ -32,4 +33,14 @@ export const mapDispatchToProps = (
   requestFetchViewResource: (id) => dispatch(fetchViewResource({ id })),
 });
 
-export const withViewsActions = connect(null, mapDispatchToProps);
+export function withViewsActions<P>(
+  WrappedComponent: ComponentType<P>,
+): ComponentType<Omit<P, keyof WithViewsActionsProps>> {
+  const Connected = connect(
+    null,
+    mapDispatchToProps,
+  )(WrappedComponent as ComponentType<any>);
+  return Connected as unknown as ComponentType<
+    Omit<P, keyof WithViewsActionsProps>
+  >;
+}

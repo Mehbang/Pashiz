@@ -1,6 +1,7 @@
 import { Intent, Classes, Button } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { Form, useFormikContext } from 'formik';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { UserFormCalloutAlerts } from './components';
@@ -16,7 +17,6 @@ import {
 } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { compose } from '@/utils';
 
 interface UserFormContentProps extends WithDialogActionsProps {
   calloutCode: number[];
@@ -99,11 +99,11 @@ function UserFormContentInner({
             loading={isSubmitting}
             style={{ minWidth: '85px' }}
           >
-            <T id={'edit'} />
+            <T id={'save'} />
           </Button>
         </div>
       </div>
     </Form>
   );
 }
-export const UserFormContent = compose(withDialogActions)(UserFormContentInner);
+export const UserFormContent = FF.pipe(UserFormContentInner, withDialogActions);

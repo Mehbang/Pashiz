@@ -1,6 +1,5 @@
 import { ITransactionsByReferenceTransaction } from './TransactionsByReference.types';
 import { FinancialSheet } from '../../common/FinancialSheet';
-import { ModelObject } from 'objection';
 import { AccountTransaction } from '@/modules/Accounts/models/AccountTransaction.model';
 import {
   INumberFormatQuery,
@@ -10,19 +9,19 @@ import {
 import { TransactionsByReferenceQueryDto } from './TransactionsByReferenceQuery.dto';
 
 export class TransactionsByReference extends FinancialSheet {
-  readonly transactions: ModelObject<AccountTransaction>[];
+  readonly transactions: Array<AccountTransaction>;
   readonly query: TransactionsByReferenceQueryDto;
   readonly baseCurrency: string;
   readonly numberFormat: INumberFormatQuery;
 
   /**
    * Constructor method.
-   * @param {ModelObject<AccountTransaction>[]} transactions
+   * @param {AccountTransaction[]} transactions
    * @param {TransactionsByVendorQueryDto} query
    * @param {IFinancialReportMeta} meta
    */
   constructor(
-    transactions: ModelObject<AccountTransaction>[],
+    transactions: Array<AccountTransaction>,
     query: TransactionsByReferenceQueryDto,
     meta: IFinancialReportMeta,
   ) {
@@ -42,7 +41,7 @@ export class TransactionsByReference extends FinancialSheet {
    * @returns {ITransactionsByReferenceTransaction}
    */
   private transactionMapper = (
-    transaction: ModelObject<AccountTransaction>,
+    transaction: AccountTransaction,
   ): ITransactionsByReferenceTransaction => {
     return {
       date: this.getDateMeta(transaction.date),
@@ -61,6 +60,8 @@ export class TransactionsByReference extends FinancialSheet {
       accountName: transaction.account?.name || '',
       accountCode: this.localizeDigits(transaction.account?.code || ''),
       accountId: transaction.accountId,
+
+      basis: transaction.basis ?? null,
     };
   };
 
@@ -70,7 +71,7 @@ export class TransactionsByReference extends FinancialSheet {
    * @returns {ITransactionsByReferenceTransaction}
    */
   private transactionsMapper = (
-    transactions: ModelObject<AccountTransaction>[],
+    transactions: Array<AccountTransaction>,
   ): ITransactionsByReferenceTransaction[] => {
     return transactions.map(this.transactionMapper);
   };

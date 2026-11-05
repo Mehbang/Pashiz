@@ -20,6 +20,8 @@ export function getDefaultTrialBalanceQuery(): TrialBalanceQuery {
     filterByOption: 'with-transactions',
     branchesIds: [] as number[],
     numberFormat: {},
+    columnSortBy: undefined,
+    sortOrder: undefined,
   };
 }
 

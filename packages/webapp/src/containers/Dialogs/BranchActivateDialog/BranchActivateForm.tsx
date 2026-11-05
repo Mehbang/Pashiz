@@ -1,5 +1,6 @@
 import { Intent } from '@blueprintjs/core';
 import { Formik, type FormikHelpers } from 'formik';
+import * as FF from 'fp-ts/function';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { BranchActivateFormContent } from './BranchActivateFormContent';
@@ -8,7 +9,6 @@ import type { BranchActivateFormValues } from './types';
 import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
 import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { compose } from '@/utils';
 
 interface BranchActivateFormProps extends WithDialogActionsProps {}
 
@@ -25,10 +25,9 @@ function BranchActivateFormInner({
 
   // Handles the form submit.
   const handleFormSubmit = (
-    values: BranchActivateFormValues,
+    _values: BranchActivateFormValues,
     { setSubmitting }: FormikHelpers<BranchActivateFormValues>,
   ) => {
-    const form = { ...values };
     setSubmitting(true);
     // Handle request response success.
     const onSuccess = () => {
@@ -43,8 +42,7 @@ function BranchActivateFormInner({
     const onError = () => {
       setSubmitting(false);
     };
-    // @ts-expect-error — latent bug preserved: hook expects a number|string id, original code passed an object.
-    activateBranches(form).then(onSuccess).catch(onError);
+    activateBranches().then(onSuccess).catch(onError);
   };
 
   return (
@@ -56,6 +54,7 @@ function BranchActivateFormInner({
   );
 }
 
-export const BranchActivateForm = compose(withDialogActions)(
+export const BranchActivateForm = FF.pipe(
   BranchActivateFormInner,
+  withDialogActions,
 );

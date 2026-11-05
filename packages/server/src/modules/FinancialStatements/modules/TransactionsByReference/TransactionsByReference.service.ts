@@ -6,12 +6,14 @@ import { getTransactionsByReferenceQuery } from './_utils';
 import { TenancyContext } from '@/modules/Tenancy/TenancyContext.service';
 import { TransactionsByReferenceQueryDto } from './TransactionsByReferenceQuery.dto';
 import { calendarOfLanguage } from '@/utils/jalali-date';
+import { AccountingBasisService } from '../../common/AccountingBasisService';
 
 @Injectable()
 export class TransactionsByReferenceService {
   constructor(
     private readonly repository: TransactionsByReferenceRepository,
     private readonly tenancyContext: TenancyContext,
+    private readonly accountingBasisService: AccountingBasisService,
   ) {}
 
   /**
@@ -27,11 +29,13 @@ export class TransactionsByReferenceService {
       ...query,
     };
     const tenantMetadata = await this.tenancyContext.getTenantMetadata();
+    const basis = await this.accountingBasisService.resolve(query.basis);
 
     // Retrieve the accounts transactions of the given reference.
     const transactions = await this.repository.getTransactions(
       query.referenceId,
       filter.referenceType,
+      basis,
     );
     // Transactions by reference report.
     const report = new TransactionsByReference(transactions, filter, {

@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ClsService } from 'nestjs-cls';
-import { ABILITIES_CACHE, getAbilityForRole } from './TenantAbilities';
+import {
+  cacheAbility,
+  getAbilityForRole,
+  getCachedAbility,
+} from './TenantAbilities';
 import { TenantModelProxy } from '../System/models/TenantBaseModel';
 import { TenantUser } from '../Tenancy/TenancyModels/models/TenantUser.model';
 
@@ -29,21 +33,22 @@ export class AuthorizationGuard implements CanActivate {
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const userId = this.clsService.get('userId');
-    const organizationId = this.clsService.get('organizationId');
-    // Scope the cache by organization as well as user: one person may belong to
-    // several organizations with a different role in each, and keying on the
-    // user alone leaked one organization's abilities into the others. (The
-    // entry is still only evicted by the LRU; a role edit is reflected once it
-    // ages out — the upstream purge-on-edit is a later change.)
-    const cacheKey = `${organizationId}:${userId}`;
+    const userId = this.clsService.get<number>('userId');
+    const organizationId = this.clsService.get<string>('organizationId');
+    const isCacheable = organizationId != null && userId != null;
 
-    if (ABILITIES_CACHE.has(cacheKey)) {
-      (request as any).ability = ABILITIES_CACHE.get(cacheKey);
-    } else {
-      const ability = await this.getAbilityForUser();
-      (request as any).ability = ability;
-      ABILITIES_CACHE.set(cacheKey, ability);
+    if (isCacheable) {
+      const cachedAbility = getCachedAbility(organizationId, userId);
+      if (cachedAbility) {
+        (request as any).ability = cachedAbility;
+        return true;
+      }
+    }
+    const ability = await this.getAbilityForUser();
+    (request as any).ability = ability;
+
+    if (isCacheable) {
+      cacheAbility(organizationId, userId, ability);
     }
     return true;
   }

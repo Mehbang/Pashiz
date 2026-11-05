@@ -1,3 +1,4 @@
+import * as FF from 'fp-ts/function';
 import moment from 'moment';
 import React, { useEffect, useCallback } from 'react';
 import { InventoryValuationLoadingBar } from './components';
@@ -6,14 +7,16 @@ import { InventoryValuationBody } from './InventoryValuationBody';
 import { InventoryValuationDialogs } from './InventoryValuationDialogs';
 import { InventoryValuationHeader } from './InventoryValuationHeader';
 import { InventoryValuationProvider } from './InventoryValuationProvider';
-import { useInventoryValuationQuery } from './utils';
+import {
+  getInventoryValuationQuery,
+  useInventoryValuationQuery,
+} from './utils';
 import {
   withInventoryValuationActions,
   WithInventoryValuationActionsProps,
 } from './withInventoryValuationActions';
-import { DashboardPageContent } from '@/components';
+import { DashboardPageContent, FinancialStatement } from '@/components';
 import { useCurrentOrganizationName } from '@/hooks/query';
-import { compose } from '@/utils';
 
 interface InventoryValuationProps {
   toggleInventoryValuationFilterDrawer: WithInventoryValuationActionsProps['toggleInventoryValuationFilterDrawer'];
@@ -58,17 +61,19 @@ function InventoryValuationInner({
   return (
     <InventoryValuationProvider query={query}>
       <InventoryValuationActionsBar
-        numberFormat={query.numberFormat}
+        numberFormat={query.numberFormat ?? {}}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <InventoryValuationLoadingBar />
 
       <DashboardPageContent>
-        <InventoryValuationHeader
-          pageFilter={query}
-          onSubmitFilter={handleFilterSubmit}
-        />
-        <InventoryValuationBody />
+        <FinancialStatement numberFormat={query.numberFormat ?? {}}>
+          <InventoryValuationHeader
+            pageFilter={query as ReturnType<typeof getInventoryValuationQuery>}
+            onSubmitFilter={handleFilterSubmit}
+          />
+          <InventoryValuationBody />
+        </FinancialStatement>
       </DashboardPageContent>
 
       <InventoryValuationDialogs />
@@ -76,6 +81,7 @@ function InventoryValuationInner({
   );
 }
 
-export const InventoryValuation = compose(withInventoryValuationActions)(
+export const InventoryValuation = FF.pipe(
   InventoryValuationInner,
+  withInventoryValuationActions,
 );

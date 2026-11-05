@@ -1,3 +1,4 @@
+import * as FF from 'fp-ts/function';
 import moment from 'moment';
 import React, { useCallback, useEffect } from 'react';
 import {
@@ -15,7 +16,6 @@ import {
   WithTrialBalanceActionsProps,
 } from './withTrialBalanceActions';
 import { FinancialStatement, DashboardPageContent } from '@/components';
-import { compose } from '@/utils';
 
 type TrialBalanceSheetProps = Pick<
   WithTrialBalanceActionsProps,
@@ -59,16 +59,16 @@ function TrialBalanceSheetInner({
   );
 
   return (
-    <TrialBalanceSheetProvider query={query}>
+    <TrialBalanceSheetProvider query={query} setQuery={setLocationQuery}>
       <TrialBalanceActionsBar
-        numberFormat={query.numberFormat}
+        numberFormat={query.numberFormat ?? {}}
         onNumberFormatSubmit={handleNumberFormatSubmit}
       />
       <TrialBalanceSheetLoadingBar />
       <TrialBalanceSheetAlerts />
 
       <DashboardPageContent>
-        <FinancialStatement>
+        <FinancialStatement numberFormat={query.numberFormat ?? {}}>
           <TrialBalanceSheetHeader
             pageFilter={query}
             onSubmitFilter={handleFilterSubmit}
@@ -82,6 +82,7 @@ function TrialBalanceSheetInner({
   );
 }
 
-export const TrialBalanceSheet = compose(withTrialBalanceActions)(
+export const TrialBalanceSheet = FF.pipe(
   TrialBalanceSheetInner,
+  withTrialBalanceActions,
 );

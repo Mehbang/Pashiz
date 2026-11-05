@@ -41,6 +41,7 @@ export * from './cashflow-accounts';
 export * from './transactions-locking';
 export * from './warehouses';
 export * from './branches';
+export * from './tracking-categories';
 export * from './warehouses-transfers';
 
 // Banking and payment hooks (nested directory structure)
@@ -58,4 +59,5 @@ export * from './base';
 // Subdirectories (already in nested structure)
 export * from './UniversalSearch/universal-search';
 export * from './FinancialReports';
+export * from './notifications';
 export * from './audit-logs';

@@ -1,10 +1,10 @@
 import intl from 'react-intl-universal';
 import classNames from 'classnames';
+import * as FF from 'fp-ts/function';
 import React, { lazy } from 'react';
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { CLASSES } from '@/constants/classes';
-import { compose } from '@/utils';
 
 // Lazy loading the content.
 const SalesByItemsPdfDialogContent = lazy(() =>
@@ -44,6 +44,7 @@ function SalesByItemsPdfDialogRoot({
   );
 }
 
-export const SalesByItemsPdfDialog = compose(withDialogRedux())(
+export const SalesByItemsPdfDialog = FF.pipe(
   SalesByItemsPdfDialogRoot,
+  withDialogRedux(),
 );

@@ -1,4 +1,3 @@
-import intl from 'react-intl-universal';
 export const initialValues = {
   templateName: '',
 
@@ -13,94 +12,89 @@ export const initialValues = {
 
   // Receipt Number
   showReceiptNumber: true,
-  receiptNumberLabel: intl.get('receipt_no_'),
+  receiptNumberLabel: 'Receipt number',
 
   // Receipt Date
   showReceiptDate: true,
-  receiptDateLabel: intl.get('date_of_issue'),
+  receiptDateLabel: 'Date of Issue',
 
   // Customer address
   showCustomerAddress: true,
 
   // Company address
   showCompanyAddress: true,
-  billedToLabel: intl.get('billed_to'),
+  billedToLabel: 'Billed To',
 
   // Entries
-  itemNameLabel: intl.get('item'),
-  itemDescriptionLabel: intl.get('description'),
-  itemRateLabel: intl.get('rate'),
-  itemTotalLabel: intl.get('total'),
+  lineItemLabel: 'Item',
+  lineRateLabel: 'Rate',
+  lineTotalLabel: 'Total',
 
   // Subtotal
   showSubtotal: true,
-  subtotalLabel: intl.get('subtotal'),
+  subtotalLabel: 'Subtotal',
 
   // Total
   showTotal: true,
-  totalLabel: intl.get('total'),
+  totalLabel: 'Total',
 
   // Terms & Conditions
-  termsConditionsLabel: intl.get('terms_conditions'),
+  termsConditionsLabel: 'Terms & Conditions',
   showTermsConditions: true,
 
   // Customer Note
-  customerNoteLabel: intl.get('customer_note'),
+  customerNoteLabel: 'Customer Note',
   showCustomerNote: true,
 };
 
 export const fieldsGroups = [
   {
-    label: intl.get('header'),
+    label: 'Header',
     fields: [
       {
         labelKey: 'receiptNumberLabel',
         enableKey: 'showReceiptNumber',
-        label: intl.get('receipt_no_'),
+        label: 'Receipt Number',
       },
       {
         labelKey: 'receiptDateLabel',
         enableKey: 'showReceiptDate',
-        label: intl.get('receipt_date'),
+        label: 'Receipt Date',
       },
       {
         enableKey: 'showCustomerAddress',
         labelKey: 'billedToLabel',
-        label: intl.get('bill_to'),
+        label: 'Bill To',
       },
       {
         enableKey: 'showCompanyAddress',
-        label: intl.get('billed_from'),
+        label: 'Billed From',
       },
     ],
   },
   {
-    label: intl.get('totals'),
+    label: 'Totals',
     fields: [
       {
         labelKey: 'subtotalLabel',
         enableKey: 'showSubtotal',
-        label: intl.get('subtotal'),
+        label: 'Subtotal',
       },
-      {
-        labelKey: 'totalLabel',
-        enableKey: 'showTotal',
-        label: intl.get('total'),
-      },
+      { labelKey: 'totalLabel', enableKey: 'showTotal', label: 'Total' },
     ],
   },
   {
-    label: intl.get('statements'),
+    label: 'Statements',
     fields: [
       {
         enableKey: 'showCustomerNote',
         labelKey: 'customerNoteLabel',
-        label: intl.get('customer_note'),
+        label: 'Customer Note',
       },
       {
         enableKey: 'showTermsConditions',
         labelKey: 'termsConditionsLabel',
-        label: intl.get('terms_conditions'),
+        label: 'Terms & Conditions',
       },
     ],
   },
