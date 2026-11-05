@@ -95,6 +95,16 @@ services:
   gotenberg:
     container_name: pashiz-gotenberg
 
+  # Upstream added a ClickHouse analytics store to the production compose.
+  # This installation does not run analytics — CLICKHOUSE_ENABLED is false and
+  # the server degrades cleanly without it — and ClickHouse is far too hungry
+  # for this box, so the container is parked behind a profile that is never
+  # enabled. (CLICKHOUSE_PASSWORD must still exist in .env: compose evaluates
+  # the `:?` guard in docker-compose.prod.yml before it applies profiles.)
+  clickhouse:
+    profiles:
+      - upstream-only
+
   # Upstream's watchtower polls a registry every hour for a newer `:latest` of
   # whatever it watches, and `docker-compose.prod.yml` labels the webapp and
   # the server for it. That is right for upstream, whose containers run
