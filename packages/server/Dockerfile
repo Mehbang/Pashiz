@@ -17,6 +17,11 @@ COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml lerna.jso
 COPY --chown=node:node packages/server/package.json ./packages/server/
 COPY --chown=node:node shared ./shared
 
+# Vendored dependencies installed from a tarball committed to this repo (e.g.
+# xlsx/SheetJS, whose fixed releases are published only on the SheetJS CDN, not
+# npm). Copied before install so the file: specifier resolves offline.
+COPY --chown=node:node vendor ./vendor
+
 # Install all dependencies (including devDependencies for build)
 RUN pnpm install --frozen-lockfile
 
@@ -48,6 +53,9 @@ ENV PYTHON=/usr/bin/python3
 COPY --chown=nodejs:nodejs package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY --chown=nodejs:nodejs packages/server/package.json ./packages/server/
 COPY --chown=nodejs:nodejs shared ./shared
+
+# Vendored dependencies (see builder stage) — needed before the prod install.
+COPY --chown=nodejs:nodejs vendor ./vendor
 
 # Copy .husky directory (needed for husky install command)
 COPY --chown=nodejs:nodejs .husky ./.husky
