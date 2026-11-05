@@ -50,5 +50,10 @@
   },
   "dependencies": {
     "tsup": "^8.3.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "multer": "^2.5.0"
+    }
   }
 }

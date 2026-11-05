@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  multer: ^2.5.0
+
 importers:
 
   .:
@@ -133,8 +136,8 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       '@types/multer':
-        specifier: ^1.4.11
-        version: 1.4.11
+        specifier: ^2.0.0
+        version: 2.3.0
       '@types/nodemailer':
         specifier: ^8.0.2
         version: 8.0.2
@@ -244,8 +247,8 @@ importers:
         specifier: ^0.5.43
         version: 0.5.45
       multer:
-        specifier: 1.4.5-lts.1
-        version: 1.4.5-lts.1
+        specifier: ^2.5.0
+        version: 2.5.0
       multer-s3:
         specifier: ^3.0.1
         version: 3.0.1(@aws-sdk/client-s3@3.583.0)
@@ -5600,8 +5603,8 @@ packages:
   '@types/minimist@1.2.5':
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
 
-  '@types/multer@1.4.11':
-    resolution: {integrity: sha512-svK240gr6LVWvv3YGyhLlA+6LRRWA4mnGIU7RcNmgjBYFl6665wcXrRfxGp5tEPVHUNm5FMcmq7too9bxCwX/w==}
+  '@types/multer@2.3.0':
+    resolution: {integrity: sha512-i7STIm9V4K2MPH4ZYMtrZAwNxs3kglk2LgleaTuB9pUXgADBcQYQuYMd7+6xgTIxfoggIkFA/DkkvycdZpIARA==}
 
   '@types/node-fetch@2.6.11':
     resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
@@ -10222,15 +10225,9 @@ packages:
     peerDependencies:
       '@aws-sdk/client-s3': ^3.0.0
 
-  multer@1.4.4-lts.1:
-    resolution: {integrity: sha512-WeSGziVj6+Z2/MwQo3GvqzgR+9Uc+qt8SwHKh3gvNPiISKfsMfG4SvCOFYlxxgkXt7yIV2i1yczehm0EOKIxIg==}
-    engines: {node: '>= 6.0.0'}
-    deprecated: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
-
-  multer@1.4.5-lts.1:
-    resolution: {integrity: sha512-ywPWvcDMeH+z9gQq5qYHCCy+ethsk4goepZ45GLD63fOu0YcNecQxi64nDs3qluZB+murG3/D4dJ7+dGctcCQQ==}
-    engines: {node: '>= 6.0.0'}
-    deprecated: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
+  multer@2.5.0:
+    resolution: {integrity: sha512-BsqOzYGVq49JcW2IzoSAxeKYRevb+dGGPPWleOR8Lrlk4igwxu1/9pwSXlByhCb7MVZDrNJFC0IBP5/O5nLYRw==}
+    engines: {node: '>= 10.16.0'}
 
   multimatch@5.0.0:
     resolution: {integrity: sha512-ypMKuglUrZUD99Tk2bUQ+xNQj43lPEfAeX2o9cTteAmShXy2VHDJpuwu1o0xqoKCt9jLVAvwyFKdLTPXKAfJyA==}
@@ -17456,7 +17453,7 @@ snapshots:
       body-parser: 1.20.3
       cors: 2.8.5
       express: 4.21.1
-      multer: 1.4.4-lts.1
+      multer: 2.5.0
       tslib: 2.7.0
     transitivePeerDependencies:
       - supports-color
@@ -20368,7 +20365,7 @@ snapshots:
 
   '@types/minimist@1.2.5': {}
 
-  '@types/multer@1.4.11':
+  '@types/multer@2.3.0':
     dependencies:
       '@types/express': 5.0.0
 
@@ -26157,25 +26154,11 @@ snapshots:
       html-comment-regex: 1.1.2
       run-parallel: 1.2.0
 
-  multer@1.4.4-lts.1:
+  multer@2.5.0:
     dependencies:
       append-field: 1.0.0
       busboy: 1.6.0
-      concat-stream: 1.6.2
-      mkdirp: 0.5.6
-      object-assign: 4.1.1
       type-is: 1.6.18
-      xtend: 4.0.2
-
-  multer@1.4.5-lts.1:
-    dependencies:
-      append-field: 1.0.0
-      busboy: 1.6.0
-      concat-stream: 1.6.2
-      mkdirp: 0.5.6
-      object-assign: 4.1.1
-      type-is: 1.6.18
-      xtend: 4.0.2
 
   multimatch@5.0.0:
     dependencies:
