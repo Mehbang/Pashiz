@@ -16,6 +16,11 @@ async function bootstrap() {
     rawBody: true,
   });
   app.set('query parser', 'extended');
+  // Behind Caddy -> Envoy: trust the proxy chain so req.ip is the real client
+  // IP. Without it every request looks like it comes from the proxy, so the
+  // rate limiter puts all clients in one bucket (one attacker then throttles
+  // sign-in for everyone) and audit logs record only the proxy address.
+  app.set('trust proxy', true);
   app.setGlobalPrefix('/api');
 
   // create and mount the middleware manually here
