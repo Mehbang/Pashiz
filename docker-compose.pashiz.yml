@@ -30,6 +30,13 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "false"
     environment:
+      # Authentication. The server signs and verifies every login token with
+      # APP_JWT_SECRET. docker-compose.prod.yml forwards JWT_SECRET — a name the
+      # application never reads — so without this line the server falls back to
+      # the public default secret baked into the source and every token becomes
+      # forgeable. Required: refuse to boot rather than sign with the default.
+      - 'APP_JWT_SECRET=${APP_JWT_SECRET:?APP_JWT_SECRET is required — generate one with: openssl rand -hex 48}'
+
       # `docker-compose.prod.yml` lists every variable the server receives, so
       # a new key in `.env` reaches the container only if it is named here too.
       # Without these the portal reads no credentials, decides it was never
