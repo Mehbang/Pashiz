@@ -22,6 +22,9 @@ export const AbilitySubject = {
   TaxRate: 'TaxRate',
   BankRule: 'BankRule',
   AuditLog: 'AuditLog',
+  Role: 'Role',
+  Warehouse: 'Warehouse',
+  Attachment: 'Attachment',
 } as const;
 
 export const ItemAction = {
@@ -198,4 +201,28 @@ export const BankRuleAction = {
 
 export const AuditLogAction = {
   View: 'View',
+} as const;
+
+export const RoleAction = {
+  View: 'View',
+  Create: 'Create',
+  Edit: 'Edit',
+  Delete: 'Delete',
+} as const;
+
+export const WarehouseAction = {
+  View: 'View',
+  Create: 'Create',
+  Edit: 'Edit',
+  Delete: 'Delete',
+} as const;
+
+export const AttachmentAction = {
+  View: 'View',
+  Create: 'Create',
+  Delete: 'Delete',
+} as const;
+
+export const PreferencesAction = {
+  Mutate: 'Mutate',
 } as const;

@@ -3,7 +3,10 @@ import intl from 'react-intl-universal';
 import {
   AbilitySubject,
   AccountAction,
+  AttachmentAction,
+  AuditLogAction,
   BillAction,
+  CashflowAction,
   CreditNoteAction,
   CustomerAction,
   ExpenseAction,
@@ -11,12 +14,15 @@ import {
   ManualJournalAction,
   PaymentMadeAction,
   PaymentReceiveAction,
+  PreferencesAction,
   ReportsAction,
+  RoleAction,
   SaleEstimateAction,
   SaleInvoiceAction,
   SaleReceiptAction,
   VendorAction,
   VendorCreditAction,
+  WarehouseAction,
 } from './abilityOption';
 
 export const ModulePermissionsStyle = {
@@ -664,6 +670,117 @@ export const getPermissionsSchema = (): PermissionModule[] => [
             label: intl.get('permissions.sales_tax_liability_summary'),
             key: ReportsAction.READ_SALES_TAX_LIABILITY_SUMMARY,
           },
+        ],
+      },
+    ],
+  },
+  {
+    label: intl.get('permissions.banking'),
+    type: ModulePermissionsStyle.Vertical,
+    serviceFullAccess: true,
+    moduleFullAccess: true,
+    services: [
+      {
+        label: intl.get('permissions.banking'),
+        subject: AbilitySubject.Cashflow,
+        permissions: [
+          { label: intl.get('permissions.column.view'), key: CashflowAction.View },
+          {
+            label: intl.get('permissions.column.create'),
+            key: CashflowAction.Create,
+            depend: [{ key: CashflowAction.View }],
+          },
+          {
+            label: intl.get('permissions.column.delete'),
+            key: CashflowAction.Delete,
+            depend: [{ key: CashflowAction.View }],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: intl.get('permissions.administration'),
+    type: ModulePermissionsStyle.Vertical,
+    serviceFullAccess: true,
+    moduleFullAccess: true,
+    services: [
+      {
+        label: intl.get('permissions.preferences'),
+        subject: AbilitySubject.Preferences,
+        permissions: [
+          {
+            label: intl.get('permissions.mutate_preferences'),
+            key: PreferencesAction.Mutate,
+          },
+        ],
+      },
+      {
+        label: intl.get('permissions.roles'),
+        subject: AbilitySubject.Role,
+        permissions: [
+          { label: intl.get('permissions.column.view'), key: RoleAction.View },
+          {
+            label: intl.get('permissions.column.create'),
+            key: RoleAction.Create,
+            depend: [{ key: RoleAction.View }],
+          },
+          {
+            label: intl.get('permissions.column.edit'),
+            key: RoleAction.Edit,
+            depend: [{ key: RoleAction.View }],
+          },
+          {
+            label: intl.get('permissions.column.delete'),
+            key: RoleAction.Delete,
+            depend: [{ key: RoleAction.View }],
+          },
+        ],
+      },
+      {
+        label: intl.get('permissions.warehouses'),
+        subject: AbilitySubject.Warehouse,
+        permissions: [
+          { label: intl.get('permissions.column.view'), key: WarehouseAction.View },
+          {
+            label: intl.get('permissions.column.create'),
+            key: WarehouseAction.Create,
+            depend: [{ key: WarehouseAction.View }],
+          },
+          {
+            label: intl.get('permissions.column.edit'),
+            key: WarehouseAction.Edit,
+            depend: [{ key: WarehouseAction.View }],
+          },
+          {
+            label: intl.get('permissions.column.delete'),
+            key: WarehouseAction.Delete,
+            depend: [{ key: WarehouseAction.View }],
+          },
+        ],
+      },
+      {
+        label: intl.get('permissions.attachments'),
+        subject: AbilitySubject.Attachment,
+        permissions: [
+          { label: intl.get('permissions.column.view'), key: AttachmentAction.View },
+          {
+            label: intl.get('permissions.column.create'),
+            key: AttachmentAction.Create,
+            depend: [{ key: AttachmentAction.View }],
+          },
+          {
+            label: intl.get('permissions.column.delete'),
+            key: AttachmentAction.Delete,
+            depend: [{ key: AttachmentAction.View }],
+          },
+        ],
+      },
+      {
+        label: intl.get('permissions.audit_log'),
+        subject: AbilitySubject.AuditLog,
+        permissions: [
+          { label: intl.get('permissions.column.view'), key: AuditLogAction.View },
         ],
       },
     ],
