@@ -1,6 +1,6 @@
 // @ts-nocheck
 import intl from 'react-intl-universal';
-import { Button, Classes, Intent, Radio, Tag } from '@blueprintjs/core';
+import { Button, Checkbox, Classes, Intent, Radio, Tag } from '@blueprintjs/core';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import * as FF from 'fp-ts/function';
 import { get } from 'lodash';
@@ -41,6 +41,43 @@ import {
 const MoneyInOptions = getAddMoneyInOptions();
 const MoneyOutOptions = getAddMoneyOutOptions();
 
+/**
+ * Lets a rule target a specific cash/bank account, or every account. Leaving the
+ * account empty (null) applies the rule to all accounts — the server treats a
+ * bank rule without `applyIfAccountId` as applying to all accounts.
+ */
+function ApplyToAccountField({ accounts }) {
+  const { values, setFieldValue } = useFormikContext();
+  const allAccounts = values.applyIfAccountId === null;
+
+  return (
+    <FFormGroup
+      name={'applyIfAccountId'}
+      label={intl.get('apply_the_rule_to_account')}
+      style={{ maxWidth: 350 }}
+    >
+      <Checkbox
+        checked={allAccounts}
+        label={intl.get('apply_to_all_accounts')}
+        onChange={(event) =>
+          setFieldValue(
+            'applyIfAccountId',
+            event.currentTarget.checked ? null : '',
+          )
+        }
+      />
+      {!allAccounts && (
+        <AccountsSelect
+          name={'applyIfAccountId'}
+          items={accounts}
+          filterByTypes={['cash', 'bank']}
+          buttonProps={{ 'data-testId': 'rule-apply-account-select' }}
+        />
+      )}
+    </FFormGroup>
+  );
+}
+
 function RuleFormContentFormRoot({
   // #withDialogActions
   closeDialog,
@@ -52,10 +89,17 @@ function RuleFormContentFormRoot({
 
   const validationSchema = CreateRuleFormSchema;
 
+  const _camelRule = transformToCamelCase(bankRule);
   const _initialValues = {
     ...initialValues,
-    ...transformToForm(transformToCamelCase(bankRule), initialValues),
+    ...transformToForm(_camelRule, initialValues),
   };
+  // A saved rule whose account is empty applies to all accounts (null).
+  // `transformToForm` drops null values, so restore it here when editing such a
+  // rule, otherwise the "all accounts" checkbox would not reflect it.
+  if (isEditMode && _camelRule && _camelRule.applyIfAccountId == null) {
+    _initialValues.applyIfAccountId = null;
+  }
   // Handles the form submitting.
   const handleSubmit = (
     values: RuleFormValues,
@@ -109,21 +153,7 @@ function RuleFormContentFormRoot({
           />
         </FFormGroup>
 
-        <FFormGroup
-          name={'applyIfAccountId'}
-          label={intl.get('apply_the_rule_to_account')}
-          labelInfo={<Tag minimal>{intl.get('required')}</Tag>}
-          style={{ maxWidth: 350 }}
-          fastField
-        >
-          <AccountsSelect
-            name={'applyIfAccountId'}
-            items={accounts}
-            filterByTypes={['cash', 'bank']}
-            fastField
-            buttonProps={{ 'data-testId': 'rule-apply-account-select' }}
-          />
-        </FFormGroup>
+        <ApplyToAccountField accounts={accounts} />
 
         <RuleApplyIfTransactionTypeField />
 
