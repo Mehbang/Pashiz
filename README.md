@@ -19,7 +19,30 @@
 تاریخ‌ها همچنان میلادی ذخیره و از API رد و بدل می‌شوند؛ جلالی فقط جایی است
 که تاریخ برای انسان خوانده می‌شود.
 
-## نصب روی اوبونتو
+## پیش‌نیازها
+
+| | کمینه | پیشنهادی |
+|---|---|---|
+| اوبونتو | ۲۲٫۰۴ | ۲۴٫۰۴ |
+| حافظه | ۴ گیگ + swap | ۸ گیگ |
+| دیسک | ۱۰ گیگ | ۲۰ گیگ |
+| پورت | ۸۰ | ۸۰ و ۴۴۳ (برای HTTPS) |
+
+ساخت رابط کاربری سنگین‌ترین کار این نرم‌افزار است؛ اگر مجموع حافظه و swap
+کمتر از ۸ گیگ باشد، `setup.sh` و `update.sh` خودشان یک فایل swap چهار
+گیگابایتی می‌سازند تا build در میانهٔ کار کشته نشود.
+
+## نصب
+
+دو راه نصب هست؛ هر دو از روی منبع همین مخزن build می‌کنند، پس در هر دو حالت
+همهٔ تغییرهای این فورک در ایمیج‌ها هست:
+
+- **راه ۱ (پیشنهادی):** یک اسکریپت که همه‌چیز را خودکار می‌کند.
+- **راه ۲:** ‏`docker compose` دستی با یک فایل یکپارچه
+  (`docker-compose.standalone.yml`)، برای وقتی که می‌خواهید هر گام و هر تنظیم
+  را خودتان ببینید.
+
+### راه ۱ — اسکریپت نصب (پیشنهادی)
 
 ```bash
 git clone -b pashiz https://github.com/Mehbang/Pashiz.git /opt/pashiz
@@ -65,22 +88,176 @@ sudo DOCKER_REGISTRY_MIRROR=https://docker.arvancloud.ir ./setup.sh
 
 </details>
 
-## نگهداری
+### راه ۲ — نصب دستی با docker compose
+
+برای وقتی که می‌خواهید فایل compose و همهٔ تنظیم‌ها را خودتان ببینید و اداره
+کنید. در سه گام:
+
+**۱) منبع و رمزها.** رمزها را با اسکریپت در یک فایل `.env` بسازید:
+
+```bash
+git clone -b pashiz https://github.com/Mehbang/Pashiz.git /opt/pashiz
+cd /opt/pashiz
+./scripts/gen-secrets.sh
+```
+
+‏`gen-secrets.sh` یک `.env` کامل می‌سازد: رمز پایگاه‌داده، کلید JWT، کلیدهای
+Garage، مقدار ClickHouse و نشانی و کلید نشستِ صفحهٔ مدیریت. اجرای دوباره‌اش
+بی‌خطر است و رمزهای پرشده را عوض نمی‌کند. سپس در `.env`:
+
+- ‏`BASE_URL` را به نشانی‌ای که کاربر در مرورگر می‌بیند بگذارید.
+- برای HTTPS، ‏`PASHIZ_DOMAIN` را هم پر کنید.
+
+**۲) بالا آوردن سرویس‌ها.** همهٔ تنظیم‌ها از `.env` خوانده می‌شوند. یک فایل
+یکپارچه و خودبسنده برای همین هست — `docker-compose.standalone.yml` — که همهٔ
+سرویس‌ها و صفحهٔ مدیریت را در خود دارد و از روی منبع build می‌کند:
+
+```bash
+docker compose -f docker-compose.standalone.yml --env-file .env up -d --build
+```
+
+برای HTTPS، در `.env` این سه مقدار را بگذارید تا فقط Caddy روی ۸۰/۴۴۳ بماند و
+تضاد پورت پیش نیاید، سپس profile را روشن کنید:
+
+```bash
+# در .env:
+#   PASHIZ_DOMAIN=hesab.example.ir
+#   PUBLIC_PROXY_PORT=127.0.0.1:8080
+#   PUBLIC_PROXY_SSL_PORT=127.0.0.1:8443
+docker compose -f docker-compose.standalone.yml --profile https \
+  --env-file .env up -d --build
+```
+
+> ‏`docker-compose.standalone.yml` معادلِ یک‌فایلیِ جفتِ
+> `docker-compose.prod.yml` + `docker-compose.pashiz.yml` است — همان نام
+> کانتینرها و همان volumeها — منهای دو سرویسی که این فورک اجرا نمی‌کند
+> (ClickHouse و watchtower). `setup.sh` و `update.sh` از آن جفت استفاده
+> می‌کنند؛ این فایل برای وقتی است که می‌خواهید همه‌چیز را در یک compose ببینید.
+> هم‌زمان فقط یکی را بالا نگه دارید.
+
+> روی سروری با حافظهٔ کم، build همزمانِ دو ایمیج ممکن است با `signal: killed`
+> کشته شود. راه ۱ این را مدیریت می‌کند (swap و build یکی‌یکی). در راه دستی اگر
+> چنین شد، `sudo ./setup.sh` را روی همان `.env` موجود اجرا کنید؛ آن را
+> بازنویسی نمی‌کند و فقط کارهای مانده را انجام می‌دهد.
+
+**۳) فضای پیوست‌ها و صفحهٔ مدیریت.** یک `up` ساده کانتینرها را بالا می‌آورد،
+اما دو کار آخر را خودکار نمی‌کند: ساخت کلید S3 در Garage (برای پیوست‌ها و
+لوگو) و ساخت گذرواژهٔ صفحهٔ مدیریت. ساده‌ترین راه، اجرای اسکریپت نصب روی همان
+`.env` است — چون idempotent است، فقط همین دو را تکمیل می‌کند:
+
+```bash
+sudo ./setup.sh
+```
+
+گذرواژهٔ صفحهٔ مدیریت را در هر زمان می‌توان با `sudo ./update.sh admin` ساخت
+یا عوض کرد.
+
+## به‌روزرسانی و نگهداری
+
+همهٔ کارهای روزمره با `update.sh` انجام می‌شود. به‌روزرسانی پیش از هر کار
+پشتیبان می‌گیرد، `.env` را دست نمی‌زند و هیچ volume‌ای را پاک نمی‌کند.
 
 ```bash
 cd /opt/pashiz
 
-sudo ./update.sh                        # دریافت نسخهٔ تازه، پشتیبان، ساخت، راه‌اندازی
-sudo ./update.sh https hesab.example.ir # روشن‌کردن HTTPS روی نصب موجود
-     ./update.sh backup                 # پشتیبان از پایگاه‌داده و تنظیمات
-     ./update.sh logs server
-     ./update.sh status
+sudo ./update.sh                 # دریافت نسخهٔ تازه، پشتیبان، ساخت و راه‌اندازی
+sudo ./update.sh rebuild         # ساخت دوباره بدون دریافت نسخهٔ تازه
+sudo ./update.sh rollback        # بازگشت به نسخهٔ پیش از آخرین به‌روزرسانی
+     ./update.sh backup          # بایگانی: پایگاه‌داده + پیوست‌ها + کلیدها
+sudo ./update.sh restore <فایل>  # بالا آوردن یک بایگانی روی این نصب
+     ./update.sh status          # وضعیت سرویس‌ها
+     ./update.sh logs [سرویس]    # دنبال‌کردن گزارش‌ها
+     ./update.sh start|stop|restart
+
+sudo ./update.sh https hesab.example.ir  # روشن‌کردن HTTPS روی نصب موجود
+sudo ./update.sh https off               # بازگشت به HTTP
 ```
 
-به‌روزرسانی پیش از هر کار پشتیبان می‌گیرد، `.env` را دست نمی‌زند و هیچ
-volume‌ای را پاک نمی‌کند.
+## صفحهٔ مدیریت (پنل مدیریت)
 
-راهنمای کامل نصب، پشتیبان‌گیری، دامنه و عیب‌یابی: **[DEPLOY.md](DEPLOY.md)**
+صفحهٔ مدیریت یک کانتینر جدا نیست؛ درون همان سرور است و روی نشانی‌ای تصادفی و
+حدس‌نزدنی سرو می‌شود:
+
+```
+<BASE_URL>/api/admin/<PASHIZ_ADMIN_PATH>
+```
+
+از آنجا می‌توانید کاربران و سازمان‌ها را ببینید، ثبت‌نام را باز و بسته کنید،
+‏SMTP را تنظیم و آزمایش کنید و پشتیبان بگیرید. نشانی و اعتبارنامه را `setup.sh`
+هنگام نصب می‌سازد و یک‌بار نشان می‌دهد. بعداً:
+
+```bash
+./update.sh admin-url    # نشان‌دادن نشانی صفحه (بدون نیاز به sudo)
+sudo ./update.sh admin   # ساخت یا تعویض نام کاربری و گذرواژه
+```
+
+گذرواژه با scrypt درهم‌سازی می‌شود و متن اصلی هیچ‌جا نوشته نمی‌شود؛ اعتبارنامه
+در `.env` می‌ماند نه در پایگاه‌داده. پس از پنج تلاش ناموفق، آن IP پانزده دقیقه
+بسته می‌شود و هر ردِّ وجودِ صفحه ۴۰۴ می‌گیرد. جزئیات کامل امنیتی در
+**[DEPLOY.md](DEPLOY.md)**.
+
+## رمزها و مقادیر تصادفی
+
+نصب به چند مقدار تصادفی نیاز دارد. دو راه برای ساختنشان هست — «یک فایل» یا
+«ترمینال»:
+
+**راه فایل — همه را یکجا:**
+
+```bash
+./scripts/gen-secrets.sh
+```
+
+یک `.env` کامل می‌سازد یا کامل می‌کند؛ اجرای دوباره رمزهای موجود را عوض
+نمی‌کند و هیچ مقداری را چاپ نمی‌کند (جز نشانی صفحهٔ مدیریت).
+
+<details>
+<summary>راه ترمینال — تک‌تک و دستی</summary>
+
+هرکدام را ساخته و در `.env` بگذارید:
+
+```bash
+openssl rand -hex 32   # APP_JWT_SECRET      — امضای توکن ورود
+openssl rand -hex 24   # DB_PASSWORD         — رمز کاربر پایگاه‌داده
+openssl rand -hex 24   # DB_ROOT_PASSWORD    — رمز root پایگاه‌داده
+openssl rand -hex 32   # GARAGE_RPC_SECRET   — فضای S3 پیوست‌ها
+openssl rand -hex 32   # GARAGE_ADMIN_TOKEN
+openssl rand -hex 24   # CLICKHOUSE_PASSWORD — لازم است حتی وقتی ClickHouse خاموش است
+openssl rand -hex 32   # PASHIZ_ADMIN_PATH   — بخش تصادفی نشانی صفحهٔ مدیریت
+openssl rand -hex 32   # PASHIZ_ADMIN_SECRET — کلید امضای نشست صفحهٔ مدیریت
+```
+
+گذرواژهٔ صفحهٔ مدیریت را خودِ `update.sh` درهم‌سازی می‌کند (داخل ایمیج، تا
+متن اصلی جایی نوشته نشود). اگر خواستید دستی:
+
+```bash
+printf '%s' 'گذرواژه‌تان' \
+  | docker run --rm -i pashiz/server:latest \
+      node packages/server/scripts/hash-admin-password.js
+# خروجی را در PASHIZ_ADMIN_PASSWORD_HASH بگذارید
+```
+
+</details>
+
+## همهٔ تنظیمات
+
+هر تنظیمی در `.env` است؛ نمونهٔ کامل با توضیح هر کلید در
+[`.env.example`](.env.example) است و `gen-secrets.sh` از روی همان می‌سازد.
+مهم‌ترین گروه‌ها:
+
+| گروه | کلیدها |
+|---|---|
+| **برنامه** | `BASE_URL`، `PASHIZ_DOMAIN`، `PUBLIC_PROXY_PORT`، `PUBLIC_PROXY_SSL_PORT` |
+| **رمزها (لازم)** | `APP_JWT_SECRET`، `DB_PASSWORD`، `DB_ROOT_PASSWORD`، `GARAGE_RPC_SECRET`، `GARAGE_ADMIN_TOKEN`، `CLICKHOUSE_PASSWORD` |
+| **صفحهٔ مدیریت** | `PASHIZ_ADMIN_PATH`، `PASHIZ_ADMIN_SECRET`، `PASHIZ_ADMIN_USERNAME`، `PASHIZ_ADMIN_PASSWORD_HASH` |
+| **ثبت‌نام** | `SIGNUP_DISABLED`، `SIGNUP_ALLOWED_DOMAINS`، `SIGNUP_ALLOWED_EMAILS`، `SIGNUP_EMAIL_CONFIRMATION` |
+| **ایمیل (SMTP)** | `MAIL_HOST`، `MAIL_PORT`، `MAIL_USERNAME`، `MAIL_PASSWORD`، `MAIL_FROM_ADDRESS`، `MAIL_FROM_NAME` |
+| **محدودیت نرخ** | `THROTTLE_GLOBAL_TTL`/`_LIMIT`، `THROTTLE_AUTH_TTL`/`_LIMIT` |
+| **پیوست‌ها (S3/Garage)** | `S3_ENDPOINT`، `S3_BUCKET`، `S3_ACCESS_KEY_ID`، `S3_SECRET_ACCESS_KEY`، `S3_REGION`، `S3_FORCE_PATH_STYLE` |
+| **چاپ PDF** | `GOTENBERG_URL`، `GOTENBERG_DOCS_URL` |
+| **اختیاری** | `PLAID_*`، `STRIPE_*`، `OPEN_EXCHANGE_RATE_APP_ID`، `BANK_FEED_ENABLED` |
+
+راهنمای کامل پشتیبان‌گیری، دامنه، عیب‌یابی و جزئیات امنیتی:
+**[DEPLOY.md](DEPLOY.md)**
 
 ## پس از نصب
 

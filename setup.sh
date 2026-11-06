@@ -357,6 +357,13 @@ create_env() {
   set_env GARAGE_RPC_SECRET "$(openssl rand -hex 32)"
   set_env GARAGE_ADMIN_TOKEN "$(openssl rand -hex 32)"
 
+  # ClickHouse is parked behind a profile that is never enabled, but
+  # docker-compose.prod.yml guards CLICKHOUSE_PASSWORD with `:?` and compose
+  # evaluates that guard before it applies profiles — so without a value even
+  # `docker compose build` refuses to run. .env.example leaves it blank, so it
+  # is generated here; otherwise a fresh install stops at the first build.
+  set_env CLICKHOUSE_PASSWORD "$(openssl rand -hex 24)"
+
   if [ -n "${PASHIZ_DOMAIN:-}" ]; then
     set_env PASHIZ_DOMAIN "$PASHIZ_DOMAIN"
     set_env BASE_URL "${BASE_URL:-https://$PASHIZ_DOMAIN}"
